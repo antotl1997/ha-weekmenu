@@ -9,7 +9,7 @@ from urllib.parse import parse_qs, urlparse
 
 import httpx
 
-from app.ahclient import LOGIN_URL, AhClient
+from app.ahclient import LOGIN_URL, AhClient, AhLoginExpired
 from app.tokens import TokenStore
 
 
@@ -40,11 +40,19 @@ async def main(rounds: int, interval: float) -> None:
         for i in range(rounds):
             if i:
                 await asyncio.sleep(interval)
-            await client.refresh()
-            data = await client.request("GET", "/mobile-services/shoppinglist/v2/items")
-            items = data.get("items", []) if isinstance(data, dict) else data
-            print(f"{datetime.now().isoformat(timespec='seconds')} refresh=ja items={len(items)}")
-
+            try:
+                await client.refresh()
+                data = await client.request(
+                    "GET", "/mobile-services/shoppinglist/v2/items"
+                )
+            except AhLoginExpired:
+                print("login geweigerd")
+                return
+            stamp = datetime.now().isoformat(timespec="seconds")
+            if isinstance(data, dict) and isinstance(data.get("items"), list):
+                print(f"{stamp} refresh=ja items={len(data['items'])}")
+            else:
+                print(f"{stamp} refresh=ja onverwacht antwoord, geen items-lijst")
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()

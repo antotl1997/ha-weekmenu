@@ -116,7 +116,7 @@ class AhClient:
             raise AhApiError(f"{method} {path} failed: {type(e).__name__}") from None
         if r.status_code == 401:
             raise AhLoginExpired(f"{method} {path}: login expired", 401)
-        if r.status_code >= 400:
+        if r.status_code >= 400 or 300 <= r.status_code < 400:
             raise AhApiError(f"{method} {path}: HTTP {r.status_code}", r.status_code)
         if not r.content:
             return None

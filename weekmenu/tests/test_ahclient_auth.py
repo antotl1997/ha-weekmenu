@@ -119,3 +119,12 @@ async def test_token_never_in_exception_text(respx_mock, tmp_path):
         await client.request("GET", "/x")
     assert SECRET_ACCESS not in str(ei.value)
     await http.aclose()
+
+
+async def test_redirect_with_empty_body_raises(respx_mock, tmp_path):
+    respx_mock.get(BASE + "/x").respond(302, headers={"location": "https://login.ah.nl/"})
+    client, _, http = make(tmp_path, Tokens("a", "r", time.time() + 3600))
+    with pytest.raises(AhApiError) as ei:
+        await client.request("GET", "/x")
+    assert ei.value.status == 302
+    await http.aclose()
