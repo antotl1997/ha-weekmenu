@@ -1,0 +1,13 @@
+# Weekmenu AH
+
+Home Assistant add-on that builds a weekly dinner menu from Allerhande recipes around the current Albert Heijn bonus, puts the groceries on your AH list or in your open delivery order, and shows the menu and the estimated savings in Home Assistant.
+
+This uses the unofficial API of the Albert Heijn app. It is not affiliated with or endorsed by Albert Heijn, and it can break whenever AH changes that API. It never checks out, never removes anything from your list or order, and keeps your AH login only inside the add-on.
+
+## Install
+
+In Home Assistant: Settings, Add-ons, Add-on Store, the three-dot menu, Repositories, and add:
+
+    https://github.com/antotl1997/ha-weekmenu
+
+Then install "Weekmenu AH" from the store.

@@ -1,0 +1,6 @@
+__pycache__/
+.venv/
+tokens*.json
+.pytest_cache/
+tests/screens/
+.superpowers/
