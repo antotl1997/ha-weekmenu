@@ -273,7 +273,7 @@ async def test_total_not_counted_twice_after_crash_between_file_and_flags(
     with pytest.raises(SystemExit):
         await update_total(ctx, SUNDAY.date())
     data = json.loads((tmp_path / "totaal.json").read_text())
-    assert data == {"total": 14.0, "counted": ["2026-10-28"]}
+    assert data == {"total": 14.0, "counted": {"2026-10-28": 4.0}}
     assert not Ledger(tmp_path / "weeks").load(date(2026, 10, 28)).counted  # flag lost
 
     monkeypatch.setattr(ctx.ledger, "save", real_save)
@@ -291,7 +291,7 @@ async def test_old_total_file_is_migrated_from_ledger_flags(tmp_path, planned, o
     ctx.ledger.save(WeekLog(date(2026, 10, 28), plan=plan_b().to_dict(), savings=4.0))
     await update_total(ctx, SUNDAY.date())
     data = json.loads((tmp_path / "totaal.json").read_text())
-    assert data == {"total": 16.5, "counted": ["2026-10-21", "2026-10-28"]}
+    assert data == {"total": 16.5, "counted": {"2026-10-21": 3.0, "2026-10-28": 4.0}}
 
 
 async def test_button_round_clears_pending_schema_retry(tmp_path, planned):
@@ -333,3 +333,48 @@ def test_weeklog_without_period_warning_loads():
     assert WeekLog.from_dict(d).period_warning is None
     log = WeekLog(W, period_warning="x")
     assert WeekLog.from_dict(log.to_dict()).period_warning == "x"
+
+
+async def test_old_counted_list_is_migrated_with_ledger_values(tmp_path, planned):
+    ctx = make_ctx(tmp_path)
+    (tmp_path / "totaal.json").write_text('{"total": 3.0, "counted": ["2026-10-21"]}',
+                                          encoding="utf-8")
+    ctx.ledger.save(WeekLog(date(2026, 10, 21), plan=plan_b().to_dict(), savings=3.0,
+                            extras_savings=0.5, counted=True))
+    await update_total(ctx, SUNDAY.date())
+    data = json.loads((tmp_path / "totaal.json").read_text())
+    # the list had no amounts: the ledger value at migration time counts as counted
+    assert data == {"total": 3.0, "counted": {"2026-10-21": 3.5}}
+
+
+async def test_staple_added_after_week_was_counted_reaches_total_once(tmp_path, planned):
+    ctx = make_ctx(tmp_path)
+    old = date(2026, 10, 28)
+    ctx.ledger.save(WeekLog(old, plan=plan_b().to_dict(), savings=4.0))
+    await update_total(ctx, SUNDAY.date())
+    assert ctx.hass.totals()[-1] == 4.0
+    log = ctx.ledger.load(old)
+    log.extras_added = {50: 2}
+    log.extras_savings = 1.25  # tapped in the app after the week began
+    ctx.ledger.save(log)
+    await update_total(ctx, SUNDAY.date())
+    assert ctx.hass.totals()[-1] == 5.25
+    await update_total(ctx, SUNDAY.date())
+    await update_total(ctx, SUNDAY.date())
+    assert ctx.hass.totals()[-1] == 5.25
+    data = json.loads((tmp_path / "totaal.json").read_text())
+    assert data == {"total": 5.25, "counted": {"2026-10-28": 5.25}}
+
+
+async def test_total_never_goes_down(tmp_path, planned):
+    ctx = make_ctx(tmp_path)
+    old = date(2026, 10, 28)
+    ctx.ledger.save(WeekLog(old, plan=plan_b().to_dict(), savings=4.0))
+    await update_total(ctx, SUNDAY.date())
+    log = ctx.ledger.load(old)
+    log.savings = 2.0  # e.g. a swap to a cheaper dish after the week began
+    ctx.ledger.save(log)
+    await update_total(ctx, SUNDAY.date())
+    assert ctx.hass.totals()[-1] == 4.0
+    data = json.loads((tmp_path / "totaal.json").read_text())
+    assert data["counted"] == {"2026-10-28": 4.0}

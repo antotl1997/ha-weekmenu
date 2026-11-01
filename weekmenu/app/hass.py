@@ -52,13 +52,16 @@ def format_eur(x: float) -> str:
     return "€ " + f"{x:.2f}".replace(".", ",")
 
 
-def load_total_state(path: Path = TOTAL_PATH) -> tuple[float, set[str] | None]:
-    """The total and the ISO dates of the weeks counted in it.
+def load_total_state(
+    path: Path = TOTAL_PATH,
+) -> tuple[float, dict[str, float] | set[str] | None]:
+    """The total and what was counted in it per week.
 
-    The counted list lives in the same file as the total, written in one atomic
-    replace, so a week can never be in the total without being marked counted.
-    `None` for the list: no file yet, or an older file without it (plain number or
-    {"total": x}); the caller migrates from the ledger then.
+    `counted` lives in the same file as the total, written in one atomic replace,
+    so an amount can never be in the total without being recorded. It is a dict
+    {ISO week: amount counted}. A `set` of ISO weeks: an older file with a list
+    (amounts unknown); `None`: no file yet, or an older file without it (plain
+    number or {"total": x}). The caller migrates both from the ledger.
     """
     try:
         data = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -73,22 +76,33 @@ def load_total_state(path: Path = TOTAL_PATH) -> tuple[float, set[str] | None]:
     except (ValueError, TypeError):
         total = 0.0
     counted = data.get("counted")
-    if not isinstance(counted, list):
-        return total, None
-    return total, {str(x) for x in counted}
+    if isinstance(counted, dict):
+        out: dict[str, float] = {}
+        for k, v in counted.items():
+            try:
+                out[str(k)] = float(v)
+            except (ValueError, TypeError):
+                out[str(k)] = 0.0
+        return total, out
+    if isinstance(counted, list):
+        return total, {str(x) for x in counted}
+    return total, None
 
 
 def load_total(path: Path = TOTAL_PATH) -> float:
     return load_total_state(path)[0]
 
 
-def _save_total(path: Path, total: float, counted: list[str] | None = None) -> None:
+def _save_total(path: Path, total: float,
+                counted: dict[str, float] | list[str] | None = None) -> None:
     path = Path(path)
-    if counted is None:  # keep the counted list that is already there
+    if counted is None:  # keep what is already there
         known = load_total_state(path)[1]
-        counted = sorted(known) if known is not None else None
+        counted = sorted(known) if isinstance(known, set) else known
     data: dict = {"total": total}
-    if counted is not None:
+    if isinstance(counted, dict):
+        data["counted"] = {k: counted[k] for k in sorted(counted)}
+    elif counted is not None:
         data["counted"] = list(counted)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = Path(str(path) + ".tmp")
@@ -193,7 +207,8 @@ class Hass:
             },
         })
 
-    async def publish_total(self, total: float, counted: list[str] | None = None) -> None:
+    async def publish_total(self, total: float,
+                            counted: dict[str, float] | None = None) -> None:
         """Write total (and the counted weeks) atomically to the file, then the sensor."""
         _save_total(self._total_path, total, counted)
         await self._post("states/sensor.weekmenu_besparing_totaal", {

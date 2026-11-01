@@ -76,11 +76,13 @@ def test_menu_products_and_dinner_categories_excluded():
     vlees = bp(3, "AH Speklappen", cat="Vlees")
     groente = bp(4, "AH Courgette", cat="Groente, aardappelen")
     vis = bp(5, "AH Zalm", cat="Vis")
-    maaltijd = bp(6, "AH Lasagne", cat="Verse maaltijden")
+    maaltijd = bp(6, "AH Lasagne all uovo", cat="Maaltijden, salades")
     boter = bp(1, "AH Roomboter", cat="Zuivel, eieren")
-    bought = [buy(p, d) for p in (1, 2, 3, 4, 5, 6) for d in (3, 20)]
-    out = suggest_staples(bought, [gehakt, vlees, groente, vis, maaltijd, boter], {2: 1}, TODAY)
-    assert [s.product.title for s in out] == ["AH Roomboter"]
+    worst = bp(7, "AH Grillworst", cat="Vleeswaren", regular=2.0)  # beleg: stays
+    bought = [buy(p, d) for p in (1, 2, 3, 4, 5, 6, 7) for d in (3, 20)]
+    out = suggest_staples(bought, [gehakt, vlees, groente, vis, maaltijd, boter, worst],
+                          {2: 1}, TODAY)
+    assert [s.product.title for s in out] == ["AH Roomboter", "AH Grillworst"]
 
 
 def test_usual_qty_is_median_rounded_up_then_deal_qty():
@@ -222,11 +224,16 @@ async def test_real_history_gives_real_suggestions(respx_mock, tmp_path, no_dela
     client = make_client(tmp_path)
     period = BonusPeriod(date(2026, 11, 2), date(2026, 11, 8), None, [])
     bought = await client.purchases(TODAY - timedelta(days=61))
-    out = suggest_staples(bought, await client.previously_bought_bonus(period), {}, TODAY)
-    for s in out:
-        assert s.times >= 2 and s.savings > 0
-        assert not any(w in (s.product.category or "").lower()
-                       for w in ("vlees", "vis", "kip", "groente", "aardappel"))
+    bonus = await client.previously_bought_bonus(period)
+    # the real history alone: every product was bought once in these 61 days
+    assert suggest_staples(bought, bonus, {}, TODAY) == []
+    # the receipt of 28 September has CHEDDAR RASP 2x (hq 600439); one more online
+    # purchase of the same cheese makes it a staple, matched through the hq id
+    extra = Purchase(454161, "AH Cheddar geraspte kaas", 2, date(2026, 10, 20), "online")
+    out = suggest_staples(bought + [extra], bonus, {}, TODAY)
+    assert [(s.product.id, s.product.title, s.times, s.usual_qty, s.qty, s.savings)
+            for s in out] == [(454161, "AH Cheddar geraspte kaas", 2, 2, 2, 0.98)]
+    assert out[0].product.mechanism == "2 voor 5.00"
 
 
 # --- API ------------------------------------------------------------------------------
@@ -260,16 +267,50 @@ async def test_api_add_staple_writes_once_and_logs(aiohttp_client, tmp_path):
     log = ctx.ledger.load(W)
     assert log.extras_added == {50: 2} and log.extras_savings == 3.0
     assert log.added == {1: 1, 2: 1}  # the menu's own log is untouched
-    assert (await r2.json())[0]["added"] is True
+    body = await r2.json()
+    assert body["items"][0]["added"] is True and body["target"] == "list"
 
     r = await client.post("api/staples/50")  # later tap: still nothing new
     assert r.status == 200 and len([w for w in ctx.client.writes if 50 in w[1]]) == 1
 
     r = await client.post("api/staples/77")
     assert r.status == 404
+    # only this or next menu week (Sunday 1 Nov: weeks of 28 Oct and 4 Nov)
+    r = await client.post("api/staples/50?week=2026-11-11")
+    assert r.status == 400
+    r = await client.post("api/staples/50?week=2026-10-21")
+    assert r.status == 400
     r = await client.get("api/week")
     week = await r.json()
     assert week["extras_savings"] == 3.0 and week["staples_error"] is None
+
+
+async def test_api_add_staple_reports_actual_target(aiohttp_client, tmp_path):
+    from app.ahclient import ActiveOrder
+    ctx = await staples_ctx(tmp_path)  # the menu went on the list
+    ctx.client.order = ActiveOrder(7, {})  # since then an order was opened
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.post("api/staples/50")).json()
+    assert body["target"] == "order" and ctx.client.order.items == {50: 2}
+
+
+async def test_swap_that_settles_a_staple_updates_extras_savings(aiohttp_client, tmp_path,
+                                                                 monkeypatch):
+    ah = FakeAh(tmp_path, fail_on_call=2, fail_after=True)
+    ctx = await staples_ctx(tmp_path, ah=ah)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await client.post("api/staples/50")).status == 502  # unsure: pending
+    assert ctx.ledger.load(W).extras_savings == 0.0
+
+    async def fake_rescale(client_, plan, day, n):
+        return make_plan([dish(W, 101, [1, 2], 2.0, persons=n)])
+
+    monkeypatch.setattr(main, "rescale_dish", fake_rescale)
+    r = await client.post(f"api/dish/{W.isoformat()}/persons", json={"persons": 3})
+    assert r.status == 200
+    log = ctx.ledger.load(W)
+    assert log.extras_added == {50: 2} and log.extras_savings == 3.0
+    assert len([w for w in ah.writes if 50 in w[1]]) == 1
 
 
 async def test_api_staple_write_failure_is_not_retried(aiohttp_client, tmp_path):
@@ -318,13 +359,28 @@ async def test_round_suggests_staples_after_the_menu(tmp_path, planned):
                   for d in (4, 30)] + [Purchase(1, "Product 1", 1, day - timedelta(days=d),
                                                 "online") for d in (4, 30)]
     ctx = make_ctx(tmp_path, ah=ah)
+    sent_before_history = []
+    real = ah.purchases
+
+    async def purchases(since):
+        sent_before_history.append(len(ctx.hass.notifications()))
+        return await real(since)
+
+    ah.purchases = purchases
     out = await main.run_round(ctx, SUNDAY, "nu_maken")
     assert out.status == "done"
     assert ah.history_for == [day - timedelta(days=61)]
+    assert sent_before_history == [1]  # the menu message did not wait for the history
     log = ctx.ledger.load(W)
     assert [Staple.from_dict(s).product.id for s in log.staples] == [50]
     assert log.staples_error is None
     assert not any(50 in w[1] for w in ah.writes)  # a suggestion, never written by itself
+    # the first message cannot know the count yet; one notification, no second one
+    assert len(ctx.hass.notifications()) == 1
+    assert "vaste boodschap" not in ctx.hass.notifications()[0]["message"]
+    # a later round that sends a message knows it
+    await main.run_round(ctx, SUNDAY, "nieuw_menu")
+    assert len(ctx.hass.notifications()) == 2
     assert "Ook 1 vaste boodschap in de bonus" in ctx.hass.notifications()[-1]["message"]
 
 

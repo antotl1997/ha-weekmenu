@@ -587,11 +587,11 @@ app.addEventListener("click", async (ev) => {
   }
   if (t.dataset.run) { startRound(t, t.dataset.run); return; }
   if (t.dataset.staple && state.week) {
-    const where = state.week.target === "order" ? "in je bestelling" : "op je lijst";
     await busy(t, async () => {
       try {
-        state.staples = await api(`api/staples/${encodeURIComponent(t.dataset.staple)}?week=${encodeURIComponent(state.week.week)}`, {});
-        toast(`Toegevoegd, het staat ${where}`);
+        const res = await api(`api/staples/${encodeURIComponent(t.dataset.staple)}?week=${encodeURIComponent(state.week.week)}`, {});
+        state.staples = res.items;
+        toast(`Toegevoegd, het staat ${res.target === "order" ? "in je bestelling" : "op je lijst"}`);
       } catch (e) {
         if (e.body && Array.isArray(e.body.items)) state.staples = e.body.items;
         throw e;

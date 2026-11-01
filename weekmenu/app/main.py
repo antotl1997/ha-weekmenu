@@ -268,16 +268,30 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         ), "melding")
         return RoundOutcome("error", start, error=msg)
 
-    await refresh_staples(ctx, wlog, plan, start, now)
+    recount_extras(ctx, wlog)  # apply may have settled a staple write
     await guard(ctx.hass.publish(plan_view(plan, start, result.target, raw.ouders),
                                  plan.savings + wlog.extras_savings), "sensoren")
     if reused and not (result.added or result.pending or result.unknown or had_error):
         log.info("Menu stond er al en alles was al toegevoegd: geen nieuwe melding")
     else:
+        # the message does not wait for the history: the count is the one already known
+        # from an earlier round of this week, or left out
         title, body = format_message(plan, result, raw.ouders, warning,
-                                     staples=staples.open_count(wlog))
+                                     staples=staples.open_count(wlog, plan.basket))
         await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding")
+    await refresh_staples(ctx, wlog, plan, start, now)
     return RoundOutcome("done", start, warning=warning, plan=plan, result=result)
+
+
+def recount_extras(ctx: Context, wlog: WeekLog) -> None:
+    """extras_savings from the staples in extras_added (a settle can add one)."""
+    new = staples.extras_savings(wlog)
+    if new != wlog.extras_savings:
+        wlog.extras_savings = new
+        try:
+            ctx.ledger.save(wlog)
+        except Exception as e:
+            log.warning("Logboek %s niet bijgewerkt (%s)", wlog.week, type(e).__name__)
 
 
 async def refresh_staples(ctx: Context, wlog: WeekLog, plan: Plan, start: date,
@@ -309,25 +323,40 @@ async def refresh_staples(ctx: Context, wlog: WeekLog, plan: Plan, start: date,
 
 
 async def update_total(ctx: Context, today: date) -> None:
-    """Add every week that has started and was not counted yet, then publish the total.
+    """Add what every started week saved and was not counted yet, then publish the total.
 
-    The source of truth for "counted" is the list in totaal.json, written in the same
-    atomic replace as the total: a crash can never leave a week in the total but not
-    marked. An older file without that list is migrated from the ledger flags. The
-    ledger `counted` flag is only for display. The file is written before the sensor
-    POST, so an HA error still leaves the weeks counted; a failing file write counts
-    nothing.
+    The source of truth is `counted` in totaal.json: {ISO week: amount counted},
+    written in the same atomic replace as the total, so a crash can never count an
+    amount twice. A week adds max(0, its value now - what was counted), so a staple
+    added after the week started still reaches the total, once; nothing is ever
+    subtracted. Older files (a list of weeks, or no list) are migrated with the
+    ledger values at migration time. The ledger `counted` flag is only for display.
+    The file is written before the sensor POST, so an HA error still leaves the weeks
+    counted; a failing file write counts nothing.
     """
     async with ctx.lock:
-        total, counted = load_total_state(ctx.total_path)
+        total, known = load_total_state(ctx.total_path)
         weeks = ctx.ledger.weeks()
-        if counted is None:
-            counted = {w.week.isoformat() for w in weeks if w.counted}
+        value = {w.week.isoformat(): round(w.savings + w.extras_savings, 2) for w in weeks}
+        if known is None:
+            known = {w.week.isoformat() for w in weeks if w.counted}
+        if isinstance(known, set):
+            counted = {iso: value.get(iso, 0.0) for iso in known}
+        else:
+            counted = dict(known)
         new = [w for w in weeks if w.week <= today and w.week.isoformat() not in counted]
-        total = round(total + sum(w.savings + w.extras_savings for w in new), 2)
-        counted |= {w.week.isoformat() for w in new}
+        added = 0.0
+        for w in weeks:
+            iso = w.week.isoformat()
+            if w.week > today:
+                continue
+            more = round(value[iso] - counted.get(iso, 0.0), 2)
+            if iso not in counted or more > 0:
+                added += max(0.0, more)
+                counted[iso] = max(value[iso], counted.get(iso, 0.0))
+        total = round(total + added, 2)
         try:
-            await ctx.hass.publish_total(total, sorted(counted))
+            await ctx.hass.publish_total(total, counted)
         except httpx.HTTPError as e:
             log.warning("Home Assistant: totaal niet gezet (%s)", type(e).__name__)
         except Exception as e:

@@ -158,7 +158,8 @@ def build_ctx(tmp_path):
         old = Plan([], {}, {}, saved, [], 0)
         ctx.ledger.save(WeekLog(week, plan=old.to_dict(), target="order", savings=saved,
                                 counted=True))
-    _save_total(ctx.total_path, 57.15, [w.isoformat() for w, _ in history] + [W.isoformat()])
+    _save_total(ctx.total_path, 57.15,
+                {**{w.isoformat(): saved for w, saved in history}, W.isoformat(): plan.savings})
     return ctx
 
 

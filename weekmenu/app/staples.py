@@ -3,7 +3,7 @@
 A product is suggested when it was bought at least MIN_TIMES times (orders and till
 receipts together) in the WINDOW_DAYS days before today, is in this week's bonus, is
 not already in the menu and is not a dinner product (meat, fish, vegetables, potatoes,
-fresh meals: the menu is about those). The quantity is the usual one (median per
+meals: the menu is about those; sandwich meats, "Vleeswaren", do stay). The quantity is the usual one (median per
 purchase, rounded up) topped up so the deal applies. Only a suggestion: nothing is
 written until the user taps it in the app.
 """
@@ -22,8 +22,10 @@ from app.deals import qty_for_deal, savings
 
 WINDOW_DAYS = 61
 MIN_TIMES = 2
-# substrings of the AH main category, case-insensitive
-DINNER_CATEGORIES = ("vlees", "vis", "kip", "groente", "aardappel", "verse maaltijden")
+# substrings of the AH main category, case-insensitive ("Vlees", "Vis",
+# "Groente, aardappelen", "Maaltijden, salades"); "Vleeswaren" is beleg and stays
+DINNER_CATEGORIES = ("vlees", "vis", "kip", "groente", "aardappel", "maaltijden")
+NOT_DINNER = ("vleeswaren",)
 
 
 @dataclass
@@ -56,6 +58,8 @@ class Staple:
 
 def is_dinner(p: Product) -> bool:
     cat = (p.category or "").lower()
+    if any(w in cat for w in NOT_DINNER):
+        return False
     return any(w in cat for w in DINNER_CATEGORIES)
 
 
@@ -107,7 +111,9 @@ def merge(log, new: list[Staple]) -> None:
     log.extras_savings = extras_savings(log)
 
 
-def open_count(log) -> int:
-    """Suggestions not added yet: the number in the Sunday message."""
+def open_count(log, menu_basket: dict[int, int] | None = None) -> int:
+    """Suggestions not added yet and not in the menu: the number in the message."""
+    menu = menu_basket or {}
     return sum(1 for s in staple_list(log)
-               if s.product.id not in log.extras_added and s.product.id not in log.pending)
+               if s.product.id not in log.extras_added and s.product.id not in log.pending
+               and s.product.id not in menu)

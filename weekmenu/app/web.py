@@ -331,6 +331,10 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             if isinstance(new, web.Response):
                 return new
             await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan)
+            settled = extras_savings(wlog)  # apply may have settled a staple write
+            if settled != wlog.extras_savings:
+                wlog.extras_savings = settled
+                ctx.ledger.save(wlog)
         nd = next(x for x in new.dishes if x.date == day)
         await publish(wlog.week, new, wlog.target or "list", wlog.extras_savings)
         return web.json_response(dish_view(wlog, new, nd, ctx.clock().date()))
@@ -431,14 +435,19 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         except ValueError:
             return _err(400, "ongeldig product")
         start = shown_week(request)
+        now = ctx.clock()
+        if start not in (main.week_of(now.date()), menu_week_start(now)):
+            return _err(400, "Alleen voor deze of de volgende menuweek")
         async with ctx.lock:
             wlog = ctx.ledger.load(start)
             staple = next((s for s in staple_list(wlog) if s.product.id == pid), None)
             if staple is None:
                 return _err(404, "geen voorstel voor dit product")
+            target = wlog.target
             if pid not in wlog.extras_added:
-                await apply_extras(ctx.client, ctx.ledger, wlog, {pid: staple.qty},
-                                   {pid: staple.product.title})
+                res = await apply_extras(ctx.client, ctx.ledger, wlog, {pid: staple.qty},
+                                         {pid: staple.product.title})
+                target = res.target
                 wlog.extras_savings = extras_savings(wlog)
                 ctx.ledger.save(wlog)
                 if pid not in wlog.extras_added:  # outcome unsure, or unknown: never blind
@@ -447,7 +456,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         if wlog.plan:
             await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",
                           wlog.extras_savings)
-        return web.json_response(staples_view(wlog))
+        # target: where this product went ("order" or "list"), for the app's message
+        return web.json_response({"items": staples_view(wlog), "target": target or "list"})
 
     # --- savings and settings ---
 
