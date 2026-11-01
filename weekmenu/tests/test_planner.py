@@ -51,6 +51,7 @@ class FakeClient:
         self.recipe_calls = []
         self.product_calls = []
         self.fail_ids = set()
+        self.noname = set()  # ingredients that come without a name, like some AH ones
         self._pids = {}
 
     def add(self, *recipes):
@@ -78,9 +79,10 @@ class FakeClient:
         ings = []
         for qty, unit, name in r["ings"]:
             if qty is None:
-                ings.append((name, name))
+                ings.append((name, "" if name in self.noname else name))
             else:
-                ings.append((f"{qty * f:g} {unit} {name}".replace("  ", " "), name))
+                text = f"{qty * f:g} {unit} {name}".replace("  ", " ")
+                ings.append((text, "" if name in self.noname else name))
         return Recipe(
             id=id, title=r["title"], url=f"https://www.ah.nl/allerhande/recept/R-R{id}/r",
             cook=r["cook"], oven=None, wait=None, courses=r["courses"],
@@ -493,6 +495,7 @@ def rec(title, cuisines=(), names=()):
     ("Linzensoep met venkelworst", [], ["varkensbraadworst"], "", "Hollandse pot"),
     ("Zalm met groente", [], ["zalm"], "stamppot", "Hollandse pot"),
     ("Shakshuka met feta", [], ["feta", "ei"], "gehakt", None),
+    ("Stamppot met Chinese kool, worst en appel", [], [], "", "Hollandse pot"),
 ])
 def test_cuisine_of(title, cuisines, names, term, expected):
     assert cuisine_of(rec(title, cuisines, names), term) == expected
@@ -600,3 +603,132 @@ async def test_build_plan_on_recorded_fixtures(monkeypatch):
     assert len({d.cuisine for d in plan.dishes}) >= min(3, len(plan.dishes))
     graphql = [c for c in client.calls if c[1] == "/graphql"]
     assert len(graphql) < 25 + 40 + 130  # searches + details + bonus groups
+
+
+# --- fix round 1 -----------------------------------------------------------------------
+
+KIP11 = bonus(2, "AH Scharrelkipfilet", regular=4.0, now=4.0, mech="1+1 gratis")
+
+
+async def test_multibuy_deal_scores_its_potential_for_one_pack():
+    r = Recipe(1, "Curry met kip", "u", 30, None, None, ["hoofdgerecht"], [], 2,
+               [("500 g scharrelkipfilet", "scharrelkipfilet")], [], None)
+    score, _ = await planner._score(r, [KIP11], PANTRY)
+    assert score == 2.0  # half of the 1+1 deal: another dish may complete it
+    client = FakeClient([
+        R(300, "Stamppot met kalkoen", [(500, "g", "kalkoenfilet")]),  # same, no bonus
+        R(301, "Stamppot met kip", [(500, "g", "scharrelkipfilet")]),
+    ])
+    plan = await build_plan(client, [KIP11], settings([WO]))
+    assert [d.recipe.id for d in plan.dishes] == [301]
+    assert plan.savings == 0.0  # what is really saved is still decided by the basket
+
+
+async def test_scoring_uses_most_common_persons():
+    client = FakeClient([R(310, "Stamppot met gehakt", [(500, "g", "rundergehakt")])])
+    await build_plan(client, [GEHAKT], settings([WO, DO, VR], persons={WO: 4, DO: 4}))
+    assert client.recipe_calls[0] == (310, 4)
+    assert planner.score_servings(settings([WO, DO], persons={WO: 3, DO: 4}), [WO, DO]) == 4
+
+
+def _late_failing(fish_variant):
+    """40 candidates over 7 evenings where the third cuisine is hard to place.
+
+    The two odd ones come first in the search results, so they are fetched, but they
+    score lowest, so the menu search only reaches them after trying the others."""
+    if fish_variant:  # the only other cuisines are both fish: at most one may be used
+        rs = [R(450, "Pasta met zalm", [(1, "stuks", "ui"), (1, "stuks", "zalm")]),
+              R(451, "Curry met zalm", [(1, "stuks", "ui"), (1, "stuks", "zalm")])]
+    else:  # the other two cuisines only fit the weekend
+        rs = [R(450, "Pasta lang", [(1, "stuks", "ui")], cook=90),
+              R(451, "Curry lang", [(1, "stuks", "ui")], cook=90)]
+    return rs + [R(400 + i, f"Stamppot {i}", [(500, "g", "rundergehakt")]) for i in range(38)]
+
+
+@pytest.mark.parametrize("fish_variant", [True, False])
+async def test_menu_search_is_fast_on_late_failing_week(fish_variant):
+    import time
+    week = [WO, DO, VR, ZA, ZO, MA, DI]
+    client = FakeClient(_late_failing(fish_variant))
+    cands, _ = await planner._gather(client, [GEHAKT], settings(week), set(), week, 40)
+    assert len(cands) == 40
+    t = time.perf_counter()
+    menu, _ = planner._choose_menu(cands, week)
+    assert time.perf_counter() - t < 5
+    assert menu
+
+    t = time.perf_counter()
+    plan = await build_plan(FakeClient(_late_failing(fish_variant)), [GEHAKT],
+                            settings(week))
+    assert time.perf_counter() - t < 5
+    assert plan.dishes
+    assert sum(d.is_fish for d in plan.dishes) <= 1
+    assert len({d.cuisine for d in plan.dishes}) >= min(3, len(plan.dishes))
+    assert all(is_weekend(d.date) or d.cook <= 45 for d in plan.dishes)
+
+
+async def test_spent_search_budget_gives_best_partial_menu(monkeypatch, caplog):
+    monkeypatch.setattr(planner, "_SEARCH_BUDGET", 5)
+    client = FakeClient(_late_failing(False))
+    plan = await build_plan(client, [GEHAKT], settings([WO, DO, VR, ZA, ZO, MA, DI]))
+    assert plan.budget_exhausted is True
+    assert "budget" in caplog.text
+    assert plan.dishes  # not "no menu possible"
+    assert len({d.cuisine for d in plan.dishes}) >= min(3, len(plan.dishes))
+    assert plan.short_by == 7 - len(plan.dishes)
+    assert Plan.from_dict(json.loads(json.dumps(plan.to_dict()))).budget_exhausted is True
+
+
+async def test_rescale_never_buys_pantry_items():
+    client = FakeClient([
+        R(320, "Stamppot met gehakt", [(500, "g", "rundergehakt"), (2, "el", "olijfolie")]),
+    ])
+    client.noname = {"olijfolie"}  # name missing: only the text says what it is
+    plan = await build_plan(client, [GEHAKT], settings([WO]))
+    assert plan.dishes[0].pantry == ["2 el olijfolie"]
+    new = await rescale_dish(client, plan, WO, 4)
+    assert new.dishes[0].pantry == ["4 el olijfolie"]
+    assert set(new.basket) == {1}
+    assert not any("olie" in q for q in client.product_calls)
+
+
+async def test_zero_saving_offer_is_not_searched():
+    biefstuk = Product(5, "AH Biefstuk 2 stuks", None, 9.29, 2.69, True,
+                       "100 GRAM VOOR 2.69", True, "Vlees")
+    client = FakeClient([R(330, "Stamppot met gehakt", [(500, "g", "rundergehakt")])])
+    await build_plan(client, [biefstuk, GEHAKT], settings([WO]))
+    assert client.search_calls == ["gehakt"]
+
+
+async def test_titles_with_a_cuisine_are_fetched_first():
+    odd = [R(500 + i, f"Bowl {i}", [(500, "g", "rundergehakt")]) for i in range(50)]
+    client = FakeClient(odd + [R(600, "Stamppot met gehakt", [(500, "g", "rundergehakt")])])
+    plan = await build_plan(client, [GEHAKT], settings([WO]))
+    assert client.recipe_calls[0] == (600, 2)
+    assert [d.recipe.id for d in plan.dishes] == [600]
+
+
+async def test_amounts_are_merged_before_rounding_to_packs():
+    # 200 g + 200 g of gehakt fits in one pack of 500 g: buy 1, not 2
+    client = FakeClient([
+        R(340, "Stamppot met gehakt", [(200, "g", "rundergehakt")]),
+        R(341, "Pasta met gehakt", [(200, "g", "rundergehakt")]),
+    ])
+    plan = await build_plan(client, [GEHAKT], settings([WO, DO]))
+    assert len(plan.dishes) == 2
+    assert [d.lines[0].qty for d in plan.dishes] == [1, 1]  # each dish alone: one pack
+    assert plan.basket[1] == 1
+    assert plan.savings == 3.0
+    assert [d.savings for d in plan.dishes] == [1.5, 1.5]
+
+
+async def test_pack_size_from_title_when_card_has_none():
+    # most bonus cards have no salesUnitSize; "3 kilo" in the title still counts
+    aardappel = bonus(9, "AH Kruimige aardappelen 3 kilo", unit=None)
+    client = FakeClient([
+        R(350, "Stamppot met prei", [(800, "g", "kruimige aardappelen")]),
+        R(351, "Curry met aardappel", [(800, "g", "kruimige aardappelen")]),
+    ])
+    plan = await build_plan(client, [aardappel], settings([WO, DO]))
+    assert len(plan.dishes) == 2
+    assert plan.basket[9] == 1

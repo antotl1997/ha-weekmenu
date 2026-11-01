@@ -177,6 +177,19 @@ def packs_needed(amount: Amount, unit_size: tuple[float, str] | None) -> int:
     return max(1, math.ceil(need / unit_size[0] - 1e-9))
 
 
+def pack_fraction(amount: Amount, unit_size: tuple[float, str] | None) -> float | None:
+    """The amount as a part of one pack (200 g of a 500 g pack: 0.4).
+
+    None when it cannot be converted; then only whole packs (packs_needed) count.
+    """
+    if amount.qty is None or unit_size is None or unit_size[0] <= 0:
+        return None
+    base = _TO_BASE.get(amount.unit or "")
+    if base is None or base[0] != unit_size[1]:
+        return None
+    return amount.qty * base[1] / unit_size[0]
+
+
 # --- choosing a product ------------------------------------------------------
 
 # Size and preparation words that do not say which product to buy.

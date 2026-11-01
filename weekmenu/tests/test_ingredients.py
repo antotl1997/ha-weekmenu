@@ -9,6 +9,7 @@ from app.ingredients import (
     Amount,
     choose_product,
     is_pantry,
+    pack_fraction,
     packs_needed,
     parse_ingredient,
     parse_unit_size,
@@ -424,3 +425,12 @@ async def test_choose_accepts_ginger_beer_when_asked(name):
     client = FakeClient({name: [p]})
     got = await choose_product(client, Amount(1, "stuks", name), [])
     assert got is not None and got.id == 1
+
+
+def test_pack_fraction():
+    assert pack_fraction(Amount(200, "g", "gehakt"), (500, "g")) == 0.4
+    assert pack_fraction(Amount(1.5, "kg", "aardappel"), (3000, "g")) == 0.5
+    assert pack_fraction(Amount(2, "el", "sojasaus"), (150, "ml")) == 0.2
+    assert pack_fraction(Amount(None, None, "nootmuskaat"), (50, "g")) is None
+    assert pack_fraction(Amount(2, "stuks", "ui"), (1000, "g")) is None
+    assert pack_fraction(Amount(200, "g", "gehakt"), None) is None

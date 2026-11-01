@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import dataclasses
 import itertools
+import logging
+import math
 import re
 import unicodedata
 from dataclasses import dataclass, field
@@ -25,6 +27,7 @@ from app.ingredients import (
     choose_product,
     is_pantry,
     keywords,
+    pack_fraction,
     packs_needed,
     parse_ingredient,
     parse_unit_size,
@@ -37,10 +40,13 @@ MAX_FISH = 1
 TOP_BONUS = 25
 MAX_RECIPE_SEARCHES = 25
 MAX_RECIPE_DETAILS = 40  # get_recipe calls per build_plan, the per-person scaling included
-SCORE_SERVINGS = 2
+SCORE_SERVINGS = 2  # default persons when an evening has none
 MAIN_COURSE = "hoofdgerecht"
-# Backtracking budget for picking the menu (nodes per attempt); plenty for <= 40 x 7.
-_SEARCH_BUDGET = 20000
+# Backtracking budget for picking the menu (nodes over all attempts of one build).
+# Spent: the best valid partial menu found so far is used and Plan.budget_exhausted set.
+_SEARCH_BUDGET = 500_000  # about 1.2 s of searching on a desktop when it is all spent
+
+log = logging.getLogger(__name__)
 
 _CONF = yaml.safe_load((Path(__file__).parent / "keukens.yaml").read_text(encoding="utf-8"))
 
@@ -94,8 +100,9 @@ class Settings:
 @dataclass
 class Line:
     product: Product
-    qty: int
+    qty: int  # whole packs for this dish alone
     from_ingredient: str
+    fraction: float | None = None  # the amount as part of a pack; None: not convertible
 
 
 @dataclass
@@ -123,6 +130,8 @@ class Plan:
     savings: float
     not_found: list[str]
     short_by: int
+    pantry: list[str] = field(default_factory=list)  # the pantry list the plan was made with
+    budget_exhausted: bool = False  # the menu search ran out of budget: maybe not the best
 
     def to_dict(self) -> dict:
         return {
@@ -132,6 +141,8 @@ class Plan:
             "savings": self.savings,
             "not_found": list(self.not_found),
             "short_by": self.short_by,
+            "pantry": list(self.pantry),
+            "budget_exhausted": self.budget_exhausted,
         }
 
     @classmethod
@@ -143,6 +154,8 @@ class Plan:
             savings=float(d["savings"]),
             not_found=list(d["not_found"]),
             short_by=int(d["short_by"]),
+            pantry=list(d.get("pantry") or []),
+            budget_exhausted=bool(d.get("budget_exhausted", False)),
         )
 
 
@@ -153,7 +166,7 @@ def _dish_to_dict(d: Dish) -> dict:
     out["recipe"]["ingredients"] = [list(i) for i in d.recipe.ingredients]
     out["lines"] = [
         {"product": dataclasses.asdict(ln.product), "qty": ln.qty,
-         "from_ingredient": ln.from_ingredient}
+         "from_ingredient": ln.from_ingredient, "fraction": ln.fraction}
         for ln in d.lines
     ]
     out["pantry"] = list(d.pantry)
@@ -170,7 +183,8 @@ def _dish_from_dict(x: dict) -> Dish:
         cuisine=x["cuisine"],
         is_fish=bool(x["is_fish"]),
         lines=[
-            Line(Product(**ln["product"]), int(ln["qty"]), ln["from_ingredient"])
+            Line(Product(**ln["product"]), int(ln["qty"]), ln["from_ingredient"],
+                 ln.get("fraction"))
             for ln in x["lines"]
         ],
         savings=float(x["savings"]),
@@ -194,10 +208,9 @@ def cuisine_of(recipe: Recipe, term: str = "") -> str | None:
         for k in CUISINES:
             if fc in k["cuisines"]:
                 return k["naam"]
-    title = _fold(recipe.title)
-    for k in CUISINES:
-        if any(w in title for w in k["titel"]):
-            return k["naam"]
+    by_title = title_cuisine(recipe.title)
+    if by_title:
+        return by_title
     names = [_fold(n or t) for t, n in recipe.ingredients]
     best, best_n = None, 0
     for k in CUISINES:
@@ -211,6 +224,14 @@ def cuisine_of(recipe: Recipe, term: str = "") -> str | None:
         for k in CUISINES:
             if any(w in t for w in k["titel"]):
                 return k["naam"]
+    return None
+
+
+def title_cuisine(title: str) -> str | None:
+    t = _fold(title)
+    for k in CUISINES:
+        if any(w in t for w in k["titel"]):
+            return k["naam"]
     return None
 
 
@@ -249,10 +270,17 @@ def _is_bonus_food(p: Product) -> bool:
     return bool(cat) and any(c in cat for c in BONUS_CATEGORIES)
 
 
+def _unit_saving(p: Product) -> float:
+    return savings(p, qty_for_deal(p, 1))
+
+
 def search_terms(bonus: list[Product]) -> list[str]:
     """Core words of the top bonus products (vlees, vis, groente, zuivel) by saving."""
-    food = [p for p in bonus if p.is_bonus and p.orderable and _is_bonus_food(p)]
-    food.sort(key=lambda p: -savings(p, qty_for_deal(p, 1)))  # stable on ties
+    food = [
+        p for p in bonus
+        if p.is_bonus and p.orderable and _is_bonus_food(p) and _unit_saving(p) > 0
+    ]  # a saving deals.py cannot compute ("100 GRAM VOOR 2.69") is not worth a search
+    food.sort(key=lambda p: -_unit_saving(p))  # stable on ties
     terms: list[str] = []
     for p in food[:TOP_BONUS]:
         t = core_word(p.title)
@@ -317,7 +345,7 @@ class _Cand:
 async def _score(
     recipe: Recipe, bonus: list[Product], pantry: list[str]
 ) -> tuple[float, list[Product]]:
-    need: dict[int, int] = {}
+    parts: dict[int, list[Line]] = {}
     prods: dict[int, Product] = {}
     for text, name in recipe.ingredients:
         if is_pantry(name or text, pantry):
@@ -327,9 +355,19 @@ async def _score(
         if p is None:
             continue
         prods[p.id] = p
-        need[p.id] = need.get(p.id, 0) + packs_needed(amount, parse_unit_size(p.unit_size))
-    score = round(sum(savings(prods[i], q) for i, q in need.items()), 2)
-    return score, list(prods.values())
+        parts.setdefault(p.id, []).append(_line(p, amount, text))
+    need = {pid: _packs(lines) for pid, lines in parts.items()}
+    return round(sum(_potential(prods[i], n) for i, n in need.items()), 2), list(prods.values())
+
+
+def _potential(p: Product, n: int) -> float:
+    """The deal's saving per pack, times the packs this recipe needs.
+
+    Ranking only: one pack of a "1+1 gratis" product is worth half the deal, because
+    another dish may complete it. What is really bought and saved is decided in _finish.
+    """
+    full = qty_for_deal(p, n)
+    return savings(p, full) * n / full if full else 0.0
 
 
 async def _gather(
@@ -339,6 +377,7 @@ async def _gather(
     exclude: set[int],
     days: list[date],
     detail_budget: int,
+    servings: int = SCORE_SERVINGS,
 ) -> tuple[list[_Cand], int]:
     """Scored candidates, and the number of get_recipe calls it took."""
     lists: list[tuple[str, list[RecipeSummary]]] = []
@@ -366,6 +405,8 @@ async def _gather(
             if any(x in _fold(r.title) for x in EXCLUDE_TITLES):
                 continue
             ordered.append((term, r))
+    # titles that already name a cuisine first: their get_recipe call is rarely wasted
+    ordered.sort(key=lambda tr: title_cuisine(tr[1].title) is None)
 
     any_weekend = any(is_weekend(d) for d in days)
     cands: list[_Cand] = []
@@ -377,7 +418,7 @@ async def _gather(
             continue  # cannot be cooked on any of these evenings: do not fetch it
         calls += 1
         try:
-            recipe = await client.get_recipe(summ.id, servings=SCORE_SERVINGS)
+            recipe = await client.get_recipe(summ.id, servings=servings)
         except AhApiError as e:
             if _blocking(e):
                 raise
@@ -415,43 +456,57 @@ def _rank(day: date):
     return lambda c: (-c.score, c.order)
 
 
-def _pick(cands: list[_Cand], days: list[date]) -> list[_Cand] | None:
-    """Greedy in date order with backtracking; the first full menu found."""
+def _pick(
+    cands: list[_Cand], days: list[date], budget: list[int], best: list
+) -> list[_Cand] | None:
+    """Greedy in date order with backtracking; the first full menu found.
+
+    `budget` is shared over all attempts; when it runs out _OutOfBudget is raised.
+    `best[0]` keeps the longest valid partial menu seen, as (days, chosen).
+    """
     need = min(MIN_CUISINES, len(days))
     if len({c.cuisine for c in cands}) < need:
         return None
     per_day = [sorted((c for c in cands if _fits(d, c.cook)), key=_rank(d)) for d in days]
-    # cuisines still on offer from evening i on: prunes weeks that cannot reach `need`
-    avail = [set() for _ in range(len(days) + 1)]
+    # cuisines still on offer from evening i on, from non-fish and from fish recipes
+    plain: list[set] = [set() for _ in range(len(days) + 1)]
+    fishy: list[set] = [set() for _ in range(len(days) + 1)]
     for i in range(len(days) - 1, -1, -1):
-        avail[i] = avail[i + 1] | {c.cuisine for c in per_day[i]}
-    nodes = 0
+        plain[i] = plain[i + 1] | {c.cuisine for c in per_day[i] if not c.is_fish}
+        fishy[i] = fishy[i + 1] | {c.cuisine for c in per_day[i] if c.is_fish}
+    at_day = [{c.cuisine for c in cs} for cs in per_day]
 
-    def rec(i: int, used: set[int], cuisines: list[str], fish: int) -> list[_Cand] | None:
-        nonlocal nodes
+    def rec(i: int, path: list[_Cand], fish: int) -> list[_Cand] | None:
+        distinct = {c.cuisine for c in path}
+        valid = len(distinct) >= min(MIN_CUISINES, len(path))
+        if path and valid and len(path) > len(best[0][1]):
+            best[0] = (days[: len(path)], list(path))
         if i == len(days):
             return []
-        distinct = set(cuisines)
-        if len(avail[i] - distinct) < need - len(distinct):
-            return None
-        only_new = need - len(distinct) >= len(days) - i
+        new_plain = plain[i] - distinct
+        new_fish = fishy[i] - distinct - new_plain
+        reachable = len(new_plain) + min(len(new_fish), MAX_FISH - fish)
+        missing = need - len(distinct)
+        if reachable < missing:
+            return None  # this week can no longer reach enough cuisines
+        if missing > 0 and sum(1 for j in range(i, len(days)) if at_day[j] - distinct) < missing:
+            return None  # not enough evenings left that can take a new cuisine
+        only_new = missing >= len(days) - i
+        used = {c.id for c in path}
         for c in per_day[i]:
             if c.id in used or (c.is_fish and fish >= MAX_FISH):
                 continue
             if only_new and c.cuisine in distinct:
                 continue
-            nodes += 1
-            if nodes > _SEARCH_BUDGET:
+            budget[0] -= 1
+            if budget[0] < 0:
                 raise _OutOfBudget
-            rest = rec(i + 1, used | {c.id}, cuisines + [c.cuisine], fish + c.is_fish)
+            rest = rec(i + 1, path + [c], fish + c.is_fish)
             if rest is not None:
                 return [c] + rest
         return None
 
-    try:
-        return rec(0, set(), [], 0)
-    except _OutOfBudget:
-        return None
+    return rec(0, [], 0)
 
 
 def _arrange(chosen: list[_Cand], days: list[date], evenings: list[date]) -> list[_Cand]:
@@ -477,14 +532,30 @@ def _arrange(chosen: list[_Cand], days: list[date], evenings: list[date]) -> lis
     return best
 
 
-def _choose_menu(cands: list[_Cand], evenings: list[date]) -> dict[date, _Cand]:
-    """Fill as many evenings as the rules allow; drop the latest evenings first."""
-    for k in range(len(evenings), 0, -1):
-        for days in itertools.combinations(evenings, k):
-            chosen = _pick(cands, list(days))
-            if chosen:
-                return dict(zip(days, _arrange(chosen, list(days), evenings)))
-    return {}
+def _choose_menu(cands: list[_Cand], evenings: list[date]) -> tuple[dict[date, _Cand], bool]:
+    """Fill as many evenings as the rules allow; drop the latest evenings first.
+
+    Returns the menu and whether the search budget ran out. Then the longest valid
+    partial menu found so far is used: the rules hold, but it may not be the best menu.
+    """
+    budget = [_SEARCH_BUDGET]
+    best: list = [((), [])]
+    try:
+        for k in range(len(evenings), 0, -1):
+            for days in itertools.combinations(evenings, k):
+                chosen = _pick(cands, list(days), budget, best)
+                if chosen:
+                    return dict(zip(days, _arrange(chosen, list(days), evenings))), False
+    except _OutOfBudget:
+        days, chosen = best[0]
+        log.warning(
+            "menu search budget spent: using the best partial menu (%d of %d evenings)",
+            len(chosen), len(evenings),
+        )
+        if not chosen:
+            return {}, True
+        return dict(zip(days, _arrange(chosen, list(days), evenings))), True
+    return {}, False
 
 
 # --- building dishes and the basket ------------------------------------------------------
@@ -492,21 +563,33 @@ def _choose_menu(cands: list[_Cand], evenings: list[date]) -> dict[date, _Cand]:
 
 async def _lines(client, recipe: Recipe, resolve) -> tuple[list[Line], list[str], list[str]]:
     lines, pantry, not_found = [], [], []
-    for text, name in recipe.ingredients:
-        kind, p = await resolve(text, name)
+    for i, (text, name) in enumerate(recipe.ingredients):
+        kind, p = await resolve(i, text, name)
         if kind == "pantry":
             pantry.append(text)
             continue
         if p is None:
             not_found.append(text)
             continue
-        amount = parse_ingredient(text, name or text)
-        lines.append(Line(p, packs_needed(amount, parse_unit_size(p.unit_size)), text))
+        lines.append(_line(p, parse_ingredient(text, name or text), text))
     return lines, pantry, not_found
 
 
+def _line(p: Product, amount, text: str) -> Line:
+    # most bonus cards have no salesUnitSize; the title often says it ("... 3 kilo")
+    size = parse_unit_size(p.unit_size) or parse_unit_size(p.title)
+    return Line(p, packs_needed(amount, size), text, pack_fraction(amount, size))
+
+
+def _packs(lines: list[Line]) -> int:
+    """Packs for these lines of one product together: amounts first, then round up."""
+    parts = sum(ln.fraction for ln in lines if ln.fraction is not None)
+    whole = sum(ln.qty for ln in lines if ln.fraction is None)
+    return max(1, math.ceil(parts - 1e-9) + whole) if lines else 0
+
+
 def _resolver(client, bonus: list[Product], pantry: list[str], cache: dict):
-    async def resolve(text: str, name: str):
+    async def resolve(_i: int, text: str, name: str):
         if is_pantry(name or text, pantry):
             return "pantry", None
         amount = parse_ingredient(text, name or text)
@@ -538,17 +621,22 @@ async def _make_dish(
     )
 
 
-def _finish(dishes: list[Dish], short_by: int) -> Plan:
+def _finish(
+    dishes: list[Dish], short_by: int, pantry: list[str], budget_exhausted: bool = False
+) -> Plan:
     """Merge quantities per product, top up deals only for shared products, split savings."""
     dishes = sorted(dishes, key=lambda d: d.date)
-    need: dict[int, int] = {}
+    per_product: dict[int, list[Line]] = {}
     users: dict[int, set[int]] = {}
     products: dict[int, Product] = {}
     for i, d in enumerate(dishes):
         for ln in d.lines:
             products.setdefault(ln.product.id, ln.product)
-            need[ln.product.id] = need.get(ln.product.id, 0) + ln.qty
+            per_product.setdefault(ln.product.id, []).append(ln)
             users.setdefault(ln.product.id, set()).add(i)
+    need = {pid: _packs(lines) for pid, lines in per_product.items()}
+    # each dish's share of a product, by its own amount
+    weight_total = {pid: sum(_weight(ln) for ln in ls) for pid, ls in per_product.items()}
     basket = {
         pid: (qty_for_deal(products[pid], n) if len(users[pid]) > 1 else n)
         for pid, n in need.items()
@@ -556,10 +644,13 @@ def _finish(dishes: list[Dish], short_by: int) -> Plan:
     total_saving = {pid: savings(products[pid], q) for pid, q in basket.items()}
     out = []
     for d in dishes:
-        mine: dict[int, int] = {}
+        mine: dict[int, float] = {}
         for ln in d.lines:
-            mine[ln.product.id] = mine.get(ln.product.id, 0) + ln.qty
-        share = sum(total_saving[pid] * q / need[pid] for pid, q in mine.items() if need[pid])
+            mine[ln.product.id] = mine.get(ln.product.id, 0) + _weight(ln)
+        share = sum(
+            total_saving[pid] * w / weight_total[pid]
+            for pid, w in mine.items() if weight_total[pid]
+        )
         out.append(dataclasses.replace(d, savings=round(share, 2)))
     not_found: list[str] = []
     for d in out:
@@ -573,7 +664,22 @@ def _finish(dishes: list[Dish], short_by: int) -> Plan:
         savings=round(sum(total_saving.values()), 2),
         not_found=not_found,
         short_by=short_by,
+        pantry=list(pantry),
+        budget_exhausted=budget_exhausted,
     )
+
+
+def _weight(ln: Line) -> float:
+    return ln.fraction if ln.fraction is not None else float(ln.qty)
+
+
+def score_servings(s: Settings, days: list[date]) -> int:
+    """The most common number of persons over the evenings (ties: the higher one)."""
+    counts: dict[int, int] = {}
+    for d in days:
+        n = s.persons.get(d, SCORE_SERVINGS)
+        counts[n] = counts.get(n, 0) + 1
+    return max(counts, key=lambda n: (counts[n], n)) if counts else SCORE_SERVINGS
 
 
 # --- public API -----------------------------------------------------------------------------
@@ -582,15 +688,17 @@ def _finish(dishes: list[Dish], short_by: int) -> Plan:
 async def build_plan(client, bonus: list[Product], s: Settings) -> Plan:
     evenings = sorted(s.evenings)
     detail_budget = max(MAX_RECIPE_DETAILS - len(evenings), 0)
-    cands, used = await _gather(client, bonus, s, set(), evenings, detail_budget)
-    menu = _choose_menu(cands, evenings)
+    cands, used = await _gather(
+        client, bonus, s, set(), evenings, detail_budget, score_servings(s, evenings)
+    )
+    menu, exhausted = _choose_menu(cands, evenings)
     budget = [MAX_RECIPE_DETAILS - used]  # what is left for scaling to the persons
     resolve = _resolver(client, bonus, s.pantry, {})
     dishes = [
         await _make_dish(client, c, day, s.persons.get(day, SCORE_SERVINGS), resolve, budget)
         for day, c in sorted(menu.items())
     ]
-    return _finish(dishes, short_by=len(evenings) - len(dishes))
+    return _finish(dishes, len(evenings) - len(dishes), s.pantry, exhausted)
 
 
 async def swap_dish(
@@ -600,7 +708,8 @@ async def swap_dish(
     old = next((d for d in plan.dishes if d.date == day), None)
     others = [d for d in plan.dishes if d.date != day]
     skip = set(exclude) | {d.recipe.id for d in others} | ({old.recipe.id} if old else set())
-    cands, _ = await _gather(client, bonus, s, skip, [day], MAX_RECIPE_DETAILS - 1)
+    persons = old.persons if old else s.persons.get(day, SCORE_SERVINGS)
+    cands, _ = await _gather(client, bonus, s, skip, [day], MAX_RECIPE_DETAILS - 1, persons)
     need = min(MIN_CUISINES, len(others) + 1)
     other_cuisines = {d.cuisine for d in others}
     other_fish = sum(d.is_fish for d in others)
@@ -613,12 +722,13 @@ async def swap_dish(
     if not ok:
         return dataclasses.replace(plan, short_by=1)
     best = min(ok, key=_rank(day))
-    persons = old.persons if old else s.persons.get(day, SCORE_SERVINGS)
     resolve = _resolver(client, bonus, s.pantry, {})
     dish = await _make_dish(client, best, day, persons, resolve)
     dishes = others + [dish]
     filled = {d.date for d in dishes}
-    return _finish(dishes, short_by=sum(1 for e in s.evenings if e not in filled))
+    return _finish(
+        dishes, sum(1 for e in s.evenings if e not in filled), s.pantry, plan.budget_exhausted
+    )
 
 
 async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
@@ -628,25 +738,29 @@ async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
         return plan
     recipe = await client.get_recipe(old.recipe.id, servings=persons)
 
-    name_of = {t: n or t for t, n in old.recipe.ingredients}
-    by_name = {name_of.get(ln.from_ingredient, ""): ln.product for ln in old.lines}
-    pantry_names = {name_of.get(t, t) for t in old.pantry}
-    missing_names = {name_of.get(t, t) for t in old.not_found}
+    old_keys = [n or t for t, n in old.recipe.ingredients]
+    key_of_text = dict(zip((t for t, _ in old.recipe.ingredients), old_keys))
+    by_key = {key_of_text.get(ln.from_ingredient, ""): ln.product for ln in old.lines}
+    missing_keys = {key_of_text.get(t, t) for t in old.not_found}
+    same_list = len(old_keys) == len(recipe.ingredients)
     known_bonus = [p for p in plan.products.values() if p.is_bonus]
 
-    async def resolve(text: str, name: str):
-        key = name or text
-        if key in pantry_names:
-            return "pantry", None
-        if key in by_name:
-            return "product", by_name[key]
-        if key in missing_names:
+    async def resolve(i: int, text: str, name: str):
+        if is_pantry(name or text, plan.pantry):
+            return "pantry", None  # never bought, also not after scaling
+        # the scaled text differs ("4 el" for "2 el"): match on name, else on position
+        key = name or (old_keys[i] if same_list else text)
+        if key in by_key:
+            return "product", by_key[key]
+        if key in missing_keys:
             return "product", None
-        return "product", await choose_product(client, parse_ingredient(text, key), known_bonus)
+        return "product", await choose_product(
+            client, parse_ingredient(text, name or text), known_bonus
+        )
 
     lines, pantry, not_found = await _lines(client, recipe, resolve)
     dish = dataclasses.replace(
         old, recipe=recipe, persons=persons, lines=lines, pantry=pantry, not_found=not_found
     )
     dishes = [dish if d.date == day else d for d in plan.dishes]
-    return _finish(dishes, short_by=plan.short_by)
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted)
