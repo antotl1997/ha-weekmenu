@@ -6,6 +6,7 @@ things the user removed again are never re-added.
 """
 import json
 import os
+import time
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from pathlib import Path
@@ -26,6 +27,8 @@ class WeekLog:
     previous: dict[str, int] = field(default_factory=dict)  # ISO day -> recipe id before last swap
     extras_added: dict[int, int] = field(default_factory=dict)
     extras_savings: float = 0.0
+    # Write-ahead record of a write in flight: pid -> {"before", "delta", "target", "order_id"}
+    pending: dict[int, dict] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return {
@@ -39,6 +42,7 @@ class WeekLog:
             "previous": dict(self.previous),
             "extras_added": {str(k): v for k, v in self.extras_added.items()},
             "extras_savings": self.extras_savings,
+            "pending": {str(k): dict(v) for k, v in self.pending.items()},
         }
 
     @classmethod
@@ -54,6 +58,7 @@ class WeekLog:
             previous={k: int(v) for k, v in (d.get("previous") or {}).items()},
             extras_added={int(k): int(v) for k, v in (d.get("extras_added") or {}).items()},
             extras_savings=float(d.get("extras_savings") or 0.0),
+            pending={int(k): dict(v) for k, v in (d.get("pending") or {}).items()},
         )
 
 
@@ -86,8 +91,18 @@ class Ledger:
         self.root.mkdir(parents=True, exist_ok=True)
         tmp = Path(str(path) + ".tmp")
         try:
-            tmp.write_text(json.dumps(log.to_dict()), encoding="utf-8")
-            os.replace(tmp, path)
+            with open(tmp, "w", encoding="utf-8") as f:
+                f.write(json.dumps(log.to_dict()))
+                f.flush()
+                os.fsync(f.fileno())
+            for attempt in range(6):
+                try:
+                    os.replace(tmp, path)
+                    break
+                except PermissionError:  # Windows: a scanner may hold the file for a moment
+                    if attempt == 5:
+                        raise
+                    time.sleep(0.05)
         except BaseException:
             tmp.unlink(missing_ok=True)
             raise

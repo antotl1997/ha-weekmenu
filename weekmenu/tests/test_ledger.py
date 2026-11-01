@@ -1,6 +1,8 @@
 import json
 from datetime import date, timedelta
 
+import pytest
+
 from app.ahclient import Product
 from app.ledger import Ledger, WeekLog, leftovers
 from app.planner import Plan
@@ -24,7 +26,8 @@ def test_ledger_roundtrip_and_atomic(tmp_path):
     led = Ledger(tmp_path / "weeks")
     log = WeekLog(W, plan={"dishes": []}, added={5: 2}, target="list", savings=3.5,
                   counted=True, swapped_out={"2026-11-05": [1, 2]}, previous={"2026-11-05": 9},
-                  extras_added={7: 1}, extras_savings=0.5)
+                  extras_added={7: 1}, extras_savings=0.5,
+                  pending={3: {"before": 1, "delta": 2, "target": "order", "order_id": 8}})
     led.save(log)
     assert (tmp_path / "weeks" / "2026-11-04.json").exists()
     assert not list((tmp_path / "weeks").glob("*.tmp"))
@@ -34,10 +37,8 @@ def test_ledger_roundtrip_and_atomic(tmp_path):
         def to_dict(self):
             raise RuntimeError("x")
 
-    try:
+    with pytest.raises(RuntimeError):
         led.save(Boom(W))
-    except RuntimeError:
-        pass
     assert led.load(W) == log  # old file intact
     assert not list((tmp_path / "weeks").glob("*.tmp"))
 
@@ -54,6 +55,7 @@ def test_load_older_file_without_extras_fields(tmp_path):
     }), encoding="utf-8")
     log = Ledger(tmp_path).load(W)
     assert log.added == {5: 1} and log.extras_added == {} and log.extras_savings == 0.0
+    assert log.pending == {}
 
 
 def test_recent_recipe_ids_last_four_weeks(tmp_path):

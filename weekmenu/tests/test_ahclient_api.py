@@ -476,3 +476,30 @@ async def test_bonus_offers_pauses_between_calls(respx_mock, tmp_path, monkeypat
     await client.bonus_offers(period_with(["A", "B", "C"]))
     assert slept == [0.2, 0.2]
     await http.aclose()
+
+
+async def test_add_to_order_on_before_gets_fresh_quantities_before_put(respx_mock, tmp_path):
+    respx_mock.get(ORDER_GET).respond(
+        json={"id": 123456, "orderedProducts": [{"quantity": 4, "product": {"webshopId": 1235}}]}
+    )
+    put = respx_mock.put(ORDER_PUT).respond(200)
+    client, http = make(tmp_path)
+    seen = []
+    await client.add_to_order(
+        ActiveOrder(123456, {1235: 1}), {1235: 1, 99: 3},
+        on_before=lambda cur: seen.append((dict(cur), put.call_count)),
+    )
+    assert seen == [({1235: 4, 99: 0}, 0)]
+    await http.aclose()
+
+
+async def test_add_to_shopping_list_on_before_gets_current_before_patch(respx_mock, tmp_path):
+    respx_mock.get(LIST_URL).respond(json={"items": [
+        {"quantity": 2, "productDetails": {"product": {"webshopId": 7}}}]})
+    patch = respx_mock.patch(LIST_URL).respond(200)
+    client, http = make(tmp_path)
+    seen = []
+    await client.add_to_shopping_list(
+        {7: 1}, on_before=lambda cur: seen.append((dict(cur), patch.call_count)))
+    assert seen == [({7: 2}, 0)]
+    await http.aclose()

@@ -4,6 +4,7 @@ import re
 import time
 from dataclasses import dataclass, field
 from datetime import date
+from collections.abc import Callable
 from typing import Any
 from urllib.parse import parse_qs, quote, urlparse
 
@@ -524,8 +525,14 @@ class AhClient:
                 out[int(pid)] = out.get(int(pid), 0) + int(it.get("quantity") or 0)
         return out
 
-    async def add_to_shopping_list(self, adds: dict[int, int]) -> None:
-        """Never retried. The PATCH sets quantities, so send current + added."""
+    async def add_to_shopping_list(
+        self, adds: dict[int, int], on_before: Callable[[dict[int, int]], None] | None = None
+    ) -> None:
+        """Never retried. The PATCH sets quantities, so send current + added.
+
+        `on_before` gets the fresh current quantities of the added products
+        right before the PATCH (write-ahead hook).
+        """
         if not adds:
             return
         current = await self.shopping_list()
@@ -543,6 +550,8 @@ class AhClient:
                     "strikeThrough": False,
                 }
             )
+        if on_before is not None:
+            on_before({pid: current.get(pid, 0) for pid in adds})
         await self.request(
             "PATCH", "/mobile-services/shoppinglist/v2/items", json={"items": items}
         )
@@ -565,11 +574,17 @@ class AhClient:
                 items[int(pid)] = items.get(int(pid), 0) + int(op.get("quantity") or 0)
         return ActiveOrder(id=int(r.body["id"]), items=items)
 
-    async def add_to_order(self, order: ActiveOrder, adds: dict[int, int]) -> None:
+    async def add_to_order(
+        self,
+        order: ActiveOrder,
+        adds: dict[int, int],
+        on_before: Callable[[dict[int, int]], None] | None = None,
+    ) -> None:
         """Never retried. The PUT sets quantities, so send current + added.
 
         The current quantities are re-read right before the PUT, so changes
-        made in the app since `order` was read are never lowered.
+        made in the app since `order` was read are never lowered. `on_before`
+        gets those fresh quantities of the added products right before the PUT.
         """
         if not adds:
             return
@@ -590,6 +605,8 @@ class AhClient:
                     "strikethrough": False,
                 }
             )
+        if on_before is not None:
+            on_before({pid: fresh.items.get(pid, 0) for pid in adds})
         await self.request(
             "PUT",
             "/mobile-services/order/v1/items?sortBy=DEFAULT",
