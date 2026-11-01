@@ -170,7 +170,9 @@ def product_from_card(c: dict) -> Product:
     )
 
 
-def product_from_graphql(p: dict, is_bonus: bool = True) -> Product:
+def product_from_graphql(
+    p: dict, is_bonus: bool = True, category: str | None = None
+) -> Product:
     """GraphQL product (bonus group expansion)."""
     price = p.get("priceV2") or {}
     now = (price.get("now") or {}).get("amount")
@@ -188,7 +190,7 @@ def product_from_graphql(p: dict, is_bonus: bool = True) -> Product:
         is_bonus=is_bonus,
         mechanism=(price.get("discount") or {}).get("description") or None,
         orderable=True,
-        category=None,
+        category=category,
     )
 
 
@@ -368,7 +370,12 @@ class AhClient:
         for promo in data.get("bonusPromotions") or []:
             for p in promo.get("products") or []:
                 if p.get("id") is not None:
-                    out.append(product_from_graphql(p, is_bonus=True))
+                    # GraphQL has no category: use the group's own (the planner filters on it)
+                    out.append(
+                        product_from_graphql(
+                            p, is_bonus=True, category=group.get("category") or None
+                        )
+                    )
         return out
 
     @staticmethod

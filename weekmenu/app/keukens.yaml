@@ -1,0 +1,95 @@
+# Keukenindeling van Allerhande-recepten voor de planner.
+#
+# Allerhande vult `cuisines` bijna nooit (21 van 22 opgenomen recepten leeg, een keer
+# "mexicaans"). De keuken van een recept wordt daarom in deze volgorde bepaald:
+#   1. een `cuisines`-waarde van het recept die hieronder staat
+#   2. een titelwoord (deel van een woord telt ook: "witlofstamppot" -> stamppot)
+#   3. ingredienten: de keuken met de meeste treffers in de ingredientnamen
+#   4. de zoekterm waarmee het recept gevonden is, met de titelwoorden
+# Valt een recept nergens in, dan doet het niet mee.
+#
+# De volgorde van de keukens is de voorrang als een titel bij twee keukens past:
+# "Mexicaanse ovenschotel" is Mexicaans, "Gnocchi-ovenschotel" is Italiaans.
+# Alles in kleine letters en zonder accenten (saté -> sate).
+
+keukens:
+  - naam: Mexicaans en wraps
+    cuisines: [mexicaans, tex-mex]
+    titel: [mexicaans, wrap, taco, burrito, quesadilla, enchilada, fajita, nacho,
+            chili con carne, tortilla, tostada]
+    ingredienten: [tortilla, wrap, taco, chipotle, kidneybonen, zwarte bonen, jalapeno,
+                   salsa, nacho, guacamole, tacokruiden, burrito, fajita]
+
+  - naam: Aziatisch
+    cuisines: [aziatisch, chinees, japans, thais, indonesisch, indiaas, koreaans,
+               vietnamees, surinaams]
+    titel: [aziatisch, wok, curry, noedel, noodle, nasi, bami, teriyaki, sate, ramen,
+            pad thai, sushi, rendang, roerbak, udon, dumpling, thais, thaise, indiase, miso,
+            indonesische, chinese, japanse, koreaanse, poke, bibimbap, gochujang]
+    ingredienten: [ketjap, sojasaus, sambal, kokosmelk, currypasta, curry, mirin,
+                   sesamolie, vissaus, noedel, nasi, bami, tempeh, miso, gochujang,
+                   kimchi, wokgroente, oestersaus, rijstazijn, sriracha, kroepoek,
+                   pindasaus, jasmijnrijst, basmatirijst, naan]
+
+  - naam: pasta en Italiaans
+    cuisines: [italiaans]
+    titel: [italiaans, pasta, spaghetti, penne, lasagne, risotto, gnocchi, ravioli,
+            tortellini, macaroni, orzo, pizza, carbonara, bolognese, linguine,
+            tagliatelle, rigatoni, fusilli, pappardelle, orecchiette, farfalle,
+            mafaldine, conchiglie]
+    ingredienten: [pasta, spaghetti, penne, lasagne, risottorijst, gnocchi, ravioli,
+                   tortellini, macaroni, orzo, linguine, tagliatelle, rigatoni, fusilli,
+                   parmigiano, parmezaan, grana padano, pecorino, mozzarella, burrata,
+                   ricotta, pesto, pancetta, nduja, mascarpone]
+
+  - naam: Hollandse pot
+    cuisines: [hollands, nederlands]
+    titel: [stamppot, stamp, hutspot, zuurkool, boerenkool, andijvie, hachee, stoofvlees,
+            draadjesvlees, ovenschotel, schotel, gratin, gehaktbal, slavink, rookworst,
+            aardappelen met, aardappel met, puree, stoofpot, erwtensoep, snert, jachtschotel]
+    ingredienten: [rookworst, zuurkool, boerenkool, andijvie, rodekool, hutspot,
+                   kruimige aardappel, braadworst, slavink, jus, speklap, hachee, appelmoes,
+                   draadjesvlees]
+
+# Vis: trefwoorden in titel, ingredientnamen en titels van gekozen producten.
+# Daarnaast telt elk woord dat op "vis" begint of eindigt ("visfrietjes", "koolvis"),
+# behalve de uitzonderingen. Een product met AH-categorie precies "Vis" telt ook.
+vis: [zalm, kabeljauw, garnaal, garnalen, tonijn, pangasius, schol, tilapia, makreel,
+      forel, zeebaars, roodbaars, heek, wijting, sliptong, haring, kibbeling, lekkerbek,
+      mossel, scampi, zeevruchten, sardine, poon, dorade, zeewolf]
+vis_uitzonderingen: [vissaus, visbouillon, visfond, ansjovis]
+
+# Kip: gaat net als vis bij voorkeur naar de eerste twee avonden.
+kip: [kip, chicken]
+kip_uitzonderingen: [kippenbouillon]
+
+# Houdbaar of diepvries: telt niet als vers product (maandag en dinsdag krijgen het
+# recept met de minste verse producten).
+houdbaar: [diepvries, gedroogd, blik, pot, rijst, pasta, spaghetti, penne, linguine,
+           lasagnevel, orzo, noedel, linzen, bonen, bouillon, saus, kruiden, specerij,
+           zaad, poeder, vlokken, meel, ketjap, sambal, sojasaus, mirin, azijn, wijn,
+           noten, amandel, honing, mosterd, wrap, tortilla, tapenade, couscous,
+           bulgur, kokosmelk, currypasta, mayonaise, ketchup, tomatenblokjes, passata,
+           tomatenpuree, laurier, kaneel, oregano, paneermeel, tablet, blokje, chips]
+
+# Recepten die nooit meedoen (deel van de titel, kleine letters).
+uitsluiten_titel: ["maanden (opperdepop)", "+ maanden"]
+
+# Bonusproducten om recepten bij te zoeken: alleen deze AH-categorieen (deel van de
+# naam, kleine letters).
+bonus_categorieen: [vlees, vis, kip, groente, aardappel, kaas, zuivel]
+
+# Kernwoorden: de zoekterm voor Allerhande bij een bonusproduct. Het langste kernwoord
+# dat in een woord van de producttitel zit wint ("AH Rundergehakt" -> gehakt,
+# "AH Zeebaarsfilet op huid" -> zeebaars). Met een spatie: deel van de hele titel.
+# Geen kernwoord: het langste titelwoord.
+kernwoorden: [gehakt, kip, kipfilet, kipdij, kipworst, kippendij, rundvlees, biefstuk,
+              varkenshaas, speklap, spek, rookworst, braadworst, worst, shoarma, hamlap,
+              schnitzel, slavink, hamburger, burger, gyros, pulled pork, sate, stoofvlees,
+              lamsvlees, zalm, kabeljauw, tonijn, garnalen, pangasius, zeebaars, roodbaars,
+              koolvis, schol, kibbeling, mosselen, makreel, forel, aardappel, prei,
+              broccoli, bloemkool, spinazie, paprika, courgette, champignon, wortel,
+              winterpeen, uien, avocado, bleekselderij, spitskool, boerenkool, zuurkool,
+              andijvie, rodekool, witlof, pompoen, tomaat, sperziebonen, aubergine,
+              knolselderij, pastinaak, zoete aardappel, kaas, feta, mozzarella, geitenkaas,
+              halloumi, burrata, ricotta, room, kookroom, yoghurt, creme fraiche, eieren, tomaten]

@@ -95,6 +95,8 @@ async def test_bonus_offers_expands_group_deals_and_marks_bonus(respx_mock, tmp_
     assert soup.now == 2.99 and soup.regular == 4.49
     assert soup.mechanism == "VOOR 2.99"
     assert soup.unit_size == "6 pers | 30 min"
+    # GraphQL has no category; the planner needs the group's own (Taak 6)
+    assert soup.category == "Groente, aardappelen"
     # a plain REST card keeps its own fields
     gehakt = by_id[619322]
     assert (gehakt.regular, gehakt.now, gehakt.mechanism) == (2.99, 1.49, "50% korting")
