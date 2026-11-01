@@ -256,6 +256,7 @@ class AhClient:
         self.skipped_categories: list[str] = []
         self.skipped_groups: list[str] = []
         self._called_ah = False
+        self._refresh_task: asyncio.Task | None = None
 
     def _headers(self, order_id: int | None = None) -> dict[str, str]:
         h = {
@@ -269,7 +270,7 @@ class AhClient:
             h["Appie-Current-Order-Id"] = str(order_id)
         return h
 
-    async def _token_call(self, path: str, body: dict) -> None:
+    async def _token_call(self, path: str, body: dict, *, refreshing: bool = False) -> None:
         # Error messages never include response bodies: they may echo secrets.
         try:
             r = await self.http.post(
@@ -280,8 +281,9 @@ class AhClient:
             )
         except httpx.HTTPError as e:
             raise AhApiError(f"token request failed: {type(e).__name__}") from None
-        if r.status_code == 401:
-            raise AhLoginExpired("login expired", 401)
+        if r.status_code == 401 or (refreshing and r.status_code in (400, 403)):
+            # a refused refresh (usually 400 invalid_grant) means: log in again
+            raise AhLoginExpired("login expired", r.status_code)
         if r.status_code != 200:
             raise AhApiError(f"token request failed: HTTP {r.status_code}", r.status_code)
         try:
@@ -302,12 +304,26 @@ class AhClient:
         )
 
     async def refresh(self) -> None:
+        """Single-flight and shielded: concurrent callers share one refresh POST, and a
+        cancelled caller leaves it running until the new tokens are saved (AH may have
+        rotated the refresh token already, so dropping the answer would lose the login).
+        """
+        task = self._refresh_task
+        if task is None or task.done():
+            task = asyncio.create_task(self._do_refresh())
+            # retrieve the outcome even when every caller was cancelled
+            task.add_done_callback(lambda t: t.cancelled() or t.exception())
+            self._refresh_task = task
+        await asyncio.shield(task)
+
+    async def _do_refresh(self) -> None:
         t = self.store.load()
         if t is None:
             raise AhLoginExpired("not logged in", 401)
         await self._token_call(
             "/mobile-auth/v1/auth/token/refresh",
             {"clientId": "appie-ios", "refreshToken": t.refresh_token},
+            refreshing=True,
         )
 
     async def ensure_fresh(self) -> None:
@@ -373,7 +389,7 @@ class AhClient:
         )
         if isinstance(body, dict) and body.get("errors"):
             raise AhApiError("graphql returned errors", 200)
-        return (body or {}).get("data", {})
+        return (body or {}).get("data") or {}
 
     # --- bonus ---
 

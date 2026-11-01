@@ -407,3 +407,43 @@ def test_message_mentions_staples_count():
     assert "Ook 1 vaste boodschap in de bonus" in text
     _, text = format_message(plan, WriteResult("order"), "Niet deze week", None)
     assert "vaste boodschap" not in text
+
+
+async def test_token_refresh_happens_before_the_time_limit(tmp_path, planned, monkeypatch):
+    """A refresh never starts inside the bounded window, so a timeout cannot cut it off."""
+    monkeypatch.setattr(main, "STAPLES_TIMEOUT", 0.05)
+    ah = staples_ah(tmp_path)
+    order: list[str] = []
+
+    async def slow_fresh():
+        order.append("fresh start")
+        await asyncio.sleep(0.2)  # longer than STAPLES_TIMEOUT: outside wait_for it finishes
+        order.append("fresh done")
+
+    real = ah.bonus_periods
+
+    async def periods():
+        order.append("periods")
+        return await real()
+
+    ah.ensure_fresh = slow_fresh
+    ah.bonus_periods = periods
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await main.run_round(ctx, SUNDAY, "nu_maken")
+    assert out.status == "done"
+    # the menu's own reads come first; the staples step checks the token, then reads
+    assert order[-3:] == ["fresh start", "fresh done", "periods"]
+    log = ctx.ledger.load(W)
+    assert log.staples_error is None and [s["product"]["id"] for s in log.staples] == [50]
+
+
+async def test_staples_login_expired_is_reported_not_raised(tmp_path, planned):
+    from app.ahclient import AhLoginExpired
+    ah = staples_ah(tmp_path)
+    ah.raise_on["ensure_fresh"] = AhLoginExpired("login expired", 400)
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await main.run_round(ctx, SUNDAY, "nu_maken")
+    assert out.status == "done"  # the menu itself is on the list
+    log = ctx.ledger.load(W)
+    assert log.added == {1: 1, 2: 1} and "login expired" in log.staples_error
+    assert "previously_bought_bonus" not in ah.calls

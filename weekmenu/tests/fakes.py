@@ -72,11 +72,18 @@ class FakeAh:
         self.history: list = []  # Purchase list returned by purchases()
         self.prev_bonus: list[Product] = []  # previously_bought_bonus()
         self.history_for: list = []
+        self.fresh_checks = 0
 
     def _maybe_raise(self, name):
         self.calls.append(name)
         if name in self.raise_on:
             raise self.raise_on[name]
+
+    async def ensure_fresh(self):
+        # not in `calls`: tests compare that list with the AH reads of a round
+        if "ensure_fresh" in self.raise_on:
+            raise self.raise_on["ensure_fresh"]
+        self.fresh_checks += 1
 
     async def bonus_periods(self):
         self._maybe_raise("bonus_periods")

@@ -378,3 +378,48 @@ async def test_total_never_goes_down(tmp_path, planned):
     assert ctx.hass.totals()[-1] == 4.0
     data = json.loads((tmp_path / "totaal.json").read_text())
     assert data["counted"] == {"2026-10-28": 4.0}
+
+
+# --- final review fixes ----------------------------------------------------------------
+
+
+async def test_non_http_settings_error_retries_the_sunday_round(tmp_path, planned):
+    calls, _ = planned
+    ctx = make_ctx(tmp_path)
+
+    async def broken():
+        raise ValueError("bad helper value")
+
+    ctx.hass.read_settings = broken
+    await tick(ctx, SUNDAY)
+    assert ctx.retry_at == datetime(2026, 11, 1, 8, 10)  # same path as an HTTP error
+    assert "ValueError" in ctx.error and "bad helper value" not in ctx.error
+    assert calls == [] and not (tmp_path / "state.json").exists()
+
+
+async def test_refused_refresh_in_a_round_asks_for_login(tmp_path, planned, respx_mock,
+                                                         aiohttp_client):
+    import time as _time
+
+    import httpx
+
+    from app.ahclient import AhClient
+    from app.tokens import Tokens
+    from app.web import make_app
+
+    respx_mock.post("https://api.ah.nl/mobile-auth/v1/auth/token/refresh").respond(
+        400, json={"error": "invalid_grant"})
+    ah = FakeAh(tmp_path)
+    ah.store.save(Tokens("a", "r", _time.time() + 10))  # about to expire
+    async with httpx.AsyncClient() as http:
+        real = AhClient(ah.store, http)
+        ah.bonus_periods = real.bonus_periods  # the first AH call refreshes the token
+        ctx = make_ctx(tmp_path, ah=ah)
+        out = await run_round(ctx, SUNDAY, "schema")
+    assert out.status == "login_expired" and ah.writes == []
+    (note,) = ctx.hass.notifications()
+    assert note["message"] == "AH-login verlopen, log opnieuw in"
+    assert ctx.login_expired
+    client = await aiohttp_client(make_app(ctx))
+    status = await (await client.get("/api/status")).json()
+    assert status["logged_in"] is False  # app.js shows the login screen

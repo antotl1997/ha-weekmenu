@@ -5,7 +5,7 @@ whole menu (or reuse the week's menu from the log), then write the delta to AH,
 publish the sensors and send the push message.
 
 Every path that writes to AH (the rounds and the write calls of the web API) runs
-under `Context.lock`: AhClient has no refresh lock, and two writers at once could
+under `Context.lock`: two writers at once could
 add a product twice. Calls to Home Assistant never break a round: their
 `httpx.HTTPError` is logged and dropped.
 """
@@ -194,7 +194,7 @@ async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
     start = menu_week_start(now)
     try:
         raw = await ctx.hass.read_settings()
-    except httpx.HTTPError as e:
+    except Exception as e:  # not only HTTP: nothing may skip the Sunday round silently
         msg = f"Home Assistant-instellingen niet te lezen ({type(e).__name__})"
         ctx.error = msg
         if mode == "schema":  # nothing written yet: try again, it must not stop unnoticed
@@ -316,6 +316,8 @@ async def refresh_staples(ctx: Context, wlog: WeekLog, plan: Plan, start: date,
         return staples.suggest_staples(bought, bonus, plan.basket, today)
 
     try:
+        # Outside the time limit: a cancelled refresh could lose the rotated token.
+        await ctx.client.ensure_fresh()
         staples.merge(wlog, await asyncio.wait_for(fetch(), STAPLES_TIMEOUT))
         wlog.staples_error = None
     except Exception as e:

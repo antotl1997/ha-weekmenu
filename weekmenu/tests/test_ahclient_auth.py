@@ -1,3 +1,4 @@
+import asyncio
 import time
 
 import httpx
@@ -145,3 +146,102 @@ FAKE_CODE = "11111111-2222-3333-4444-555555555555"
 )
 def test_extract_code(pasted):
     assert extract_code(pasted) == FAKE_CODE
+
+
+# --- final review fixes ---------------------------------------------------------------
+
+
+@pytest.mark.parametrize("status", [400, 401, 403])
+async def test_refused_refresh_is_login_expired(respx_mock, tmp_path, status):
+    # a refused refresh is usually 400 invalid_grant: the user must log in again
+    respx_mock.post(REFRESH_URL).respond(status, json={"error": "invalid_grant"})
+    client, _, http = make(tmp_path, Tokens("a", "r", time.time() + 10))
+    with pytest.raises(AhLoginExpired) as ei:
+        await client.ensure_fresh()
+    assert "invalid_grant" not in str(ei.value)
+    await http.aclose()
+
+
+async def test_refresh_500_stays_api_error(respx_mock, tmp_path):
+    respx_mock.post(REFRESH_URL).respond(500, text="down")
+    client, _, http = make(tmp_path, Tokens("a", "r", time.time() + 10))
+    with pytest.raises(AhApiError) as ei:
+        await client.ensure_fresh()
+    assert not isinstance(ei.value, AhLoginExpired) and ei.value.status == 500
+    await http.aclose()
+
+
+@pytest.mark.parametrize("status", [400, 403])
+async def test_bad_login_code_is_not_login_expired(respx_mock, tmp_path, status):
+    # login() must still report a bad code as a failed login, with its status
+    respx_mock.post(TOKEN_URL).respond(status, json={})
+    client, _, http = make(tmp_path)
+    with pytest.raises(AhApiError) as ei:
+        await client.exchange_code("abc")
+    assert not isinstance(ei.value, AhLoginExpired) and ei.value.status == status
+    await http.aclose()
+
+
+class SlowRefreshHttp:
+    """An http client whose refresh POST waits until `release` is set."""
+
+    def __init__(self):
+        self.posts = 0
+        self.started = asyncio.Event()
+        self.release = asyncio.Event()
+
+    async def post(self, url, **kw):
+        self.posts += 1
+        self.started.set()
+        await self.release.wait()
+        return httpx.Response(200, json=token_body("fresh-a", "fresh-r"),
+                              request=httpx.Request("POST", url))
+
+
+async def test_cancelled_caller_still_saves_refreshed_token(tmp_path):
+    store = TokenStore(tmp_path / "tokens.json")
+    store.save(Tokens("old-a", "old-r", time.time() + 10))
+    http = SlowRefreshHttp()
+    client = AhClient(store, http)
+    caller = asyncio.create_task(client.ensure_fresh())
+    await http.started.wait()
+    caller.cancel()  # e.g. asyncio.wait_for timing out mid-refresh
+    with pytest.raises(asyncio.CancelledError):
+        await caller
+    http.release.set()
+    await client._refresh_task  # the refresh itself was not cancelled
+    t = store.load()
+    assert (t.access_token, t.refresh_token) == ("fresh-a", "fresh-r")
+    assert http.posts == 1
+
+
+async def test_concurrent_ensure_fresh_makes_one_refresh(tmp_path):
+    store = TokenStore(tmp_path / "tokens.json")
+    store.save(Tokens("old-a", "old-r", time.time() + 10))
+    http = SlowRefreshHttp()
+    client = AhClient(store, http)
+    both = asyncio.gather(client.ensure_fresh(), client.ensure_fresh())
+    await http.started.wait()
+    http.release.set()
+    await both
+    assert http.posts == 1  # the old refresh token is used once, never twice
+    assert store.load().refresh_token == "fresh-r"
+
+
+async def test_failed_refresh_reaches_every_waiter_and_next_call_tries_again(
+        respx_mock, tmp_path):
+    route = respx_mock.post(REFRESH_URL).mock(side_effect=[
+        httpx.Response(500), httpx.Response(200, json=token_body())])
+    client, store, http = make(tmp_path, Tokens("a", "r", time.time() + 10))
+    with pytest.raises(AhApiError):
+        await client.ensure_fresh()
+    await client.ensure_fresh()  # a finished (failed) refresh is not reused
+    assert route.call_count == 2 and store.load().refresh_token == "new-r"
+    await http.aclose()
+
+
+async def test_graphql_null_data_is_empty(respx_mock, tmp_path):
+    respx_mock.post(BASE + "/graphql").respond(json={"data": None})
+    client, _, http = make(tmp_path, Tokens("a", "r", time.time() + 3600))
+    assert await client.graphql("query { x }", {}) == {}
+    await http.aclose()
