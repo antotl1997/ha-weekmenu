@@ -93,3 +93,52 @@ def test_staples_fields_roundtrip_and_default(tmp_path):
                                               encoding="utf-8")
     old = led.load(W)
     assert old.staples == [] and old.staples_error is None
+
+
+# --- final review fixes: the directory is fsynced after the replace -----------------
+
+
+def test_fsync_dir_after_replace(tmp_path, monkeypatch):
+    from app import durable
+    synced, closed = [], []
+    real_open = durable.os.open
+
+    def fake_open(path, flags, *a, **kw):
+        if path == str(tmp_path / "weeks"):
+            return 9999
+        return real_open(path, flags, *a, **kw)
+
+    real_fsync = durable.os.fsync
+    monkeypatch.setattr(durable.os, "open", fake_open)
+    monkeypatch.setattr(durable.os, "fsync",
+                        lambda fd: synced.append(fd) if fd == 9999 else real_fsync(fd))
+    monkeypatch.setattr(durable.os, "close", lambda fd: closed.append(fd))
+    led = Ledger(tmp_path / "weeks")
+    led.save(WeekLog(date(2026, 11, 4), savings=1.5))
+    assert synced == [9999] and closed == [9999]
+    assert led.load(date(2026, 11, 4)).savings == 1.5
+
+
+def test_save_works_when_the_directory_cannot_be_opened(tmp_path, monkeypatch):
+    """Windows cannot open a directory: the save still succeeds."""
+    from app import durable
+
+    def refuse(path, flags, *a, **kw):
+        raise PermissionError(13, "Permission denied")
+
+    led = Ledger(tmp_path / "weeks")
+    monkeypatch.setattr(durable.os, "open", refuse)
+    led.save(WeekLog(date(2026, 11, 4), savings=2.0))
+    assert led.load(date(2026, 11, 4)).savings == 2.0
+
+
+def test_tokens_and_total_fsync_their_directory(tmp_path, monkeypatch):
+    from app.hass import _save_total, load_total
+    from app.tokens import Tokens, TokenStore
+    dirs = []
+    monkeypatch.setattr("app.tokens.fsync_dir", lambda d: dirs.append(str(d)))
+    monkeypatch.setattr("app.hass.fsync_dir", lambda d: dirs.append(str(d)))
+    TokenStore(tmp_path / "t" / "tokens.json").save(Tokens("a", "r", 1.0))
+    _save_total(tmp_path / "s" / "totaal.json", 3.5, {})
+    assert dirs == [str(tmp_path / "t"), str(tmp_path / "s")]
+    assert load_total(tmp_path / "s" / "totaal.json") == 3.5

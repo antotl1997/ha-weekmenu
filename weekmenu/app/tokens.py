@@ -3,6 +3,8 @@ import os
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+from app.durable import fsync_dir
+
 
 @dataclass
 class Tokens:
@@ -34,3 +36,4 @@ class TokenStore:
         except BaseException:
             tmp.unlink(missing_ok=True)
             raise
+        fsync_dir(self.path.parent)

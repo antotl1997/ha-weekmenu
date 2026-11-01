@@ -8,6 +8,7 @@ from pathlib import Path
 
 import httpx
 
+from app.durable import fsync_dir
 from app.planner import Plan
 from app.week import GEEN_OUDERAVOND, WEEKDAGEN
 from app.writer import WriteResult
@@ -112,6 +113,7 @@ def _save_total(path: Path, total: float,
     except BaseException:
         tmp.unlink(missing_ok=True)
         raise
+    fsync_dir(path.parent)
 
 
 def plan_view(plan: Plan, week_start: date, target: str, ouders: str) -> dict:

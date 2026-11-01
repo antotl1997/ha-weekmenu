@@ -12,6 +12,7 @@ from datetime import date, timedelta
 from pathlib import Path
 from typing import Literal
 
+from app.durable import fsync_dir
 from app.planner import Plan
 
 
@@ -127,6 +128,7 @@ class Ledger:
         except BaseException:
             tmp.unlink(missing_ok=True)
             raise
+        fsync_dir(self.root)
 
     def _all(self) -> list[WeekLog]:
         logs = []
