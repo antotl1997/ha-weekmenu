@@ -22,11 +22,19 @@ def test_week_start_on_wednesday():
 
 
 def test_week_start_on_monday():
-    assert menu_week_start(dt(2026, 11, 2, 10)) == date(2026, 11, 4)
+    assert menu_week_start(dt(2026, 11, 2, 10)) == date(2026, 11, 11)
 
 
 def test_week_start_on_tuesday():
-    assert menu_week_start(dt(2026, 11, 3, 23)) == date(2026, 11, 4)
+    assert menu_week_start(dt(2026, 11, 3, 23)) == date(2026, 11, 11)
+
+
+def test_week_start_on_thursday():
+    assert menu_week_start(dt(2026, 11, 5, 9)) == date(2026, 11, 11)
+
+
+def test_week_start_on_next_sunday():
+    assert menu_week_start(dt(2026, 11, 8, 18)) == date(2026, 11, 11)
 
 
 def test_five_evenings_no_parents():

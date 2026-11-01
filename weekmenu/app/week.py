@@ -6,18 +6,20 @@ WEEKDAGEN = ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag
 
 GEEN_OUDERAVOND = "Niet deze week"
 
-_WOENSDAG = 2  # date.weekday(): maandag=0 ... woensdag=2
+_ZONDAG = 6  # date.weekday(): maandag=0 ... zondag=6
+_WOENSDAG_NA_ZONDAG = 3  # de woensdag na de zondag
 
 
 def menu_week_start(now: datetime) -> date:
-    """Woensdag waarmee de menuweek begint: de eerstvolgende woensdag die na vandaag ligt.
+    """Woensdag waarmee de menuweek begint.
 
-    Zo geldt maandag en dinsdag al voor de woensdag van deze week (de bestelling
-    is zondag geplaatst), en op woensdag zelf begint de volgende week.
+    Dat is de woensdag na de komende zondag, of na deze zondag als het zondag is.
+    Zo begint de week van za 31 okt en zo 1 nov op woensdag 4 nov, en de week
+    van ma 2 t/m zo 8 nov op woensdag 11 nov.
     """
     today = now.date()
-    days_ahead = (_WOENSDAG - today.weekday()) % 7 or 7
-    return today + timedelta(days=days_ahead)
+    zondag = today + timedelta(days=(_ZONDAG - today.weekday()) % 7)
+    return zondag + timedelta(days=_WOENSDAG_NA_ZONDAG)
 
 
 def evenings(start: date, aantal: int, ouders: str) -> list[date]:
