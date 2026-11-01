@@ -1,3 +1,4 @@
+import asyncio
 import html
 import re
 import time
@@ -131,6 +132,9 @@ RECIPE_QUERY = (
     " ingredients { text name { singular } } preparation { steps } } }"
 )
 ORDER_MODE_TEXT = "Server in order mode"
+# Pause between AH calls while walking the bonus folder (tests set this to 0).
+CALL_DELAY = 0.2
+MAX_CONSECUTIVE_CATEGORY_FAILURES = 3
 
 
 def _num(v: Any) -> float:
@@ -201,6 +205,8 @@ class AhClient:
         self.store = store
         self.http = http
         self.skipped_categories: list[str] = []
+        self.skipped_groups: list[str] = []
+        self._called_ah = False
 
     def _headers(self, order_id: int | None = None) -> dict[str, str]:
         h = {
@@ -349,6 +355,7 @@ class AhClient:
         inline = group.get("products") or []
         if inline:
             return [product_from_card(c) for c in inline if c.get("webshopId")]
+        await self._pause()
         data = await self.graphql(
             GROUP_QUERY,
             {
@@ -364,9 +371,25 @@ class AhClient:
                     out.append(product_from_graphql(p, is_bonus=True))
         return out
 
+    @staticmethod
+    def _is_blocking(e: Exception) -> bool:
+        """Errors that mean AH is refusing us: stop at once instead of skipping."""
+        return isinstance(e, (AhLoginExpired, AhNotJson)) or (
+            isinstance(e, AhApiError) and e.status == 429
+        )
+
+    async def _pause(self) -> None:
+        if self._called_ah and CALL_DELAY > 0:
+            await asyncio.sleep(CALL_DELAY)
+        self._called_ah = True
+
     async def bonus_offers(self, period: BonusPeriod) -> list[Product]:
         self.skipped_categories = []
+        self.skipped_groups = []
+        self._called_ah = False
+        groups: dict[str, list[Product] | None] = {}
         found: dict[int, Product] = {}
+        failed_in_row = 0
         for cat in period.categories:
             path = (
                 "/mobile-services/bonuspage/v2/section?application=AHWEBSHOP"
@@ -374,20 +397,41 @@ class AhClient:
                 f"&category={quote(cat, safe='')}"
             )
             try:
+                await self._pause()
                 body = await self.request("GET", path)
                 items: list[Product] = []
                 for entry in (body or {}).get("bonusGroupOrProducts") or []:
                     if entry.get("product"):
                         items.append(product_from_card(entry["product"]))
                     elif entry.get("bonusGroup"):
-                        items.extend(await self._expand_group(entry["bonusGroup"], period))
-            except AhLoginExpired:
-                raise
-            except (AhApiError, KeyError, ValueError, TypeError):
+                        g = entry["bonusGroup"]
+                        gid = str(g.get("id"))
+                        if gid not in groups:
+                            try:
+                                groups[gid] = await self._expand_group(g, period)
+                            except (AhApiError, KeyError, ValueError, TypeError) as e:
+                                if self._is_blocking(e):
+                                    raise
+                                groups[gid] = None
+                                self.skipped_groups.append(gid)
+                        items.extend(groups[gid] or [])
+            except (AhApiError, KeyError, ValueError, TypeError) as e:
+                if self._is_blocking(e):
+                    raise
                 self.skipped_categories.append(cat)
+                failed_in_row += 1
+                if failed_in_row >= MAX_CONSECUTIVE_CATEGORY_FAILURES:
+                    raise AhApiError(
+                        "bonusfolder niet op te halen: "
+                        f"{failed_in_row} categorieen achter elkaar mislukt",
+                        getattr(e, "status", 0),
+                    ) from None
                 continue
+            failed_in_row = 0
             for p in items:
                 found.setdefault(p.id, p)
+        if period.categories and len(self.skipped_categories) == len(period.categories):
+            raise AhApiError("bonusfolder niet op te halen: alle categorieen mislukt", 0)
         return list(found.values())
 
     # --- products ---
@@ -480,7 +524,8 @@ class AhClient:
         current = await self.shopping_list()
         items = []
         for pid, qty in adds.items():
-            assert qty > 0, "adds must be positive"
+            if qty <= 0:
+                raise ValueError("adds must be positive")
             items.append(
                 {
                     "description": "",
@@ -514,17 +559,25 @@ class AhClient:
         return ActiveOrder(id=int(r.body["id"]), items=items)
 
     async def add_to_order(self, order: ActiveOrder, adds: dict[int, int]) -> None:
-        """Never retried. The PUT sets quantities, so send current + added."""
+        """Never retried. The PUT sets quantities, so send current + added.
+
+        The current quantities are re-read right before the PUT, so changes
+        made in the app since `order` was read are never lowered.
+        """
         if not adds:
             return
+        for qty in adds.values():
+            if qty <= 0:
+                raise ValueError("adds must be positive")
+        fresh = await self.active_order()
+        if fresh is None or fresh.id != order.id:
+            raise AhApiError("bestelling is niet meer actief", 404)
         items = []
         for pid, qty in adds.items():
-            current = order.items.get(pid, 0)
-            assert qty > 0 and current + qty >= current, "never lower a quantity"
             items.append(
                 {
                     "productId": pid,
-                    "quantity": current + qty,
+                    "quantity": fresh.items.get(pid, 0) + qty,
                     "originCode": "PRD",
                     "description": "",
                     "strikethrough": False,

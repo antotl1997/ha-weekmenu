@@ -6,6 +6,7 @@ from pathlib import Path
 import httpx
 import pytest
 
+from app import ahclient
 from app.ahclient import (
     ActiveOrder,
     AhApiError,
@@ -25,6 +26,11 @@ ORDER_GET = BASE + "/mobile-services/order/v1/summaries/active"
 ORDER_PUT = BASE + "/mobile-services/order/v1/items"
 SECTION = BASE + "/mobile-services/bonuspage/v2/section"
 GRAPHQL = BASE + "/graphql"
+
+
+@pytest.fixture(autouse=True)
+def no_delay(monkeypatch):
+    monkeypatch.setattr(ahclient, "CALL_DELAY", 0)
 
 
 def fx(name):
@@ -298,6 +304,10 @@ async def test_active_order_500_raises(respx_mock, tmp_path):
 
 
 async def test_add_to_order_sends_current_plus_added_with_order_header(respx_mock, tmp_path):
+    respx_mock.get(ORDER_GET).respond(
+        json={"id": 123456, "orderedProducts": [
+            {"quantity": 2, "product": {"webshopId": 1235}}]}
+    )
     put = respx_mock.put(ORDER_PUT).respond(200)
     client, http = make(tmp_path)
     order = ActiveOrder(123456, {1235: 2})
@@ -317,16 +327,150 @@ async def test_add_to_order_sends_current_plus_added_with_order_header(respx_moc
 async def test_add_to_order_never_lowers_quantity(respx_mock, tmp_path):
     put = respx_mock.put(ORDER_PUT).respond(200)
     client, http = make(tmp_path)
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         await client.add_to_order(ActiveOrder(1, {5: 4}), {5: -1})
     assert put.call_count == 0
     await http.aclose()
 
 
+async def test_add_to_order_uses_fresh_read_when_order_changed_meanwhile(respx_mock, tmp_path):
+    respx_mock.get(ORDER_GET).respond(
+        json={"id": 123456, "orderedProducts": [
+            {"quantity": 5, "product": {"webshopId": 1235}}]}
+    )
+    put = respx_mock.put(ORDER_PUT).respond(200)
+    client, http = make(tmp_path)
+    await client.add_to_order(ActiveOrder(123456, {1235: 2}), {1235: 1})
+    items = json.loads(put.calls[0].request.content)["items"]
+    assert items[0]["quantity"] == 6
+    await http.aclose()
+
+
+async def test_add_to_order_order_gone_writes_nothing(respx_mock, tmp_path):
+    respx_mock.get(ORDER_GET).respond(404, json={"message": "Order does not exist"})
+    put = respx_mock.put(ORDER_PUT).respond(200)
+    client, http = make(tmp_path)
+    with pytest.raises(AhApiError):
+        await client.add_to_order(ActiveOrder(123456, {}), {1: 1})
+    assert put.call_count == 0
+    await http.aclose()
+
+
 async def test_add_to_order_failure_not_retried(respx_mock, tmp_path):
+    respx_mock.get(ORDER_GET).respond(json={"id": 1, "orderedProducts": []})
     put = respx_mock.put(ORDER_PUT).respond(502)
     client, http = make(tmp_path)
     with pytest.raises(AhApiError):
         await client.add_to_order(ActiveOrder(1, {}), {5: 1})
     assert put.call_count == 1
+    await http.aclose()
+
+
+def period_with(cats):
+    return BonusPeriod(date(2026, 10, 26), date(2026, 11, 1), None, cats)
+
+
+async def test_bonus_offers_html_stops_at_first_category(respx_mock, tmp_path):
+    route = respx_mock.get(SECTION).respond(200, text="<html>blocked</html>")
+    client, http = make(tmp_path)
+    with pytest.raises(AhNotJson):
+        await client.bonus_offers(period_with(["A", "B", "C", "D"]))
+    assert route.call_count == 1
+    await http.aclose()
+
+
+async def test_bonus_offers_429_stops_immediately(respx_mock, tmp_path):
+    route = respx_mock.get(SECTION).respond(429)
+    client, http = make(tmp_path)
+    with pytest.raises(AhApiError) as e:
+        await client.bonus_offers(period_with(["A", "B", "C"]))
+    assert e.value.status == 429 and route.call_count == 1
+    await http.aclose()
+
+
+async def test_bonus_offers_three_failures_in_a_row_raise(respx_mock, tmp_path):
+    route = respx_mock.get(SECTION).respond(500)
+    client, http = make(tmp_path)
+    with pytest.raises(AhApiError, match="bonusfolder niet op te halen"):
+        await client.bonus_offers(period_with(["A", "B", "C", "D", "E"]))
+    assert route.call_count == 3
+    await http.aclose()
+
+
+async def test_bonus_offers_all_categories_failing_raises(respx_mock, tmp_path):
+    respx_mock.get(SECTION).respond(500)
+    client, http = make(tmp_path)
+    with pytest.raises(AhApiError, match="bonusfolder niet op te halen"):
+        await client.bonus_offers(period_with(["A", "B"]))
+    await http.aclose()
+
+
+async def test_bonus_offers_success_resets_failure_streak(respx_mock, tmp_path):
+    ok = fx("bonus-section__p0-vlees.json")
+    respx_mock.get(SECTION, params={"category": "A"}).respond(500)
+    respx_mock.get(SECTION, params={"category": "B"}).respond(500)
+    respx_mock.get(SECTION, params={"category": "C"}).respond(json=ok)
+    respx_mock.get(SECTION, params={"category": "D"}).respond(500)
+    respx_mock.post(GRAPHQL).mock(side_effect=graphql_side_effect)
+    client, http = make(tmp_path)
+    offers = await client.bonus_offers(period_with(["A", "B", "C", "D"]))
+    assert offers and client.skipped_categories == ["A", "B", "D"]
+    await http.aclose()
+
+
+async def test_bonus_offers_failing_group_keeps_rest_of_category(respx_mock, tmp_path):
+    sec = fx("bonus-section__p0-groente-aardappelen.json")
+    respx_mock.get(SECTION).respond(json=sec)
+
+    def side(request):
+        if json.loads(request.content)["variables"]["id"] == "816453":
+            return httpx.Response(500)
+        return graphql_side_effect(request)
+
+    respx_mock.post(GRAPHQL).mock(side_effect=side)
+    client, http = make(tmp_path)
+    offers = await client.bonus_offers(period_with(["Groente, aardappelen"]))
+    ids = {p.id for p in offers}
+    assert 198386 not in ids  # inside the failed group 816453
+    assert 619322 not in ids  # vlees product is not in this category
+    assert ids, "rest of the category must survive"
+    assert client.skipped_groups == ["816453"]
+    assert client.skipped_categories == []
+    await http.aclose()
+
+
+async def test_bonus_offers_group_html_stops(respx_mock, tmp_path):
+    sec = fx("bonus-section__p0-groente-aardappelen.json")
+    respx_mock.get(SECTION).respond(json=sec)
+    route = respx_mock.post(GRAPHQL).respond(200, text="<html>x</html>")
+    client, http = make(tmp_path)
+    with pytest.raises(AhNotJson):
+        await client.bonus_offers(period_with(["Groente, aardappelen"]))
+    assert route.call_count == 1
+    await http.aclose()
+
+
+async def test_bonus_offers_caches_group_expansion_across_categories(respx_mock, tmp_path):
+    sec = fx("bonus-section__p0-groente-aardappelen.json")
+    respx_mock.get(SECTION).respond(json=sec)
+    route = respx_mock.post(GRAPHQL).mock(side_effect=graphql_side_effect)
+    client, http = make(tmp_path)
+    await client.bonus_offers(period_with(["A", "B"]))
+    ids = {e["bonusGroup"]["id"] for e in sec["bonusGroupOrProducts"] if e.get("bonusGroup")}
+    assert route.call_count == len(ids)
+    await http.aclose()
+
+
+async def test_bonus_offers_pauses_between_calls(respx_mock, tmp_path, monkeypatch):
+    slept = []
+
+    async def fake_sleep(s):
+        slept.append(s)
+
+    monkeypatch.setattr(ahclient, "CALL_DELAY", 0.2)
+    monkeypatch.setattr(ahclient.asyncio, "sleep", fake_sleep)
+    respx_mock.get(SECTION).respond(json={"bonusGroupOrProducts": []})
+    client, http = make(tmp_path)
+    await client.bonus_offers(period_with(["A", "B", "C"]))
+    assert slept == [0.2, 0.2]
     await http.aclose()
