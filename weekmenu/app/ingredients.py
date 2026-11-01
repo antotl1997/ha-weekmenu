@@ -72,8 +72,16 @@ def parse_ingredient(text: str, name: str) -> Amount:
 
 # --- pantry ------------------------------------------------------------------
 
-# Fresh ingredients that would otherwise look like pantry because they end in "peper".
-NOT_PANTRY_PHRASES = ("rode peper", "groene peper", "gele peper", "spaanse peper", "verse peper")
+# "peper" is only pantry as the spice. Every other *peper (chilipeper, jalapenopeper,
+# rode peper, madame jeanette) is a fresh chili and gets bought.
+PEPPER_SPICE_COMPOUNDS = frozenset({"cayennepeper", "citroenpeper"})
+PEPPER_SPICE_MODIFIERS = frozenset({
+    "zwarte", "witte", "versgemalen", "gemalen", "grof", "grove", "fijne", "vers",
+    "en", "zout", "de", "molen",
+})
+
+# "tonijn in olie": only the part before in/op/met/voor/uit names the ingredient.
+_CUT = re.compile(r"\b(?:voor|in|op|met|uit)\b.*$")
 
 
 def _fold(text: str) -> str:
@@ -93,19 +101,23 @@ def is_pantry(name: str, pantry: list[str]) -> bool:
     """A pantry word equals a word of the name or is the tail of a compound word.
 
     'olijfolie' and 'zeezout' match 'olie' and 'zout'; 'oliebollen' and 'peperkoek'
-    do not (the pantry word is at the start of the compound). Plain (tap) water counts
-    as pantry too.
+    do not (the pantry word is at the start of the compound). Only the part before
+    'in/op/met/voor/uit' counts ('tonijn in olie' is tuna), so 'olie voor het bakken'
+    is pantry. 'peper' is pantry only as the spice. Plain (tap) water counts as pantry.
     """
-    folded = " ".join(_words(name))
-    ws = folded.split()
+    head = _CUT.sub("", " ".join(_words(re.sub(r"\([^)]*\)", " ", name or ""))))
+    ws = head.split()
     if ws and set(ws) <= TAP_WATER_WORDS and ("water" in ws or "kraanwater" in ws):
         return True
-    if any(p in f" {folded} " for p in (f" {x} " for x in NOT_PANTRY_PHRASES)):
-        return False
     pantry_words = [w for p in pantry for w in _words(p)]
-    for w in folded.split():
+    for w in ws:
         for p in pantry_words:
-            if w == p or w.endswith(p):
+            if p == "peper":
+                if w in PEPPER_SPICE_COMPOUNDS or (
+                    w == "peper" and all(o in PEPPER_SPICE_MODIFIERS for o in ws if o != "peper")
+                ):
+                    return True
+            elif w == p or w.endswith(p):
                 return True
     return False
 
@@ -176,7 +188,6 @@ STOPWORDS = frozenset({
 # Plural forms that the simple rules below do not cover (matched as word endings).
 PLURAL_EXCEPTIONS = {"eieren": "ei", "bladeren": "blad", "kinderen": "kind"}
 
-_CUT = re.compile(r"\b(?:voor|in|op|met|uit)\b.*$")
 _VOWELS = "aeiou"
 
 
@@ -270,6 +281,30 @@ class _Title:
         return n
 
 
+# Products that are not the plain ingredient: drinks, sweets, ready meals. Whole title words
+# and (folded, substring) category names, each with the keyword endings that make the
+# product plausible after all (a recipe that asks for appelsap or cola).
+IMPLAUSIBLE_TITLE_WORDS = frozenset({
+    "drank", "sap", "siroop", "ijs", "chips", "snoep", "limonade", "smoothie", "knijpfruit",
+    "hachee",
+})
+IMPLAUSIBLE_CATEGORIES = {
+    "frisdrank": ("sap", "water", "drank", "limonade", "cola", "tonic", "bier"),
+    "baby en kind": ("baby",),
+}
+
+
+def _plausible(p: Product, t: "_Title", kws: list[str]) -> bool:
+    for m in IMPLAUSIBLE_TITLE_WORDS:
+        if m in t.words and not any(k.endswith(m) for k in kws):
+            return False
+    cat = _fold(p.category or "")
+    for c, exempt in IMPLAUSIBLE_CATEGORIES.items():
+        if c in cat and not any(k.endswith(e) for k in kws for e in exempt):
+            return False
+    return True
+
+
 def _discount(p: Product) -> float:
     return (p.regular - p.now) / p.regular if p.regular else 0.0
 
@@ -277,6 +312,7 @@ def _discount(p: Product) -> float:
 def _best_search_hit(
     orderable: list[Product], kws: list[str], wanted: frozenset[str]
 ) -> Product | None:
+    orderable = [p for p in orderable if _plausible(p, _Title(p.title), kws)]
     titles = [_Title(p.title) for p in orderable]
     # 1. all keywords in the title; the plainest product (fewest unrelated words) first
     full = [(t.extras(kws, wanted), i) for i, t in enumerate(titles) if all(t.has(k) for k in kws)]
@@ -313,7 +349,11 @@ async def choose_product(
         if not p.orderable:
             continue
         t = _Title(p.title)
-        if all(t.has(k) for k in kws) and t.extras(kws, wanted) <= MAX_EXTRA_WORDS_BONUS:
+        if (
+            all(t.has(k) for k in kws)
+            and t.extras(kws, wanted) <= MAX_EXTRA_WORDS_BONUS
+            and _plausible(p, t, kws)
+        ):
             hits.append(p)
     if hits:
         return max(hits, key=_discount)  # max keeps the first of equal discounts
