@@ -1,0 +1,241 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1201659,
+   "title": "Volkoren taco's met kip tinga",
+   "description": "Gek op taco's? Wij ook! Vooral deze met kip tinga, waarin de kip gepocheerd wordt in een smaakvolle bouillon met o.a. kruidnagel. Met chipotle erbij krijg het een pittige rokerige kick. We doen er ook nog radijsjes bij voor als knapperig, fris extraatje.",
+   "href": "/allerhande/recept/R-R1201659/volkoren-taco-s-met-kip-tinga",
+   "cookTime": 40,
+   "nutriScore": null,
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [
+    "mexicaans"
+   ],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD210709_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 4.111112,
+    "count": 9
+   },
+   "ingredients": [
+    {
+     "text": "2 middelgrote uien",
+     "name": {
+      "singular": "middelgrote ui"
+     }
+    },
+    {
+     "text": "1 hele kruidnagel",
+     "name": {
+      "singular": "hele kruidnagel"
+     }
+    },
+    {
+     "text": "200 g scharrelkipfilets",
+     "name": {
+      "singular": "scharrelkipfilet"
+     }
+    },
+    {
+     "text": "2.5 g verse tijm",
+     "name": {
+      "singular": "verse tijm"
+     }
+    },
+    {
+     "text": "2 laurierblaadjes",
+     "name": {
+      "singular": "laurierblaadje"
+     }
+    },
+    {
+     "text": "250 ml water",
+     "name": {
+      "singular": "water"
+     }
+    },
+    {
+     "text": "&#189; kippenbouillontablet",
+     "name": {
+      "singular": "kippenbouillontablet"
+     }
+    },
+    {
+     "text": "250 g trostomaten",
+     "name": {
+      "singular": "trostomaat"
+     }
+    },
+    {
+     "text": "1 el chipotle saus in pot",
+     "name": {
+      "singular": "chipotle saus in pot"
+     }
+    },
+    {
+     "text": "1&#189; teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "1 el zonnebloemolie",
+     "name": {
+      "singular": "zonnebloemolie"
+     }
+    },
+    {
+     "text": "&#189; tl gedroogde oregano",
+     "name": {
+      "singular": "gedroogde oregano"
+     }
+    },
+    {
+     "text": "&#189; el rietsuiker",
+     "name": {
+      "singular": "rietsuiker"
+     }
+    },
+    {
+     "text": "75 g witte kaas",
+     "name": {
+      "singular": "witte kaas"
+     }
+    },
+    {
+     "text": "5 g verse koriander",
+     "name": {
+      "singular": "verse koriander"
+     }
+    },
+    {
+     "text": "50 g radijsjes",
+     "name": {
+      "singular": "radijs"
+     }
+    },
+    {
+     "text": "&#189; limoen",
+     "name": {
+      "singular": "limoen"
+     }
+    },
+    {
+     "text": "6 volkorenwraps mini",
+     "name": {
+      "singular": "volkorenwrap mini"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verwarm de oven voor op 210 °C.",
+     "Halveer 1 geschilde ui en druk de kruidnagels in een van de helften. Houd de andere helft apart.",
+     "Leg de kipfilet, de halve ui met kruidnagels, de tijm en laurier­blaadjes in een kleine soeppan.",
+     "Schenk het water erbij en verkruimel het bouillonblokje erover. Breng aan de kook, zet het vuur laag en laat de kip ca. 1 uur zachtjes koken (pocheren).",
+     "Maak ondertussen de saus. Verdeel de tomaten over een met bakpapier beklede bakplaat. Rooster 30 min. in de oven.",
+     "Haal uit de oven en pureer met de chipotlesaus met het vrijgekomen vocht glad met de staafmixer. Schenk de saus door een zeef in een kom.",
+     "Snijd ondertussen de uien in halve ringen. Snijd de knoflook fijn. Ris de blaadjes van de rest van de tijmtakjes.",
+     "Verhit de olie in een hapjespan. Bak de ui 6­-8 min. op middelhoog vuur.",
+     "Voeg de knoflook, oregano, de rest van de tijm toe, bak nog 2 min. mee op laag vuur. Schenk de tomaten­chipotle­ saus erbij en breng aan de kook.",
+     "Haal ondertussen de kipfilet uit de bouillon en laat afkoelen.",
+     "Schenk 200 ml bouillon (per 4 personen) bij de saus en laat de saus in 6-­8 min. op middelhoog vuur tot ⅔ inkoken.",
+     "Voeg de rietsuiker toe en meng tot het opgelost is.",
+     "Trek de kip met 2 vorken in plukjes uit elkaar. Schep door de saus en verwarm mee (kip tinga).",
+     "Verkruimel ondertussen de witte kaas, snijd de koriander fijn en snipper de achtergehouden halve ui fijn.",
+     "Snijd de radijs in dunne plakjes en de limoen in partjes.",
+     "Verwarm de tortilla’s volgens de aanwijzingen op de verpakking.",
+     "Beleg de taco’s met de kip tinga, witte kaas, gesnipperde ui, radijs en koriander. Serveer de limoenpartjes erbij."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 590,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 56,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 20,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 41,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

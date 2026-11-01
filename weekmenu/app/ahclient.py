@@ -1,3 +1,4 @@
+import re
 import time
 from typing import Any
 
@@ -14,6 +15,15 @@ LOGIN_URL = (
 APP_VERSION = "9.28"
 USER_AGENT = f"Appie/{APP_VERSION} (iPhone17,3; iPhone; CPU OS 26_1 like Mac OS X)"
 REFRESH_MARGIN = 300
+
+
+def extract_code(text: str) -> str:
+    """Pull the login code out of a pasted URL, console line or bare code."""
+    text = text.strip()
+    if "code=" in text:
+        text = text.split("code=", 1)[1]
+    m = re.match(r"[A-Za-z0-9-]+", text)
+    return m.group(0) if m else ""
 
 
 class AhApiError(Exception):

@@ -1,0 +1,162 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302880,
+   "title": "Zalmburger met pastinaak en yoghurtdip - 12+ maanden (Opperdepop)",
+   "description": "Houdt je kleintje al van van vis? Probeer dan eens deze zalmburger! Lekker met wat aardappeltjes en komkommerdipje.",
+   "href": "/allerhande/recept/R-R1302880/zalmburger-met-pastinaak-en-yoghurtdip-12-maanden-opperdepop",
+   "cookTime": 15,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036904_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 2,
+    "type": "porties"
+   },
+   "rating": {
+    "average": null,
+    "count": 0
+   },
+   "ingredients": [
+    {
+     "text": "200 g pastinaken",
+     "name": {
+      "singular": "pastinaak"
+     }
+    },
+    {
+     "text": "250 g iets kruimige aardappelen",
+     "name": {
+      "singular": "iets kruimige aardappel"
+     }
+    },
+    {
+     "text": "&#189; el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "1 krokante zalmburger",
+     "name": {
+      "singular": "krokante zalmburger"
+     }
+    },
+    {
+     "text": "&#189; komkommer",
+     "name": {
+      "singular": "komkommer"
+     }
+    },
+    {
+     "text": "5 g verse dille",
+     "name": {
+      "singular": "verse dille"
+     }
+    },
+    {
+     "text": "3 el yoghurt Griekse stijl 0%",
+     "name": {
+      "singular": "yoghurt Griekse stijl 0%"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verwarm de oven voor op 200 °C.",
+     "Schil de pastinaak en de aardappelen. Snijd in blokjes van 3 cm en verdeel over een met bakpapier beklede bakplaat.",
+     "Besprenkel met de olijfolie. Rooster ca. 30 min. in de oven.",
+     "Bak de laatste 8-10 min. de zalmburger mee in de oven.",
+     "Rasp ondertussen de komkommer grof en snijd de dille fijn.",
+     "Meng de yoghurt met de komkommer en dille."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 295,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 34,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 10,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 13,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,590 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Huishouden",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "818003",
+    "offerId": 201795,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 818003,
+    "segmentDescription": "Alle Sun, Robijn, Dove, Axe en Andrélon",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201795_AH_NL_WK45_ALLE_SUN_ROBIJN_DOVE_AXE_EN_ANDRELON?rendition=200px&fileType=binary&version=DaYymapMXrydak57nwGSyg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201795_AH_NL_WK45_ALLE_SUN_ROBIJN_DOVE_AXE_EN_ANDRELON?rendition=708px&fileType=binary&version=DaYymapMXrydak57nwGSyg"
+     }
+    ],
+    "category": "Huishouden",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "labelType": "SPOTLIGHT",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817999",
+    "offerId": 201791,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817999,
+    "segmentDescription": "Alle Marcel's Green Soap en Seepje",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201791_AH_NL_WK45_ALLE_MARCELS_GREEN_SOAP_EN_SEEPJE?rendition=200px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201791_AH_NL_WK45_ALLE_MARCELS_GREEN_SOAP_EN_SEEPJE?rendition=708px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     }
+    ],
+    "category": "Huishouden",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 584126,
+    "hqId": 27777,
+    "title": "AH Keukenpapier sterk & absorberend 4=6 rollen",
+    "brand": "AH",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_3664754e6a4e366a524b32665a64654172774d683451?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_3664754e6a4e366a524b32665a64654172774d683451?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_3664754e6a4e366a524b32665a64654172774d683451?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_3664754e6a4e366a524b32665a64654172774d683451?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_3664754e6a4e366a524b32665a64654172774d683451?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "817923",
+    "bonusSegmentId": 817923,
+    "offerId": 201715,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "AH Keukenpapier sterk & absorberend 4=6 rollen",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "2e gratis",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 5.95,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Huishouden",
+    "subCategory": "Keukenpapier",
+    "subCategoryId": 43796,
+    "propertyIcons": [],
+    "properties": {
+     "da_accreditation": [
+      "EU_ECO_LABEL"
+     ],
+     "da_store_department": [
+      "Non Food"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "np_verbluffen": [
+      "verbluffend goedkoop"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817973",
+    "offerId": 201765,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817973,
+    "segmentDescription": "Alle Dettol",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201765_AH_NL_WK45_ALLE_DETTOL?rendition=200px&fileType=binary&version=GmaRR62BfVY2bW8k4JRuyQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201765_AH_NL_WK45_ALLE_DETTOL?rendition=708px&fileType=binary&version=GmaRR62BfVY2bW8k4JRuyQ"
+     }
+    ],
+    "category": "Huishouden",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817996",
+    "offerId": 201788,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817996,
+    "segmentDescription": "Alle Glorix flessen",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 4.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201788_AH_NL_WK45_ALLE_GLORIX_FLESSEN?rendition=200px&fileType=binary&version=xhZkeRbs68v6-qlHX04mvA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201788_AH_NL_WK45_ALLE_GLORIX_FLESSEN?rendition=708px&fileType=binary&version=xhZkeRbs68v6-qlHX04mvA"
+     }
+    ],
+    "category": "Huishouden",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 4.99",
+      "count": 3,
+      "price": 4.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817945",
+    "offerId": 201737,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817945,
+    "segmentDescription": "Alle Swirl",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "30% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201737_AH_NL_WK45_ALLE_SWIRL?rendition=200px&fileType=binary&version=_E6GPruPbCkSYjTr0G2baw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201737_AH_NL_WK45_ALLE_SWIRL?rendition=708px&fileType=binary&version=_E6GPruPbCkSYjTr0G2baw"
+     }
+    ],
+    "category": "Huishouden",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "30% korting",
+      "percentage": 30,
+      "precisePercentage": 30
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817934",
+    "offerId": 201726,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817934,
+    "segmentDescription": "Alle Dreft handafwas en vaatwascapsules",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201726_AH_NL_WK45_ALLE_DREFT_HANDAFWAS_EN_VAATWASCAPSULES?rendition=200px&fileType=binary&version=72hFWhxl0CxZHpY1DMtjuA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201726_AH_NL_WK45_ALLE_DREFT_HANDAFWAS_EN_VAATWASCAPSULES?rendition=708px&fileType=binary&version=72hFWhxl0CxZHpY1DMtjuA"
+     }
+    ],
+    "category": "Huishouden",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817924",
+    "offerId": 201716,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817924,
+    "segmentDescription": "Page toiletpapier compleet schoon 24 rollen, recycled 18 rollen en sensitive 16 rollen",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201716_AH_NL_WK45_PAGE_TOILETPAPIER_COMPLEET_SCHOON_24_ROLLEN_RECYCLED_18_ROLLEN_EN_SENSITIVE_16_ROLLEN?rendition=200px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201716_AH_NL_WK45_PAGE_TOILETPAPIER_COMPLEET_SCHOON_24_ROLLEN_RECYCLED_18_ROLLEN_EN_SENSITIVE_16_ROLLEN?rendition=708px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     }
+    ],
+    "category": "Huishouden",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 615079,
+    "hqId": 72025,
+    "title": "Ariel The Big one 9 wasbeurten",
+    "brand": "Ariel",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_447a594e4a4466425446616c732d697366574f436a67?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_447a594e4a4466425446616c732d697366574f436a67?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_447a594e4a4466425446616c732d697366574f436a67?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_447a594e4a4466425446616c732d697366574f436a67?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_447a594e4a4466425446616c732d697366574f436a67?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "819370",
+    "bonusSegmentId": 819370,
+    "offerId": 203182,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "Ariel The Big one 9 wasbeurten",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 1.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 1.99",
+      "price": 1.99
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 11.99,
+    "hasListPrice": false,
+    "currentPrice": 1.99,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Huishouden",
+    "subCategory": "Waspods",
+    "subCategoryId": 1683,
+    "propertyIcons": [],
+    "properties": {
+     "da_liquid_solid": [
+      "Vast"
+     ],
+     "da_store_department": [
+      "Non Food"
+     ],
+     "da_grape": [],
+     "da_available_in_store": [
+      "true"
+     ],
+     "da_type_of_washes": [
+      "Gekleurde was"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Ontdek Ariel the big One pods wasmiddelcapsules voor de was bright colors, met 2x vlek- en geurverwijdering (de prestaties van Ariel the big One zijn gelijk aan 2 Ariel original 4in1 pods).</p><p><ul><li>Onze maximale reiniging voor minimale inspanning</li><li>Ariel the big One pods lossen snel op, zelfs in koud water</li><li>Was kouder, bespaar tot 60% op je elektriciteitsrekening van de wasmachine</li><li>Geschikt voor wasmachines tot 9kg, alle waterhardheden en vuilniveaus</li></ul></p>",
+    "descriptionFull": "Ze bieden je de maximale Ariel reiniging met minimale inspanning: speciaal ontworpen voor gemengde wasladingen, je kunt opnieuw wassen vergeten, zelfs bij een volle wasmachine. Bovendien zijn ze ontworpen om uitstekend te werken, zelfs bij lagere temperaturen. Ze lossen snel op in koud water met onberispelijke resultaten. Was kouder en bespaar tot 60% op je elektriciteitsrekening van de wasmachine (energieverbruik van de wasmachine van 60 graden celsius naar 30 graden celsius, normale cyclus). Voor het beste resultaat: eerst de pod achterin de trommel, kleding er bovenop. 1 big One = 1 wasbeurt, geschikt voor wasmachines tot 9 kg, alle waterhardheid en vuilniveau. Voor kleine en licht vervuilde ladingen kun je ook de Ariel 4in1-collecties ontdekken. Houd Ariel the big One pods altijd buiten het bereik van kinderen. Bezoek keepcapsfromkids.eu voor meer informatie."
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817912",
+    "offerId": 201704,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817912,
+    "segmentDescription": "Alle Reus wasmiddel 80-100 wasbeurten",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 11.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201704_AH_NL_WK45_ALLE_REUS_WASMIDDEL_80100_WASBEURTEN?rendition=200px&fileType=binary&version=0O-D0boNpvfUB75MYmup0g"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201704_AH_NL_WK45_ALLE_REUS_WASMIDDEL_80100_WASBEURTEN?rendition=708px&fileType=binary&version=0O-D0boNpvfUB75MYmup0g"
+     }
+    ],
+    "category": "Huishouden",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 11.99",
+      "price": 11.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

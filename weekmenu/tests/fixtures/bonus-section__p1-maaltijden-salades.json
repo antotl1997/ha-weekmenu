@@ -1,0 +1,490 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Maaltijden, salades",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817910",
+    "offerId": 201702,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817910,
+    "segmentDescription": "Alle AH Bapao*",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201702_AH_NL_WK45_ALLE_AH_BAPAO?rendition=200px&fileType=binary&version=O0AdXEo541kEHR1q6GNR7g"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201702_AH_NL_WK45_ALLE_AH_BAPAO?rendition=708px&fileType=binary&version=O0AdXEo541kEHR1q6GNR7g"
+     }
+    ],
+    "category": "Maaltijden, salades",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. diepvries"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. diepvries"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "818880",
+    "offerId": 202713,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 818880,
+    "segmentDescription": "Alle AH Pizzadeeg",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_202713_AH_NL_WK45_ALLE_AH_PIZZADEEG?rendition=200px&fileType=binary&version=jB615afSCjZvcoU30fy1kQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_202713_AH_NL_WK45_ALLE_AH_PIZZADEEG?rendition=708px&fileType=binary&version=jB615afSCjZvcoU30fy1kQ"
+     }
+    ],
+    "category": "Maaltijden, salades",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817930",
+    "offerId": 201722,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817930,
+    "segmentDescription": "Alle AH L- en XL-salades*",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 8.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_63657979616f6257537a53396a656c71356e46415277?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_63657979616f6257537a53396a656c71356e46415277?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_63657979616f6257537a53396a656c71356e46415277?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_63657979616f6257537a53396a656c71356e46415277?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_63657979616f6257537a53396a656c71356e46415277?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Maaltijden, salades",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. basissalades"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 8.99",
+      "count": 2,
+      "price": 8.99
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. basissalades"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817971",
+    "offerId": 201763,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817971,
+    "segmentDescription": "Alle AH Hollandse Keuken 2-vaks stamppotten",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 3.75",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6c41504a554730395271364e7667755234766c336b77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6c41504a554730395271364e7667755234766c336b77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6c41504a554730395271364e7667755234766c336b77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6c41504a554730395271364e7667755234766c336b77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6c41504a554730395271364e7667755234766c336b77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Maaltijden, salades",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 3.75",
+      "price": 3.75
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817943",
+    "offerId": 201735,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817943,
+    "segmentDescription": "Alle AH Pureersoepen",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 7.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201735_AH_NL_WK45_ALLE_AH_PUREERSOEPEN?rendition=200px&fileType=binary&version=954zvcOKxFD6LHlWLyoWwQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201735_AH_NL_WK45_ALLE_AH_PUREERSOEPEN?rendition=708px&fileType=binary&version=954zvcOKxFD6LHlWLyoWwQ"
+     }
+    ],
+    "category": "Maaltijden, salades",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 7.00",
+      "count": 2,
+      "price": 7.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823266",
+    "offerId": 207073,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823266,
+    "segmentDescription": "Alle AH Verse soepen 500 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 6.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207073_AH_NL_WK45_ALLE_AH_VERSE_SOEPEN_500_GRAM?rendition=200px&fileType=binary&version=DQZJxabeQuhya8Pa-xuBng"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207073_AH_NL_WK45_ALLE_AH_VERSE_SOEPEN_500_GRAM?rendition=708px&fileType=binary&version=DQZJxabeQuhya8Pa-xuBng"
+     }
+    ],
+    "category": "Maaltijden, salades",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 6.00",
+      "count": 2,
+      "price": 6.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823269",
+    "offerId": 207076,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823269,
+    "segmentDescription": "Alle AH Verse pinsa's",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 10.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207076_AH_NL_WK45_ALLE_AH_VERSE_PINSAS?rendition=200px&fileType=binary&version=F1_ZXc0QpK9db0FyTtGG9Q"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207076_AH_NL_WK45_ALLE_AH_VERSE_PINSAS?rendition=708px&fileType=binary&version=F1_ZXc0QpK9db0FyTtGG9Q"
+     }
+    ],
+    "category": "Maaltijden, salades",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 10.00",
+      "count": 2,
+      "price": 10.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823274",
+    "offerId": 207081,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823274,
+    "segmentDescription": "Alle AH Verse pizza's",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 12.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207081_AH_NL_WK45_ALLE_AH_VERSE_PIZZAS?rendition=200px&fileType=binary&version=G8IGCEcN3XjeNr3y_Wt0SA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207081_AH_NL_WK45_ALLE_AH_VERSE_PIZZAS?rendition=708px&fileType=binary&version=G8IGCEcN3XjeNr3y_Wt0SA"
+     }
+    ],
+    "category": "Maaltijden, salades",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 12.00",
+      "count": 2,
+      "price": 12.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823278",
+    "offerId": 207085,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823278,
+    "segmentDescription": "Alle AH Uit Eigen Keuken maaltijden",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 12.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207085_AH_NL_WK45_ALLE_AH_UIT_EIGEN_KEUKEN_MAALTIJDEN?rendition=200px&fileType=binary&version=ii0EB-WjfmcsSA-1CAFzYg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207085_AH_NL_WK45_ALLE_AH_UIT_EIGEN_KEUKEN_MAALTIJDEN?rendition=708px&fileType=binary&version=ii0EB-WjfmcsSA-1CAFzYg"
+     }
+    ],
+    "category": "Maaltijden, salades",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 12.00",
+      "count": 2,
+      "price": 12.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

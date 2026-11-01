@@ -1,0 +1,133 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "AH Voordeelshop",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "822011",
+    "offerId": 205814,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 822011,
+    "segmentDescription": "Slapen",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-15",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-15",
+     "description": "",
+     "code": "NO_LABEL"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "BONUS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_496d7930724e6b385376614f73574736313432445051?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_496d7930724e6b385376614f73574736313432445051?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_496d7930724e6b385376614f73574736313432445051?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_496d7930724e6b385376614f73574736313432445051?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_496d7930724e6b385376614f73574736313432445051?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "AH Voordeelshop",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_BONUS",
+      "defaultDescription": "BONUS"
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823962",
+    "offerId": 207755,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 823962,
+    "segmentDescription": "Verwarming",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-22",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-22",
+     "description": "",
+     "code": "NO_LABEL"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "BONUS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6d4a5a6a58615545527871783573695f4f4a4d687577?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6d4a5a6a58615545527871783573695f4f4a4d687577?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6d4a5a6a58615545527871783573695f4f4a4d687577?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6d4a5a6a58615545527871783573695f4f4a4d687577?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6d4a5a6a58615545527871783573695f4f4a4d687577?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "AH Voordeelshop",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_BONUS",
+      "defaultDescription": "BONUS"
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

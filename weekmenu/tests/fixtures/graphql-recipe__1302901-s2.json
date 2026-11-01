@@ -1,0 +1,192 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302901,
+   "title": "Zalmzijde en herfstgroente uit de airfryer",
+   "description": "Twee mandjes, één complete maaltijd: deze zalmzijde met geroosterde biet, pastinaak en korianderzaad-mosterdroomsaus komt uit de airfryer.",
+   "href": "/allerhande/recept/R-R1302901/zalmzijde-en-herfstgroente-uit-de-airfryer",
+   "cookTime": 20,
+   "nutriScore": "B",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036905_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 6,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 4.333333,
+    "count": 3
+   },
+   "ingredients": [
+    {
+     "text": "600 g pastinaken",
+     "name": {
+      "singular": "pastinaak"
+     }
+    },
+    {
+     "text": "500 g gekookte rode bieten",
+     "name": {
+      "singular": "gekookte rode bieten"
+     }
+    },
+    {
+     "text": "4 el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "450 g jasmijnrijst",
+     "name": {
+      "singular": "jasmijnrijst"
+     }
+    },
+    {
+     "text": "1 biologische citroen",
+     "name": {
+      "singular": "biologische citroen"
+     }
+    },
+    {
+     "text": "800 g AH Excellent hele zalmzijdes (diepvries)",
+     "name": {
+      "singular": "AH Excellent hele zalmzijde (diepvries)"
+     }
+    },
+    {
+     "text": "1 sjalot",
+     "name": {
+      "singular": "sjalot"
+     }
+    },
+    {
+     "text": "1 tl korianderzaad",
+     "name": {
+      "singular": "korianderzaad"
+     }
+    },
+    {
+     "text": "1 el grove mosterd",
+     "name": {
+      "singular": "grove mosterd"
+     }
+    },
+    {
+     "text": "150 ml slagroom",
+     "name": {
+      "singular": "slagroom"
+     }
+    },
+    {
+     "text": "10 g verse koriander",
+     "name": {
+      "singular": "verse koriander"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Schil de pastinaak en snijd in plakken van 1 cm. Snijd de bieten in parten van 2 cm. Meng in een kom met de olie en peper.",
+     "Verdeel over het mandje van de airfryer en bak ca. 30 min. op 180 °C.",
+     "Kook ondertussen de rijst volgens de aanwijzingen op de verpakking. Giet af en laat met de deksel op de pan staan.",
+     "Boen de citroen schoon, rasp ondertussen de gele schil van een halve vrucht en pers deze helft uit. Snijd de andere helft in plakjes.",
+     "Besprenkel de zalm met de olie en bestrooi met peper en eventueel zout. Verdeel de citroenplakjes over de zalm.",
+     "Schep de groente na 15 min. om, leg de zalmzijde erop en rooster nog  ca. 15 min. op 180 °C.",
+     "Snipper ondertussen de sjalot. Verhit de rest van de olie in een steelpan en bak de sjalot met het korianderzaad 2-3 min. op middelhoog vuur.",
+     "Voeg de mosterd en slagroom toe, breng aan de kook en laat  6-8 min. zachtjes op laag vuur koken tot sausdikte.",
+     "Breng op smaak met 1 el citroensap (per 6 personen), peper en eventueel zout.",
+     "Snijd de koriander grof en meng de rijst met de helft van de koriander, een ½ el citroensap en het -rasp (per 6 personen).",
+     "Verdeel de groente met de zalmzijde over een schaal en bestrooi met de rest van de koriander.",
+     "Serveer met de rijst  en korianderzaad-mosterdsaus."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 825,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 74,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 42,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 34,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

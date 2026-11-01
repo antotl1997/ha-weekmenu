@@ -1,0 +1,57 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Glutenvrij",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "823239",
+    "offerId": 207040,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823239,
+    "segmentDescription": "Alle AH Glutenvrije koekjes 45 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 3.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207040_AH_NL_WK45_ALLE_AH_GLUTENVRIJE_KOEKJES_45_GRAM?rendition=200px&fileType=binary&version=c8Kw6YiN4i70Us5RY4BTcQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207040_AH_NL_WK45_ALLE_AH_GLUTENVRIJE_KOEKJES_45_GRAM?rendition=708px&fileType=binary&version=c8Kw6YiN4i70Us5RY4BTcQ"
+     }
+    ],
+    "category": "Glutenvrij",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 3.00",
+      "count": 3,
+      "price": 3.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

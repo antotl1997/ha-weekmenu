@@ -1,0 +1,201 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302911,
+   "title": "Gnocchi met pompoensaus en saliepesto van Veggilaine",
+   "description": "Veggilaine: \"De gnocchi met pompoensaus past perfect in het seizoen: romig, vol van smaak en precies zo’n gerecht waar je op een frisse avond zin in hebt\".",
+   "href": "/allerhande/recept/R-R1302911/gnocchi-met-pompoensaus-en-saliepesto-van-veggilaine",
+   "cookTime": 35,
+   "nutriScore": "C",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036870_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 4.28125,
+    "count": 32
+   },
+   "ingredients": [
+    {
+     "text": "700 g biologische pompoen",
+     "name": {
+      "singular": "biologische pompoen"
+     }
+    },
+    {
+     "text": "&#189; bol knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "40 ml extra vierge olijfolie",
+     "name": {
+      "singular": "extra vierge olijfolie"
+     }
+    },
+    {
+     "text": "20 g amandelen",
+     "name": {
+      "singular": "amandelen"
+     }
+    },
+    {
+     "text": "45 g Pecorino Romano",
+     "name": {
+      "singular": "Pecorino Romano"
+     }
+    },
+    {
+     "text": "&#188; biologische citroen",
+     "name": {
+      "singular": "biologische citroen"
+     }
+    },
+    {
+     "text": "3.8 g verse salie",
+     "name": {
+      "singular": "verse salie"
+     }
+    },
+    {
+     "text": "3.8 g platte peterselie",
+     "name": {
+      "singular": "platte peterselie"
+     }
+    },
+    {
+     "text": "&#189; el gedroogde tijm",
+     "name": {
+      "singular": "gedroogde tijm"
+     }
+    },
+    {
+     "text": "400 g koelverse gnocchi",
+     "name": {
+      "singular": "koelverse gnocchi"
+     }
+    },
+    {
+     "text": "50 ml kookroom",
+     "name": {
+      "singular": "kookroom"
+     }
+    },
+    {
+     "text": "2 mini burratine",
+     "name": {
+      "singular": "mini burratine"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verwarm de oven voor op 220 °C.",
+     "Halveer de pompoen, verwijder de zaden en de draderige binnenkant en leg op de snijkant op een met bakpapier beklede bakplaat.",
+     "Snijd het kapje van de knoflook, besprenkel de bol met de olie en verpak in aluminiumfolie. Rooster 30-35 min. tot de pompoen zacht is.",
+     "Rooster ondertussen de amandelen 3 min. in een koekenpan zonder olie of boter. Rasp de Pecorino Romano.",
+     "Boen de citroen schoon, rasp de gele schil van de vrucht en pers uit.",
+     "Doe de salieblaadjes, peterselie, tijm, geroosterde amandelen. 40 g kaas (per 4 personen) in de keukenmachine.",
+     "Voeg hier de rest van de olie, 2 tl citroensap (per 4 personen) en wat -rasp aan toe en maal tot een grove pesto.",
+     "Kook de gnocchi volgens de aanwijzingen op de verpakking. Giet af en vang 300 ml kookvocht (per 4 personen) op.",
+     "Haal de bakplaat uit de oven, draai de pompoen om, verwijder de folie van de knoflook en laat beide 15-20 min. afkoelen.",
+     "Verwijder de schil van de pompoen.",
+     "Knijp de knoflook uit de schil en pureer met de pompoen, kookroom en de rest van de kaas in de keukenmachine tot een gladde saus.",
+     "Breng op smaak met peper en eventueel zout.",
+     "Verwarm de pompoensaus op laag vuur. Schep de gnocchi erdoor en verwarm 1-2 min.",
+     "Meng in delen het opgevangen kookvocht erdoor tot de saus lekker romig aan de gnocchi plakt.",
+     "Verdeel de gnocchi, burratines en saliepesto over borden."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 855,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 79,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 48,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 23,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

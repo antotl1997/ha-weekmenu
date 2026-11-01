@@ -5,22 +5,11 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
 
 import httpx
 
-from app.ahclient import LOGIN_URL, AhClient, AhLoginExpired
+from app.ahclient import LOGIN_URL, AhApiError, AhClient, AhLoginExpired, extract_code
 from app.tokens import TokenStore
-
-
-def extract_code(line: str) -> str:
-    line = line.strip()
-    if "code=" in line:
-        qs = parse_qs(urlparse(line).query)
-        if "code" in qs:
-            return qs["code"][0]
-        return line.split("code=", 1)[1].split("&", 1)[0]
-    return line
 
 
 def read_line() -> str:
@@ -35,8 +24,12 @@ async def main(rounds: int, interval: float) -> None:
     code = extract_code(read_line())
     async with httpx.AsyncClient(timeout=30) as http:
         client = AhClient(TokenStore(path), http)
-        await client.exchange_code(code)
-        print("ingelogd")
+        try:
+            await client.exchange_code(code)
+            print("ingelogd")
+        except AhApiError as e:
+            print(f"inloggen mislukt: {e}")
+            return
         for i in range(rounds):
             if i:
                 await asyncio.sleep(interval)

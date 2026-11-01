@@ -1,0 +1,163 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302882,
+   "title": "Gehaktballetjes met broccoli en appelcompote - 12+ maanden (Opperdepop)",
+   "description": "Een AVG'tje voor je kleintje: gehaktballetjes met aardappel en broccoli. Als zoetje erbij: appelcompote. Daar kan je kindje vast aan wennen!",
+   "href": "/allerhande/recept/R-R1302882/gehaktballetjes-met-broccoli-en-appelcompote-12-maanden-opperdepop",
+   "cookTime": 25,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036865_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 2,
+    "type": "porties"
+   },
+   "rating": {
+    "average": null,
+    "count": 0
+   },
+   "ingredients": [
+    {
+     "text": "250 g iets kruimige aardappelen",
+     "name": {
+      "singular": "iets kruimige aardappel"
+     }
+    },
+    {
+     "text": "1 friszoete appel",
+     "name": {
+      "singular": "friszoete appel"
+     }
+    },
+    {
+     "text": "90 ml water",
+     "name": {
+      "singular": "water"
+     }
+    },
+    {
+     "text": "&#189; tl gemalen kaneel",
+     "name": {
+      "singular": "gemalen kaneel"
+     }
+    },
+    {
+     "text": "100 g biologische rundertartaar",
+     "name": {
+      "singular": "biologische rundertartaar"
+     }
+    },
+    {
+     "text": "&#189; el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "200 g broccoli",
+     "name": {
+      "singular": "broccoli"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Schil de aardappelen en kook in 20 min. gaar.",
+     "Schil ondertussen de appel en snijd in blokjes van 1 cm.",
+     "Breng in een steelpan de appelblokjes met het water en het kaneel aan de kook en laat op laag vuur 10 min. koken.",
+     "Vorm ondertussen met vochtige handen 2 balletjes (per 2 porties) van het rundertartaar.",
+     "Verhit de olijfolie in een koekenpan en bak de balletjes op middelhoog vuur in 10 min. rondom bruin en gaar.",
+     "Snijd de broccoli in roosjes en kook in 6 min. gaar. Giet af en vang wat kookvocht op.",
+     "Stamp de aardappelen met een pureestamper tot een smeuïge puree."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 235,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 25,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 7,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 15,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

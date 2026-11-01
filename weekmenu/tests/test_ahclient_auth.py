@@ -3,7 +3,7 @@ import time
 import httpx
 import pytest
 
-from app.ahclient import AhApiError, AhClient, AhLoginExpired, AhNotJson
+from app.ahclient import AhApiError, AhClient, AhLoginExpired, AhNotJson, extract_code
 from app.tokens import Tokens, TokenStore
 
 BASE = "https://api.ah.nl"
@@ -128,3 +128,20 @@ async def test_redirect_with_empty_body_raises(respx_mock, tmp_path):
         await client.request("GET", "/x")
     assert ei.value.status == 302
     await http.aclose()
+
+
+FAKE_CODE = "11111111-2222-3333-4444-555555555555"
+
+
+@pytest.mark.parametrize(
+    "pasted",
+    [
+        f"Failed to launch 'appie://login-exit?code={FAKE_CODE}' because the scheme "
+        "does not have a registered handler.",
+        f"appie://login-exit?code={FAKE_CODE}",
+        f"  {FAKE_CODE}\n",
+    ],
+    ids=["console-line", "bare-url", "bare-code"],
+)
+def test_extract_code(pasted):
+    assert extract_code(pasted) == FAKE_CODE

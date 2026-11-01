@@ -1,0 +1,183 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302916,
+   "title": "Eenpansrisotto met kip, champignons en ’nduja ",
+   "description": "Comfort food ten top: kazige risotto, champignons, kip en een vleugje pit van de 'nduja. Lekker makkelijk met maar één pan om af te wassen.",
+   "href": "/allerhande/recept/R-R1302916/eenpansrisotto-met-kip-champignons-en-nduja",
+   "cookTime": 35,
+   "nutriScore": "B",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036863_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 4.292683,
+    "count": 41
+   },
+   "ingredients": [
+    {
+     "text": "200 g champignons",
+     "name": {
+      "singular": "champignon"
+     }
+    },
+    {
+     "text": "30 g ongezouten roomboter",
+     "name": {
+      "singular": "ongezouten roomboter"
+     }
+    },
+    {
+     "text": "17.5 g 'nduja",
+     "name": {
+      "singular": "'nduja"
+     }
+    },
+    {
+     "text": "1 middelgrote ui",
+     "name": {
+      "singular": "middelgrote ui"
+     }
+    },
+    {
+     "text": "1&#189; teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "100 g scharrelkipfilets",
+     "name": {
+      "singular": "scharrelkipfilet"
+     }
+    },
+    {
+     "text": "150 g risottorijst",
+     "name": {
+      "singular": "risottorijst"
+     }
+    },
+    {
+     "text": "&#189; bospaddenstoelenbouillontablet",
+     "name": {
+      "singular": "bospaddenstoelenbouillontablet"
+     }
+    },
+    {
+     "text": "600 ml kokend water",
+     "name": {
+      "singular": "kokend water"
+     }
+    },
+    {
+     "text": "30 g Grana Padano 32+",
+     "name": {
+      "singular": "Grana Padano 32+"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Snijd de champignons in kwarten. Verhit de boter in de pan op middelhoog vuur en bak de ’nduja 1 min.",
+     "Voeg de champignons toe, zet het vuur hoog en bak nog 6-7 min. Schep met een schuimspaan uit de pan.",
+     "Snipper ondertussen de uien en snijd de knoflook fijn. Snijd de kipfilet in blokjes van 1.5 cm.",
+     "Verhit de boter in de koekenpan met het achtergebleven bakvet en bak de ui, knoflook en kip 6-7 min. op middelhoog vuur.",
+     "Voeg de risottorijst toe en bak 2 min. mee.",
+     "Los ondertussen het bouillonblokje op in het kokende water. Voeg een scheut bouillon toe aan de rijst en roer kort door.",
+     "Herhaal dit tot de bouillon is opgenomen en de rijst gaar is. Dit duurt 20-25 min. Het mengsel hoort nog smeuïg te zijn.",
+     "Breng op smaak met peper en eventueel zout.",
+     "Schaaf ondertussen de kaas. Roer ⅔ van de kaas, de rest van de boter en de champignons door de risotto. Bestrooi met de rest van de kaas."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 575,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 63,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 23,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 27,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

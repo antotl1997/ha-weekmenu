@@ -1,0 +1,177 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302918,
+   "title": "Rijsttraybake met kip en tempeh",
+   "description": "Één braadslede, eindeloos veel smaak. Probeer nu deze rijsttraybake met pittige kip en tempeh, lekker veel groente en zure rode uien. Eenvoudig én budgetproof!",
+   "href": "/allerhande/recept/R-R1302918/rijsttraybake-met-kip-en-tempeh",
+   "cookTime": 20,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036889_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 2,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 2.521739,
+    "count": 23
+   },
+   "ingredients": [
+    {
+     "text": "250 g tempeh",
+     "name": {
+      "singular": "tempeh"
+     }
+    },
+    {
+     "text": "300 g scharrelkipfilets",
+     "name": {
+      "singular": "scharrelkipfilet"
+     }
+    },
+    {
+     "text": "3 el ketjap manis",
+     "name": {
+      "singular": "ketjap manis"
+     }
+    },
+    {
+     "text": "1 el sambal oelek",
+     "name": {
+      "singular": "sambal oelek"
+     }
+    },
+    {
+     "text": "410 ml water",
+     "name": {
+      "singular": "water"
+     }
+    },
+    {
+     "text": "300 g witte snelkookrijst",
+     "name": {
+      "singular": "witte snelkookrijst"
+     }
+    },
+    {
+     "text": "900 g diepvries nasi-bamigroente",
+     "name": {
+      "singular": "diepvries nasi-bamigroente"
+     }
+    },
+    {
+     "text": "2 rode uien",
+     "name": {
+      "singular": "rode ui"
+     }
+    },
+    {
+     "text": "3 el natuurazijn",
+     "name": {
+      "singular": "natuurazijn"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verwarm de oven voor op 200 °C.",
+     "Snijd de tempeh in repen van 1 cm en de kip in dunne repen en meng in een kom.",
+     "Roer de ketjap los met de sambal en het water en meng door het kip-tempehmengsel.",
+     "Meng in de braadslede de rijst met de bevroren nasi-bamigroente en het water en verdeel over ⅔ van de braadslede.",
+     "Verdeel het kip-tempehmengsel over de andere kant. Breng op smaak met peper en eventueel zout en dek af met aluminiumfolie.",
+     "Bak ca. 40 min. in de oven tot de rijst gaar is.",
+     "Snijd ondertussen de rode ui in flinterdunne halve ringen.",
+     "Doe in een kom met de azijn en de rest van het water. Breng op smaak met peper en laat staan tot gebruik.",
+     "Haal de braadslede uit de oven en laat nog 5 min. afgedekt staan. Verdeel de rode ui erover."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 590,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 74,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 10,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 42,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

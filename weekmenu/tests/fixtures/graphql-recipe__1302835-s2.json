@@ -1,0 +1,192 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302835,
+   "title": "Gele-curry-bloemkoolsteak met rijst (advertorial)",
+   "description": "Haal de Thaise smaken in huis met deze gele-curry-bloemkoolsteak met rijst. De combinatie van kruidige gele currypasta, zoete tuinerwten, gember en rode peper zorgt voor een kleurrijk gerecht vol smaak.",
+   "href": "/allerhande/recept/R-R1302835/gele-curry-bloemkoolsteak-met-rijst-advertorial",
+   "cookTime": 40,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036958_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 4,
+    "count": 1
+   },
+   "ingredients": [
+    {
+     "text": "150 g witte rijst",
+     "name": {
+      "singular": "witte rijst"
+     }
+    },
+    {
+     "text": "1 teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "75 g sjalotten",
+     "name": {
+      "singular": "sjalot"
+     }
+    },
+    {
+     "text": "5 g verse gember",
+     "name": {
+      "singular": "verse gember"
+     }
+    },
+    {
+     "text": "&#189; bloemkool",
+     "name": {
+      "singular": "bloemkool"
+     }
+    },
+    {
+     "text": "35 g Blue Elephant Thaise gele currypasta",
+     "name": {
+      "singular": "Blue Elephant Thaise gele currypasta"
+     }
+    },
+    {
+     "text": "2 el zonnebloemolie",
+     "name": {
+      "singular": "zonnebloemolie"
+     }
+    },
+    {
+     "text": "225 g diepvries fijne tuinerwten",
+     "name": {
+      "singular": "diepvries fijne tuinerwten"
+     }
+    },
+    {
+     "text": "1 el kraanwater",
+     "name": {
+      "singular": "kraanwater"
+     }
+    },
+    {
+     "text": "&#189; rode peper",
+     "name": {
+      "singular": "rode peper"
+     }
+    },
+    {
+     "text": "7.5 g verse platte peterselie",
+     "name": {
+      "singular": "verse platte peterselie"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Kook de rijst volgens de aanwijzingen op de verpakking. Snijd ondertussen de knoflook fijn en de sjalotten in halve ringen.",
+     "Schil en rasp de gember. Snijd de bloemkool in 4 mooie steaks (per 4 personen) van 1 cm dik, snijd de rest in roosjes.",
+     "Meng de currypasta met de olie. Bestrijk de bloemkoolsteaks ermee en laat 15 min. staan.",
+     "Verhit ondertussen de rest van de olie in een hapjespan op middelhoog vuur.",
+     "Fruit hierin de gember, knoflook en sjalot met de rest van de currypasta 5 min. Schep regelmatig om.",
+     "Giet de rijst af, voeg met de tuinerwten toe aan de pan en bak nog 6 min. mee op middelhoog vuur. Breng op smaak met peper en eventueel zout.",
+     "Verhit ondertussen een grote koekenpan zonder boter of olie op middelhoog vuur en bak hierin de bloemkoolsteaks in 8-10 min. goudbruin.",
+     "Keer halverwege. Voeg het water toe om de bloemkool gaar te stomen.",
+     "Bak en stoom de bloemkoolroosjes op dezelfde manier.",
+     "Snijd ondertussen het steeltje van de rode peper. Halveer de peper in de lengte, verwijder met een scherp mesje de zaadlijsten.",
+     "Snijd het vruchtvlees in schuine ringetjes. Snijd de peterselie fijn.",
+     "Meng de rode peper en peterselie door de rijst en serveer met de bloemkoolsteaks."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 580,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 82,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 17,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 18,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

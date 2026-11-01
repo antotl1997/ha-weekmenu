@@ -1,0 +1,3442 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 535,
+  "totalPages": 27,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 520221,
+   "hqId": 686120,
+   "title": "Spa Reine koolzuurvrij mineraalwater",
+   "salesUnitSize": "5 l",
+   "unitPriceDescription": "prijs per liter €0.92",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_695f376249465856513165643869516b6e352d563441?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_695f376249465856513165643869516b6e352d563441?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_695f376249465856513165643869516b6e352d563441?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_695f376249465856513165643869516b6e352d563441?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_695f376249465856513165643869516b6e352d563441?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 4.59,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "Spa",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Het natuurlijk mineraalwater van SPA Reine in een handige verpakking van 5 liter. Zeer licht gemineraliseerd en perfect geschikt voor de bereiding van babyvoeding.</p><p><ul><li>Natuurlijk koolzuurvrij mineraalwater</li><li>Zeer licht gemineraliseerd</li><li>Geschikt voor zoutarme diëten en voor de bereiding van babyvoeding</li><li>Recyclebaar</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "De puurheid van SPA Reine in een handige recyclebare verpakking van 5 liter voorzien van een handig kraantje. Alle SPA producten zijn afkomstig uit de Belgische Ardennen. Dankzij de pure, ongerepte natuur, de uitzonderlijke bescherming gedurende meer dan 130 jaar en de lange ondergrondse reis van ons water is SPA REINE een van de zuiverste waters van Europa.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": true,
+   "auctionId": "83a04425-463d-4ae2-b0d1-e177ac54b062",
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 73235,
+   "hqId": 729221,
+   "title": "Spa Reine koolzuurvrij mineraalwater 24-pack",
+   "salesUnitSize": "24 x 0,5 l",
+   "unitPriceDescription": "prijs per liter €1.25",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4674707a686e335a524c71476767426562474e543177?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4674707a686e335a524c71476767426562474e543177?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4674707a686e335a524c71476767426562474e543177?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4674707a686e335a524c71476767426562474e543177?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4674707a686e335a524c71476767426562474e543177?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 14.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "Spa",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Spa Reine 50cl, de gezonde dorstlesser voor onderweg. Afkomstig uit het hart van de Belgische Ardennen. Puur en zeer laag gemineraliseerd.</p><p><ul><li>Natuurzuiver koolzuurvrij mineraalwater</li><li>Geen calorie&#235;n</li><li>Geschikt voor zoutarme di&#235;ten en voor de bereiding van babyvoeding</li><li>Deze eco pack bevat 24 flesjes van 50cl</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": true,
+   "auctionId": "83a04425-463d-4ae2-b0d1-e177ac54b062",
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 611800,
+   "hqId": 0,
+   "title": "Spa Reine 5L 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_50546c38716b4247514d6d6e48646d554f672d677877?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_50546c38716b4247514d6d6e48646d554f672d677877?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_50546c38716b4247514d6d6e48646d554f672d677877?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_50546c38716b4247514d6d6e48646d554f672d677877?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_50546c38716b4247514d6d6e48646d554f672d677877?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "10% volume voordeel",
+   "currentPrice": 12.39,
+   "priceBeforeBonus": 13.77,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "Spa",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Reine 5 liter pack 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 520221,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "10% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 615107,
+   "hqId": 0,
+   "title": "Princes Tonijnstukken in water 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_514851574b316b4f514647796330504563324d374d41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_514851574b316b4f514647796330504563324d374d41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_514851574b316b4f514647796330504563324d374d41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_514851574b316b4f514647796330504563324d374d41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_514851574b316b4f514647796330504563324d374d41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 7.67,
+   "priceBeforeBonus": 8.07,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Tonijn in water",
+   "brand": "Princes",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Princes Tonijnstukken in water 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 496941,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 611841,
+   "hqId": 0,
+   "title": "Spa Touch passion fizz 6-pack",
+   "salesUnitSize": "6 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_664b647956495f7751504f2d3333743267516f713841?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_664b647956495f7751504f2d3333743267516f713841?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_664b647956495f7751504f2d3333743267516f713841?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_664b647956495f7751504f2d3333743267516f713841?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_664b647956495f7751504f2d3333743267516f713841?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "15% volume voordeel",
+   "currentPrice": 9.43,
+   "priceBeforeBonus": 11.1,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Water met smaak",
+   "brand": "Spa",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Spa Touch passion fizz 6x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 575871,
+     "quantity": 6
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "15% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 15,
+     "unit": null,
+     "precisePercentage": 15
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 614194,
+   "hqId": 72205,
+   "title": "Spa Reine koolzuurvrij mineraalwater 24-pack",
+   "salesUnitSize": "792 cl",
+   "unitPriceDescription": "prijs per liter €2.01",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4e7a32535773386b5370366c4e70323969504f2d7277?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4e7a32535773386b5370366c4e70323969504f2d7277?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4e7a32535773386b5370366c4e70323969504f2d7277?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4e7a32535773386b5370366c4e70323969504f2d7277?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4e7a32535773386b5370366c4e70323969504f2d7277?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 15.95,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "Spa",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>SPA Reine is natuurzuiver koolzuurvrij mineraalwater uit het hart van de Belgische Ardennen. De handige flesjes van 33 cl zijn ideaal voor thuis, onderweg, school, sport of een dagje uit.</p><p><ul><li>Natuurzuiver koolzuurvrij mineraalwater</li><li>Zeer laag gemineraliseerd en zacht van smaak</li><li>Geen calorieën en geschikt voor een zoutarm dieet</li><li>24 handige flesjes van 33 cl voor thuis en onderweg</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "SPA Reine wordt rechtstreeks aan de bron gebotteld in Spa, in het hart van de Belgische Ardennen. Tijdens de natuurlijke ondergrondse reis krijgt het water zijn kenmerkende zuivere karakter en zeer mineraalarme samenstelling. Daardoor smaakt SPA Reine zacht en is het geschikt voor elk moment van de dag. De compacte flesjes van 33 cl zijn makkelijk mee te nemen en de tray van 24 flesjes is handig om thuis een voorraad koolzuurvrij mineraalwater te hebben.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": true,
+   "auctionId": "83a04425-463d-4ae2-b0d1-e177ac54b062",
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 123416,
+   "hqId": 577176,
+   "title": "AH Mineraalwater koolzuurvrij 6-pack",
+   "salesUnitSize": "6 x 0,5 l",
+   "unitPriceDescription": "prijs per liter €0.76",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_467462584d694e5953586574757950635a6943733567?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_467462584d694e5953586574757950635a6943733567?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_467462584d694e5953586574757950635a6943733567?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_467462584d694e5953586574757950635a6943733567?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_467462584d694e5953586574757950635a6943733567?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Water, koolzuurvrij.</p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>\n   <list />\n  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 420789,
+   "hqId": 692454,
+   "title": "Statesman Tonijn stukken in water",
+   "salesUnitSize": "160 g",
+   "unitPriceDescription": "prijs per kg €13.30",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_646f6c744c6f4a6b5164617a48514630756936356577?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_646f6c744c6f4a6b5164617a48514630756936356577?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_646f6c744c6f4a6b5164617a48514630756936356577?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_646f6c744c6f4a6b5164617a48514630756936356577?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_646f6c744c6f4a6b5164617a48514630756936356577?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Tonijn in water",
+   "brand": "Statesman",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Tonijnstukken in water: de basis voor jouw gerechten. Rijk aan eiwitten.</p><p><ul><li>Lekker in warme en koude gerechten</li><li>Rijk aan eiwitten</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Het Statesman assortiment behoort niet voor niets tot de best verkochte visconserven in Nederland! Vele consumenten genieten van onze producten. Van een heerlijke tuna melt sandwich tot een frisse pastasalade met makreel: met Statesman bereid je de lekkerste gerechten. Smakelijk eten hoeft niet duur te zijn!",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 614462,
+   "hqId": 0,
+   "title": "Sourcy Vitaminwater mango guave 6-pck",
+   "salesUnitSize": "6 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_79764f37397a5a6b534c2d6b364c4534786f392d5a77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_79764f37397a5a6b534c2d6b364c4534786f392d5a77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_79764f37397a5a6b534c2d6b364c4534786f392d5a77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_79764f37397a5a6b534c2d6b364c4534786f392d5a77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_79764f37397a5a6b534c2d6b364c4534786f392d5a77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "15% volume voordeel",
+   "currentPrice": 13.72,
+   "priceBeforeBonus": 16.14,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Vitamin water",
+   "brand": "Sourcy",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Sourcy Vitaminwater mango guave 6x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 237903,
+     "quantity": 6
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "15% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 15,
+     "unit": null,
+     "precisePercentage": 15
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 626136,
+   "hqId": 0,
+   "title": "Vitamin Well Zero raspberry 12-pack",
+   "salesUnitSize": "12 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4e5f78687257735a52586951555a423773392d6b6d77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4e5f78687257735a52586951555a423773392d6b6d77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4e5f78687257735a52586951555a423773392d6b6d77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4e5f78687257735a52586951555a423773392d6b6d77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4e5f78687257735a52586951555a423773392d6b6d77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "25% volume voordeel",
+   "currentPrice": 17.91,
+   "priceBeforeBonus": 23.88,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Vitamin water",
+   "brand": "Vitamin Well",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Vitamin Well Zero raspberry 12x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 613466,
+     "quantity": 12
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "25% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 25,
+     "unit": null,
+     "precisePercentage": 25
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 626135,
+   "hqId": 0,
+   "title": "Vitamin Well Zero lemon 12-pack",
+   "salesUnitSize": "12 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6879734e306a39536843696a5f57794a7479696f51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6879734e306a39536843696a5f57794a7479696f51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6879734e306a39536843696a5f57794a7479696f51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6879734e306a39536843696a5f57794a7479696f51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6879734e306a39536843696a5f57794a7479696f51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "25% volume voordeel",
+   "currentPrice": 17.91,
+   "priceBeforeBonus": 23.88,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Vitamin water",
+   "brand": "Vitamin Well",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Vitamin Well Zero lemon 12x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 613465,
+     "quantity": 12
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "25% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 25,
+     "unit": null,
+     "precisePercentage": 25
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 611826,
+   "hqId": 0,
+   "title": "Spa Touch bruisend blackcurrant 6-pack",
+   "salesUnitSize": "6 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6b4569746130345351324b64764e71655f5372795851?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6b4569746130345351324b64764e71655f5372795851?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6b4569746130345351324b64764e71655f5372795851?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6b4569746130345351324b64764e71655f5372795851?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6b4569746130345351324b64764e71655f5372795851?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "15% volume voordeel",
+   "currentPrice": 9.13,
+   "priceBeforeBonus": 10.74,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Water met smaak",
+   "brand": "Spa",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Spa Touch bruisend blackcurrant 6x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 239489,
+     "quantity": 6
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "15% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 15,
+     "unit": null,
+     "precisePercentage": 15
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 485298,
+   "hqId": 740557,
+   "title": "Princes Tonijnstukken in water voordeelpak",
+   "salesUnitSize": "435 g",
+   "unitPriceDescription": "prijs per kg €22.84",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4a6a6135556f42595473432d5f694d31502d37636777?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4a6a6135556f42595473432d5f694d31502d37636777?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4a6a6135556f42595473432d5f694d31502d37636777?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4a6a6135556f42595473432d5f694d31502d37636777?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4a6a6135556f42595473432d5f694d31502d37636777?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 6.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Tonijn in water",
+   "brand": "Princes",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Voordeelverpakking msc tonijnstukken in water: de ideale basis voor jouw warme en koude gerechten. Snel, gemakkelijk en rijk aan eiwitten.</p><p><ul><li>Handige voordeelverpakking</li><li>Heerlijke naturel tonijnstukken en rijk aan eiwitten</li><li>Msc gecertificeerd</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "De lekkerste visgerechten in een handomdraai op tafel! Creeer uiteenlopende visgerechten van over de hele wereld, gewoon gezellig thuis met onze heerlijke tonijn, zalm, makreel, ansjovis, haring of sardines. Hoe verruim jij je blik vanavond? voor inspirerende recepten, kijk hier: www.princes.eu",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 123417,
+   "hqId": 577177,
+   "title": "AH Mineraalwater licht bruisend 6-pack",
+   "salesUnitSize": "6 x 0,5 l",
+   "unitPriceDescription": "prijs per liter €0.76",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_376c487436546f34546c79774435654b367941516151?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_376c487436546f34546c79774435654b367941516151?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_376c487436546f34546c79774435654b367941516151?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_376c487436546f34546c79774435654b367941516151?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_376c487436546f34546c79774435654b367941516151?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurhoudend water",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Verfrissend mineraalwater licht sprankelend</p><p><ul><li>Smaakt gekoeld het lekkerst!</li><li>De ideale dorstlesser</li><li>Tip: voeg wat munt of citroen toe</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 550295,
+   "hqId": 68877,
+   "title": "Bar-le-Duc Natuurlijk mineraal water 6-pack",
+   "salesUnitSize": "6 x 2 l",
+   "unitPriceDescription": "prijs per liter €0.49",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303133?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303133?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303133?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303133?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303133?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 5.89,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "Bar-le-Duc",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 226264,
+   "hqId": 820213,
+   "title": "John West Tonijnstukken in water",
+   "salesUnitSize": "145 g",
+   "unitPriceDescription": "prijs per kg €27.35",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4c62656675333334544a752d347951547052304b5167?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4c62656675333334544a752d347951547052304b5167?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4c62656675333334544a752d347951547052304b5167?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4c62656675333334544a752d347951547052304b5167?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4c62656675333334544a752d347951547052304b5167?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.79,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Tonijn in water",
+   "brand": "John West",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>John West Tonijnstukken in water zijn mals en sappig!</p><p><ul><li>Wild gevangen Skipjack Tonijn</li><li>Op basis van water dus mager</li><li>Rijk aan eiwitten</li><li>De basis voor vele recepten</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> Met de John West Tonijnstukken maak je de lekkerste recepten in een handomdraai. Lekker, makkelijk en gezond!  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 623378,
+   "hqId": 76686,
+   "title": "AH Hamsterchef Water 6-pack",
+   "salesUnitSize": "6 x 0,25 l",
+   "unitPriceDescription": "prijs per liter €1.13",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6e77666a5a4e2d49546d692d6638424e61302d783151?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6e77666a5a4e2d49546d692d6638424e61302d783151?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6e77666a5a4e2d49546d692d6638424e61302d783151?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6e77666a5a4e2d49546d692d6638424e61302d783151?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6e77666a5a4e2d49546d692d6638424e61302d783151?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.69,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "AH Hamsterchef",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 436060,
+   "hqId": 700507,
+   "title": "Spa Reine koolzuurvrij mineraalwater",
+   "salesUnitSize": "6 x 1,5 l",
+   "unitPriceDescription": "prijs per liter €0.79",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_34446676746c54355164477a6c5a4f352d617a346651?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_34446676746c54355164477a6c5a4f352d617a346651?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_34446676746c54355164477a6c5a4f352d617a346651?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_34446676746c54355164477a6c5a4f352d617a346651?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_34446676746c54355164477a6c5a4f352d617a346651?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 7.09,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "Spa",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Spa reine 1,5l, drinkgemak voor het hele gezin. Afkomstig uit het hart van de belgische ardennen. Puur en zeer laag gemineraliseerd.</p><p><ul><li>Natuurzuiver koolzuurvrij mineraalwater</li><li>Geen calorie&#x00EB;n</li><li>Geschikt voor zoutarme di&#x00EB;ten en voor de bereiding van babyvoeding</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 507220,
+   "hqId": 687020,
+   "title": "Bar-le-Duc Koolzuurvrij mineraalwater",
+   "salesUnitSize": "6 x 1 l",
+   "unitPriceDescription": "prijs per liter €0.78",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303134?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303134?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303134?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303134?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303134?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 4.69,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "Bar-le-Duc",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 496941,
+   "hqId": 795495,
+   "title": "Princes Tonijnstukken in water",
+   "salesUnitSize": "145 g",
+   "unitPriceDescription": "prijs per kg €26.37",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_435054614c59374b51743249525548546c7957303467?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_435054614c59374b51743249525548546c7957303467?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_435054614c59374b51743249525548546c7957303467?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_435054614c59374b51743249525548546c7957303467?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_435054614c59374b51743249525548546c7957303467?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.69,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Tonijn in water",
+   "brand": "Princes",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Msc tonijnstukken in water: de ideale basis voor jouw warme en koude gerechten. Snel, gemakkelijk en rijk aan eiwitten.</p><p><ul><li>Heerlijke tonijn in water</li><li>Direct genieten uit blik of verwerkt in koude en warme gerechten</li><li>Msc gecertificeerd</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "De lekkerste visgerechten in een handomdraai op tafel! Creeer uiteenlopende visgerechten van over de hele wereld, gewoon gezellig thuis met onze heerlijke tonijn, zalm, makreel, ansjovis, haring of sardines. Hoe verruim jij je blik vanavond?",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 67830,
+   "hqId": 535365,
+   "title": "Spa Reine koolzuurvrij mineraalwater",
+   "salesUnitSize": "6 x 0,5 l",
+   "unitPriceDescription": "prijs per liter €1.33",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4d544d744769666b516c79784f6369446741504c5977?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4d544d744769666b516c79784f6369446741504c5977?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4d544d744769666b516c79784f6369446741504c5977?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4d544d744769666b516c79784f6369446741504c5977?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4d544d744769666b516c79784f6369446741504c5977?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 3.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Koolzuurvrij water",
+   "brand": "Spa",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Spa Reine 50cl, de gezonde dorstlesser voor onderweg. Afkomstig uit het hart van de Belgische Ardennen. Puur en zeer laag gemineraliseerd.</p><p><ul><li>Natuurzuiver koolzuurvrij mineraalwater</li><li>Geen calorie&#235;n</li><li>Geschikt voor zoutarme di&#235;ten en voor de bereiding van babyvoeding</li><li>Ook verkrijgbaar in handige 1L meeneemfles</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 611839,
+   "hqId": 0,
+   "title": "Spa Touch of lemon 6-pack",
+   "salesUnitSize": "6 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_654865724c68687752544f785f45792d715379664151?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_654865724c68687752544f785f45792d715379664151?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_654865724c68687752544f785f45792d715379664151?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_654865724c68687752544f785f45792d715379664151?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_654865724c68687752544f785f45792d715379664151?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "15% volume voordeel",
+   "currentPrice": 9.13,
+   "priceBeforeBonus": 10.74,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Water met smaak",
+   "brand": "Spa",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Spa Touch of lemon 6x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 436053,
+     "quantity": 6
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "15% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 15,
+     "unit": null,
+     "precisePercentage": 15
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 515134,
+   "hqId": 80844,
+   "title": "AH Vitamin drink granaatappel 0% 6-pack",
+   "salesUnitSize": "6 x 0,5 l",
+   "unitPriceDescription": "prijs per liter €1.15",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6f66764d3463486452712d5851672d6c376b75356641?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6f66764d3463486452712d5851672d6c376b75356641?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6f66764d3463486452712d5851672d6c376b75356641?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6f66764d3463486452712d5851672d6c376b75356641?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6f66764d3463486452712d5851672d6c376b75356641?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 3.45,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Vitamin water",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "C",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=water&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=water&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=water&sortBy=RELEVANCE&page=1&size=20"
+  },
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=water&sortBy=RELEVANCE&page=26&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 60,
+     "display": true
+    },
+    {
+     "id": "AH Biologisch",
+     "label": "AH Biologisch",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "AH Hamsterchef",
+     "label": "AH Hamsterchef",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Absolut",
+     "label": "Absolut",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Actiph",
+     "label": "Actiph",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Addmoore",
+     "label": "Addmoore",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "Air up",
+     "label": "Air up",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Ambi Pur",
+     "label": "Ambi Pur",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Autodrop",
+     "label": "Autodrop",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Bar-le-Duc",
+     "label": "Bar-le-Duc",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "Binggrae",
+     "label": "Binggrae",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Blue Home",
+     "label": "Blue Home",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Breezer",
+     "label": "Breezer",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "CB12",
+     "label": "CB12",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Candyman",
+     "label": "Candyman",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Care",
+     "label": "Care",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Celsius",
+     "label": "Celsius",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Charlie's",
+     "label": "Charlie's",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "Chaudfontaine",
+     "label": "Chaudfontaine",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "CoolBest",
+     "label": "CoolBest",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Corsodyl",
+     "label": "Corsodyl",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Crystal Clear",
+     "label": "Crystal Clear",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Dermolin",
+     "label": "Dermolin",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Dove",
+     "label": "Dove",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "Drs. Leenarts",
+     "label": "Drs. Leenarts",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Durex",
+     "label": "Durex",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Elmex",
+     "label": "Elmex",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Etos",
+     "label": "Etos",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Evian",
+     "label": "Evian",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Fever-Tree",
+     "label": "Fever-Tree",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Fini",
+     "label": "Fini",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Fish Tales",
+     "label": "Fish Tales",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Fountain of Youth",
+     "label": "Fountain of Youth",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Galilei",
+     "label": "Galilei",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Garnier",
+     "label": "Garnier",
+     "count": 23,
+     "display": true
+    },
+    {
+     "id": "Glorix",
+     "label": "Glorix",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Goodoo",
+     "label": "Goodoo",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Grace",
+     "label": "Grace",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "HG",
+     "label": "HG",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "HOWAT",
+     "label": "HOWAT",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "Hansaplast",
+     "label": "Hansaplast",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Healthy people",
+     "label": "Healthy people",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Hombli",
+     "label": "Hombli",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Hydro Ice",
+     "label": "Hydro Ice",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Inventum",
+     "label": "Inventum",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Jacob Hooy",
+     "label": "Jacob Hooy",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "John West",
+     "label": "John West",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "Karvan Cévitam",
+     "label": "Karvan Cévitam",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Kidsner",
+     "label": "Kidsner",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Kizilay",
+     "label": "Kizilay",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Klene",
+     "label": "Klene",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Kneipp",
+     "label": "Kneipp",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Kult",
+     "label": "Kult",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "L'Oréal",
+     "label": "L'Oréal",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "La Croix",
+     "label": "La Croix",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Listerine",
+     "label": "Listerine",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Living Things",
+     "label": "Living Things",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Look-O-Look",
+     "label": "Look-O-Look",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Lucovitaal",
+     "label": "Lucovitaal",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Maybelline New York",
+     "label": "Maybelline New York",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Mela",
+     "label": "Mela",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Mepal",
+     "label": "Mepal",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Mogu Mogu",
+     "label": "Mogu Mogu",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "NIVEA",
+     "label": "NIVEA",
+     "count": 25,
+     "display": true
+    },
+    {
+     "id": "Naïf",
+     "label": "Naïf",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Nestlé",
+     "label": "Nestlé",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Nexxt",
+     "label": "Nexxt",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Ola",
+     "label": "Ola",
+     "count": 17,
+     "display": true
+    },
+    {
+     "id": "Optimum Nutrition",
+     "label": "Optimum Nutrition",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Pampers",
+     "label": "Pampers",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Parodontax",
+     "label": "Parodontax",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Princes",
+     "label": "Princes",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Red Bull",
+     "label": "Red Bull",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Rexona",
+     "label": "Rexona",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Rimmel London",
+     "label": "Rimmel London",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Rio Mare",
+     "label": "Rio Mare",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "S. Pellegrino",
+     "label": "S. Pellegrino",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "SEA Water",
+     "label": "SEA Water",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "Sensodyne",
+     "label": "Sensodyne",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Sistema",
+     "label": "Sistema",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Slimpie",
+     "label": "Slimpie",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Solan de Cabras",
+     "label": "Solan de Cabras",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Sourcy",
+     "label": "Sourcy",
+     "count": 45,
+     "display": true
+    },
+    {
+     "id": "Spa",
+     "label": "Spa",
+     "count": 71,
+     "display": true
+    },
+    {
+     "id": "Statesman",
+     "label": "Statesman",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Swicked",
+     "label": "Swicked",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Tomado",
+     "label": "Tomado",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Van de Boom",
+     "label": "Van de Boom",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Vita",
+     "label": "Vita",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Vitamin Well",
+     "label": "Vitamin Well",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "WaterWipes",
+     "label": "WaterWipes",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Waterdrop",
+     "label": "Waterdrop",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Xo",
+     "label": "Xo",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Zarqa",
+     "label": "Zarqa",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Zwitsal",
+     "label": "Zwitsal",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "donttellmum",
+     "label": "donttellmum",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "innocent",
+     "label": "innocent",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "21048",
+     "label": "Alcoholvrij, alcoholarm dranken",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "1975",
+     "label": "Baby en kind verzorging",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "11449",
+     "label": "Babydoekjes",
+     "count": 21,
+     "display": true
+    },
+    {
+     "id": "902",
+     "label": "Billendoekjes",
+     "count": 15,
+     "display": true
+    },
+    {
+     "id": "6956",
+     "label": "Bubbels en mousserende wijn",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "5339",
+     "label": "Bubbels overig",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "20275",
+     "label": "Bubbels overig lichtzoet",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "20869",
+     "label": "Craft en speciaal fris",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "2432",
+     "label": "Dagcreme",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "2384",
+     "label": "Dagcreme vrouwen",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "6421",
+     "label": "Deodorant",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "1465",
+     "label": "Deoroller vrouwen",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "1585",
+     "label": "Deospray vrouwen",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "4110",
+     "label": "Drop",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "7221",
+     "label": "EHBO",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "10258",
+     "label": "EHBO en sport",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "20915",
+     "label": "Energy drink, sportdranken",
+     "count": 77,
+     "display": true
+    },
+    {
+     "id": "2218",
+     "label": "Energydrinks",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "21186",
+     "label": "Fruit tussendoortjes",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "2561",
+     "label": "Fruitsalade",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "20921",
+     "label": "Fruitwater",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "2431",
+     "label": "Gezichtsreiniging",
+     "count": 52,
+     "display": true
+    },
+    {
+     "id": "1163",
+     "label": "Gezichtsreiniging vrouwen",
+     "count": 42,
+     "display": true
+    },
+    {
+     "id": "11523",
+     "label": "Gezichtsverzorging",
+     "count": 55,
+     "display": true
+    },
+    {
+     "id": "10661",
+     "label": "Glijmiddel",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "10889",
+     "label": "Hard snoep",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "11550",
+     "label": "Huidbehandeling",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "21230",
+     "label": "Huidirritatie, jeuk",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "1171",
+     "label": "IJs",
+     "count": 41,
+     "display": true
+    },
+    {
+     "id": "6028",
+     "label": "Intimiteit",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "6845",
+     "label": "Keukenapparatuur",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "12044",
+     "label": "Koken",
+     "count": 17,
+     "display": true
+    },
+    {
+     "id": "20936",
+     "label": "Kokoswater, aloe vera dranken",
+     "count": 14,
+     "display": true
+    },
+    {
+     "id": "5622",
+     "label": "Koolzuurhoudend water",
+     "count": 44,
+     "display": true
+    },
+    {
+     "id": "5624",
+     "label": "Koolzuurvrij water",
+     "count": 52,
+     "display": true
+    },
+    {
+     "id": "11540",
+     "label": "Lichaamsverzorging",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "2815",
+     "label": "Limonadesiroop (suikerbewust en suikervrij)",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "19250",
+     "label": "Luiers en verschonen",
+     "count": 15,
+     "display": true
+    },
+    {
+     "id": "1310",
+     "label": "Make-up",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "2572",
+     "label": "Makreel (conserven)",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "9950",
+     "label": "Mascara",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "4203",
+     "label": "Meenemen en bewaren",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "6284",
+     "label": "Mixdranken",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "20866",
+     "label": "Mixdranken, seltzers",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "18401",
+     "label": "Mixdranken, seltzers, aperitieven",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "1948",
+     "label": "Mondhygiene",
+     "count": 23,
+     "display": true
+    },
+    {
+     "id": "4913",
+     "label": "Mondreiniging",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "1331",
+     "label": "Mondwater en mondspray",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "44737",
+     "label": "Onderhouds- en poetsmiddelen",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "5765",
+     "label": "Oog make-up remover",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "3051",
+     "label": "Pleisters",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "1498",
+     "label": "Schoonmaakmiddelen",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "44559",
+     "label": "Schoonmaken",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "2223",
+     "label": "Siroop",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "1839",
+     "label": "Snoep",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "2430",
+     "label": "Snoepmix",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "11450",
+     "label": "Snoetenpoetsers en vochtige washandjes",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "1584",
+     "label": "Sportdrank fles",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "10826",
+     "label": "Sportdranken",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "10866",
+     "label": "Sportvoeding",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "19127",
+     "label": "Supplementen",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "1996",
+     "label": "Toiletblokken",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "19319",
+     "label": "Toiletreinigers",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "1994",
+     "label": "Toiletreinigers, luchtverfrissers",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "1616",
+     "label": "Tonic",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "20914",
+     "label": "Tonic, ginger, bitter, crafts en speciaal fris",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "10318",
+     "label": "Tonijn (conserven)",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "10319",
+     "label": "Tonijn in water",
+     "count": 18,
+     "display": true
+    },
+    {
+     "id": "20916",
+     "label": "Tray (fris en water)",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "44870",
+     "label": "Tuin",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "44875",
+     "label": "Tuingereedschap",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "9464",
+     "label": "Verse sappen en smoothies",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "2726",
+     "label": "Visconserven",
+     "count": 23,
+     "display": true
+    },
+    {
+     "id": "9970",
+     "label": "Vitamin water",
+     "count": 59,
+     "display": true
+    },
+    {
+     "id": "1677",
+     "label": "Vruchtensappen en fruitdrank",
+     "count": 78,
+     "display": true
+    },
+    {
+     "id": "2221",
+     "label": "Water met smaak",
+     "count": 73,
+     "display": true
+    },
+    {
+     "id": "19628",
+     "label": "Water, water met smaak, vitamin water",
+     "count": 233,
+     "display": true
+    },
+    {
+     "id": "5381",
+     "label": "Waterflessen",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "1847",
+     "label": "Waterijs",
+     "count": 41,
+     "display": true
+    },
+    {
+     "id": "19553",
+     "label": "Waterkokers en kranen",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "1845",
+     "label": "Winegums",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "19203",
+     "label": "Wondverzorging",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "10887",
+     "label": "Zacht snoep",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "2361",
+     "label": "Zelfzorg",
+     "count": 13,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 249,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 243,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 220,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 255,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 221,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 254,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 236,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 236,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 254,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 254,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 255,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 247,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 251,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 236,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 110,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 175,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 166,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 205,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 220,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "a",
+     "label": "Score A",
+     "count": 90,
+     "display": true
+    },
+    {
+     "id": "b",
+     "label": "Score B",
+     "count": 50,
+     "display": true
+    },
+    {
+     "id": "c",
+     "label": "Score C",
+     "count": 81,
+     "display": true
+    },
+    {
+     "id": "d",
+     "label": "Score D",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "e",
+     "label": "Score E",
+     "count": 7,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 249,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "diepvries",
+   "allLabel": null,
+   "label": "Diepvries",
+   "options": [
+    {
+     "id": "diepvries",
+     "label": "Diepvries",
+     "count": 36,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_verbluffen",
+   "allLabel": null,
+   "label": "Prijsfavoriet",
+   "options": [
+    {
+     "id": "np_verbluffen",
+     "label": "Prijsfavoriet",
+     "count": 19,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_biologisch",
+   "allLabel": null,
+   "label": "Biologisch",
+   "options": [
+    {
+     "id": "np_biologisch",
+     "label": "Biologisch",
+     "count": 11,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_nieuw",
+   "allLabel": null,
+   "label": "Nieuw",
+   "options": [
+    {
+     "id": "np_nieuw",
+     "label": "Nieuw",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_vegetarisch",
+   "allLabel": null,
+   "label": "Vegetarisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 220,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_veganistisch",
+   "allLabel": null,
+   "label": "Veganistisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 205,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}
