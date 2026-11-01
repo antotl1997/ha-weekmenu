@@ -1,7 +1,7 @@
 """Write the delta between plan and log to the AH order or shopping list.
 
 Callers MUST serialise all calls to `apply` (one asyncio.Lock around every
-write): AhClient has no refresh lock and two concurrent rounds could add
+write): two concurrent rounds could add
 products twice.
 
 Rules: one AH call per product, any error stops the round (progress kept,
@@ -29,6 +29,7 @@ looks "not applied" and the product is written once more. Example: a list
 write crashed after AH applied it, the user deletes the item from the list
 before the next round, current <= before, so it is written once more.
 """
+import logging
 from dataclasses import dataclass, field
 from typing import Literal
 
@@ -46,6 +47,15 @@ class WriteResult:
 
 
 EXTRA = "extra"  # pending "kind" of a staple write
+
+log_ = logging.getLogger("weekmenu.writer")
+
+
+def _log_target(what: str, order, count: int) -> None:
+    """Where this write goes and why; never a token or a body."""
+    why = (f"actieve bestelling {order.id}" if order is not None
+           else "geen actieve bestelling -> lijst")
+    log_.info("%s: %d product(en) naar %s", what, count, why)
 
 
 def _title(plan: Plan, replaced: Plan | None, pid: int) -> str:
@@ -161,6 +171,7 @@ async def apply(
     log.savings = plan.savings
     log.target = target
     ledger.save(log)
+    _log_target("Menu", order, len(delta))
 
     result = WriteResult(target=target)
     await _write_each(client, ledger, log, order, delta, log.added, result)
@@ -195,6 +206,7 @@ async def apply_extras(
     result = WriteResult(target="order" if order is not None else "list")
     if log.target is None:
         log.target = result.target
+    _log_target("Vaste boodschappen", order, len(delta))
     await _write_each(client, ledger, log, order, delta, log.extras_added, result, kind=EXTRA)
     result.pending = [(titles.get(p, str(p)), int(log.pending[p]["delta"]))
                       for p in adds if p in log.pending]

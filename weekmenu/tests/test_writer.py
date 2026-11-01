@@ -355,3 +355,25 @@ async def test_extras_skip_unsure_and_unknown_products(led):
     res = await apply_extras(ah, led, log, {8: 1, 9: 2})
     assert ah.calls == [] and res.added == {}
     assert [t for t, _ in res.pending] == ["9"] and [t for t, _ in res.unknown] == ["8"]
+
+
+# --- final review fixes: the chosen target is logged ------------------------------------
+
+
+async def test_apply_logs_target_and_why(led, caplog):
+    caplog.set_level("INFO", logger="weekmenu.writer")
+    await apply(FakeAh(order=ActiveOrder(4242, {})), led, WeekLog(W), plan({1: 1}))
+    await apply(FakeAh(), led, WeekLog(date(2026, 11, 11)), plan({1: 1}))
+    lines = [r.getMessage() for r in caplog.records if r.name == "weekmenu.writer"]
+    assert any("actieve bestelling 4242" in m for m in lines)
+    assert any("geen actieve bestelling -> lijst" in m for m in lines)
+    assert all(r.levelname == "INFO" for r in caplog.records if r.name == "weekmenu.writer")
+
+
+async def test_apply_extras_logs_target(led, caplog):
+    caplog.set_level("INFO", logger="weekmenu.writer")
+    await apply_extras(FakeAh(), led, WeekLog(W), {50: 1})
+    lines = [r.getMessage() for r in caplog.records if r.name == "weekmenu.writer"]
+    assert any("vaste boodschappen" in m.lower() and "geen actieve bestelling -> lijst" in m
+               for m in lines)
+    assert not any("Bearer" in m or "token" in m.lower() for m in lines)
