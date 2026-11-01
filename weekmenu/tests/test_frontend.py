@@ -226,6 +226,7 @@ def render(base, route, tmp_path, name, size=PHONE) -> str:
     return dom
 
 
+@pytest.mark.slow
 def test_app_screens_in_chrome(tmp_path):
     ctx = build_ctx(tmp_path)
     static = tmp_path / "static"
@@ -265,6 +266,11 @@ def test_app_screens_in_chrome(tmp_path):
         dom = render(base, "#instellingen", tmp_path, "instellingen")
         assert "Kookavonden" in dom and "Bij de ouders" in dom and "Nieuw menu" in dom
         assert "Nu maken" in dom
+        assert 'href="#inloggen"' in dom and "Opnieuw inloggen" in dom
+
+        dom = render(base, "#inloggen", tmp_path, "opnieuw-inloggen")
+        assert "appie://login-exit" in dom and "Log opnieuw in" in dom
+        assert 'href="#instellingen"' in dom  # a way back without logging in
 
         render(base, "", tmp_path, "week-desktop", size=(1280, 800))
 

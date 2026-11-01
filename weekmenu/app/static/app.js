@@ -461,17 +461,21 @@ function settingsScreen() {
     </div>
     <div class="btnrow"><button class="btn sec2" data-run="nieuw_menu">${ICON.refresh} Nieuw menu</button>
       <button class="btn pri" data-run="nu_maken">Nu maken</button></div>
-    <p class="foot">Nu maken vult aan wat nog ontbreekt. Nieuw menu kiest andere gerechten.</p>`;
+    <p class="foot">Nu maken vult aan wat nog ontbreekt. Nieuw menu kiest andere gerechten.</p>
+    <p class="foot"><a href="#inloggen">Opnieuw inloggen</a> bij AH, als de add-on de login kwijt is.</p>`;
 }
 
 // --- screens: login --------------------------------------------------------------------
 
-function loginScreen() {
+function loginScreen(again) {
   const url = safeUrl(state.status && state.status.login_url);
+  const why = again
+    ? "Log opnieuw in als de add-on de AH-login kwijt is."
+    : "De add-on is niet (meer) ingelogd.";
   return `<header class="top"><div><h1>Weekmenu</h1><div class="sub">inloggen bij Albert Heijn</div></div></header>
     <div class="card login">
-      <h2>Log één keer in bij AH</h2>
-      <p>De add-on is niet (meer) ingelogd. Inloggen kan alleen met de hand, omdat AH een captcha gebruikt. Daarna houdt de add-on de login zelf bij.</p>
+      <h2>${again ? "Opnieuw inloggen bij AH" : "Log één keer in bij AH"}</h2>
+      <p>${why} Inloggen kan alleen met de hand, omdat AH een captcha gebruikt. Daarna houdt de add-on de login zelf bij.</p>
       <ol>
         <li><span>Open op een computer de AH-inlogpagina in Chrome of Edge.</span></li>
         <li><span>Druk op F12 en kies het tabblad Console.</span></li>
@@ -481,7 +485,8 @@ function loginScreen() {
       ${url ? `<a class="btn sec2 full" style="margin:0 0 12px;width:100%" href="${esc(url)}" target="_blank" rel="noopener">AH-inlogpagina openen</a>` : ""}
       <textarea id="code" placeholder="appie://login-exit?code=…" autocomplete="off" spellcheck="false"></textarea>
       <div class="btnrow"><button class="btn pri" data-login>Inloggen</button></div>
-    </div>`;
+    </div>
+    ${again ? `<p class="foot"><a href="#instellingen">Terug naar instellingen</a></p>` : ""}`;
 }
 
 function errorScreen(msg) {
@@ -495,7 +500,7 @@ function errorScreen(msg) {
 function route() {
   const h = location.hash.replace(/^#/, "");
   if (h.startsWith("gerecht/")) return { tab: "week", dish: h.slice(8) };
-  if (h === "besparing" || h === "instellingen") return { tab: h };
+  if (h === "besparing" || h === "instellingen" || h === "inloggen") return { tab: h };
   return { tab: "week" };
 }
 
@@ -505,11 +510,12 @@ async function render() {
   const seq = ++renderSeq;
   const r = route();
   const loggedIn = state.status && state.status.logged_in;
-  nav.hidden = !loggedIn || !!r.dish;
-  app.classList.toggle("bare", !loggedIn || !!r.dish);
+  const relogin = r.tab === "inloggen";  // "Opnieuw inloggen" in Instellingen
+  nav.hidden = !loggedIn || !!r.dish || relogin;
+  app.classList.toggle("bare", !loggedIn || !!r.dish || relogin);
   for (const a of nav.querySelectorAll("a")) a.classList.toggle("on", a.dataset.tab === r.tab);
   if (!state.status) return;
-  if (!loggedIn) { app.innerHTML = loginScreen(); return; }
+  if (!loggedIn || relogin) { app.innerHTML = loginScreen(loggedIn && relogin); return; }
 
   const need = r.dish ? (state.dishes[r.dish] ? null : () => loadDish(r.dish))
     : r.tab === "besparing" ? (state.savings ? null : () => api("api/savings").then((x) => { state.savings = x; }))
@@ -611,6 +617,7 @@ app.addEventListener("click", async (ev) => {
       field.value = "";
       toast("Ingelogd bij AH");
       await loadStatus();
+      if (route().tab === "inloggen") { location.hash = "#week"; return; }
       render();
     });
     return;
