@@ -63,6 +63,11 @@ def test_qty_for_deal():
     assert qty_for_deal(prod(mech="Feestfavoriet"), 3) == 3
 
 
+def test_n_for_without_saving_does_not_pad_qty():
+    p = prod(regular=2.00, mech="2 voor 4.00")
+    assert savings(p, 2) == 0 and qty_for_deal(p, 1) == 1
+
+
 def test_parse_shapes():
     assert parse_mechanism("2e halve prijs") == Deal("nth_discount", n=2, pct=50)
     assert parse_mechanism("2 + 2 gratis") == Deal("x_plus_y", n=2, free=2)
@@ -74,8 +79,11 @@ def test_parse_shapes():
 # Distinct strings from the fixtures (bonusMechanism and discount.description).
 # (mechanism, regular, now, qty, expected savings; None = unknown deal kind)
 FIXTURE_CASES = [
-    ("1 EURO KORTING", 5.0, 5.0, 2, None),
-    ("1 euro korting", 5.0, 5.0, 2, None),
+    ("1 EURO KORTING", 5.0, 4.0, 2, 2.00),
+    ("1 euro korting", 5.99, 4.99, 1, 1.00),
+    ("1 euro korting", 5.0, 5.0, 2, 0.0),
+    # "100 GRAM VOOR x": currentPrice is absent or equals the per-100g price,
+    # so regular - now would over-count; computing it needs the package weight.
     ("100 GRAM VOOR 0.75", 1.0, 1.0, 2, None),
     ("100 GRAM VOOR 3.42", 4.0, 4.0, 2, None),
     ("15% korting", 4.00, 3.40, 2, 1.20),

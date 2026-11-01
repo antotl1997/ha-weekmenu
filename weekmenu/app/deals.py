@@ -44,6 +44,9 @@ def parse_mechanism(text: str | None) -> Deal:
         return Deal("n_for", n=int(m[1]), total=_f(m[2]))
     if m := re.fullmatch(rf"{_NUM} ?% korting", t):
         return Deal("percent", pct=_f(m[1]))
+    if re.fullmatch(rf"{_NUM} euro korting", t):
+        # amount off per unit; the saving is read from the product's own prices
+        return Deal("price")
     if m := re.fullmatch(rf"voor {_NUM}", t):
         return Deal("price", total=_f(m[1]))
     return Deal("unknown")
@@ -88,4 +91,6 @@ def qty_for_deal(p: Product, need: int) -> int:
     g = _group(d)
     if need <= 0 or g <= 1:
         return need
+    if d.kind == "n_for" and d.n * p.regular <= d.total:
+        return need  # deal saves nothing, do not buy extra units
     return math.ceil(need / g) * g
