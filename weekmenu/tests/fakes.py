@@ -149,8 +149,11 @@ class FakeHass(Hass):
         }
         self.posts: list[tuple[str, dict]] = []
         self.fail_posts = fail_posts
+        self.fail_reads = False
 
     async def _get_state(self, entity_id):
+        if self.fail_reads:
+            raise httpx.ConnectError("HA is weg")
         return self.states.get(entity_id)
 
     async def _post(self, path, payload):

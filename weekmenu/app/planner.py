@@ -775,10 +775,27 @@ async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
     return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted)
 
 
+def dish_to_dict(d: Dish) -> dict:
+    return _dish_to_dict(d)
+
+
+def dish_from_dict(x: dict) -> Dish:
+    return _dish_from_dict(x)
+
+
+def put_dish(plan: Plan, dish: Dish) -> Plan:
+    """Put a saved dish back exactly as it was ("Terug"); no AH calls at all.
+
+    Same recipe, products, quantities, times; basket and savings are recomputed.
+    """
+    dishes = [d for d in plan.dishes if d.date != dish.date] + [dish]
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted)
+
+
 async def restore_dish(
     client, plan: Plan, day: date, recipe_id: int, bonus: list[Product]
 ) -> Plan:
-    """Put recipe `recipe_id` back on `day` ("Terug" after a swap); the rest stays.
+    """Put recipe `recipe_id` back on `day`: the fallback for logs without a saved dish.
 
     The recipe already passed the week's rules before it was swapped out, so they are
     not checked again. Oven and waiting times only come with search results and are

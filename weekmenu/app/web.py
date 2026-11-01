@@ -338,6 +338,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 return _err(409, "Geen ander gerecht gevonden dat in de regels past")
             wlog.swapped_out.setdefault(iso, []).append(d.recipe.id)
             wlog.previous[iso] = d.recipe.id
+            wlog.previous_dish[iso] = main.dish_to_dict(d)  # "Terug" puts exactly this back
             return new
 
         return await _write(day, change)
@@ -352,11 +353,17 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 return _err(409, "Er is geen vorig gerecht")
             if ctx.clock().date() >= wlog.week:
                 return _err(409, "De week is al begonnen")
-            bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(), may_retry=False)
-            new = await main.restore_dish(ctx.client, plan, day, prev, bonus)
+            saved = wlog.previous_dish.get(iso)
+            if saved is not None and int(saved["recipe"]["id"]) == prev:
+                new = main.put_dish(plan, main.dish_from_dict(saved))  # exact, no AH reads
+            else:  # a log from before previous_dish: look the recipe up again
+                bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(),
+                                                     may_retry=False)
+                new = await main.restore_dish(ctx.client, plan, day, prev, bonus)
             if d.recipe.id not in wlog.swapped_out.setdefault(iso, []):
                 wlog.swapped_out[iso].append(d.recipe.id)
             del wlog.previous[iso]
+            wlog.previous_dish.pop(iso, None)
             return new
 
         return await _write(day, change)

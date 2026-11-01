@@ -279,3 +279,47 @@ async def test_index_without_static_is_a_login_page(aiohttp_client, ctx, tmp_pat
     assert (await client.get("app.css")).status == 200
     assert (await client.get("static/app.css")).status == 200
     assert (await client.get("../tokens.json")).status == 404
+
+
+# --- fix round 1 (Ruling 22) -------------------------------------------------------
+
+
+async def test_api_back_restores_exact_dish_without_ah_reads(aiohttp_client, ctx, swaps,
+                                                             monkeypatch):
+    import dataclasses
+    from app.writer import apply
+
+    async def no_restore(*a, **k):
+        raise AssertionError("must not look the recipe up again")
+
+    monkeypatch.setattr(main, "restore_dish", no_restore)
+    original = dataclasses.replace(dish(WO, 101, [1, 2], 2.0), oven=20, wait=60)
+    from app.planner import put_dish  # real plans come out of _finish: do the same here
+    start = put_dish(make_plan([dish(DO, 102, [2, 3], 3.0)]), original)
+    await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), start)
+    client = await aiohttp_client(make_app(ctx))
+    before = (await (await client.get(f"api/dish/{WO.isoformat()}")).json())
+    assert (await client.post(f"api/dish/{WO.isoformat()}/swap")).status == 200
+    ah = ctx.client
+    reads, writes = list(ah.calls), list(ah.writes)
+
+    r = await client.post(f"api/dish/{WO.isoformat()}/back")
+    assert r.status == 200, await r.text()
+    after = await r.json()
+    for key in ("recipe", "lines", "persons", "steps", "not_found", "savings"):
+        assert after[key] == before[key], key
+    assert after["recipe"]["oven"] == 20 and after["recipe"]["wait"] == 60
+    assert ah.calls == reads  # no bonus, recipe or product reads
+    assert ah.writes == writes  # everything was already bought
+    assert ctx.ledger.load(W).previous_dish == {}
+
+
+async def test_api_back_falls_back_for_logs_without_saved_dish(aiohttp_client, ctx, swaps):
+    await planned_ctx(ctx)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await client.post(f"api/dish/{WO.isoformat()}/swap")).status == 200
+    log = ctx.ledger.load(W)
+    log.previous_dish = {}  # a log written before previous_dish existed
+    ctx.ledger.save(log)
+    r = await client.post(f"api/dish/{WO.isoformat()}/back")
+    assert r.status == 200 and (await r.json())["recipe"]["id"] == 101

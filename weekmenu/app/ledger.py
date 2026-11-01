@@ -25,6 +25,8 @@ class WeekLog:
     counted: bool = False
     swapped_out: dict[str, list[int]] = field(default_factory=dict)  # ISO day -> recipe ids
     previous: dict[str, int] = field(default_factory=dict)  # ISO day -> recipe id before last swap
+    # ISO day -> the whole dish (planner.dish_to_dict) before the last swap, for an exact "Terug"
+    previous_dish: dict[str, dict] = field(default_factory=dict)
     extras_added: dict[int, int] = field(default_factory=dict)
     extras_savings: float = 0.0
     # Write-ahead record of a write in flight: pid -> {"before", "delta", "target", "order_id"}
@@ -42,6 +44,7 @@ class WeekLog:
             "counted": self.counted,
             "swapped_out": {k: list(v) for k, v in self.swapped_out.items()},
             "previous": dict(self.previous),
+            "previous_dish": {k: dict(v) for k, v in self.previous_dish.items()},
             "extras_added": {str(k): v for k, v in self.extras_added.items()},
             "extras_savings": self.extras_savings,
             "pending": {str(k): dict(v) for k, v in self.pending.items()},
@@ -59,6 +62,7 @@ class WeekLog:
             counted=bool(d.get("counted", False)),
             swapped_out={k: [int(i) for i in v] for k, v in (d.get("swapped_out") or {}).items()},
             previous={k: int(v) for k, v in (d.get("previous") or {}).items()},
+            previous_dish={k: dict(v) for k, v in (d.get("previous_dish") or {}).items()},
             extras_added={int(k): int(v) for k, v in (d.get("extras_added") or {}).items()},
             extras_savings=float(d.get("extras_savings") or 0.0),
             pending={int(k): dict(v) for k, v in (d.get("pending") or {}).items()},

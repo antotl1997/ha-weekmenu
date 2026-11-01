@@ -224,3 +224,87 @@ async def test_schedule_done_survives_restart(tmp_path, planned):
     main.load_state(ctx2)
     await tick(ctx2, datetime(2026, 11, 1, 9, 0))
     assert len(calls) == 1 and ctx2.hass.notifications() == []
+
+
+# --- fix round 1 (Ruling 22) -------------------------------------------------------
+
+
+async def test_schema_retries_when_settings_unreadable(tmp_path, planned):
+    calls, _ = planned
+    ctx = make_ctx(tmp_path)
+    ctx.hass.fail_reads = True
+    await tick(ctx, SUNDAY)
+    assert ctx.retry_at == datetime(2026, 11, 1, 8, 10)
+    assert ctx.client.calls == [] and calls == []
+    assert not (tmp_path / "state.json").exists()  # a restart tries again
+    # buttons do not retry; they report
+    out = await run_round(ctx, SUNDAY, "nu_maken")
+    assert out.status == "error"
+    # HA is back at the retry
+    ctx.hass.fail_reads = False
+    await tick(ctx, datetime(2026, 11, 1, 8, 10))
+    assert ctx.retry_at is None and len(calls) == 1
+    assert ctx.client.held() == {1: 1, 2: 2, 3: 1}
+
+
+async def test_settings_retry_gives_up_after_18(tmp_path, planned):
+    ctx = make_ctx(tmp_path)
+    ctx.hass.fail_reads = True
+    out = await run_round(ctx, datetime(2026, 11, 1, 17, 50), "schema")
+    assert out.status == "retry" and out.retry_at == datetime(2026, 11, 1, 18, 0)
+    out = await run_round(ctx, datetime(2026, 11, 1, 18, 0), "schema")
+    assert out.status == "error" and out.retry_at is None
+
+
+async def test_total_not_counted_twice_after_crash_between_file_and_flags(
+    tmp_path, planned, monkeypatch
+):
+    ctx = make_ctx(tmp_path)
+    (tmp_path / "totaal.json").write_text('{"total": 10.0, "counted": []}', encoding="utf-8")
+    ctx.ledger.save(WeekLog(date(2026, 10, 28), plan=plan_b().to_dict(), savings=4.0))
+    real_save = ctx.ledger.save
+
+    def crash(log):
+        raise SystemExit("power cut")  # not an Exception: like the process dying
+
+    monkeypatch.setattr(ctx.ledger, "save", crash)
+    with pytest.raises(SystemExit):
+        await update_total(ctx, SUNDAY.date())
+    data = json.loads((tmp_path / "totaal.json").read_text())
+    assert data == {"total": 14.0, "counted": ["2026-10-28"]}
+    assert not Ledger(tmp_path / "weeks").load(date(2026, 10, 28)).counted  # flag lost
+
+    monkeypatch.setattr(ctx.ledger, "save", real_save)
+    await update_total(ctx, SUNDAY.date())
+    assert json.loads((tmp_path / "totaal.json").read_text())["total"] == 14.0
+    assert ctx.hass.totals()[-1] == 14.0
+
+
+@pytest.mark.parametrize("old", ["12.5", '{"total": 12.5}'])
+async def test_old_total_file_is_migrated_from_ledger_flags(tmp_path, planned, old):
+    ctx = make_ctx(tmp_path)
+    (tmp_path / "totaal.json").write_text(old, encoding="utf-8")
+    ctx.ledger.save(WeekLog(date(2026, 10, 21), plan=plan_b().to_dict(), savings=3.0,
+                            counted=True))
+    ctx.ledger.save(WeekLog(date(2026, 10, 28), plan=plan_b().to_dict(), savings=4.0))
+    await update_total(ctx, SUNDAY.date())
+    data = json.loads((tmp_path / "totaal.json").read_text())
+    assert data == {"total": 16.5, "counted": ["2026-10-21", "2026-10-28"]}
+
+
+async def test_button_round_clears_pending_schema_retry(tmp_path, planned):
+    ctx = make_ctx(tmp_path, ah=FakeAh(tmp_path, periods=[CURRENT]))
+    await tick(ctx, SUNDAY)
+    assert ctx.retry_at == datetime(2026, 11, 1, 9, 0)
+    out = await run_round(ctx, datetime(2026, 11, 1, 8, 30), "nu_maken")
+    assert out.status == "done" and ctx.retry_at is None
+
+
+async def test_reused_plan_adding_nothing_sends_no_second_message(tmp_path, planned):
+    ctx = make_ctx(tmp_path)
+    await run_round(ctx, datetime(2026, 10, 31, 12, 0), "nu_maken")  # Saturday button
+    assert len(ctx.hass.notifications()) == 1
+    out = await run_round(ctx, SUNDAY, "schema")
+    assert out.status == "done" and out.result.added == {}
+    assert len(ctx.hass.notifications()) == 1  # no second "klaar"
+    assert sum(p == "states/sensor.weekmenu" for p, _ in ctx.hass.posts) == 2  # still published

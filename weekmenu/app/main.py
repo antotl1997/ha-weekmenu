@@ -26,15 +26,33 @@ from zoneinfo import ZoneInfo
 import httpx
 
 from app.ahclient import AhApiError, AhClient, AhLoginExpired, BonusPeriod, Product
-from app.hass import TOTAL_PATH, Hass, RawSettings, format_message, load_total, plan_view
+from app.hass import (
+    TOTAL_PATH,
+    Hass,
+    RawSettings,
+    format_message,
+    load_total_state,
+    plan_view,
+)
 from app.ledger import Ledger, WeekLog
-from app.planner import Plan, Settings, build_plan, rescale_dish, restore_dish, swap_dish
+from app.planner import (
+    Plan,
+    Settings,
+    build_plan,
+    dish_from_dict,
+    dish_to_dict,
+    put_dish,
+    rescale_dish,
+    restore_dish,
+    swap_dish,
+)
 from app.tokens import TokenStore
 from app.week import GEEN_OUDERAVOND, WEEKDAGEN, evenings, menu_week_start
 from app.writer import WriteResult, apply
 
 # swap_dish, rescale_dish and restore_dish are looked up here by the web API
-__all__ = ["run_round", "swap_dish", "rescale_dish", "restore_dish", "build_plan"]
+__all__ = ["run_round", "swap_dish", "rescale_dish", "restore_dish", "put_dish", "build_plan",
+           "dish_to_dict", "dish_from_dict"]
 
 log = logging.getLogger("weekmenu")
 
@@ -46,7 +64,8 @@ DATA = Path("/data")
 OPTIONS_PATH = DATA / "options.json"
 DEFAULT_PANTRY = ["olie", "zout", "peper", "suiker", "bloem", "azijn"]
 DEFAULT_SCHEDULE = time(8, 0)
-LAST_RETRY = time(18, 0)  # the last hourly try for next week's folder
+LAST_RETRY = time(18, 0)  # the last try on Sunday: folder (hourly) or HA settings
+SETTINGS_RETRY = timedelta(minutes=10)
 PERIOD_WARNING = (
     "De folder van volgende week was er nog niet: "
     "prijzen gelden woensdag waarschijnlijk niet meer"
@@ -175,8 +194,15 @@ async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
         raw = await ctx.hass.read_settings()
     except httpx.HTTPError as e:
         msg = f"Home Assistant-instellingen niet te lezen ({type(e).__name__})"
-        log.warning(msg)
         ctx.error = msg
+        if mode == "schema":  # nothing written yet: try again, it must not stop unnoticed
+            nxt = now.replace(second=0, microsecond=0) + SETTINGS_RETRY
+            if nxt.date() == now.date() and nxt.time() <= LAST_RETRY:
+                log.warning("%s, opnieuw om %s", msg, nxt.strftime("%H:%M"))
+                return RoundOutcome("retry", start, retry_at=nxt, error=msg)
+            log.error("%s; de zondagronde is opgegeven", msg)
+        else:
+            log.warning(msg)
         return RoundOutcome("error", start, error=msg)
     if mode == "schema" and not raw.enabled:
         log.info("Weekmenu staat uit: geen zondagronde")
@@ -189,6 +215,9 @@ async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
     if outcome.status == "done":
         ctx.error = None
         ctx.login_expired = False
+        if (mode in BUTTONS and ctx.retry_at is not None
+                and menu_week_start(ctx.retry_at) == start):
+            ctx.retry_at = None  # this week is done: no Sunday retry any more
     elif outcome.status in ("error", "login_expired"):
         ctx.error = outcome.error
     log.info("Ronde %s voor week %s: %s", mode, start, outcome.status)
@@ -198,9 +227,12 @@ async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
 
 async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawSettings):
     warning = None
+    had_error = ctx.error is not None
+    reused = False
     try:
         wlog = ctx.ledger.load(start)
         if mode != "nieuw_menu" and wlog.plan:
+            reused = True
             plan, replaced = Plan.from_dict(wlog.plan), None  # same menu, only fill gaps
         else:
             got = await bonus_for_week(ctx, start, now, may_retry=(mode == "schema"))
@@ -216,6 +248,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
             if replaced is not None:  # a new menu: the swap history was about the old one
                 wlog.swapped_out.clear()
                 wlog.previous.clear()
+                wlog.previous_dish.clear()
         result = await apply(ctx.client, ctx.ledger, wlog, plan, replaced)
     except AhLoginExpired:
         ctx.login_expired = True
@@ -235,32 +268,47 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
 
     await guard(ctx.hass.publish(plan_view(plan, start, result.target, raw.ouders),
                                  plan.savings), "sensoren")
-    title, body = format_message(plan, result, raw.ouders, warning)
-    await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding")
+    if reused and not (result.added or result.pending or result.unknown or had_error):
+        log.info("Menu stond er al en alles was al toegevoegd: geen nieuwe melding")
+    else:
+        title, body = format_message(plan, result, raw.ouders, warning)
+        await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding")
     return RoundOutcome("done", start, warning=warning, plan=plan, result=result)
 
 
 async def update_total(ctx: Context, today: date) -> None:
     """Add every week that has started and was not counted yet, then publish the total.
 
-    The total file is written before the sensor POST (Hass.publish_total), so an HA
-    error still leaves the weeks counted; a failing file write counts nothing.
+    The source of truth for "counted" is the list in totaal.json, written in the same
+    atomic replace as the total: a crash can never leave a week in the total but not
+    marked. An older file without that list is migrated from the ledger flags. The
+    ledger `counted` flag is only for display. The file is written before the sensor
+    POST, so an HA error still leaves the weeks counted; a failing file write counts
+    nothing.
     """
     async with ctx.lock:
-        weeks = ctx.ledger.weeks_to_count(today)
-        total = round(load_total(ctx.total_path)
-                      + sum(w.savings + w.extras_savings for w in weeks), 2)
+        total, counted = load_total_state(ctx.total_path)
+        weeks = ctx.ledger.weeks()
+        if counted is None:
+            counted = {w.week.isoformat() for w in weeks if w.counted}
+        new = [w for w in weeks if w.week <= today and w.week.isoformat() not in counted]
+        total = round(total + sum(w.savings + w.extras_savings for w in new), 2)
+        counted |= {w.week.isoformat() for w in new}
         try:
-            await ctx.hass.publish_total(total)
+            await ctx.hass.publish_total(total, sorted(counted))
         except httpx.HTTPError as e:
             log.warning("Home Assistant: totaal niet gezet (%s)", type(e).__name__)
         except Exception as e:
             log.error("Totaal niet opgeslagen: %s", type(e).__name__)
             return
-        for w in weeks:
-            w.counted = True
-            ctx.ledger.save(w)
         ctx.total_day = today
+        for w in new:  # display only; the file above decides
+            if not w.counted:
+                w.counted = True
+                try:
+                    ctx.ledger.save(w)
+                except Exception as e:
+                    log.warning("Logboek %s niet bijgewerkt (%s)", w.week, type(e).__name__)
 
 
 # --- schedule, state and stdin ----------------------------------------------------------

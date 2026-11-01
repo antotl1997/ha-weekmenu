@@ -52,19 +52,48 @@ def format_eur(x: float) -> str:
     return "€ " + f"{x:.2f}".replace(".", ",")
 
 
-def load_total(path: Path = TOTAL_PATH) -> float:
+def load_total_state(path: Path = TOTAL_PATH) -> tuple[float, set[str] | None]:
+    """The total and the ISO dates of the weeks counted in it.
+
+    The counted list lives in the same file as the total, written in one atomic
+    replace, so a week can never be in the total without being marked counted.
+    `None` for the list: no file yet, or an older file without it (plain number or
+    {"total": x}); the caller migrates from the ledger then.
+    """
     try:
-        return float(json.loads(Path(path).read_text(encoding="utf-8"))["total"])
-    except (FileNotFoundError, KeyError, ValueError, TypeError):
-        return 0.0
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        return 0.0, None
+    if isinstance(data, (int, float)) and not isinstance(data, bool):
+        return float(data), None
+    if not isinstance(data, dict):
+        return 0.0, None
+    try:
+        total = float(data.get("total") or 0.0)
+    except (ValueError, TypeError):
+        total = 0.0
+    counted = data.get("counted")
+    if not isinstance(counted, list):
+        return total, None
+    return total, {str(x) for x in counted}
 
 
-def _save_total(path: Path, total: float) -> None:
+def load_total(path: Path = TOTAL_PATH) -> float:
+    return load_total_state(path)[0]
+
+
+def _save_total(path: Path, total: float, counted: list[str] | None = None) -> None:
     path = Path(path)
+    if counted is None:  # keep the counted list that is already there
+        known = load_total_state(path)[1]
+        counted = sorted(known) if known is not None else None
+    data: dict = {"total": total}
+    if counted is not None:
+        data["counted"] = list(counted)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = Path(str(path) + ".tmp")
     try:
-        tmp.write_text(json.dumps({"total": total}), encoding="utf-8")
+        tmp.write_text(json.dumps(data), encoding="utf-8")
         os.replace(tmp, path)
     except BaseException:
         tmp.unlink(missing_ok=True)
@@ -164,8 +193,9 @@ class Hass:
             },
         })
 
-    async def publish_total(self, total: float) -> None:
-        _save_total(self._total_path, total)
+    async def publish_total(self, total: float, counted: list[str] | None = None) -> None:
+        """Write total (and the counted weeks) atomically to the file, then the sensor."""
+        _save_total(self._total_path, total, counted)
         await self._post("states/sensor.weekmenu_besparing_totaal", {
             "state": round(total, 2),
             "attributes": {
