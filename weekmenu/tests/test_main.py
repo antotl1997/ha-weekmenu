@@ -308,3 +308,26 @@ async def test_reused_plan_adding_nothing_sends_no_second_message(tmp_path, plan
     assert out.status == "done" and out.result.added == {}
     assert len(ctx.hass.notifications()) == 1  # no second "klaar"
     assert sum(p == "states/sensor.weekmenu" for p, _ in ctx.hass.posts) == 2  # still published
+
+
+async def test_period_warning_is_kept_in_the_log_and_cleared_by_a_proper_round(
+        tmp_path, planned):
+    ah = FakeAh(tmp_path, periods=[CURRENT])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await run_round(ctx, datetime(2026, 11, 1, 18, 0), "schema")
+    assert ctx.ledger.load(W).period_warning == PERIOD_WARNING
+    # nu_maken reuses the plan: the warning about its prices stays
+    await run_round(ctx, datetime(2026, 11, 1, 19, 0), "nu_maken")
+    assert ctx.ledger.load(W).period_warning == PERIOD_WARNING
+    # a new menu from the right folder clears it
+    ah.periods = [CURRENT, NEXT]
+    await run_round(ctx, datetime(2026, 11, 1, 19, 0), "nieuw_menu")
+    assert ctx.ledger.load(W).period_warning is None
+
+
+def test_weeklog_without_period_warning_loads():
+    d = WeekLog(W).to_dict()
+    del d["period_warning"]
+    assert WeekLog.from_dict(d).period_warning is None
+    log = WeekLog(W, period_warning="x")
+    assert WeekLog.from_dict(log.to_dict()).period_warning == "x"

@@ -16,6 +16,7 @@ import pytest
 from aiohttp import web
 
 from app.ahclient import Product, Recipe
+from app.main import PERIOD_WARNING
 from app.hass import HELPER_OUDERS, _save_total, helper_persons
 from app.ledger import WeekLog
 from app.planner import Dish, Line, Plan
@@ -116,6 +117,9 @@ def fake_plan() -> Plan:
             (zalm, 1, "2 zalmfilets"), (kriel, 1, "500 g krieltjes"),
             (bonen, 1, "300 g sperziebonen")], fish=True),
     ]
+    # links that are not https never reach the page
+    dishes[-1].recipe.url = "javascript:alert(1)"
+    dishes[-1].recipe.image = "http://example.invalid/zalm.jpg"
     basket: dict[int, int] = {}
     products: dict[int, Product] = {}
     for d in dishes:
@@ -223,10 +227,16 @@ def test_app_screens_in_chrome(tmp_path):
         dom = render(base, "#gerecht/2026-11-04", tmp_path, "gerecht")
         assert TITLES[0] in dom
         assert "in huis" in dom and "2e halve prijs" in dom and "€ 3,40" in dom
+        assert "Recept op Allerhande" in dom  # https link: shown
         assert "Bereiding" in dom and "Ander gerecht" in dom
 
         dom = render(base, "#gerecht/2026-11-05", tmp_path, "gerecht-niet-gevonden")
         assert "niet gevonden" in dom and "snufje nootmuskaat" in dom
+
+        dom = chrome(base + "#gerecht/2026-11-09", tmp_path / "profile-unsafe")
+        assert TITLES[4] in dom
+        assert "Recept op Allerhande" not in dom and "javascript:" not in dom
+        assert "<img" not in dom and "http://example.invalid" not in dom
 
         dom = render(base, "#besparing", tmp_path, "besparing")
         assert "€ 57,15" in dom and "€ 14,85" in dom and "wk 45" in dom
@@ -242,12 +252,14 @@ def test_app_screens_in_chrome(tmp_path):
         log.pending = {6: {"before": 0, "delta": 1, "target": "order", "order_id": None}}
         log.unknown = {7: 1}
         log.plan["budget_exhausted"] = True
+        log.period_warning = PERIOD_WARNING
         ctx.ledger.save(log)
         dom = render(base, "", tmp_path, "week-meldingen")
         assert "Over van het vorige gerecht" in dom and "1× AH Kipdijfilet" in dom
         assert "Onzeker of gelukt" in dom and "AH Gehaktballetjes" in dom
         assert "Status onbekend" in dom and "De Cecco Penne rigate" in dom
         assert "Snel gekozen" in dom
+        assert "De folder van volgende week was er nog niet" in dom
 
         ctx.login_expired = True
         dom = render(base, "", tmp_path, "login")

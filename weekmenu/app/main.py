@@ -245,6 +245,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
             plan = await build_plan(ctx.client, bonus, make_settings(ctx, raw, start, old_ids))
             if not plan.dishes:
                 raise AhApiError("geen enkel recept gevonden dat in de regels past")
+            wlog.period_warning = warning  # a menu from the right folder clears it
             if replaced is not None:  # a new menu: the swap history was about the old one
                 wlog.swapped_out.clear()
                 wlog.previous.clear()

@@ -115,7 +115,7 @@ def week_view(wlog, plan: Plan | None, start: date, ouders: str | None) -> dict:
         "week": start.isoformat(), "target": wlog.target, "ouders": ouders, "days": [],
         "savings": 0.0, "products": 0, "bonus_products": 0, "leftovers": [],
         "not_found": [], "short_by": 0, "pending": [], "unknown": [],
-        "budget_exhausted": False,
+        "budget_exhausted": False, "period_warning": wlog.period_warning,
     }
     if plan is None:
         return out

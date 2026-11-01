@@ -30,6 +30,11 @@ function eur(x) {
   return "€ " + n.toFixed(2).replace(".", ",");
 }
 
+/* Only https links from the API reach the page; anything else is dropped. */
+function safeUrl(u) {
+  return typeof u === "string" && /^https:\/\/[^\s"'<>]+$/i.test(u) ? u : "";
+}
+
 function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ""; }
 
 function parseDate(iso) {
@@ -99,8 +104,8 @@ const ICON = {
 };
 
 function photo(recipe, cls) {
-  const img = recipe && recipe.image
-    ? `<img src="${esc(recipe.image)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+  const src = safeUrl(recipe && recipe.image);
+  const img = src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : "";
   return `<div class="${cls} ${cuisineClass(recipe && recipe.cuisine)}">${ICON.plate}${img}`;
 }
 
@@ -360,7 +365,7 @@ function dishScreen(day) {
       <button class="btn pri" data-swap>${ICON.swap} Ander gerecht</button></div>
     ${open ? `<div class="sec">Bereiding</div><div class="card steps">${steps}</div>` : ""}
     ${d.can_back ? `<button class="btn sec2 full" data-undo>${ICON.undo} Terug naar het vorige gerecht</button>` : ""}
-    ${r.url ? `<a class="src" href="${esc(r.url)}" target="_blank" rel="noopener">Recept op Allerhande</a>` : ""}
+    ${safeUrl(r.url) ? `<a class="src" href="${esc(safeUrl(r.url))}" target="_blank" rel="noopener">Recept op Allerhande</a>` : ""}
     </div>`;
 }
 
@@ -425,7 +430,7 @@ function settingsScreen() {
 // --- screens: login --------------------------------------------------------------------
 
 function loginScreen() {
-  const url = (state.status && state.status.login_url) || "#";
+  const url = safeUrl(state.status && state.status.login_url);
   return `<header class="top"><div><h1>Weekmenu</h1><div class="sub">inloggen bij Albert Heijn</div></div></header>
     <div class="card login">
       <h2>Log één keer in bij AH</h2>
@@ -436,7 +441,7 @@ function loginScreen() {
         <li><span>Log in. In de console verschijnt een regel met <code>appie://login-exit?code=…</code></span></li>
         <li><span>Kopieer die hele regel en plak hem hieronder. De code is maar kort geldig.</span></li>
       </ol>
-      <a class="btn sec2 full" style="margin:0 0 12px;width:100%" href="${esc(url)}" target="_blank" rel="noopener">AH-inlogpagina openen</a>
+      ${url ? `<a class="btn sec2 full" style="margin:0 0 12px;width:100%" href="${esc(url)}" target="_blank" rel="noopener">AH-inlogpagina openen</a>` : ""}
       <textarea id="code" placeholder="appie://login-exit?code=…" autocomplete="off" spellcheck="false"></textarea>
       <div class="btnrow"><button class="btn pri" data-login>Inloggen</button></div>
     </div>`;
@@ -565,7 +570,7 @@ app.addEventListener("click", async (ev) => {
       const n = Number(t.dataset.persons);
       const fewer = n < state.dishes[day].persons;
       await busy(t, async () => {
-        const data = await api(`api/dish/${day}/persons`, { persons: n });
+        const data = await api(`api/dish/${encodeURIComponent(day)}/persons`, { persons: n });
         await afterDishWrite(day, data);
         if (fewer) toast("Minder personen haalt niets weg uit je bestelling. Wat over is, staat bij het gerecht.");
       });
@@ -578,7 +583,7 @@ app.addEventListener("click", async (ev) => {
         "Ander gerecht");
       if (!ok) return;
       await busy(t, async () => {
-        const data = await api(`api/dish/${day}/swap`, {});
+        const data = await api(`api/dish/${encodeURIComponent(day)}/swap`, {});
         await afterDishWrite(day, data);
         toast("Nieuw gerecht: " + data.recipe.title);
       });
@@ -586,7 +591,7 @@ app.addEventListener("click", async (ev) => {
     }
     if ("undo" in t.dataset) {
       await busy(t, async () => {
-        const data = await api(`api/dish/${day}/back`, {});
+        const data = await api(`api/dish/${encodeURIComponent(day)}/back`, {});
         await afterDishWrite(day, data);
         toast("Het vorige gerecht staat er weer");
       });

@@ -334,3 +334,17 @@ async def test_api_week_reports_budget_exhausted(aiohttp_client, ctx):
     client = await aiohttp_client(make_app(ctx))
     body = await (await client.get("api/week")).json()
     assert body["budget_exhausted"] is True
+
+
+async def test_api_week_reports_period_warning(aiohttp_client, ctx):
+    log = ctx.ledger.load(W)
+    log.plan = week_plan().to_dict()
+    log.period_warning = main.PERIOD_WARNING
+    ctx.ledger.save(log)
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert body["period_warning"] == main.PERIOD_WARNING
+    log.period_warning = None
+    ctx.ledger.save(log)
+    body = await (await client.get("api/week")).json()
+    assert body["period_warning"] is None
