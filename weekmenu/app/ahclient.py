@@ -1,6 +1,10 @@
+import html
 import re
 import time
+from dataclasses import dataclass, field
+from datetime import date
 from typing import Any
+from urllib.parse import parse_qs, quote, urlparse
 
 import httpx
 
@@ -40,10 +44,163 @@ class AhNotJson(AhApiError):
     pass
 
 
+class AhOrderMode(AhApiError):
+    """The shopping list is locked because a delivery order is active."""
+
+
+@dataclass
+class RawResponse:
+    status: int
+    body: Any  # parsed JSON; raw text when not JSON; None when empty
+    is_json: bool
+    text: str
+
+
+@dataclass
+class BonusPeriod:
+    start: date
+    end: date
+    next_visible_from: date | None
+    categories: list[str]
+
+
+@dataclass
+class Product:
+    id: int
+    title: str
+    unit_size: str | None
+    regular: float
+    now: float
+    is_bonus: bool
+    mechanism: str | None
+    orderable: bool
+    category: str | None
+
+
+@dataclass
+class RecipeSummary:
+    id: int
+    title: str
+    slug: str
+    courses: list[str]
+    cook: int | None
+    oven: int | None
+    wait: int | None
+    servings: int
+    image: str | None = None
+
+
+@dataclass
+class Recipe:
+    id: int
+    title: str
+    url: str
+    cook: int | None
+    oven: int | None
+    wait: int | None
+    courses: list[str]
+    cuisines: list[str]
+    servings: int
+    ingredients: list[tuple[str, str]]
+    steps: list[str]
+    image: str | None
+
+
+@dataclass
+class ActiveOrder:
+    id: int
+    items: dict[int, int] = field(default_factory=dict)
+
+
+GROUP_QUERY = (
+    "query BonusGroupProducts($id: String, $start: String, $end: String) {"
+    " bonusPromotions(input: {id: $id, periodStart: $start, periodEnd: $end}) {"
+    " products { id title brand salesUnitSize priceV2 { now { amount }"
+    " was { amount } discount { description } } } } }"
+)
+RECIPE_SEARCH_QUERY = (
+    "query RecipeSearch($query: RecipeSearchParams!) {"
+    " recipeSearch(query: $query) { result { id title slug courses"
+    " time { cook oven wait } serving { number type }"
+    " images { url width height } } } }"
+)
+RECIPE_QUERY = (
+    "query Recipe($id: Int!, $servings: Int) {"
+    " recipe(id: $id, servings: $servings) { id title href cookTime courses"
+    " cuisines images { url width height } servings { number type }"
+    " ingredients { text name { singular } } preparation { steps } } }"
+)
+ORDER_MODE_TEXT = "Server in order mode"
+
+
+def _num(v: Any) -> float:
+    return float(v) if isinstance(v, (int, float)) else 0.0
+
+
+def _widest_image(images: Any) -> str | None:
+    best, best_w = None, -1
+    for im in images or []:
+        if isinstance(im, dict) and im.get("url") and (im.get("width") or 0) > best_w:
+            best, best_w = im["url"], im.get("width") or 0
+    return best
+
+
+def product_from_card(c: dict) -> Product:
+    """REST product card (bonus section, product search)."""
+    regular = c.get("priceBeforeBonus")
+    now = c.get("currentPrice")
+    if now is None:
+        now = regular
+    if regular is None:
+        regular = now
+    return Product(
+        id=int(c["webshopId"]),
+        title=html.unescape(c.get("title") or ""),
+        unit_size=c.get("salesUnitSize"),
+        regular=_num(regular),
+        now=_num(now),
+        is_bonus=bool(c.get("isBonus")),
+        mechanism=c.get("bonusMechanism") or None,
+        orderable=bool(c.get("isOrderable", True)),
+        category=c.get("mainCategory") or None,
+    )
+
+
+def product_from_graphql(p: dict, is_bonus: bool = True) -> Product:
+    """GraphQL product (bonus group expansion)."""
+    price = p.get("priceV2") or {}
+    now = (price.get("now") or {}).get("amount")
+    was = (price.get("was") or {}).get("amount")
+    if now is None:
+        now = was
+    if was is None:
+        was = now
+    return Product(
+        id=int(p["id"]),
+        title=html.unescape(p.get("title") or ""),
+        unit_size=p.get("salesUnitSize"),
+        regular=_num(was),
+        now=_num(now),
+        is_bonus=is_bonus,
+        mechanism=(price.get("discount") or {}).get("description") or None,
+        orderable=True,
+        category=None,
+    )
+
+
+def _iso(d: Any) -> date | None:
+    return date.fromisoformat(d) if d else None
+
+
+def _minutes(v: Any) -> int | None:
+    return v if isinstance(v, int) and not isinstance(v, bool) else None
+
+
 class AhClient:
     def __init__(self, store: TokenStore, http: httpx.AsyncClient):
         self.store = store
         self.http = http
+        self.skipped_categories: list[str] = []
 
     def _headers(self, order_id: int | None = None) -> dict[str, str]:
         h = {
@@ -113,6 +270,28 @@ class AhClient:
         json: Any = None,
         order_id: int | None = None,
     ) -> Any:
+        r = await self.request_raw(method, path, json=json, order_id=order_id)
+        if self._is_failure(r.status):
+            raise AhApiError(f"{method} {path}: HTTP {r.status}", r.status)
+        if r.body is None:
+            return None
+        if not r.is_json:
+            raise AhNotJson(f"{method} {path}: response is not JSON", r.status)
+        return r.body
+
+    @staticmethod
+    def _is_failure(status: int) -> bool:
+        return status >= 400 or 300 <= status < 400
+
+    async def request_raw(
+        self,
+        method: str,
+        path: str,
+        *,
+        json: Any = None,
+        order_id: int | None = None,
+    ) -> RawResponse:
+        """Send a request; returns status and body for every status except 401."""
         await self.ensure_fresh()
         t = self.store.load()
         headers = self._headers(order_id)
@@ -126,14 +305,12 @@ class AhClient:
             raise AhApiError(f"{method} {path} failed: {type(e).__name__}") from None
         if r.status_code == 401:
             raise AhLoginExpired(f"{method} {path}: login expired", 401)
-        if r.status_code >= 400 or 300 <= r.status_code < 400:
-            raise AhApiError(f"{method} {path}: HTTP {r.status_code}", r.status_code)
         if not r.content:
-            return None
+            return RawResponse(r.status_code, None, False, "")
         try:
-            return r.json()
+            return RawResponse(r.status_code, r.json(), True, r.text)
         except ValueError:
-            raise AhNotJson(f"{method} {path}: response is not JSON", r.status_code) from None
+            return RawResponse(r.status_code, r.text, False, r.text)
 
     async def graphql(self, query: str, variables: dict) -> dict:
         body = await self.request(
@@ -142,3 +319,220 @@ class AhClient:
         if isinstance(body, dict) and body.get("errors"):
             raise AhApiError("graphql returned errors", 200)
         return (body or {}).get("data", {})
+
+    # --- bonus ---
+
+    async def bonus_periods(self) -> list[BonusPeriod]:
+        body = await self.request("GET", "/mobile-services/bonuspage/v3/metadata")
+        out = []
+        for p in (body or {}).get("periods") or []:
+            cats: list[str] = []
+            for tab in p.get("tabs") or []:
+                for u in tab.get("urlMetadataList") or []:
+                    if u.get("bonusType") != "NATIONAL":
+                        continue
+                    q = parse_qs(urlparse(u.get("url") or "").query)
+                    name = (q.get("category") or [u.get("description")])[0]
+                    if name and name not in cats:
+                        cats.append(name)
+            out.append(
+                BonusPeriod(
+                    start=date.fromisoformat(p["bonusStartDate"]),
+                    end=date.fromisoformat(p["bonusEndDate"]),
+                    next_visible_from=_iso(p.get("nextPeriodVisibleFrom")),
+                    categories=cats,
+                )
+            )
+        return out
+
+    async def _expand_group(self, group: dict, period: BonusPeriod) -> list[Product]:
+        inline = group.get("products") or []
+        if inline:
+            return [product_from_card(c) for c in inline if c.get("webshopId")]
+        data = await self.graphql(
+            GROUP_QUERY,
+            {
+                "id": str(group["id"]),
+                "start": period.start.isoformat(),
+                "end": period.end.isoformat(),
+            },
+        )
+        out = []
+        for promo in data.get("bonusPromotions") or []:
+            for p in promo.get("products") or []:
+                if p.get("id") is not None:
+                    out.append(product_from_graphql(p, is_bonus=True))
+        return out
+
+    async def bonus_offers(self, period: BonusPeriod) -> list[Product]:
+        self.skipped_categories = []
+        found: dict[int, Product] = {}
+        for cat in period.categories:
+            path = (
+                "/mobile-services/bonuspage/v2/section?application=AHWEBSHOP"
+                f"&date={period.start.isoformat()}&promotionType=NATIONAL"
+                f"&category={quote(cat, safe='')}"
+            )
+            try:
+                body = await self.request("GET", path)
+                items: list[Product] = []
+                for entry in (body or {}).get("bonusGroupOrProducts") or []:
+                    if entry.get("product"):
+                        items.append(product_from_card(entry["product"]))
+                    elif entry.get("bonusGroup"):
+                        items.extend(await self._expand_group(entry["bonusGroup"], period))
+            except AhLoginExpired:
+                raise
+            except (AhApiError, KeyError, ValueError, TypeError):
+                self.skipped_categories.append(cat)
+                continue
+            for p in items:
+                found.setdefault(p.id, p)
+        return list(found.values())
+
+    # --- products ---
+
+    async def search_products(self, query: str, size: int = 20) -> list[Product]:
+        path = (
+            f"/mobile-services/product/search/v2?query={quote(query, safe='')}"
+            f"&page=0&size={size}&sortOn=RELEVANCE"
+        )
+        body = await self.request("GET", path)
+        return [
+            product_from_card(c)
+            for c in (body or {}).get("products") or []
+            if c.get("webshopId")
+        ]
+
+    # --- recipes ---
+
+    async def search_recipes(self, text: str, size: int = 30) -> list[RecipeSummary]:
+        data = await self.graphql(
+            RECIPE_SEARCH_QUERY, {"query": {"searchText": text, "size": size}}
+        )
+        out = []
+        for r in ((data.get("recipeSearch") or {}).get("result")) or []:
+            t = r.get("time") or {}
+            out.append(
+                RecipeSummary(
+                    id=int(r["id"]),
+                    title=html.unescape(r.get("title") or ""),
+                    slug=r.get("slug") or "",
+                    courses=list(r.get("courses") or []),
+                    cook=_minutes(t.get("cook")),
+                    oven=_minutes(t.get("oven")),
+                    wait=_minutes(t.get("wait")),
+                    servings=int((r.get("serving") or {}).get("number") or 0),
+                    image=_widest_image(r.get("images")),
+                )
+            )
+        return out
+
+    async def get_recipe(self, id: int, servings: int) -> Recipe:
+        data = await self.graphql(RECIPE_QUERY, {"id": id, "servings": servings})
+        r = data.get("recipe")
+        if not r:
+            raise AhApiError(f"recipe {id} not found", 200)
+        slug = (r.get("href") or "").rstrip("/").rsplit("/", 1)[-1]
+        return Recipe(
+            id=int(r["id"]),
+            title=html.unescape(r.get("title") or ""),
+            url=f"https://www.ah.nl/allerhande/recept/R-R{int(r['id'])}/{slug}",
+            cook=_minutes(r.get("cookTime")),
+            oven=None,  # only on search results; the planner copies it from RecipeSummary
+            wait=None,
+            courses=list(r.get("courses") or []),
+            cuisines=list(r.get("cuisines") or []),
+            servings=int((r.get("servings") or {}).get("number") or servings),
+            ingredients=[
+                (
+                    html.unescape(i.get("text") or ""),
+                    html.unescape((i.get("name") or {}).get("singular") or ""),
+                )
+                for i in r.get("ingredients") or []
+            ],
+            steps=[html.unescape(x) for x in (r.get("preparation") or {}).get("steps") or []],
+            image=_widest_image(r.get("images")),
+        )
+
+    # --- shopping list ---
+
+    async def shopping_list(self) -> dict[int, int]:
+        path = "/mobile-services/shoppinglist/v2/items"
+        r = await self.request_raw("GET", path)
+        if ORDER_MODE_TEXT in r.text:
+            raise AhOrderMode("shopping list is locked: order mode", r.status)
+        if self._is_failure(r.status):
+            raise AhApiError(f"GET {path}: HTTP {r.status}", r.status)
+        if not r.is_json or not isinstance(r.body, dict):
+            raise AhNotJson(f"GET {path}: response is not JSON", r.status)
+        out: dict[int, int] = {}
+        for it in r.body.get("items") or []:
+            pid = ((it.get("productDetails") or {}).get("product") or {}).get("webshopId")
+            if pid:
+                out[int(pid)] = out.get(int(pid), 0) + int(it.get("quantity") or 0)
+        return out
+
+    async def add_to_shopping_list(self, adds: dict[int, int]) -> None:
+        """Never retried. The PATCH sets quantities, so send current + added."""
+        if not adds:
+            return
+        current = await self.shopping_list()
+        items = []
+        for pid, qty in adds.items():
+            assert qty > 0, "adds must be positive"
+            items.append(
+                {
+                    "description": "",
+                    "productId": pid,
+                    "quantity": current.get(pid, 0) + qty,
+                    "type": "SHOPPABLE",
+                    "originCode": "PRD",
+                    "strikeThrough": False,
+                }
+            )
+        await self.request(
+            "PATCH", "/mobile-services/shoppinglist/v2/items", json={"items": items}
+        )
+
+    # --- order ---
+
+    async def active_order(self) -> ActiveOrder | None:
+        path = "/mobile-services/order/v1/summaries/active?sortBy=DEFAULT"
+        r = await self.request_raw("GET", path)
+        if r.status == 404:
+            return None
+        if self._is_failure(r.status):
+            raise AhApiError(f"GET {path}: HTTP {r.status}", r.status)
+        if not r.is_json or not isinstance(r.body, dict) or "id" not in r.body:
+            raise AhNotJson(f"GET {path}: response is not an order", r.status)
+        items: dict[int, int] = {}
+        for op in r.body.get("orderedProducts") or []:
+            pid = (op.get("product") or {}).get("webshopId")
+            if pid:
+                items[int(pid)] = items.get(int(pid), 0) + int(op.get("quantity") or 0)
+        return ActiveOrder(id=int(r.body["id"]), items=items)
+
+    async def add_to_order(self, order: ActiveOrder, adds: dict[int, int]) -> None:
+        """Never retried. The PUT sets quantities, so send current + added."""
+        if not adds:
+            return
+        items = []
+        for pid, qty in adds.items():
+            current = order.items.get(pid, 0)
+            assert qty > 0 and current + qty >= current, "never lower a quantity"
+            items.append(
+                {
+                    "productId": pid,
+                    "quantity": current + qty,
+                    "originCode": "PRD",
+                    "description": "",
+                    "strikethrough": False,
+                }
+            )
+        await self.request(
+            "PUT",
+            "/mobile-services/order/v1/items?sortBy=DEFAULT",
+            json={"items": items},
+            order_id=order.id,
+        )

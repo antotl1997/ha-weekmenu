@@ -1,0 +1,38 @@
+{
+  "status": 200,
+  "body": {
+    "id": "00000000-0000-0000-0000-000000000000",
+    "items": [
+      {
+        "position": 1,
+        "quantity": 2,
+        "strikedthrough": false,
+        "type": "SHOPPABLE",
+        "originCode": "PRD",
+        "description": "",
+        "productDetails": {"product": {"webshopId": 1235, "title": "AH Halfvolle melk"}}
+      },
+      {
+        "position": 2,
+        "quantity": 1,
+        "strikedthrough": true,
+        "type": "SHOPPABLE",
+        "originCode": "PRD",
+        "description": "",
+        "productDetails": {"product": {"webshopId": 777, "title": "AH Pasta penne"}}
+      },
+      {
+        "position": 3,
+        "quantity": 1,
+        "strikedthrough": false,
+        "type": "SHOPPABLE",
+        "originCode": "PRD",
+        "description": "bakpapier"
+      }
+    ],
+    "dateLastSynced": "2026-01-07T12:00:00",
+    "dateLastSyncedMillis": 1767787200000,
+    "activeSorting": "E",
+    "storeNumber": 0
+  }
+}

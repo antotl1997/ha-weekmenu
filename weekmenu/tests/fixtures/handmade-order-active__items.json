@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "body": {
+    "id": 123456,
+    "state": "OPEN",
+    "totalPrice": {"priceDiscount": 1.5, "priceTotalPayable": 12.34},
+    "orderedProducts": [
+      {"quantity": 2, "product": {"webshopId": 1235, "title": "AH Halfvolle melk", "currentPrice": 1.29, "priceBeforeBonus": 1.29}},
+      {"quantity": 1, "product": {"webshopId": 777, "title": "AH Pasta penne", "priceBeforeBonus": 1.09}}
+    ]
+  }
+}
