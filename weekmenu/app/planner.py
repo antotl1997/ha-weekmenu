@@ -773,3 +773,30 @@ async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
     )
     dishes = [dish if d.date == day else d for d in plan.dishes]
     return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted)
+
+
+async def restore_dish(
+    client, plan: Plan, day: date, recipe_id: int, bonus: list[Product]
+) -> Plan:
+    """Put recipe `recipe_id` back on `day` ("Terug" after a swap); the rest stays.
+
+    The recipe already passed the week's rules before it was swapped out, so they are
+    not checked again. Oven and waiting times only come with search results and are
+    lost here.
+    """
+    old = next((d for d in plan.dishes if d.date == day), None)
+    persons = old.persons if old else SCORE_SERVINGS
+    recipe = await client.get_recipe(recipe_id, servings=persons)
+    names = " ".join(n or t for t, n in recipe.ingredients)
+    resolve = _resolver(client, bonus, plan.pantry, {})
+    lines, pantry, not_found = await _lines(client, recipe, resolve)
+    fish = is_fishy(recipe.title) or is_fishy(names) or any(
+        is_fishy(ln.product.title) or _fold(ln.product.category or "") == "vis" for ln in lines
+    )
+    dish = Dish(
+        date=day, recipe=recipe, cuisine=cuisine_of(recipe) or (old.cuisine if old else ""),
+        is_fish=fish, lines=lines, savings=0.0, persons=persons, cook=recipe.cook,
+        pantry=pantry, not_found=not_found,
+    )
+    dishes = [d for d in plan.dishes if d.date != day] + [dish]
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted)

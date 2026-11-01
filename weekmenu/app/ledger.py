@@ -120,6 +120,10 @@ class Ledger:
                 continue
         return logs
 
+    def weeks(self) -> list[WeekLog]:
+        """Every week log on disk, oldest first."""
+        return self._all()
+
     def recent_recipe_ids(self, before: date, weeks: int = 4) -> set[int]:
         ids: set[int] = set()
         for i in range(1, weeks + 1):

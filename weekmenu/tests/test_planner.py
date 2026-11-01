@@ -764,3 +764,20 @@ async def test_pack_size_from_title_when_card_has_none():
     plan = await build_plan(client, [aardappel], settings([WO, DO]))
     assert len(plan.dishes) == 2
     assert plan.basket[9] == 1
+
+
+async def test_restore_dish_brings_back_the_previous_recipe():
+    client = FakeClient([
+        R(180, "Stamppot met gehakt", [(500, "g", "rundergehakt"), (1, "stuks", "ui")]),
+        R(181, "Curry met kip", [(500, "g", "scharrelkipfilet")]),
+    ])
+    plan = await build_plan(client, [GEHAKT, KIP], settings([WO, DO], persons={WO: 3}))
+    wo = dish_on(plan, WO)
+    swapped = await rescale_dish(client, plan, WO, 3)  # stand-in for a swap: same shape
+    back = await planner.restore_dish(client, swapped, WO, wo.recipe.id, [GEHAKT, KIP])
+    d = dish_on(back, WO)
+    assert d.recipe.id == wo.recipe.id and d.persons == 3
+    assert (wo.recipe.id, 3) in client.recipe_calls
+    assert dish_on(back, DO).recipe.id == dish_on(plan, DO).recipe.id
+    assert back.basket == plan.basket and back.savings == plan.savings
+    assert d.cuisine == wo.cuisine and d.is_fish == wo.is_fish
