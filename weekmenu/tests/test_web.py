@@ -323,3 +323,14 @@ async def test_api_back_falls_back_for_logs_without_saved_dish(aiohttp_client, c
     ctx.ledger.save(log)
     r = await client.post(f"api/dish/{WO.isoformat()}/back")
     assert r.status == 200 and (await r.json())["recipe"]["id"] == 101
+
+
+async def test_api_week_reports_budget_exhausted(aiohttp_client, ctx):
+    plan = week_plan()
+    plan.budget_exhausted = True
+    log = ctx.ledger.load(W)
+    log.plan = plan.to_dict()
+    ctx.ledger.save(log)
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert body["budget_exhausted"] is True

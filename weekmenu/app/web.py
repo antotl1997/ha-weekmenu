@@ -115,6 +115,7 @@ def week_view(wlog, plan: Plan | None, start: date, ouders: str | None) -> dict:
         "week": start.isoformat(), "target": wlog.target, "ouders": ouders, "days": [],
         "savings": 0.0, "products": 0, "bonus_products": 0, "leftovers": [],
         "not_found": [], "short_by": 0, "pending": [], "unknown": [],
+        "budget_exhausted": False,
     }
     if plan is None:
         return out
@@ -137,6 +138,7 @@ def week_view(wlog, plan: Plan | None, start: date, ouders: str | None) -> dict:
         leftovers=_leftovers(wlog, plan),
         not_found=list(plan.not_found),
         short_by=plan.short_by,
+        budget_exhausted=plan.budget_exhausted,
         pending=[_title(plan, p) for p in wlog.pending],
         unknown=[_title(plan, p) for p in wlog.unknown],
     )
