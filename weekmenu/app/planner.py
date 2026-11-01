@@ -22,7 +22,7 @@ from pathlib import Path
 import yaml
 
 from app.ahclient import AhApiError, AhLoginExpired, AhNotJson, Product, Recipe, RecipeSummary
-from app.deals import qty_for_deal, savings
+from app.deals import parse_mechanism, qty_for_deal, savings
 from app.ingredients import (
     choose_product,
     is_pantry,
@@ -637,8 +637,11 @@ def _finish(
     need = {pid: _packs(lines) for pid, lines in per_product.items()}
     # each dish's share of a product, by its own amount
     weight_total = {pid: sum(_weight(ln) for ln in ls) for pid, ls in per_product.items()}
+    # Ruling 19: only buy what gets used; the one exception is a free extra unit
+    # ("1+1 gratis", "2e gratis") for a product that more than one dish uses
     basket = {
-        pid: (qty_for_deal(products[pid], n) if len(users[pid]) > 1 else n)
+        pid: (qty_for_deal(products[pid], n) if len(users[pid]) > 1
+              and _free_extra(products[pid]) else n)
         for pid, n in need.items()
     }
     total_saving = {pid: savings(products[pid], q) for pid, q in basket.items()}
@@ -667,6 +670,12 @@ def _finish(
         pantry=list(pantry),
         budget_exhausted=budget_exhausted,
     )
+
+
+def _free_extra(p: Product) -> bool:
+    """A deal whose extra units cost nothing: x+y gratis, or the nth one free."""
+    d = parse_mechanism(p.mechanism)
+    return d.kind == "x_plus_y" or (d.kind == "nth_discount" and d.pct >= 100)
 
 
 def _weight(ln: Line) -> float:

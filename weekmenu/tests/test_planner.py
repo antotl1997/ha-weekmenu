@@ -242,6 +242,38 @@ async def test_smart_topup_only_when_shared():
     by_id = {d.recipe.id: d.savings for d in plan.dishes}
     assert by_id == {90: pytest.approx(2.67, abs=0.01), 91: pytest.approx(5.33, abs=0.01)}
 
+    # Ruling 19: a paid extra ("2e halve prijs") is never bought beyond the merged need
+    kip_half = bonus(2, "AH Scharrelkipfilet", regular=4.0, now=4.0, mech="2e halve prijs")
+    paid = FakeClient([
+        R(90, "Curry met kip", [(500, "g", "scharrelkipfilet")]),
+        R(91, "Pasta met kip", [(1000, "g", "scharrelkipfilet")]),
+    ])
+    plan = await build_plan(paid, [kip_half], settings([WO, DO]))
+    assert plan.basket[2] == 3  # 3 needed: no 4th at half price
+    assert plan.savings == 2.0  # one pair reaches the deal
+
+
+async def test_half_price_second_not_topped_up_when_merged_need_fits_one_pack():
+    kip_half = bonus(2, "AH Scharrelkipfilet", regular=4.0, now=4.0, mech="2e halve prijs")
+    client = FakeClient([
+        R(360, "Curry met kip", [(200, "g", "scharrelkipfilet")]),
+        R(361, "Pasta met kip", [(200, "g", "scharrelkipfilet")]),
+    ])
+    plan = await build_plan(client, [kip_half], settings([WO, DO]))
+    assert len(plan.dishes) == 2
+    assert plan.basket[2] == 1
+    assert plan.savings == 0.0
+
+
+async def test_free_unit_deal_tops_up_when_shared_even_if_one_pack_is_enough():
+    client = FakeClient([
+        R(370, "Curry met kip", [(200, "g", "scharrelkipfilet")]),
+        R(371, "Pasta met kip", [(200, "g", "scharrelkipfilet")]),
+    ])
+    plan = await build_plan(client, [KIP11], settings([WO, DO]))
+    assert plan.basket[2] == 2  # the second one is free
+    assert plan.savings == 4.0
+
 
 async def test_too_few_candidates_sets_short_by():
     client = FakeClient([
