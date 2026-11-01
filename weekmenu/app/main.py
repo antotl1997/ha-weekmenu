@@ -72,6 +72,7 @@ PERIOD_WARNING = (
     "prijzen gelden woensdag waarschijnlijk niet meer"
 )
 LOGIN_EXPIRED = "AH-login verlopen, log opnieuw in"
+STAPLES_TIMEOUT = 60  # seconds for the whole purchase-history step before the message
 PORT = 8099
 INGRESS_PROXY = "172.30.32.2"
 
@@ -268,18 +269,18 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         ), "melding")
         return RoundOutcome("error", start, error=msg)
 
+    # before the message, which names the count; bounded so the message is never late
+    await refresh_staples(ctx, wlog, plan, start, now)
     recount_extras(ctx, wlog)  # apply may have settled a staple write
     await guard(ctx.hass.publish(plan_view(plan, start, result.target, raw.ouders),
                                  plan.savings + wlog.extras_savings), "sensoren")
     if reused and not (result.added or result.pending or result.unknown or had_error):
         log.info("Menu stond er al en alles was al toegevoegd: geen nieuwe melding")
     else:
-        # the message does not wait for the history: the count is the one already known
-        # from an earlier round of this week, or left out
+        # no count when the history failed or took too long (staples_error is set then)
         title, body = format_message(plan, result, raw.ouders, warning,
                                      staples=staples.open_count(wlog, plan.basket))
         await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding")
-    await refresh_staples(ctx, wlog, plan, start, now)
     return RoundOutcome("done", start, warning=warning, plan=plan, result=result)
 
 
@@ -298,21 +299,28 @@ async def refresh_staples(ctx: Context, wlog: WeekLog, plan: Plan, start: date,
                           now: datetime) -> None:
     """Vaste boodschappen: read the purchase history after the menu and suggest.
 
-    Never breaks the round: any failure (also of AH itself) leaves no suggestions,
-    `staples_error` on the week and a log line. Staples already added stay listed.
+    Never breaks the round: any failure (also of AH itself), or taking longer than
+    STAPLES_TIMEOUT seconds in all, leaves no suggestions, `staples_error` on the week
+    and a log line. Staples already added stay listed. Only reads, so cutting it off
+    halfway is safe.
     """
     today = now.date()
-    try:
+
+    async def fetch() -> list:
         periods = await ctx.client.bonus_periods()
         period = _period_for(periods, start) or _period_for(periods, today)
         if period is None:
             raise AhApiError("geen bonusfolder gevonden voor deze week")
         bonus = await ctx.client.previously_bought_bonus(period)
         bought = await ctx.client.purchases(today - timedelta(days=staples.WINDOW_DAYS))
-        staples.merge(wlog, staples.suggest_staples(bought, bonus, plan.basket, today))
+        return staples.suggest_staples(bought, bonus, plan.basket, today)
+
+    try:
+        staples.merge(wlog, await asyncio.wait_for(fetch(), STAPLES_TIMEOUT))
         wlog.staples_error = None
     except Exception as e:
-        msg = short_error(e)
+        msg = ("duurde langer dan {} s".format(STAPLES_TIMEOUT)
+               if isinstance(e, asyncio.TimeoutError) else short_error(e))
         log.warning("Vaste boodschappen niet opgehaald: %s", msg)
         staples.merge(wlog, [])
         wlog.staples_error = f"Vaste boodschappen niet op te halen ({msg})"

@@ -351,37 +351,49 @@ async def test_history_failure_does_not_break_menu(tmp_path, planned):
     assert ctx.error is None
 
 
-async def test_round_suggests_staples_after_the_menu(tmp_path, planned):
+def staples_ah(tmp_path):
     ah = FakeAh(tmp_path)
     ah.prev_bonus = [BOTER, bp(1, "Product 1")]  # 1 is in the menu
     day = SUNDAY.date()
     ah.history = [Purchase(50, "AH Roomboter", 1, day - timedelta(days=d), "online")
                   for d in (4, 30)] + [Purchase(1, "Product 1", 1, day - timedelta(days=d),
                                                 "online") for d in (4, 30)]
+    return ah
+
+
+async def test_round_names_staples_count_in_the_message(tmp_path, planned):
+    ah = staples_ah(tmp_path)
     ctx = make_ctx(tmp_path, ah=ah)
-    sent_before_history = []
-    real = ah.purchases
-
-    async def purchases(since):
-        sent_before_history.append(len(ctx.hass.notifications()))
-        return await real(since)
-
-    ah.purchases = purchases
     out = await main.run_round(ctx, SUNDAY, "nu_maken")
     assert out.status == "done"
-    assert ah.history_for == [day - timedelta(days=61)]
-    assert sent_before_history == [1]  # the menu message did not wait for the history
+    assert ah.history_for == [SUNDAY.date() - timedelta(days=61)]
     log = ctx.ledger.load(W)
     assert [Staple.from_dict(s).product.id for s in log.staples] == [50]
     assert log.staples_error is None
     assert not any(50 in w[1] for w in ah.writes)  # a suggestion, never written by itself
-    # the first message cannot know the count yet; one notification, no second one
     assert len(ctx.hass.notifications()) == 1
-    assert "vaste boodschap" not in ctx.hass.notifications()[0]["message"]
-    # a later round that sends a message knows it
-    await main.run_round(ctx, SUNDAY, "nieuw_menu")
-    assert len(ctx.hass.notifications()) == 2
-    assert "Ook 1 vaste boodschap in de bonus" in ctx.hass.notifications()[-1]["message"]
+    assert "Ook 1 vaste boodschap in de bonus" in ctx.hass.notifications()[0]["message"]
+
+
+async def test_slow_history_message_without_count(tmp_path, planned, monkeypatch):
+    monkeypatch.setattr(main, "STAPLES_TIMEOUT", 0.05)
+    ah = staples_ah(tmp_path)
+    real = ah.purchases
+
+    async def slow(since):
+        await asyncio.sleep(1)
+        return await real(since)
+
+    ah.purchases = slow
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await main.run_round(ctx, SUNDAY, "nu_maken")
+    assert out.status == "done" and ctx.error is None
+    log = ctx.ledger.load(W)
+    assert log.added == {1: 1, 2: 1}  # the menu is unaffected
+    assert log.staples == [] and "duurde langer" in log.staples_error
+    assert len(ctx.hass.notifications()) == 1  # one message, without a count
+    msg = ctx.hass.notifications()[0]["message"]
+    assert "vaste boodschap" not in msg and "Recept 101" in msg
 
 
 # --- message ---------------------------------------------------------------------------
