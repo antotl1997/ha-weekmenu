@@ -34,3 +34,27 @@ Bestandsnaam: `<endpoint>__<parameters>.json`. Bestanden met `{status, body}` zi
 ## Waargenomen `cuisines`-waarden
 
 Van de 22 opgenomen receptdetails hadden er **21 een lege lijst** en 1 had `["mexicaans"]`. Er is dus in deze steekproef maar een waarde gezien: `mexicaans`. De keukenindeling (Hollandse pot, pasta en Italiaans, Aziatisch, Mexicaans en wraps) kan daarom niet op `cuisines` alleen leunen; een mapping moet terugvallen op titel, zoekterm en ingredienten.
+
+## Aankoopgeschiedenis (`history-*`)
+
+Opgenomen op **2026-11-01** met `python -m tools.record_history` (18 calls, alleen GraphQL-queries en GET, geen mutation) en geanonimiseerd met `python -m tools.anonymize history`. Bron voor de endpoints: albert-heijn-mcp `src/ahapi/orders.ts`, `receipts.ts` en `bonus.ts`.
+
+| Bestand | Endpoint |
+|---|---|
+| `history-graphql-fulfillments__closed.json` | GraphQL `orderFulfillments(status: CLOSED)`, de 10 laatste bestellingen, `{status, body}` |
+| `history-order-details__n0..n4.json` | `GET /mobile-services/order/v1/<id>/details-grouped-by-taxonomy` voor de 5 nieuwste (n3 is geannuleerd en leeg), `{status, body}` |
+| `history-graphql-receipts__limit50.json` | GraphQL `posReceiptsPage(limit 50)`, kassabonnen nieuwste eerst, `{status, body}` |
+| `history-graphql-receipt__n0..n4.json` | GraphQL `posReceiptDetails` zoals albert-heijn-mcp hem vraagt (zonder product-id), `{status, body}` |
+| `history-graphql-receipt-ids__n0.json`, `__n3.json` | idem met het veld `id` op de productregel erbij |
+| `history-graphql-receipt-probe__fields.json` | proef naar een product-id op `PosReceiptProduct`: `400` met de velden die niet bestaan |
+| `history-bonus-metadata__v3.json` | `GET /mobile-services/bonuspage/v3/metadata` op dezelfde dag |
+| `history-previously-bought__p0.json`, `__p1.json` | `GET /mobile-services/bonuspage/v2/section/previously-bought?application=AHWEBSHOP&date=<start>` voor de huidige en volgende periode, `{status, body}` |
+
+Ids zijn vervangen door vaste nep-ids die tussen de bestanden kloppen: bestellingen `900001` en verder (in de volgorde van de lijst, dus `n0` = `900001`), kassabonnen `receipt-1` en verder. Weggehaald: bezorgadres (`address`), factuur (`invoiceId`), betalingen (`orderPayments`, `payments`), tijdvak (`deliveryTimePeriod`, `closingTime`, `timeDisplay`), reden van annuleren, en de status van een bestelling behalve "Geannuleerd" (die kan een betaalstatus noemen). Van een kassabon blijft de datum, de tijd staat op 12:00. Producten uit de categorie gezondheid (medicijnen) zijn uit de bestellingen gehaald. Productids, titels, aantallen, prijzen en datums zijn ongewijzigd.
+
+### Ontdekt
+
+- **Een kassabon kent geen webshop-id.** `PosReceiptProduct` heeft `id`, `name` (afgekort tot 12 tekens, bijvoorbeeld `AH SPERZIEBN`), `quantity`, `price`, `amount`. Dat `id` is het **hq-id** (AH-artikelnummer): het komt overeen met `hqId` op bestelde producten en op de kaartjes van "Eerder gekocht" (`CHEDDAR RASP` = 600439 = AH Cheddar geraspte kaas). `productId`, `webshopId`, `wsId`, `hqId`, `gtin`, `ean`, `barcode`, `articleNumber`, `sku` en `product` bestaan niet.
+- **"Eerder gekocht"** (`sectionType: PBO`) geeft alleen losse productkaartjes met `webshopId`, `hqId` (soms `0`: onbekend), `mainCategory`, `bonusMechanism` in wisselende hoofdletters (`2 VOOR 5.00`, `1 + 1 GRATIS`, `2e Halve Prijs`) en vaak geen `currentPrice`.
+- **Een bestelling** heeft `orderState` (`DELIVERED`, `CANCELLED`) en per product `quantity` en `allocatedQuantity`.
+- Hoofdcategorieen die voorkomen: `Vlees`, `Vleeswaren`, `Vis`, `Groente, aardappelen`, `Maaltijden, salades`, `Kaas`, `Zuivel, eieren`, `Frisdrank, sappen, water`, `Borrel, chips, snacks`, `Huishouden`, `Drogisterij`, `Bakkerij`, `Pasta, rijst, wereldkeuken`.

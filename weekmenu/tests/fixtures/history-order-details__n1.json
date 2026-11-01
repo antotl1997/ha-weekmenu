@@ -1,0 +1,1925 @@
+{
+ "status": 200,
+ "body": {
+  "orderId": 900002,
+  "deliveryDate": "2026-10-07",
+  "orderState": "DELIVERED",
+  "deliveryType": "HOME",
+  "groupedProductsInTaxonomy": [
+   {
+    "taxonomyName": "Groente, aardappelen",
+    "orderedProducts": [
+     {
+      "amount": 1,
+      "quantity": 1,
+      "allocatedQuantity": 1,
+      "product": {
+       "webshopId": 587318,
+       "hqId": 32885,
+       "title": "AH Gesneden verspakket yakisoba",
+       "brand": "AH",
+       "isSample": false,
+       "salesUnitSize": "2-3 pers|25 min",
+       "unitPriceDescription": "prijs per kg €8.96",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_6d3143517a4e6453524971766d617a6f67424b504e51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_6d3143517a4e6453524971766d617a6f67424b504e51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_6d3143517a4e6453524971766d617a6f67424b504e51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_6d3143517a4e6453524971766d617a6f67424b504e51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_6d3143517a4e6453524971766d617a6f67424b504e51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 6.99,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Groente, aardappelen",
+       "subCategory": "Gesneden verspakketten",
+       "subCategoryId": 12182,
+       "propertyIcons": [],
+       "properties": {
+        "sp_exclude_intolerance_geen_gluten": [
+         "Geen gluten"
+        ],
+        "sp_include_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "sp_exclude_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_include_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "da_sliced": [
+         "Ja"
+        ],
+        "da_taste": [
+         "Peper",
+         "Sesam"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "da_a_type_of_preparation_cookware": [
+         "Pan",
+         "Wok"
+        ],
+        "sp_exclude_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "np_vegafav": [
+         "vegafavoriet"
+        ],
+        "da_processing_type": [
+         "Gesneden"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "sp_include_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "nutriscore": [
+         "A"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "sp_exclude_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "da_salted_or_not_salted": [
+         "Gezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Nee"
+        ],
+        "da_store_department": [
+         "Vers"
+        ],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "da_type_of_processed_food": [
+         "Gesneden"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "da_type_of_grain": [
+         "Durum",
+         "Tarwe"
+        ],
+        "sp_exclude_intolerance_geen_eieren": [
+         "Geen eieren"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "",
+       "descriptionFull": "",
+       "isVirtualBundle": false,
+       "minBestBeforeDays": 2
+      },
+      "position": 13
+     }
+    ]
+   },
+   {
+    "taxonomyName": "Maaltijden, salades",
+    "orderedProducts": [
+     {
+      "amount": 1,
+      "quantity": 1,
+      "allocatedQuantity": 1,
+      "product": {
+       "webshopId": 435163,
+       "hqId": 46007,
+       "title": "AH Pizzadeeg",
+       "brand": "AH",
+       "isSample": false,
+       "salesUnitSize": "260 g",
+       "unitPriceDescription": "prijs per kg €7.65",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_4354523130303739333039?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_4354523130303739333039?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_4354523130303739333039?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_4354523130303739333039?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_4354523130303739333039?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 1.99,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Maaltijden, salades",
+       "subCategory": "Pizzabodem (vers)",
+       "subCategoryId": 5983,
+       "propertyIcons": [
+        "vegan"
+       ],
+       "properties": {
+        "sp_exclude_intolerance_geen_gluten": [
+         "Geen gluten"
+        ],
+        "sp_exclude_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Geen toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_include_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "sp_include_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "sp_exclude_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "da_a_type_of_preparation_cookware": [
+         "Oven"
+        ],
+        "sp_exclude_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "nutriscore": [
+         "C"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "sp_include_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "da_salted_or_not_salted": [
+         "Gezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_exclude_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Nee"
+        ],
+        "da_store_department": [
+         "Vers"
+        ],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "da_cutting_method": [
+         "Rond"
+        ],
+        "da_type_of_grain": [
+         "Tarwe"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "<p>Met pizzadeeg rond &amp; dun cre&#x00EB;er je gemakkelijk je eigen pizza. De dunne bodem wordt lekker knapperig. Zo maak je thuis pizza's zoals de Italianen pizza's maken.</p><p><ul><li>Ronde pizza met een diameter van 31cm</li><li>Voeg zelf tomatensaus, mozzarella, pesto en basilicum toe</li></ul></p>",
+       "descriptionFull": "<p> Beleg de pizza zoals je hem het liefst hebt en bak in 15-20 min op 200 graden een echte Italiaanse pizza.  </p>",
+       "isVirtualBundle": false,
+       "minBestBeforeDays": 8
+      },
+      "position": 3
+     }
+    ]
+   },
+   {
+    "taxonomyName": "Vlees",
+    "orderedProducts": [
+     {
+      "amount": 1,
+      "quantity": 1,
+      "allocatedQuantity": 1,
+      "product": {
+       "webshopId": 589124,
+       "hqId": 35035,
+       "title": "AH Scharrel kipdijfiletblokjes",
+       "brand": "AH",
+       "isSample": false,
+       "salesUnitSize": "300 g",
+       "unitPriceDescription": "prijs per kg €13.30",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_586f596b714c4e585356793676646f446d31615a7951?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_586f596b714c4e585356793676646f446d31615a7951?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_586f596b714c4e585356793676646f446d31615a7951?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_586f596b714c4e585356793676646f446d31615a7951?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_586f596b714c4e585356793676646f446d31615a7951?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 3.99,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Vlees",
+       "subCategory": "Kipfiletblokjes en kipfiletreepjes",
+       "subCategoryId": 5503,
+       "propertyIcons": [
+        "goedkoopje",
+        "lokaal"
+       ],
+       "properties": {
+        "sp_include_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Geen toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "da_animal_species": [
+         "Kip"
+        ],
+        "np_lokaal": [
+         "nederland"
+        ],
+        "da_a_type_of_preparation_cookware": [
+         "Koekenpan"
+        ],
+        "sp_exclude_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "sp_include_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "nutriscore": [
+         "A"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "da_salted_or_not_salted": [
+         "Ongezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_include_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Ja"
+        ],
+        "da_store_department": [
+         "Vers"
+        ],
+        "sp_exclude_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "np_goedkoopje": [
+         "prijsfavoriet"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "sp_exclude_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "da_accreditation": [
+         "BETER_LEVEN_1_STER",
+         "KIP_NATUUR_BOER"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "da_cutting_method": [
+         "Blokjes"
+        ],
+        "sp_include_intolerance_geen_gluten": [
+         "Geen gluten"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "<p><ul><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+       "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+       "isVirtualBundle": false,
+       "minBestBeforeDays": 2
+      },
+      "position": 14
+     }
+    ]
+   },
+   {
+    "taxonomyName": "Vis",
+    "orderedProducts": [
+     {
+      "amount": 1,
+      "quantity": 1,
+      "allocatedQuantity": 1,
+      "product": {
+       "webshopId": 55671,
+       "hqId": 508505,
+       "title": "AH Gerookte zalmblokjes",
+       "brand": "AH",
+       "isSample": false,
+       "salesUnitSize": "100 g",
+       "unitPriceDescription": "prijs per kg €49.90",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_7965453166305033543579376562414d316a4e713251?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_7965453166305033543579376562414d316a4e713251?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_7965453166305033543579376562414d316a4e713251?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_7965453166305033543579376562414d316a4e713251?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_7965453166305033543579376562414d316a4e713251?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 4.99,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Vis",
+       "subCategory": "Gerookte zalm",
+       "subCategoryId": 1931,
+       "propertyIcons": [],
+       "properties": {
+        "sp_include_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Geen toegevoegde suikers"
+        ],
+        "sp_include_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "da_animal_species": [
+         "Zalm"
+        ],
+        "sp_exclude_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "da_processing_type": [
+         "Gerookt"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "sp_include_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "nutriscore": [
+         "D"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "da_salted_or_not_salted": [
+         "Gezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_exclude_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_exclude_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Ja"
+        ],
+        "da_store_department": [
+         "Vers"
+        ],
+        "sp_exclude_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "da_type_of_processed_food": [
+         "Gerookt"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "sp_exclude_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "da_accreditation": [
+         "AQUACULTURE_STEWARDSHIP_COUNCIL"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "np_soort": [
+         "zalm"
+        ],
+        "da_cutting_method": [
+         "Blokjes",
+         "Stukjes"
+        ],
+        "da_regionalism": [
+         "Noors"
+        ],
+        "sp_include_intolerance_geen_gluten": [
+         "Geen gluten"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "<p>Direct te gebruiken. Lekker op een zelfgemaakte pizza, door een ovenschotel of als extraatje in de aardappelsalade!</p><p><ul><li>Het roken gebeurt met behulp van beuken- en eikenhout en dat zorgt voor de karakteristieke smaak van onze gerookte vis!</li><li>In handige blokjes</li><li>ASC gecertificeerd</li></ul></p>",
+       "descriptionFull": "",
+       "isVirtualBundle": false
+      },
+      "position": 4
+     }
+    ]
+   },
+   {
+    "taxonomyName": "Kaas",
+    "orderedProducts": [
+     {
+      "amount": 1,
+      "quantity": 1,
+      "allocatedQuantity": 1,
+      "product": {
+       "webshopId": 186787,
+       "hqId": 786858,
+       "title": "Galbani Mozzarella bufala",
+       "brand": "Galbani",
+       "isSample": false,
+       "salesUnitSize": "235 g",
+       "unitPriceDescription": "prijs per kg €25.20",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_494143316163627a51365352576b3857322d6a546977?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_494143316163627a51365352576b3857322d6a546977?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_494143316163627a51365352576b3857322d6a546977?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_494143316163627a51365352576b3857322d6a546977?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_494143316163627a51365352576b3857322d6a546977?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 3.15,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Kaas",
+       "subCategory": "Mozzarella",
+       "subCategoryId": 4222,
+       "propertyIcons": [],
+       "properties": {
+        "sp_exclude_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Geen toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_include_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "da_taste": [
+         "Kaas",
+         "Latte"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "da_maturity": [
+         "nvt"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "da_animal_species": [
+         "Buffel"
+        ],
+        "np_verpakking": [
+         "voorverpakt"
+        ],
+        "sp_exclude_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "sp_exclude_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "np_vegafav": [
+         "vegafavoriet"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "nutriscore": [
+         "D"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "da_salted_or_not_salted": [
+         "Gezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_exclude_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Nee"
+        ],
+        "da_store_department": [
+         "Vers"
+        ],
+        "da_grape": [],
+        "sp_exclude_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "sp_exclude_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "np_soort": [
+         "mozzarella"
+        ],
+        "da_regionalism": [
+         "Italiaans"
+        ],
+        "sp_include_intolerance_geen_gluten": [
+         "Geen gluten"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "<p>De Mozzarella di Latte di Bufala van Galbani, gemaakt van buffelmelk, heeft een typische, doch eerder zachte buffelmelksmaak.</p><p><ul><li>Mozzarella uit Itali&#235;, vervaardigd uit 100% gepasteuriseerde buffelmelk.</li><li>Om van te genieten in koude gerechten of slaatjes.</li><li>Een delicatesse voor de &#233;chte mozzarella liefhebber.</li><li>Galbani, de nr. 1 in Itali&#235;, bestaat al meer dan 130 jaar (sinds 1882).</li></ul></p>",
+       "descriptionFull": "<p> De Mozzarella di Latte di Bufala van Galbani kenmerkt zich door een typische luchtige, verse structuur met een gladde, vliesdunne huid errond. Van deze buffelmozzarella geniet je overigens optimaal in koude, verse gerechten.  </p>\n  <p>Kenners houden van zijn licht zurige, verse buffelmelksmaak en genieten er van gewoon met een scheutje olijfolie en verse Italiaanse fijne vleeswaren.</p>",
+       "isVirtualBundle": false,
+       "minBestBeforeDays": 7
+      },
+      "position": 5
+     }
+    ]
+   },
+   {
+    "taxonomyName": "Zuivel, eieren",
+    "orderedProducts": [
+     {
+      "amount": 4,
+      "quantity": 4,
+      "allocatedQuantity": 4,
+      "product": {
+       "webshopId": 425572,
+       "hqId": 694387,
+       "title": "AH Skyr IJslandse stijl",
+       "brand": "AH",
+       "isSample": false,
+       "salesUnitSize": "500 g",
+       "unitPriceDescription": "prijs per kg €2.98",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_34795278584b532d52504b504951502d655f59697141?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_34795278584b532d52504b504951502d655f59697141?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_34795278584b532d52504b504951502d655f59697141?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_34795278584b532d52504b504951502d655f59697141?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_34795278584b532d52504b504951502d655f59697141?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 1.49,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Zuivel, eieren",
+       "subCategory": "Skyr naturel",
+       "subCategoryId": 10842,
+       "propertyIcons": [
+        "goedkoopje",
+        "vega"
+       ],
+       "properties": {
+        "sp_exclude_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Geen toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_include_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "da_taste": [
+         "Yoghurt"
+        ],
+        "sp_include_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "sp_exclude_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "nutriscore": [
+         "A"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "da_salted_or_not_salted": [
+         "Ongezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_include_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "da_fat_content": [
+         "Mager"
+        ],
+        "sp_include_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Nee"
+        ],
+        "da_store_department": [
+         "Vers"
+        ],
+        "sp_exclude_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "np_goedkoopje": [
+         "prijsfavoriet"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "da_accreditation": [
+         "KOE_NATUUR_BOER"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "np_verbluffen": [
+         "verbluffend goedkoop"
+        ],
+        "sp_include_intolerance_geen_gluten": [
+         "Geen gluten"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "<p>Een heerlijke frisse yoghurt gemaakt volgens IJslandse receptuur. Deze yoghurt is rijk aan eiwitten en bevat nauwelijks vet. Zo lekker, alleen een lepel heb je nodig, meer niet!</p><p><ul><li>Mild en stevig van smaak</li><li>0,2% vet</li><li>11% eiwit</li><li>Lekker met fruit of muesli als ontbijt of tussendoor</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+       "descriptionFull": "<p> Matcht uitstekend met verse stukjes fruit  </p><p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+       "isVirtualBundle": false,
+       "minBestBeforeDays": 7
+      },
+      "position": 8
+     },
+     {
+      "amount": 1,
+      "quantity": 1,
+      "allocatedQuantity": 1,
+      "product": {
+       "webshopId": 585989,
+       "hqId": 30363,
+       "title": "AH Skyr IJslandse stijl perzik",
+       "brand": "AH",
+       "isSample": false,
+       "salesUnitSize": "500 g",
+       "unitPriceDescription": "prijs per kg €3.78",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_697145587a3955555172616d68734734776a39423377?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_697145587a3955555172616d68734734776a39423377?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_697145587a3955555172616d68734734776a39423377?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_697145587a3955555172616d68734734776a39423377?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_697145587a3955555172616d68734734776a39423377?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 1.89,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Zuivel, eieren",
+       "subCategory": "Skyr met smaak",
+       "subCategoryId": 18267,
+       "propertyIcons": [
+        "vega"
+       ],
+       "properties": {
+        "sp_exclude_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "da_taste": [
+         "Perzik",
+         "Yoghurt"
+        ],
+        "sp_include_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "sp_exclude_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "nutriscore": [
+         "A"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "da_salted_or_not_salted": [
+         "Ongezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_include_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "da_fat_content": [
+         "Mager"
+        ],
+        "sp_include_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Nee"
+        ],
+        "da_store_department": [
+         "Vers"
+        ],
+        "sp_exclude_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "sp_exclude_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "da_accreditation": [
+         "KOE_NATUUR_BOER"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "sp_include_intolerance_geen_gluten": [
+         "Geen gluten"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "",
+       "descriptionFull": "",
+       "isVirtualBundle": false,
+       "minBestBeforeDays": 7
+      },
+      "position": 9
+     },
+     {
+      "amount": 1,
+      "quantity": 1,
+      "allocatedQuantity": 1,
+      "product": {
+       "webshopId": 594306,
+       "hqId": 41755,
+       "title": "AH Skyr IJslandse stijl vanille smaak",
+       "brand": "AH",
+       "isSample": false,
+       "salesUnitSize": "500 g",
+       "unitPriceDescription": "prijs per kg €3.78",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_566d6b315232326b52522d52434671696a326a465277?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_566d6b315232326b52522d52434671696a326a465277?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_566d6b315232326b52522d52434671696a326a465277?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_566d6b315232326b52522d52434671696a326a465277?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_566d6b315232326b52522d52434671696a326a465277?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 1.89,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Zuivel, eieren",
+       "subCategory": "Skyr met smaak",
+       "subCategoryId": 18267,
+       "propertyIcons": [
+        "vega"
+       ],
+       "properties": {
+        "sp_include_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "da_fat_content": [
+         "Mager"
+        ],
+        "sp_include_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Nee"
+        ],
+        "da_store_department": [
+         "Vers"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_exclude_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "da_taste": [
+         "Vanille",
+         "Yoghurt"
+        ],
+        "sp_exclude_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "sp_include_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "sp_exclude_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "da_accreditation": [
+         "KOE_NATUUR_BOER"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "nutriscore": [
+         "A"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "da_salted_or_not_salted": [
+         "Ongezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_gluten": [
+         "Geen gluten"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "",
+       "descriptionFull": "",
+       "isVirtualBundle": false,
+       "minBestBeforeDays": 7
+      },
+      "position": 10
+     },
+     {
+      "amount": 2,
+      "quantity": 2,
+      "allocatedQuantity": 2,
+      "product": {
+       "webshopId": 475117,
+       "hqId": 727865,
+       "title": "AH Kookroom 20%",
+       "brand": "AH",
+       "isSample": false,
+       "salesUnitSize": "200 ml",
+       "unitPriceDescription": "prijs per liter €4.95",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_2d59414a48497a6b525143746d7368536b502d527a77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_2d59414a48497a6b525143746d7368536b502d527a77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_2d59414a48497a6b525143746d7368536b502d527a77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_2d59414a48497a6b525143746d7368536b502d527a77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_2d59414a48497a6b525143746d7368536b502d527a77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 0.99,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Zuivel, eieren",
+       "subCategory": "Kookroom",
+       "subCategoryId": 1263,
+       "propertyIcons": [
+        "vega"
+       ],
+       "properties": {
+        "sp_exclude_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Geen toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_include_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "sp_exclude_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "sp_exclude_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "np_vegafav": [
+         "vegafavoriet"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "nutriscore": [
+         "D"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "da_salted_or_not_salted": [
+         "Ongezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_include_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Nee"
+        ],
+        "da_store_department": [
+         "Houdbaar"
+        ],
+        "sp_exclude_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "sp_exclude_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "sp_include_intolerance_geen_gluten": [
+         "Geen gluten"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "<p>Ah houdbare kookroom 20% vet.</p><p><ul><li>Vol en romig</li><li>Voor warme en koude bereidingen</li><li>Gemaakt van weidemelk</li></ul></p>",
+       "descriptionFull": "<p>  De melk is voor 100% afkomstig van koeien die minimaal 120 dagen per jaar, 6 uur per dag in de wei lopen. De weidegang geeft koeien meer bewegingsruimte en in de wei hebben koeien ruimte voor hun natuurlijke graasgedrag. Zo kunt u blijven genieten van het karakteristieke landschap met koeien in de wei. </p>",
+       "isVirtualBundle": false
+      },
+      "position": 15
+     }
+    ]
+   },
+   {
+    "taxonomyName": "Bakkerij",
+    "orderedProducts": [
+     {
+      "amount": 1,
+      "quantity": 1,
+      "allocatedQuantity": 1,
+      "product": {
+       "webshopId": 513514,
+       "hqId": 13631,
+       "title": "Bolletje Vezelrijk boeren beschuit meerzaden",
+       "brand": "Bolletje",
+       "isSample": false,
+       "salesUnitSize": "10 stuks",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_5544566471357974517a757038493565625239594b51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_5544566471357974517a757038493565625239594b51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_5544566471357974517a757038493565625239594b51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_5544566471357974517a757038493565625239594b51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_5544566471357974517a757038493565625239594b51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 1.99,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Bakkerij",
+       "subCategory": "Beschuit",
+       "subCategoryId": 921,
+       "propertyIcons": [
+        "vegan"
+       ],
+       "properties": {
+        "sp_exclude_intolerance_geen_gluten": [
+         "Geen gluten"
+        ],
+        "sp_include_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_include_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "sp_exclude_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "sp_include_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "nutriscore": [
+         "A"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "sp_exclude_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_include_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "da_salted_or_not_salted": [
+         "Gezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_exclude_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Nee"
+        ],
+        "da_store_department": [
+         "Houdbaar"
+        ],
+        "da_grape": [],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "sp_exclude_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "da_type_of_grain": [
+         "Tarwe"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "<p>Bolletje vezelrijk beschuit meerzaden is heerlijk robuust, bereid met rijke ingredienten en een flinke dosis bakkersambacht. De beschuit bevat extra veel vezels en zit boordevol zaden en pitten.</p><p><ul><li>Boordevol zaden en pitten</li><li>Extra groot, dus lekker voedzaam</li><li>Bereid met rijke ingredienten</li><li>Extra veel vezels</li></ul></p>",
+       "descriptionFull": "De bakkers van Bolletje weten wat Echt Lekker is. Al jaren maken we Nederland blij met onze beschuiten, maar deze zijn er ook in vezelrijke varianten. Extra groot, dus stiekem ook extra lekker. De lekkerste ingredienten zorgen keer op keer weer voor de beste smaak.",
+       "isVirtualBundle": false
+      },
+      "position": 11
+     }
+    ]
+   },
+   {
+    "taxonomyName": "Pasta, rijst, wereldkeuken",
+    "orderedProducts": [
+     {
+      "amount": 1,
+      "quantity": 1,
+      "allocatedQuantity": 1,
+      "product": {
+       "webshopId": 577545,
+       "hqId": 20154,
+       "title": "Bertolli Pastasaus tomaat & mascarpone",
+       "brand": "Bertolli",
+       "isSample": false,
+       "salesUnitSize": "460 g",
+       "unitPriceDescription": "prijs per kg €9.76",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_333351375266467a516c436f2d43554f356f76794941?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_333351375266467a516c436f2d43554f356f76794941?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_333351375266467a516c436f2d43554f356f76794941?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_333351375266467a516c436f2d43554f356f76794941?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_333351375266467a516c436f2d43554f356f76794941?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 4.49,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Pasta, rijst, wereldkeuken",
+       "subCategory": "Pastasaus in zak",
+       "subCategoryId": 2242,
+       "propertyIcons": [],
+       "properties": {
+        "sp_exclude_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "da_type_of_addiction": [
+         "Saus"
+        ],
+        "da_taste": [
+         "Tomaat"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "sp_exclude_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "da_a_type_of_preparation_cookware": [
+         "Magnetron"
+        ],
+        "sp_exclude_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "nutriscore": [
+         "A"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "da_salted_or_not_salted": [
+         "Gezouten"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_exclude_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Nee"
+        ],
+        "da_store_department": [
+         "Houdbaar"
+        ],
+        "da_grape": [],
+        "sp_exclude_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "sp_exclude_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "sp_exclude_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "sp_include_intolerance_geen_gluten": [
+         "Geen gluten"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "<p>Een heerlijke pastasaus voor 3-4 personen. Naar traditioneel italiaans recept, met mascarpone en Italiaanse tomaten</p><p><ul><li>Naar tradioneel italiaans recept, met 100% zongerijpte Italiaanse tomaten</li><li>Bereid met natuurlijke ingredienten</li><li>Met een scheutje extra vergine olijfolie</li></ul></p>",
+       "descriptionFull": "",
+       "isVirtualBundle": false
+      },
+      "position": 2
+     }
+    ]
+   },
+   {
+    "taxonomyName": "Frisdrank, sappen, water",
+    "orderedProducts": [
+     {
+      "amount": 4,
+      "quantity": 4,
+      "allocatedQuantity": 4,
+      "product": {
+       "webshopId": 593874,
+       "hqId": 42496,
+       "title": "Dr Pepper Zero 6-pack",
+       "brand": "Dr Pepper",
+       "isSample": false,
+       "salesUnitSize": " 6 x 0,33 l",
+       "unitPriceDescription": "prijs per liter €2.97",
+       "images": [
+        {
+         "width": 800,
+         "height": 800,
+         "url": "https://static.ah.nl/dam/product/AHI_567554576530487553757975496938584a3651443977?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+        },
+        {
+         "width": 400,
+         "height": 400,
+         "url": "https://static.ah.nl/dam/product/AHI_567554576530487553757975496938584a3651443977?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+        },
+        {
+         "width": 200,
+         "height": 200,
+         "url": "https://static.ah.nl/dam/product/AHI_567554576530487553757975496938584a3651443977?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+        },
+        {
+         "width": 48,
+         "height": 48,
+         "url": "https://static.ah.nl/dam/product/AHI_567554576530487553757975496938584a3651443977?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+         "width": 80,
+         "height": 80,
+         "url": "https://static.ah.nl/dam/product/AHI_567554576530487553757975496938584a3651443977?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        }
+       ],
+       "extraDescriptions": [],
+       "isInfiniteBonus": false,
+       "priceBeforeBonus": 5.89,
+       "isStapelBonus": false,
+       "isBonus": false,
+       "discountLabels": [],
+       "shopType": "AH",
+       "orderAvailabilityStatus": "IN_ASSORTMENT",
+       "availableOnline": true,
+       "isOrderable": true,
+       "mainCategory": "Frisdrank, sappen, water",
+       "subCategory": "Cola zero, suikervrij, light",
+       "subCategoryId": 8788,
+       "propertyIcons": [
+        "vegan"
+       ],
+       "properties": {
+        "sp_include_intolerance_geen_melk": [
+         "Geen melk"
+        ],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+         "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": [
+         "Geen soja"
+        ],
+        "da_sugar_added_or_no_sugar_added": [
+         "Geen toegevoegde suikers"
+        ],
+        "sp_include_intolerance_geen_vis": [
+         "Geen vis"
+        ],
+        "sp_include_dieet_laag_suiker": [
+         "Laag suiker"
+        ],
+        "sp_include_dieet_vegetarisch": [
+         "Vegetarisch"
+        ],
+        "sp_include_intolerance_geen_lupine": [
+         "Geen lupine"
+        ],
+        "sp_include_intolerance_geen_pindas": [
+         "Geen pinda's"
+        ],
+        "sp_include_intolerance_geen_mosterd": [
+         "Geen mosterd"
+        ],
+        "da_available_in_store": [
+         "true"
+        ],
+        "sp_include_intolerance_geen_lactose": [
+         "Geen lactose"
+        ],
+        "nutriscore": [
+         "C"
+        ],
+        "sp_include_intolerance_geen_sulfiet": [
+         "Geen sulfiet"
+        ],
+        "sp_include_dieet_veganistisch": [
+         "Veganistisch"
+        ],
+        "da_salted_or_not_salted": [
+         "Ongezouten"
+        ],
+        "da_free_of_caffeine": [
+         "Nee"
+        ],
+        "da_excluded_assortment": [
+         "false"
+        ],
+        "sp_include_intolerance_geen_sesam": [
+         "Geen sesam"
+        ],
+        "sp_include_dieet_laag_vet": [
+         "Laag vet"
+        ],
+        "sp_include_dieet_laag_zout": [
+         "Laag zout"
+        ],
+        "da_free_of_sugar": [
+         "Ja"
+        ],
+        "da_store_department": [
+         "Houdbaar"
+        ],
+        "da_carbonation_intensity": [
+         "bruisend"
+        ],
+        "da_grape": [],
+        "sp_include_intolerance_geen_schelpdieren": [
+         "Geen schelpdieren (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_eieren": [
+         "Geen eieren"
+        ],
+        "sp_include_intolerance_geen_noten": [
+         "Geen noten"
+        ],
+        "sp_include_intolerance_geen_selderij": [
+         "Geen selderij"
+        ],
+        "sp_include_intolerance_geen_gluten": [
+         "Geen gluten"
+        ]
+       },
+       "isPreviouslyBought": true,
+       "nix18": false,
+       "descriptionHighlights": "<p>Dr Pepper is het resultaat van een mengeling van smaken die heeft geleid tot een verfrissende frisdrank met een delicate smaak van fruit en kruiden.</p><p><ul><li>Nu in slim can!</li><li>Nu ook in zero!</li></ul></p>",
+       "descriptionFull": "",
+       "isVirtualBundle": false
+      },
+      "position": 12
+     }
+    ]
+   }
+  ],
+  "cancellable": false,
+  "orderMethod": "APPIE_WEB_OLD",
+  "reopenable": false
+ }
+}

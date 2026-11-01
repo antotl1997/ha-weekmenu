@@ -3,14 +3,18 @@ import html
 import re
 import time
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from urllib.parse import parse_qs, quote, urlparse
+from zoneinfo import ZoneInfo
 
 import httpx
 
 from .tokens import Tokens, TokenStore
+
+if TYPE_CHECKING:
+    from .staples import Purchase
 
 BASE_URL = "https://api.ah.nl"
 LOGIN_URL = (
@@ -77,6 +81,7 @@ class Product:
     mechanism: str | None
     orderable: bool
     category: str | None
+    hq_id: int | None = None  # AH article number; the only product id on a till receipt
 
 
 @dataclass
@@ -132,6 +137,24 @@ RECIPE_QUERY = (
     " cuisines images { url width height } servings { number type }"
     " ingredients { text name { singular } } preparation { steps } } }"
 )
+# Purchase history (albert-heijn-mcp src/ahapi/orders.ts and receipts.ts). Read-only.
+# Receipt product lines carry `id`: the hq id (AH article number), not the webshop id.
+FULFILLMENTS_QUERY = (
+    "query Fulfillments { orderFulfillments(status: CLOSED) { result {"
+    " orderId statusDescription shoppingType"
+    " delivery { slot { date } } } } }"
+)
+RECEIPTS_QUERY = (
+    "query Receipts($limit: Int!) {"
+    " posReceiptsPage(pagination: {offset: 0, limit: $limit}) {"
+    " posReceipts { id dateTime } } }"
+)
+RECEIPT_QUERY = (
+    "query Receipt($id: String!) { posReceiptDetails(id: $id) {"
+    " id products { id name quantity } } }"
+)
+RECEIPTS_LIMIT = 50
+DELIVERED = "DELIVERED"
 ORDER_MODE_TEXT = "Server in order mode"
 # Pause between AH calls while walking the bonus folder (tests set this to 0).
 CALL_DELAY = 0.2
@@ -168,6 +191,7 @@ def product_from_card(c: dict) -> Product:
         mechanism=c.get("bonusMechanism") or None,
         orderable=bool(c.get("isOrderable", True)),
         category=c.get("mainCategory") or None,
+        hq_id=_pos_int(c.get("hqId")),
     )
 
 
@@ -195,8 +219,30 @@ def product_from_graphql(
     )
 
 
+def _pos_int(v: Any) -> int | None:
+    """A real id, or None (AH sends 0 for "unknown")."""
+    return v if isinstance(v, int) and not isinstance(v, bool) and v > 0 else None
+
+
 def _iso(d: Any) -> date | None:
     return date.fromisoformat(d) if d else None
+
+
+def _local_day(stamp: Any) -> date | None:
+    """The Dutch calendar day of an ISO time stamp ("2026-09-28T11:58:00.000Z")."""
+    if not isinstance(stamp, str) or not stamp:
+        return None
+    try:
+        dt = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        return dt.date()
+    try:
+        zone = ZoneInfo("Europe/Amsterdam")
+    except Exception:  # no tz database (Windows without tzdata): winter time is close enough
+        zone = timezone(timedelta(hours=1))
+    return dt.astimezone(zone).date()
 
 
 def _minutes(v: Any) -> int | None:
@@ -441,6 +487,95 @@ class AhClient:
         if period.categories and len(self.skipped_categories) == len(period.categories):
             raise AhApiError("bonusfolder niet op te halen: alle categorieen mislukt", 0)
         return list(found.values())
+
+    async def previously_bought_bonus(self, period: BonusPeriod) -> list[Product]:
+        """AH's "Eerder gekocht" bonus section: offers on products bought before."""
+        path = (
+            "/mobile-services/bonuspage/v2/section/previously-bought"
+            f"?application=AHWEBSHOP&date={period.start.isoformat()}"
+        )
+        self._called_ah = False
+        await self._pause()
+        body = await self.request("GET", path)
+        found: dict[int, Product] = {}
+        for entry in (body or {}).get("bonusGroupOrProducts") or []:
+            if entry.get("product") and entry["product"].get("webshopId"):
+                items = [product_from_card(entry["product"])]
+            elif entry.get("bonusGroup"):
+                items = await self._expand_group(entry["bonusGroup"], period)
+            else:
+                items = []
+            for p in items:
+                found.setdefault(p.id, p)
+        return list(found.values())
+
+    # --- purchase history ---
+
+    async def purchases(self, since: date) -> list["Purchase"]:
+        """Delivered orders and till receipts from `since` on. Only GET and GraphQL queries.
+
+        One Purchase per product per order or receipt. A receipt line knows only the hq
+        id; when that product was also delivered, its webshop id is filled in.
+        """
+        from .staples import Purchase  # staples imports Product from here
+
+        self._called_ah = False
+        out: list[Purchase] = []
+        hq_to_ws: dict[int, int] = {}
+        await self._pause()
+        data = await self.graphql(FULFILLMENTS_QUERY, {})
+        for f in (data.get("orderFulfillments") or {}).get("result") or []:
+            day = _iso(((f.get("delivery") or {}).get("slot") or {}).get("date"))
+            if day is None or day < since or not f.get("orderId"):
+                continue
+            await self._pause()
+            body = await self.request(
+                "GET",
+                f"/mobile-services/order/v1/{int(f['orderId'])}/details-grouped-by-taxonomy",
+            )
+            if not isinstance(body, dict) or body.get("orderState") != DELIVERED:
+                continue
+            day = _iso(body.get("deliveryDate")) or day
+            lines: dict[int, Purchase] = {}
+            for g in body.get("groupedProductsInTaxonomy") or []:
+                for op in g.get("orderedProducts") or []:
+                    prod = op.get("product") or {}
+                    ws = _pos_int(prod.get("webshopId"))
+                    qty = op.get("allocatedQuantity", op.get("quantity"))
+                    if ws is None or not isinstance(qty, int) or qty <= 0:
+                        continue
+                    hq = _pos_int(prod.get("hqId"))
+                    if hq is not None:
+                        hq_to_ws[hq] = ws
+                    if ws in lines:
+                        lines[ws].qty += qty
+                    else:
+                        lines[ws] = Purchase(ws, html.unescape(prod.get("title") or ""), qty,
+                                             day, "online", hq_id=hq)
+            out.extend(lines.values())
+
+        await self._pause()
+        data = await self.graphql(RECEIPTS_QUERY, {"limit": RECEIPTS_LIMIT})
+        for r in (data.get("posReceiptsPage") or {}).get("posReceipts") or []:
+            day = _local_day(r.get("dateTime"))
+            if day is None or day < since or not r.get("id"):
+                continue
+            await self._pause()
+            d = (await self.graphql(RECEIPT_QUERY, {"id": str(r["id"])})).get("posReceiptDetails")
+            lines = {}
+            for x in (d or {}).get("products") or []:
+                hq, qty = _pos_int(x.get("id")), x.get("quantity")
+                if hq is None or not isinstance(qty, int) or qty <= 0:
+                    continue
+                if hq in lines:
+                    lines[hq].qty += qty
+                else:
+                    lines[hq] = Purchase(0, x.get("name") or "", qty, day, "winkel", hq_id=hq)
+            out.extend(lines.values())
+        for p in out:
+            if p.product_id == 0 and p.hq_id in hq_to_ws:
+                p.product_id = hq_to_ws[p.hq_id]
+        return out
 
     # --- products ---
 

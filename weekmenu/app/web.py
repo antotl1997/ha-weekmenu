@@ -29,8 +29,9 @@ from app.hass import (
 )
 from app.ledger import leftovers
 from app.planner import Dish, Plan, Settings
+from app.staples import extras_savings, staple_list
 from app.week import GEEN_OUDERAVOND, WEEKDAGEN, menu_week_start
-from app.writer import apply
+from app.writer import apply, apply_extras
 
 log = logging.getLogger("weekmenu.web")
 
@@ -116,6 +117,7 @@ def week_view(wlog, plan: Plan | None, start: date, ouders: str | None) -> dict:
         "savings": 0.0, "products": 0, "bonus_products": 0, "leftovers": [],
         "not_found": [], "short_by": 0, "pending": [], "unknown": [],
         "budget_exhausted": False, "period_warning": wlog.period_warning,
+        "extras_savings": wlog.extras_savings, "staples_error": wlog.staples_error,
     }
     if plan is None:
         return out
@@ -143,6 +145,16 @@ def week_view(wlog, plan: Plan | None, start: date, ouders: str | None) -> dict:
         unknown=[_title(plan, p) for p in wlog.unknown],
     )
     return out
+
+
+def staples_view(wlog) -> list[dict]:
+    """Vaste boodschappen in de bonus, as the app lists them under the dishes."""
+    return [
+        {"product": s.product.title, "product_id": s.product.id, "times": s.times,
+         "qty": s.qty, "mechanism": s.product.mechanism, "savings": s.savings,
+         "added": s.product.id in wlog.extras_added}
+        for s in staple_list(wlog)
+    ]
 
 
 def dish_view(wlog, plan: Plan, d: Dish, today: date) -> dict:
@@ -215,7 +227,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         except httpx.HTTPError:
             return None
 
-    async def publish(start: date, plan: Plan, target: str) -> None:
+    async def publish(start: date, plan: Plan, target: str, extras: float = 0.0) -> None:
         """Update sensor.weekmenu when this is the week it shows."""
         now = ctx.clock()
         nxt = menu_week_start(now)
@@ -226,7 +238,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         if ouders is None:
             return
         await main.guard(ctx.hass.publish(plan_view(plan, start, target, ouders),
-                                          plan.savings), "sensoren")
+                                          plan.savings + extras), "sensoren")
 
     # --- pages ---
 
@@ -270,17 +282,22 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
 
     # --- reading ---
 
-    async def week(request):
+    def shown_week(request) -> date:
+        """?week=<iso> or the week the app shows by default (running, else the next one)."""
         now = ctx.clock()
         q = request.query.get("week")
         if q:
             try:
-                start = main.week_of(date.fromisoformat(q))
+                return main.week_of(date.fromisoformat(q))
             except ValueError:
-                return _err(400, "ongeldige week")
-        else:
-            current = main.week_of(now.date())
-            start = current if ctx.ledger.load(current).plan else menu_week_start(now)
+                raise web.HTTPBadRequest(text='{"error": "ongeldige week"}',
+                                         content_type="application/json") from None
+        current = main.week_of(now.date())
+        return current if ctx.ledger.load(current).plan else menu_week_start(now)
+
+    async def week(request):
+        now = ctx.clock()
+        start = shown_week(request)
         wlog = ctx.ledger.load(start)
         plan = Plan.from_dict(wlog.plan) if wlog.plan else None
         out = week_view(wlog, plan, start, await ouders_now())
@@ -315,7 +332,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 return new
             await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan)
         nd = next(x for x in new.dishes if x.date == day)
-        await publish(wlog.week, new, wlog.target or "list")
+        await publish(wlog.week, new, wlog.target or "list", wlog.extras_savings)
         return web.json_response(dish_view(wlog, new, nd, ctx.clock().date()))
 
     def settings_for(plan: Plan, start: date) -> Settings:
@@ -402,6 +419,36 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         task.add_done_callback(ctx.tasks.discard)
         return web.json_response({"started": True, "mode": mode}, status=202)
 
+    # --- vaste boodschappen in de bonus ---
+
+    async def get_staples(request):
+        return web.json_response(staples_view(ctx.ledger.load(shown_week(request))))
+
+    async def add_staple(request):
+        """One tap: the staple goes in once, through the same write path as the menu."""
+        try:
+            pid = int(request.match_info["pid"])
+        except ValueError:
+            return _err(400, "ongeldig product")
+        start = shown_week(request)
+        async with ctx.lock:
+            wlog = ctx.ledger.load(start)
+            staple = next((s for s in staple_list(wlog) if s.product.id == pid), None)
+            if staple is None:
+                return _err(404, "geen voorstel voor dit product")
+            if pid not in wlog.extras_added:
+                await apply_extras(ctx.client, ctx.ledger, wlog, {pid: staple.qty},
+                                   {pid: staple.product.title})
+                wlog.extras_savings = extras_savings(wlog)
+                ctx.ledger.save(wlog)
+                if pid not in wlog.extras_added:  # outcome unsure, or unknown: never blind
+                    return _err(409, "Onzeker of gelukt, controleer in de AH-app",
+                                items=staples_view(wlog))
+        if wlog.plan:
+            await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",
+                          wlog.extras_savings)
+        return web.json_response(staples_view(wlog))
+
     # --- savings and settings ---
 
     async def savings(request):
@@ -447,6 +494,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     app.router.add_post("/api/dish/{day}/back", back)
     app.router.add_post("/api/dish/{day}/persons", persons)
     app.router.add_post("/api/run", run)
+    app.router.add_get("/api/staples", get_staples)
+    app.router.add_post("/api/staples/{pid}", add_staple)
     app.router.add_get("/api/savings", savings)
     app.router.add_get("/api/settings", get_settings)
     app.router.add_post("/api/settings", post_settings)

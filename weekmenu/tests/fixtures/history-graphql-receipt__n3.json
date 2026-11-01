@@ -1,0 +1,230 @@
+{
+ "status": 200,
+ "body": {
+  "data": {
+   "posReceiptDetails": {
+    "id": "receipt-4",
+    "products": [
+     {
+      "name": "WOKGROENTE",
+      "quantity": 2,
+      "price": {
+       "amount": 1.99
+      },
+      "amount": {
+       "amount": 3.98
+      }
+     },
+     {
+      "name": "BABYSPINAZIE",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.39
+      }
+     },
+     {
+      "name": "PHILADELPHIA",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 4.19
+      }
+     },
+     {
+      "name": "PHILADELPHIA",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.99
+      }
+     },
+     {
+      "name": "KRUIDENBOTER",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.09
+      }
+     },
+     {
+      "name": "MOZZARELLA",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.75
+      }
+     },
+     {
+      "name": "AH SKYR",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.99
+      }
+     },
+     {
+      "name": "ZAANSE HOEVE",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.25
+      }
+     },
+     {
+      "name": "AH SOUR CR",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.19
+      }
+     },
+     {
+      "name": "BIO EIEREN",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.79
+      }
+     },
+     {
+      "name": "BOLLETJE",
+      "quantity": 2,
+      "price": {
+       "amount": 2.99
+      },
+      "amount": {
+       "amount": 5.98
+      }
+     },
+     {
+      "name": "AH DROP",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.25
+      }
+     },
+     {
+      "name": "HARIBO",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.25
+      }
+     },
+     {
+      "name": "AH CHOCOLADE",
+      "quantity": 2,
+      "price": {
+       "amount": 0.99
+      },
+      "amount": {
+       "amount": 1.98
+      }
+     },
+     {
+      "name": "KANDIJKOEK",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.15
+      }
+     },
+     {
+      "name": "PICKWICK",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.19
+      }
+     },
+     {
+      "name": "LIPTON GREEN",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.99
+      }
+     },
+     {
+      "name": "AH FRAMBOZEN",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.99
+      }
+     },
+     {
+      "name": "AH VISSTICKS",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.49
+      }
+     },
+     {
+      "name": "TOPPITS VERS",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.19
+      }
+     },
+     {
+      "name": "WITTE REUS",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 7.29
+      }
+     }
+    ],
+    "discounts": [
+     {
+      "name": "ALLEKLEINTJE",
+      "amount": {
+       "amount": -1
+      }
+     },
+     {
+      "name": "BIOPREMIUMST",
+      "amount": {
+       "amount": -0.28
+      }
+     },
+     {
+      "name": "PICKWICKGREE",
+      "amount": {
+       "amount": -1.53
+      }
+     },
+     {
+      "name": "ALLEWITTEREU",
+      "amount": {
+       "amount": -5.1
+      }
+     },
+     {
+      "name": "LIPTON500ML(",
+      "amount": {
+       "amount": -1.99
+      }
+     },
+     {
+      "name": "AMERKCRACKKN",
+      "amount": {
+       "amount": -2.99
+      }
+     },
+     {
+      "name": "HARIBOSTARMI",
+      "amount": {
+       "amount": -1.13
+      }
+     }
+    ]
+   }
+  }
+ }
+}

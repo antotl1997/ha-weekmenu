@@ -46,6 +46,7 @@ from app.planner import (
     restore_dish,
     swap_dish,
 )
+from app import staples
 from app.tokens import TokenStore
 from app.week import GEEN_OUDERAVOND, WEEKDAGEN, evenings, menu_week_start
 from app.writer import WriteResult, apply
@@ -267,14 +268,44 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         ), "melding")
         return RoundOutcome("error", start, error=msg)
 
+    await refresh_staples(ctx, wlog, plan, start, now)
     await guard(ctx.hass.publish(plan_view(plan, start, result.target, raw.ouders),
-                                 plan.savings), "sensoren")
+                                 plan.savings + wlog.extras_savings), "sensoren")
     if reused and not (result.added or result.pending or result.unknown or had_error):
         log.info("Menu stond er al en alles was al toegevoegd: geen nieuwe melding")
     else:
-        title, body = format_message(plan, result, raw.ouders, warning)
+        title, body = format_message(plan, result, raw.ouders, warning,
+                                     staples=staples.open_count(wlog))
         await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding")
     return RoundOutcome("done", start, warning=warning, plan=plan, result=result)
+
+
+async def refresh_staples(ctx: Context, wlog: WeekLog, plan: Plan, start: date,
+                          now: datetime) -> None:
+    """Vaste boodschappen: read the purchase history after the menu and suggest.
+
+    Never breaks the round: any failure (also of AH itself) leaves no suggestions,
+    `staples_error` on the week and a log line. Staples already added stay listed.
+    """
+    today = now.date()
+    try:
+        periods = await ctx.client.bonus_periods()
+        period = _period_for(periods, start) or _period_for(periods, today)
+        if period is None:
+            raise AhApiError("geen bonusfolder gevonden voor deze week")
+        bonus = await ctx.client.previously_bought_bonus(period)
+        bought = await ctx.client.purchases(today - timedelta(days=staples.WINDOW_DAYS))
+        staples.merge(wlog, staples.suggest_staples(bought, bonus, plan.basket, today))
+        wlog.staples_error = None
+    except Exception as e:
+        msg = short_error(e)
+        log.warning("Vaste boodschappen niet opgehaald: %s", msg)
+        staples.merge(wlog, [])
+        wlog.staples_error = f"Vaste boodschappen niet op te halen ({msg})"
+    try:
+        ctx.ledger.save(wlog)
+    except Exception as e:
+        log.warning("Logboek %s niet bijgewerkt (%s)", wlog.week, type(e).__name__)
 
 
 async def update_total(ctx: Context, today: date) -> None:

@@ -69,6 +69,9 @@ class FakeAh:
         self.codes: list[str] = []
         self.active_writes = 0
         self.max_active_writes = 0
+        self.history: list = []  # Purchase list returned by purchases()
+        self.prev_bonus: list[Product] = []  # previously_bought_bonus()
+        self.history_for: list = []
 
     def _maybe_raise(self, name):
         self.calls.append(name)
@@ -83,6 +86,15 @@ class FakeAh:
         self._maybe_raise("bonus_offers")
         self.offers_for.append(period)
         return [prod(1), prod(2)]
+
+    async def purchases(self, since):
+        self._maybe_raise("purchases")
+        self.history_for.append(since)
+        return list(self.history)
+
+    async def previously_bought_bonus(self, period):
+        self._maybe_raise("previously_bought_bonus")
+        return list(self.prev_bonus)
 
     async def get_recipe(self, id, servings):
         self._maybe_raise("get_recipe")

@@ -10,7 +10,7 @@ from app.ahclient import ActiveOrder, AhApiError, AhClient, AhOrderMode, Product
 from app.ledger import Ledger, WeekLog
 from app.planner import Plan
 from app.tokens import Tokens, TokenStore
-from app.writer import apply
+from app.writer import apply, apply_extras
 
 W = date(2026, 11, 4)
 BASE = "https://api.ah.nl"
@@ -306,3 +306,52 @@ async def test_leftovers_come_from_log_with_quantities_and_limited_to_replaced(l
     log.added[9] = 2  # an older addition that is not part of the replaced menu
     res = await apply(ah, led, log, plan({1: 2}), replaced=old)
     assert res.leftovers == [("Product 1", 2), ("Product 2", 1)]
+
+
+# --- extras (vaste boodschappen): same write-ahead and settle rules --------------------
+
+
+async def test_apply_extras_writes_once_into_extras_added(led):
+    ah = FakeAh(order=ActiveOrder(3, {9: 1}))
+    log = WeekLog(W)
+    res = await apply_extras(ah, led, log, {9: 2})
+    assert res.target == "order" and res.added == {9: 2}
+    assert ah.order.items == {9: 3}  # 1 of Anto's own + 2: never lowered
+    saved = led.load(W)
+    assert saved.extras_added == {9: 2} and saved.added == {} and saved.pending == {}
+    res = await apply_extras(ah, led, saved, {9: 2})
+    assert res.added == {} and len(ah.calls) == 1
+
+
+async def test_apply_extras_crash_after_ah_applied_is_not_doubled(led):
+    ah = FakeAh(fail_on_call=0, fail_after=True)
+    with pytest.raises(AhApiError):
+        await apply_extras(ah, led, WeekLog(W), {9: 2})
+    assert led.load(W).pending == {
+        9: {"before": 0, "delta": 2, "target": "list", "order_id": None, "kind": "extra"}}
+    ah.fail_on_call = None
+    res = await apply_extras(ah, led, led.load(W), {9: 2})
+    assert len(ah.calls) == 1 and res.added == {}
+    saved = led.load(W)
+    assert saved.extras_added == {9: 2} and saved.added == {} and saved.pending == {}
+
+
+async def test_pending_extra_settled_by_menu_apply_goes_to_extras(led):
+    ah = FakeAh(fail_on_call=0, fail_after=True)
+    with pytest.raises(AhApiError):
+        await apply_extras(ah, led, WeekLog(W), {9: 2})
+    ah.fail_on_call = None
+    await apply(ah, led, led.load(W), plan({1: 1}))
+    saved = led.load(W)
+    assert saved.extras_added == {9: 2} and saved.added == {1: 1}
+
+
+async def test_extras_skip_unsure_and_unknown_products(led):
+    ah = FakeAh()
+    log = WeekLog(W, unknown={8: 1},
+                  pending={9: {"before": 0, "delta": 2, "target": "list", "order_id": None,
+                               "kind": "extra"}})
+    ah.listed = {9: 1}  # ambiguous: neither before nor before+delta
+    res = await apply_extras(ah, led, log, {8: 1, 9: 2})
+    assert ah.calls == [] and res.added == {}
+    assert [t for t, _ in res.pending] == ["9"] and [t for t, _ in res.unknown] == ["8"]

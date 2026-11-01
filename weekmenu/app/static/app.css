@@ -89,6 +89,14 @@ h2{font-size:22px;margin:4px 20px 8px;letter-spacing:-.3px;line-height:1.25}
 .row .b{margin-left:auto;font-size:11px;padding:4px 8px;flex:none}
 .row.home{color:#9a9388}
 .row.missing{color:#9a9388}
+.row.xtra .nm small{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;margin-top:4px}
+.row.xtra .pill.b{margin:0;font-size:10.5px;padding:3px 7px}
+.save-s{color:#2f6b3a;font-weight:600}
+.row.xtra .times{flex-basis:100%}
+.plus{width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:#22201c;color:#fff;position:relative}
+.plus svg{width:18px;height:18px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.plus.done{background:#e3f1e4;color:#2f6b3a}
+.plus.busy::after{width:16px;height:16px;margin:-8px 0 0 -8px}
 .pers{display:flex;align-items:center;gap:10px;font-size:14px;padding:12px 14px}
 .pers > svg{width:20px;height:20px;stroke:#5f5a52;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .stp{margin-left:auto;display:flex;align-items:center;gap:14px}

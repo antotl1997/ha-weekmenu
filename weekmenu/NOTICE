@@ -8,7 +8,9 @@ Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0).
 Derived from it: the Albert Heijn app API endpoints, request headers and
 login flow, and the GraphQL queries for bonus promotions, recipe search and
 recipes, as used in app/ahclient.py, plus the request shapes for the
-shopping list and the active order. The code in this add-on is a new
+shopping list and the active order, and the purchase history (order
+fulfillments, order details, till receipts and the previously-bought bonus
+section) used for the staples suggestions. The code in this add-on is a new
 Python implementation; no source files were copied verbatim.
 
 Albert Heijn, AH and Allerhande are trademarks of Koninklijke Ahold Delhaize

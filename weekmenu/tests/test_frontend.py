@@ -20,6 +20,7 @@ from app.main import PERIOD_WARNING
 from app.hass import HELPER_OUDERS, _save_total, helper_persons
 from app.ledger import WeekLog
 from app.planner import Dish, Line, Plan
+from app.staples import Staple
 from app.tokens import Tokens
 from app.web import STATIC_DIR, make_app
 from tests.fakes import W, make_ctx
@@ -31,12 +32,13 @@ CHROME_PATHS = [
 CHROME = next((p for p in CHROME_PATHS if Path(p).is_file()), None) or shutil.which("chrome")
 SCREENS = Path(__file__).parent / "screens"
 PHONE = (390, 844)
+PHONE_LONG = (390, 1420)  # the whole Week tab, down to "Ook in de bonus"
 
 # Chrome on Windows will not make a window narrower than 500 px, so a 390 px window
 # still lays the page out at 500 px. Screenshots of the phone screens therefore show
 # the app in a 390 x 844 frame; the DOM checks load the page itself.
 FRAME = """<!doctype html><html><head><meta charset="utf-8"><style>
-html,body{margin:0;background:#f4f1ec}iframe{display:block;width:390px;height:844px;border:0}
+html,body{margin:0;background:#f4f1ec}iframe{display:block;width:390px;height:{h}px;border:0}
 </style></head><body><iframe src="../{route}"></iframe></body></html>"""
 
 pytestmark = pytest.mark.skipif(CHROME is None, reason="geen Chrome op deze machine")
@@ -130,6 +132,17 @@ def fake_plan() -> Plan:
                 ["snufje nootmuskaat"], 0, pantry=["olie", "zout", "peper", "bloem", "azijn"])
 
 
+def fake_staples() -> list[Staple]:
+    boter = Product(21, "Lurpak Smeerbaar ongezouten", None, 2.95, 2.95, True,
+                    "2e Halve Prijs", True, "Zuivel, eieren")
+    chips = Product(22, "Lay's Naturel chips", None, 2.49, 2.49, True, "1 + 1 gratis",
+                    True, "Borrel, chips, snacks")
+    ranja = Product(23, "Karvan Cévitam aardbei siroop", None, 4.19, 2.99, True, "VOOR 2.99",
+                    True, "Frisdrank, sappen, water")
+    return [Staple(chips, 3, 1, 2, 2.49), Staple(boter, 4, 2, 2, 1.48),
+            Staple(ranja, 2, 1, 1, 1.20)]
+
+
 def build_ctx(tmp_path):
     ctx = make_ctx(tmp_path, now=NOW)
     ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
@@ -137,7 +150,8 @@ def build_ctx(tmp_path):
     ctx.hass.states[helper_persons()["zaterdag"]] = "4"
     plan = fake_plan()
     ctx.ledger.save(WeekLog(W, plan=plan.to_dict(), added=dict(plan.basket), target="order",
-                            savings=plan.savings, counted=True))
+                            savings=plan.savings, counted=True,
+                            staples=[s.to_dict() for s in fake_staples()]))
     history = [(date(2026, 10, 7), 9.10), (date(2026, 10, 14), 12.40),
                (date(2026, 10, 21), 11.05), (date(2026, 10, 28), 9.75)]
     for week, saved in history:
@@ -199,10 +213,10 @@ def render(base, route, tmp_path, name, size=PHONE) -> str:
     shot = SCREENS / f"{name}.png"
     shot.unlink(missing_ok=True)
     dom = chrome(base + route, tmp_path / f"profile-{name}-dom", size)
-    if size == PHONE:
+    if size[0] == PHONE[0]:
         frame = f"frame-{name}.html"
-        (tmp_path / "static" / frame).write_text(FRAME.replace("{route}", route),
-                                                 encoding="utf-8")
+        (tmp_path / "static" / frame).write_text(
+            FRAME.replace("{route}", route).replace("{h}", str(size[1])), encoding="utf-8")
         target = f"{base}static/{frame}"
     else:
         target = base + route
@@ -216,13 +230,19 @@ def test_app_screens_in_chrome(tmp_path):
     static = tmp_path / "static"
     shutil.copytree(STATIC_DIR, static)
     with Server(ctx, static) as base:
-        dom = render(base, "", tmp_path, "week")
+        dom = render(base, "", tmp_path, "week", size=PHONE_LONG)
         for title in TITLES:
             assert title.replace("'", "&#39;") in dom or title in dom, title
         assert "bij de ouders" in dom
         assert "€ 14,85" in dom
         assert "geschat" in dom
         assert "19 producten" in dom and "10 in de bonus" in dom
+        # Ook in de bonus: under the dishes, escaped, with a plus button each
+        assert dom.index("Ook in de bonus") > dom.index(TITLES[4])
+        assert "Naturel chips" in dom and "Lurpak Smeerbaar ongezouten" in dom
+        assert "€ 2,49 bespaard" in dom and "kocht je 3× in 2 mnd" in dom
+        assert "1 + 1 gratis" in dom and "2e Halve Prijs" in dom
+        assert dom.count('data-staple="') == 3 and "Toegevoegd" not in dom
 
         dom = render(base, "#gerecht/2026-11-04", tmp_path, "gerecht")
         assert TITLES[0] in dom
@@ -253,8 +273,19 @@ def test_app_screens_in_chrome(tmp_path):
         log.unknown = {7: 1}
         log.plan["budget_exhausted"] = True
         log.period_warning = PERIOD_WARNING
+        # history failed this week: only the staple already added stays, with the reason
+        added = fake_staples()[1]
+        added.product.title = "Lurpak <i>ongezouten</i>"  # titles are escaped
+        log.staples = [added.to_dict()]
+        log.extras_added = {21: 2}
+        log.extras_savings = 1.48
+        log.staples_error = "Vaste boodschappen niet op te halen (HTTP 500)"
         ctx.ledger.save(log)
         dom = render(base, "", tmp_path, "week-meldingen")
+        assert "Geen vaste boodschappen deze week" in dom and "HTTP 500" in dom
+        assert 'aria-label="Toegevoegd"' in dom and 'data-staple="' not in dom
+        assert "Lurpak &lt;i&gt;ongezouten&lt;/i&gt;" in dom and "<i>ongezouten" not in dom
+        assert "waarvan vaste boodschappen € 1,48" in dom and "€ 16,33" in dom
         assert "Over van het vorige gerecht" in dom and "1× AH Kipdijfilet" in dom
         assert "Onzeker of gelukt" in dom and "AH Gehaktballetjes" in dom
         assert "Status onbekend" in dom and "De Cecco Penne rigate" in dom

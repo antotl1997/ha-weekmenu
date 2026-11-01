@@ -18,7 +18,7 @@ const GEEN_OUDERAVOND = "Niet deze week";
 const BUSY_TEXT = "Er loopt al een ronde";
 
 const state = { status: null, week: null, weekParam: null, savings: null, settings: null,
-  dishes: {}, open: {}, polling: false };
+  staples: [], dishes: {}, open: {}, polling: false };
 
 // --- helpers ---------------------------------------------------------------------------
 
@@ -101,6 +101,8 @@ const ICON = {
   swap: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13l-3.5-3.5M20 15H7l3.5 3.5"/></svg>',
   undo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>',
   refresh: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
 };
 
 function photo(recipe, cls) {
@@ -191,6 +193,16 @@ function confirmSheet(text, sub, okLabel) {
 async function loadWeek() {
   const q = state.weekParam ? `api/week?week=${encodeURIComponent(state.weekParam)}` : "api/week";
   state.week = await api(q);
+  await loadStaples();
+}
+
+/* The staples of the week on screen; without them the week still shows. */
+async function loadStaples() {
+  try {
+    state.staples = await api(`api/staples?week=${encodeURIComponent(state.week.week)}`);
+  } catch (e) {
+    state.staples = [];
+  }
 }
 
 async function loadDish(day) {
@@ -280,6 +292,28 @@ function dayCard(d) {
     <div class="eur">${eur(d.savings)}</div></button>`;
 }
 
+// "Ook in de bonus": staples bought often, on offer this week. A tap adds one, once.
+function staplesHtml(w) {
+  const items = state.staples || [];
+  if (!items.length && !w.staples_error) return "";
+  let html = `<div class="sec">Ook in de bonus</div>`;
+  if (w.staples_error) {
+    html += `<div class="card note soft"><span class="dot"></span><div><b>Geen vaste boodschappen deze week</b>
+      <span class="muted">${esc(w.staples_error)}</span></div></div>`;
+  }
+  if (!items.length) return html;
+  const rows = items.map((s) => {
+    const pill = s.mechanism ? `<span class="pill green b">${esc(s.mechanism)}</span>` : "";
+    const btn = s.added
+      ? `<span class="plus done" role="img" aria-label="Toegevoegd">${ICON.check}</span>`
+      : `<button class="plus" data-staple="${esc(s.product_id)}" aria-label="${esc(s.product)} toevoegen">${ICON.plus}</button>`;
+    return `<div class="row xtra"><span class="q">${esc(s.qty)}×</span>
+      <span class="nm">${esc(s.product)}<small>${pill}<span class="save-s">${eur(s.savings)} bespaard</span><span class="times">kocht je ${esc(s.times)}× in 2 mnd</span></small></span>
+      ${btn}</div>`;
+  });
+  return html + `<div class="card ing">${rows.join("")}</div>`;
+}
+
 function weekScreen() {
   const w = state.week;
   const running = state.status && state.status.running;
@@ -299,11 +333,14 @@ function weekScreen() {
       Het menu wordt zondagochtend vanzelf gemaakt. Wil je niet wachten, tik dan op Nu maken.</div>
       <button class="btn pri full" data-run="nu_maken">Nu maken</button>`;
   } else {
+    const extras = Number(w.extras_savings) || 0;
     html += `<div class="save"><div><div class="lbl">Bonus bespaard deze week <em>· geschat</em></div>
-      <div class="big">${eur(w.savings)}</div></div>
+      <div class="big">${eur(w.savings + extras)}</div>
+      ${extras > 0 ? `<div class="lbl">waarvan vaste boodschappen ${eur(extras)}</div>` : ""}</div>
       <div class="right">${plural(w.products, "product", "producten")}<br>${w.bonus_products} in de bonus</div></div>`;
     html += notesHtml(w, false);
     html += w.days.map(dayCard).join("");
+    html += staplesHtml(w);
     html += notesHtml(w, true);
   }
   if (w.next_week) {
@@ -549,6 +586,23 @@ app.addEventListener("click", async (ev) => {
     return;
   }
   if (t.dataset.run) { startRound(t, t.dataset.run); return; }
+  if (t.dataset.staple && state.week) {
+    const where = state.week.target === "order" ? "in je bestelling" : "op je lijst";
+    await busy(t, async () => {
+      try {
+        state.staples = await api(`api/staples/${encodeURIComponent(t.dataset.staple)}?week=${encodeURIComponent(state.week.week)}`, {});
+        toast(`Toegevoegd, het staat ${where}`);
+      } catch (e) {
+        if (e.body && Array.isArray(e.body.items)) state.staples = e.body.items;
+        throw e;
+      } finally {
+        state.savings = null;
+        try { state.week = await api(state.weekParam ? `api/week?week=${encodeURIComponent(state.weekParam)}` : "api/week"); } catch (e2) { /* keep */ }
+        render();
+      }
+    });
+    return;
+  }
 
   if ("login" in t.dataset) {
     const field = document.getElementById("code");

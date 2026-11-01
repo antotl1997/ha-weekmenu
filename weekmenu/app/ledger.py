@@ -29,7 +29,12 @@ class WeekLog:
     previous_dish: dict[str, dict] = field(default_factory=dict)
     extras_added: dict[int, int] = field(default_factory=dict)
     extras_savings: float = 0.0
+    # Vaste boodschappen in de bonus: suggestions (staples.Staple.to_dict) and why they are
+    # missing, when the purchase history could not be read
+    staples: list[dict] = field(default_factory=list)
+    staples_error: str | None = None
     # Write-ahead record of a write in flight: pid -> {"before", "delta", "target", "order_id"}
+    # plus "kind": "extra" for a staple (it settles into extras_added instead of added)
     pending: dict[int, dict] = field(default_factory=dict)
     # pid -> delta of writes whose outcome can never be known (their order is gone): never written again
     unknown: dict[int, int] = field(default_factory=dict)
@@ -49,6 +54,8 @@ class WeekLog:
             "previous_dish": {k: dict(v) for k, v in self.previous_dish.items()},
             "extras_added": {str(k): v for k, v in self.extras_added.items()},
             "extras_savings": self.extras_savings,
+            "staples": [dict(x) for x in self.staples],
+            "staples_error": self.staples_error,
             "pending": {str(k): dict(v) for k, v in self.pending.items()},
             "unknown": {str(k): v for k, v in self.unknown.items()},
             "period_warning": self.period_warning,
@@ -68,6 +75,8 @@ class WeekLog:
             previous_dish={k: dict(v) for k, v in (d.get("previous_dish") or {}).items()},
             extras_added={int(k): int(v) for k, v in (d.get("extras_added") or {}).items()},
             extras_savings=float(d.get("extras_savings") or 0.0),
+            staples=[dict(x) for x in d.get("staples") or []],
+            staples_error=d.get("staples_error"),
             pending={int(k): dict(v) for k, v in (d.get("pending") or {}).items()},
             unknown={int(k): int(v) for k, v in (d.get("unknown") or {}).items()},
             period_warning=d.get("period_warning"),

@@ -82,3 +82,14 @@ def test_leftovers_after_fewer_persons():
     log = WeekLog(W, added={1: 4, 2: 1, 3: 2})
     assert leftovers(log, plan({1: 2, 2: 1, 3: 3})) == {1: 2}
     assert leftovers(log, plan({})) == {1: 4, 2: 1, 3: 2}
+
+
+def test_staples_fields_roundtrip_and_default(tmp_path):
+    led = Ledger(tmp_path)
+    log = WeekLog(W, staples=[{"product": {"id": 1}, "times": 2}], staples_error="HTTP 500")
+    led.save(log)
+    assert led.load(W) == log
+    (tmp_path / "2026-11-04.json").write_text(json.dumps({"week": "2026-11-04"}),
+                                              encoding="utf-8")
+    old = led.load(W)
+    assert old.staples == [] and old.staples_error is None

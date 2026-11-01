@@ -83,7 +83,9 @@ async def test_nu_maken_reuses_existing_plan(tmp_path, monkeypatch):
     ctx.ledger.save(WeekLog(W, plan=plan_a().to_dict(), added={1: 1}))
     out = await run_round(ctx, SUNDAY, "nu_maken")
     assert out.status == "done"
-    assert "bonus_periods" not in ctx.client.calls
+    # the menu does not read the folder again; only the staples step after it does
+    assert "bonus_offers" not in ctx.client.calls
+    assert ctx.client.calls == ["bonus_periods", "previously_bought_bonus", "purchases"]
     assert ctx.client.held() == {2: 2, 3: 1}  # only what the log does not have yet
 
 

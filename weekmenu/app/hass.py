@@ -231,8 +231,10 @@ def _plural(n: int, one: str, many: str) -> str:
 
 
 def format_message(
-    plan: Plan, result: WriteResult, ouders: str, period_warning: str | None
+    plan: Plan, result: WriteResult, ouders: str, period_warning: str | None,
+    staples: int = 0,
 ) -> tuple[str, str]:
+    """The Sunday message. `staples`: suggestions in the app not added yet."""
     title = f"Weekmenu klaar · {format_eur(plan.savings)} bespaard"
     lines: list[str] = []
     if period_warning:
@@ -245,6 +247,9 @@ def format_message(
         lines.append(f"{_ABBR.get(ouders, ouders)} bij de ouders")
     lines.append("Alles staat in je bestelling" if result.target == "order"
                  else "Alles staat op Mijn lijst")
+    if staples > 0:
+        lines.append(f"Ook {_plural(staples, 'vaste boodschap', 'vaste boodschappen')} "
+                     "in de bonus, kies in de app")
     if plan.not_found:
         lines.append("Niet gevonden: " + ", ".join(plan.not_found))
     if result.leftovers:
