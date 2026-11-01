@@ -103,6 +103,8 @@ def test_parse_ingredient_empty_name_stays_empty():
     "zwarte peper", "basterdsuiker", "rietsuiker", "wittewijnazijn", "rijstazijn", "bloem",
     "Olijfolie", "peper", "witte peper", "versgemalen zwarte peper", "gemalen peper",
     "versgemalen peper", "peper en zout", "cayennepeper", "citroenpeper", "peper uit de molen",
+    "peper naar smaak", "versgemalen peper naar smaak", "peper, snufje", "zout en peper naar smaak",
+    "beetje peper", "een snufje peper", "peper, naar smaak",
     "olie voor het bakken", "olijfolie om in te bakken", "zout (naar smaak)",
 ])
 def test_pantry_matches(name):
@@ -114,7 +116,7 @@ def test_pantry_matches(name):
     "suikerbonen", "rode peper", "kruimige aardappel",
     "chilipeper", "rode chilipeper", "groene chilipeper", "jalapeñopeper", "jalapeño peper",
     "madame jeanette (peper)", "habaneropeper", "gele peper", "Spaanse peper",
-    "tonijn in olie", "ansjovis in olie", "zongedroogde tomaten in olie",
+    "rode peper, in ringetjes", "chilipeper naar smaak", "tonijn in olie", "ansjovis in olie", "zongedroogde tomaten in olie",
     "zilveruitjes in azijn", "augurken in azijn", "kaas met peper",
 ])
 def test_pantry_does_not_match(name):
@@ -375,14 +377,10 @@ async def test_choose_on_recorded_fixtures_ui_is_an_onion():
     assert "ui" in got.title.lower()
 
 
-async def test_choose_on_recorded_fixtures_peer_is_not_a_drink_or_baby_food():
-    # AH search for "peer" is mostly juice and baby food; the guard must skip those
+async def test_choose_on_recorded_fixtures_peer_is_a_stewed_pear():
+    # AH search for "peer" is mostly juice and baby food; the guard skips those
     got = await choose_product(FixtureClient(), Amount(0.5, "stuks", "peer"), [])
-    assert got is None or (
-        "peer" in got.title.lower()
-        and got.category not in ("Frisdrank, sappen, water", "Baby en kind")
-        and "siroop" not in got.title.lower()
-    )
+    assert got is not None and got.title == "AH Zoete stoofpeertjes"
 
 
 async def test_choose_skips_drinks_snacks_and_baby_food():
@@ -407,3 +405,22 @@ async def test_choose_marker_allowed_when_recipe_asks_for_it():
     client = FakeClient({"appelsap": [prod(1, "AH Appelsap")]})
     got = await choose_product(client, Amount(200, "ml", "appelsap"), [])
     assert got.id == 1
+
+
+@pytest.mark.parametrize("name,title", [
+    ("kruidenmix voor hachee", "Verstegen Kruidenmix Hachee"),
+    ("hachee kruiden", "Verstegen Kruidenmix Hachee"),
+    ("hacheekruiden", "Verstegen Hachee kruiden"),
+])
+async def test_choose_accepts_hachee_spice_mix(name, title):
+    client = FakeClient({name: [prod(1, title)]})
+    got = await choose_product(client, Amount(1, "pak", name), [])
+    assert got is not None and got.id == 1
+
+
+@pytest.mark.parametrize("name", ["ginger beer", "gingerbeer"])
+async def test_choose_accepts_ginger_beer_when_asked(name):
+    p = Product(**{**prod(1, "Fentimans Ginger beer").__dict__, "category": "Frisdrank, sappen, water"})
+    client = FakeClient({name: [p]})
+    got = await choose_product(client, Amount(1, "stuks", name), [])
+    assert got is not None and got.id == 1

@@ -78,6 +78,8 @@ PEPPER_SPICE_COMPOUNDS = frozenset({"cayennepeper", "citroenpeper"})
 PEPPER_SPICE_MODIFIERS = frozenset({
     "zwarte", "witte", "versgemalen", "gemalen", "grof", "grove", "fijne", "vers",
     "en", "zout", "de", "molen",
+    # filler: "peper naar smaak", "een snufje peper", "beetje peper"
+    "naar", "smaak", "snufje", "snuf", "beetje", "wat", "een", "het",
 })
 
 # "tonijn in olie": only the part before in/op/met/voor/uit names the ingredient.
@@ -105,7 +107,8 @@ def is_pantry(name: str, pantry: list[str]) -> bool:
     'in/op/met/voor/uit' counts ('tonijn in olie' is tuna), so 'olie voor het bakken'
     is pantry. 'peper' is pantry only as the spice. Plain (tap) water counts as pantry.
     """
-    head = _CUT.sub("", " ".join(_words(re.sub(r"\([^)]*\)", " ", name or ""))))
+    first = (name or "").split(",")[0]  # drop a trailing ", snufje" clause
+    head = _CUT.sub("", " ".join(_words(re.sub(r"\([^)]*\)", " ", first))))
     ws = head.split()
     if ws and set(ws) <= TAP_WATER_WORDS and ("water" in ws or "kraanwater" in ws):
         return True
@@ -282,25 +285,33 @@ class _Title:
 
 
 # Products that are not the plain ingredient: drinks, sweets, ready meals. Whole title words
-# and (folded, substring) category names, each with the keyword endings that make the
+# and (folded, substring) category names, each with the keyword parts that make the
 # product plausible after all (a recipe that asks for appelsap or cola).
 IMPLAUSIBLE_TITLE_WORDS = frozenset({
     "drank", "sap", "siroop", "ijs", "chips", "snoep", "limonade", "smoothie", "knijpfruit",
-    "hachee",
 })
+# Ready meals named after a dish ("Hachee stoofpeer"), fine when the title is a seasoning
+# for that dish ("Kruidenmix Hachee").
+READY_MEAL_TITLE_WORDS = frozenset({"hachee", "stoofpot"})
+SEASONING_TITLE_PREFIXES = ("kruid", "mix", "specerij", "saus")
 IMPLAUSIBLE_CATEGORIES = {
-    "frisdrank": ("sap", "water", "drank", "limonade", "cola", "tonic", "bier"),
+    "frisdrank": ("sap", "water", "drank", "limonade", "cola", "tonic", "bier", "beer"),
     "baby en kind": ("baby",),
 }
 
 
 def _plausible(p: Product, t: "_Title", kws: list[str]) -> bool:
     for m in IMPLAUSIBLE_TITLE_WORDS:
-        if m in t.words and not any(k.endswith(m) for k in kws):
+        if m in t.words and not any(m in k for k in kws):
             return False
+    if any(m in t.words for m in READY_MEAL_TITLE_WORDS) and not (
+        any(w.startswith(SEASONING_TITLE_PREFIXES) for w in t.words)
+        or any(m in k for k in kws for m in READY_MEAL_TITLE_WORDS)
+    ):
+        return False
     cat = _fold(p.category or "")
     for c, exempt in IMPLAUSIBLE_CATEGORIES.items():
-        if c in cat and not any(k.endswith(e) for k in kws for e in exempt):
+        if c in cat and not any(e in k for k in kws for e in exempt):
             return False
     return True
 
