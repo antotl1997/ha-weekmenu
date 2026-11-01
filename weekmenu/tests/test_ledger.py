@@ -27,7 +27,8 @@ def test_ledger_roundtrip_and_atomic(tmp_path):
     log = WeekLog(W, plan={"dishes": []}, added={5: 2}, target="list", savings=3.5,
                   counted=True, swapped_out={"2026-11-05": [1, 2]}, previous={"2026-11-05": 9},
                   extras_added={7: 1}, extras_savings=0.5,
-                  pending={3: {"before": 1, "delta": 2, "target": "order", "order_id": 8}})
+                  pending={3: {"before": 1, "delta": 2, "target": "order", "order_id": 8}},
+                  unknown={4: 1})
     led.save(log)
     assert (tmp_path / "weeks" / "2026-11-04.json").exists()
     assert not list((tmp_path / "weeks").glob("*.tmp"))
@@ -55,7 +56,7 @@ def test_load_older_file_without_extras_fields(tmp_path):
     }), encoding="utf-8")
     log = Ledger(tmp_path).load(W)
     assert log.added == {5: 1} and log.extras_added == {} and log.extras_savings == 0.0
-    assert log.pending == {}
+    assert log.pending == {} and log.unknown == {}
 
 
 def test_recent_recipe_ids_last_four_weeks(tmp_path):

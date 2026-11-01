@@ -29,6 +29,8 @@ class WeekLog:
     extras_savings: float = 0.0
     # Write-ahead record of a write in flight: pid -> {"before", "delta", "target", "order_id"}
     pending: dict[int, dict] = field(default_factory=dict)
+    # pid -> delta of writes whose outcome can never be known (their order is gone): never written again
+    unknown: dict[int, int] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return {
@@ -43,6 +45,7 @@ class WeekLog:
             "extras_added": {str(k): v for k, v in self.extras_added.items()},
             "extras_savings": self.extras_savings,
             "pending": {str(k): dict(v) for k, v in self.pending.items()},
+            "unknown": {str(k): v for k, v in self.unknown.items()},
         }
 
     @classmethod
@@ -59,6 +62,7 @@ class WeekLog:
             extras_added={int(k): int(v) for k, v in (d.get("extras_added") or {}).items()},
             extras_savings=float(d.get("extras_savings") or 0.0),
             pending={int(k): dict(v) for k, v in (d.get("pending") or {}).items()},
+            unknown={int(k): int(v) for k, v in (d.get("unknown") or {}).items()},
         )
 
 

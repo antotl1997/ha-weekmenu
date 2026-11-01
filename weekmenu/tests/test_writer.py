@@ -242,27 +242,32 @@ async def test_ledger_save_fails_after_successful_call_not_doubled(tmp_path):
     assert fl.load(W).added == {1: 2} and fl.load(W).pending == {}
 
 
-async def test_pending_with_order_gone_is_skipped_not_written(led):
-    entry = {"before": 0, "delta": 2, "target": "order", "order_id": 5}
-    log = WeekLog(W, pending={1: dict(entry)})
+async def test_pending_with_order_gone_moves_to_unknown_and_is_never_written(led):
+    log = WeekLog(W, pending={1: {"before": 0, "delta": 2, "target": "order", "order_id": 5}})
     ah = FakeAh()  # no active order any more
     res = await apply(ah, led, log, plan({1: 2, 2: 1}))
     assert ah.calls == [("list", {2: 1})] and res.added == {2: 1}
-    assert led.load(W).pending == {1: entry}
+    saved = led.load(W)
+    assert saved.pending == {} and saved.unknown == {1: 2}
+    assert res.unknown == [("Product 1", 2)] and res.pending == []
+    ah.calls.clear()
+    res2 = await apply(ah, led, led.load(W), plan({1: 2, 2: 1}))
+    assert ah.calls == [] and res2.unknown == [("Product 1", 2)]  # cumulative for the week
 
 
-async def test_pending_with_other_order_id_is_skipped(led):
+async def test_pending_with_other_order_id_moves_to_unknown(led):
     log = WeekLog(W, pending={1: {"before": 0, "delta": 2, "target": "order", "order_id": 5}})
     ah = FakeAh(order=ActiveOrder(6, {}))
-    await apply(ah, led, log, plan({1: 2}))
-    assert ah.calls == [] and 1 in led.load(W).pending
+    res = await apply(ah, led, log, plan({1: 2}))
+    assert ah.calls == [] and led.load(W).unknown == {1: 2} and res.unknown == [("Product 1", 2)]
 
 
 async def test_pending_ambiguous_quantity_is_kept_and_skipped(led):
     log = WeekLog(W, pending={1: {"before": 1, "delta": 3, "target": "list", "order_id": None}})
     ah = FakeAh(listed={1: 2})  # between before and before+delta
-    await apply(ah, led, log, plan({1: 3}))
+    res = await apply(ah, led, log, plan({1: 3}))
     assert ah.calls == [] and 1 in led.load(W).pending
+    assert res.pending == [("Product 1", 3)] and res.unknown == []
 
 
 async def test_pending_read_failure_keeps_entry(led):

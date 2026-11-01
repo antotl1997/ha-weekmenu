@@ -13,13 +13,17 @@ and the log is saved. On success the entry moves to `log.added`. If the call
 fails or we crash, the entry stays. At the start of the next `apply` every
 pending entry is settled with one read on its own target: current >=
 before+delta means AH did apply it (count it as added); current <= before
-means it did not (drop the entry); anything else, a failing read, or an order
-that is gone or has another id keeps the entry, and that product is not
-written this round (never write blind).
+means it did not (drop the entry); an ambiguous quantity or a failing read
+keeps the entry, and that product is not written this round (never write
+blind). An entry whose order is gone or has another id can never be resolved:
+it moves to `log.unknown` (pid -> delta), is reported and never written again
+that week.
 
-Deliberate gap: if the user removes the product again in the seconds between
-a crash and the next round, the entry looks "not applied" and is written once
-more.
+Deliberate gap: the gap lasts until the next `apply`. If AH did not apply a
+write, or the user removes the product again before the next round, the entry
+looks "not applied" and the product is written once more. Example: a list
+write crashed after AH applied it, the user deletes the item from the list
+before the next round, current <= before, so it is written once more.
 """
 from dataclasses import dataclass, field
 from typing import Literal
@@ -33,6 +37,8 @@ class WriteResult:
     target: Literal["order", "list"]
     added: dict[int, int] = field(default_factory=dict)
     leftovers: list[tuple[str, int]] = field(default_factory=list)  # (product title, quantity)
+    pending: list[tuple[str, int]] = field(default_factory=list)  # outcome still unsure
+    unknown: list[tuple[str, int]] = field(default_factory=list)  # status unknown, check in the AH app
 
 
 def _title(plan: Plan, replaced: Plan | None, pid: int) -> str:
@@ -53,13 +59,15 @@ async def _settle(client, ledger: Ledger, log: WeekLog) -> None:
     if not log.pending:
         return
     reads: dict[str, object] = {}  # one read per target; None = unusable
+    gone = object()
 
-    async def current_of(entry: dict, pid: int) -> int | None:
+    async def current_of(entry: dict, pid: int):
         tgt = entry.get("target")
         if tgt not in reads:
             try:
                 if tgt == "order":
-                    reads[tgt] = await client.active_order()
+                    order = await client.active_order()
+                    reads[tgt] = order if order is not None else False
                 elif tgt == "list":
                     reads[tgt] = await client.shopping_list()
                 else:
@@ -70,14 +78,18 @@ async def _settle(client, ledger: Ledger, log: WeekLog) -> None:
         if data is None:
             return None
         if tgt == "order":
-            if data.id != entry.get("order_id"):
-                return None
+            if data is False or data.id != entry.get("order_id"):
+                return gone
             return data.items.get(pid, 0)
         return data.get(pid, 0)
 
     for pid, entry in list(log.pending.items()):
         cur = await current_of(entry, pid)
         if cur is None:
+            continue
+        if cur is gone:
+            log.unknown[pid] = int(entry["delta"])
+            del log.pending[pid]
             continue
         before, delta = int(entry["before"]), int(entry["delta"])
         if cur >= before + delta:
@@ -95,7 +107,7 @@ async def apply(
     delta = {
         p: n - log.added.get(p, 0)
         for p, n in plan.basket.items()
-        if n - log.added.get(p, 0) > 0 and p not in log.pending
+        if n - log.added.get(p, 0) > 0 and p not in log.pending and p not in log.unknown
     }
     order = await client.active_order()
     target: Literal["order", "list"] = "order" if order is not None else "list"
@@ -134,4 +146,6 @@ async def apply(
     if replaced is not None:
         left = {p: n for p, n in left.items() if p in replaced.basket}
     result.leftovers = [(_title(plan, replaced, p), n) for p, n in left.items()]
+    result.pending = [(_title(plan, replaced, p), int(e["delta"])) for p, e in log.pending.items()]
+    result.unknown = [(_title(plan, replaced, p), n) for p, n in log.unknown.items()]
     return result
