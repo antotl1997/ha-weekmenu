@@ -4,6 +4,9 @@ from datetime import date, datetime, timedelta
 
 WEEKDAGEN = ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"]
 
+MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus",
+           "september", "oktober", "november", "december"]
+
 GEEN_OUDERAVOND = "Niet deze week"
 
 _ZONDAG = 6  # date.weekday(): maandag=0 ... zondag=6
@@ -47,3 +50,13 @@ def evenings(start: date, aantal: int, ouders: str) -> list[date]:
 def is_weekend(d: date) -> bool:
     """Vrijdag, zaterdag of zondag: geen tijdgrens voor de kooktijd."""
     return d.weekday() >= 4
+
+
+def lange_datum(d: date) -> str:
+    """"woensdag 11 november": weekdag en maand uitgeschreven, zonder jaar."""
+    return f"{WEEKDAGEN[d.weekday()]} {d.day} {MAANDEN[d.month - 1]}"
+
+
+def bestelling_zin(start: date) -> str:
+    """De regel boven het menu, in de app, de melding en op sensor.weekmenu."""
+    return f"Voor de bestelling van {lange_datum(start)}"

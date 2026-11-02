@@ -2,7 +2,14 @@ from datetime import date, datetime
 
 import pytest
 
-from app.week import WEEKDAGEN, evenings, is_weekend, menu_week_start
+from app.week import (
+    WEEKDAGEN,
+    bestelling_zin,
+    evenings,
+    is_weekend,
+    lange_datum,
+    menu_week_start,
+)
 
 
 def dt(y, m, d, h=12, mi=0):
@@ -76,3 +83,13 @@ def test_is_weekend():
     assert is_weekend(date(2026, 11, 8))   # zondag
     assert not is_weekend(date(2026, 11, 4))  # woensdag
     assert not is_weekend(date(2026, 11, 5))  # donderdag
+
+
+def test_lange_datum_writes_weekday_and_month_in_dutch():
+    assert lange_datum(date(2026, 11, 11)) == "woensdag 11 november"
+    assert lange_datum(date(2026, 11, 6)) == "vrijdag 6 november"
+    assert lange_datum(date(2027, 3, 1)) == "maandag 1 maart"
+
+
+def test_bestelling_zin_names_the_delivery_wednesday():
+    assert bestelling_zin(date(2026, 11, 11)) == "Voor de bestelling van woensdag 11 november"

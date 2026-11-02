@@ -113,6 +113,7 @@ async def test_publish_sets_both_sensors(respx_mock):
     assert a["attributes"]["doel"] == "lijst"
     assert a["attributes"]["niet_gevonden"] == ["nootmuskaat"]
     assert a["attributes"]["ouders"] == "vrijdag"
+    assert a["attributes"]["bestelling"] == "Voor de bestelling van woensdag 4 november"
     d = a["attributes"]["dishes"][0]
     assert d["datum"] == "2026-11-04" and d["dag"] == "woensdag" and d["titel"] == "Pasta pesto"
     assert d["kooktijd"] == 20 and d["keuken"] == "pasta" and d["personen"] == 2
@@ -190,3 +191,11 @@ def test_message_extra_lines():
     _, one = format_message(_plan(short_by=1), WriteResult("order"), "Niet deze week", None)
     assert "Te weinig recepten voor 1 avond" in one
     assert "1 avonden" not in one
+
+
+def test_message_opens_with_the_order_sentence():
+    _, text = format_message(_plan(), WriteResult("order"), "Niet deze week", "Let op",
+                             start=date(2026, 11, 11))
+    lines = text.splitlines()
+    assert lines[0] == "Voor de bestelling van woensdag 11 november"
+    assert lines[1] == "Let op"

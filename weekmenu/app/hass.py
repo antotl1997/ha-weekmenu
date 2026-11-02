@@ -10,7 +10,7 @@ import httpx
 
 from app.durable import fsync_dir
 from app.planner import Plan
-from app.week import GEEN_OUDERAVOND, WEEKDAGEN
+from app.week import GEEN_OUDERAVOND, WEEKDAGEN, bestelling_zin
 from app.writer import WriteResult
 
 BASE_URL = "http://supervisor/core/api"
@@ -135,6 +135,7 @@ def plan_view(plan: Plan, week_start: date, target: str, ouders: str) -> dict:
         })
     return {
         "week": week_start.isoformat(),
+        "bestelling": bestelling_zin(week_start),
         "doel": "bestelling" if target == "order" else "lijst",
         "niet_gevonden": list(plan.not_found),
         "ouders": ouders,
@@ -194,6 +195,7 @@ class Hass:
             "attributes": {
                 "friendly_name": "Weekmenu",
                 "week": plan_view["week"],
+                "bestelling": plan_view["bestelling"],
                 "doel": plan_view["doel"],
                 "niet_gevonden": plan_view["niet_gevonden"],
                 "ouders": plan_view["ouders"],
@@ -249,11 +251,14 @@ def _plural(n: int, one: str, many: str) -> str:
 
 def format_message(
     plan: Plan, result: WriteResult, ouders: str, period_warning: str | None,
-    staples: int = 0,
+    staples: int = 0, start: date | None = None,
 ) -> tuple[str, str]:
-    """The Sunday message. `staples`: suggestions in the app not added yet."""
+    """The message when the menu is made. `staples`: suggestions in the app not added
+    yet; `start`: the menu Wednesday, named in the first line."""
     title = f"Weekmenu klaar · {format_eur(plan.savings)} bespaard"
     lines: list[str] = []
+    if start is not None:
+        lines.append(bestelling_zin(start))
     if period_warning:
         lines.append(period_warning)
     for d in plan.dishes:

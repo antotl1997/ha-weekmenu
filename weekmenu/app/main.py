@@ -279,7 +279,8 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     else:
         # no count when the history failed or took too long (staples_error is set then)
         title, body = format_message(plan, result, raw.ouders, warning,
-                                     staples=staples.open_count(wlog, plan.basket))
+                                     staples=staples.open_count(wlog, plan.basket),
+                                     start=start)
         await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding")
     return RoundOutcome("done", start, warning=warning, plan=plan, result=result)
 
