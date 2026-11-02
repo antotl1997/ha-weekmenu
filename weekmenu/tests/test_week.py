@@ -4,6 +4,7 @@ import pytest
 
 from app.week import (
     WEEKDAGEN,
+    away_dates,
     bestelling_zin,
     evenings,
     is_weekend,
@@ -93,3 +94,34 @@ def test_lange_datum_writes_weekday_and_month_in_dutch():
 
 def test_bestelling_zin_names_the_delivery_wednesday():
     assert bestelling_zin(date(2026, 11, 11)) == "Voor de bestelling van woensdag 11 november"
+
+
+WO = date(2026, 11, 4)
+
+
+def test_zero_persons_on_friday_shifts_like_the_parents():
+    days = evenings(WO, 5, "Niet deze week", {"vrijdag"})
+    assert [WEEKDAGEN[d.weekday()] for d in days] == [
+        "woensdag", "donderdag", "zaterdag", "zondag", "maandag"]
+
+
+def test_zero_on_friday_and_parents_on_saturday():
+    days = evenings(WO, 5, "zaterdag", {"vrijdag"})
+    assert [WEEKDAGEN[d.weekday()] for d in days] == [
+        "woensdag", "donderdag", "zondag", "maandag", "dinsdag"]
+
+
+def test_zero_persons_never_goes_past_tuesday():
+    days = evenings(WO, 7, "Niet deze week", {"vrijdag", "zaterdag"})
+    assert days[-1] == date(2026, 11, 10)
+    assert len(days) == 5
+
+
+def test_zero_on_every_day_gives_no_evenings():
+    assert evenings(WO, 5, "Niet deze week", set(WEEKDAGEN)) == []
+    assert evenings(WO, 5, "vrijdag", set(WEEKDAGEN) - {"vrijdag"}) == []
+
+
+def test_away_dates_lists_the_week_in_order():
+    assert away_dates(WO, {"maandag", "vrijdag", "fundag"}) == [date(2026, 11, 6), date(2026, 11, 9)]
+    assert away_dates(WO, set()) == []

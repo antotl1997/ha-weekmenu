@@ -3,6 +3,7 @@
 import json
 import os
 from dataclasses import dataclass, field
+from collections.abc import Iterable
 from datetime import date
 from pathlib import Path
 
@@ -47,6 +48,11 @@ class RawSettings:
     ouders: str
     persons: dict[str, int]
     defaulted: list[str] = field(default_factory=list)
+
+    @property
+    def away(self) -> set[str]:
+        """Weekdays with 0 persons: not at home, no dinner."""
+        return {dag for dag, n in self.persons.items() if n == 0}
 
 
 def format_eur(x: float) -> str:
@@ -116,8 +122,10 @@ def _save_total(path: Path, total: float,
     fsync_dir(path.parent)
 
 
-def plan_view(plan: Plan, week_start: date, target: str, ouders: str) -> dict:
-    """Attributes for sensor.weekmenu. `target` is "order" or "list"."""
+def plan_view(plan: Plan, week_start: date, target: str, ouders: str,
+              away: Iterable[date] = ()) -> dict:
+    """Attributes for sensor.weekmenu. `target` is "order" or "list"; `away`: the
+    evenings with 0 persons, without food."""
     dishes = []
     for d in plan.dishes:
         dishes.append({
@@ -139,6 +147,7 @@ def plan_view(plan: Plan, week_start: date, target: str, ouders: str) -> dict:
         "doel": "bestelling" if target == "order" else "lijst",
         "niet_gevonden": list(plan.not_found),
         "ouders": ouders,
+        "niet_thuis": [d.isoformat() for d in sorted(away)],
         "dishes": dishes,
     }
 
@@ -199,6 +208,7 @@ class Hass:
                 "doel": plan_view["doel"],
                 "niet_gevonden": plan_view["niet_gevonden"],
                 "ouders": plan_view["ouders"],
+                "niet_thuis": plan_view.get("niet_thuis", []),
                 "dishes": plan_view["dishes"],
             },
         })
@@ -251,10 +261,11 @@ def _plural(n: int, one: str, many: str) -> str:
 
 def format_message(
     plan: Plan, result: WriteResult, ouders: str, period_warning: str | None,
-    staples: int = 0, start: date | None = None,
+    staples: int = 0, start: date | None = None, away: Iterable[date] = (),
 ) -> tuple[str, str]:
     """The message when the menu is made. `staples`: suggestions in the app not added
-    yet; `start`: the menu Wednesday, named in the first line."""
+    yet; `start`: the menu Wednesday, named in the first line; `away`: evenings
+    with 0 persons."""
     title = f"Weekmenu klaar · {format_eur(plan.savings)} bespaard"
     lines: list[str] = []
     if start is not None:
@@ -267,6 +278,8 @@ def format_message(
         lines.append("deze week niet bij de ouders")
     else:
         lines.append(f"{_ABBR.get(ouders, ouders)} bij de ouders")
+    for d in sorted(away):
+        lines.append(f"{_ABBR[WEEKDAGEN[d.weekday()]]} niet thuis")
     lines.append("Alles staat in je bestelling" if result.target == "order"
                  else "Alles staat op Mijn lijst")
     if staples > 0:

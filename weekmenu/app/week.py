@@ -1,5 +1,6 @@
 """Menuweek en kookavonden. Pure logica, geen I/O."""
 
+from collections.abc import Iterable
 from datetime import date, datetime, timedelta
 
 WEEKDAGEN = ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"]
@@ -25,12 +26,15 @@ def menu_week_start(now: datetime) -> date:
     return zondag + timedelta(days=_WOENSDAG_NA_ZONDAG)
 
 
-def evenings(start: date, aantal: int, ouders: str) -> list[date]:
+def evenings(start: date, aantal: int, ouders: str, away: Iterable[str] = ()) -> list[date]:
     """Kookavonden vanaf `start`, woensdag t/m dinsdag (start + 6).
 
-    De ouderavond (een weekdag, of GEEN_OUDERAVOND) wordt overgeslagen.
-    Geeft minder dagen terug als de week er niet genoeg heeft.
+    De ouderavond (een weekdag, of GEEN_OUDERAVOND) en de weekdagen in `away`
+    (0 personen, niet thuis) worden overgeslagen; de volgende dag schuift op.
+    Geeft minder dagen terug als de week er niet genoeg heeft, en geen enkele
+    als elke dag wegvalt.
     """
+    away = set(away)
     if ouders != GEEN_OUDERAVOND and ouders not in WEEKDAGEN:
         raise ValueError(f"onbekende ouderavond: {ouders!r}")
     if not 1 <= aantal <= 7:
@@ -41,10 +45,18 @@ def evenings(start: date, aantal: int, ouders: str) -> list[date]:
         if len(result) == aantal:
             break
         day = start + timedelta(days=offset)
-        if ouders != GEEN_OUDERAVOND and WEEKDAGEN[day.weekday()] == ouders:
+        dag = WEEKDAGEN[day.weekday()]
+        if dag == ouders or dag in away:
             continue
         result.append(day)
     return result
+
+
+def away_dates(start: date, away: Iterable[str]) -> list[date]:
+    """The days of the menu week (start t/m start + 6) whose weekday is in `away`."""
+    away = set(away)
+    days = (start + timedelta(days=i) for i in range(7))
+    return [d for d in days if WEEKDAGEN[d.weekday()] in away]
 
 
 def is_weekend(d: date) -> bool:

@@ -199,3 +199,38 @@ def test_message_opens_with_the_order_sentence():
     lines = text.splitlines()
     assert lines[0] == "Voor de bestelling van woensdag 11 november"
     assert lines[1] == "Let op"
+
+
+async def test_read_settings_zero_persons_stays_zero(respx_mock):
+    persons = helper_persons()
+    eid = persons["vrijdag"]
+    respx_mock.get(f"{BASE_URL}/states/{eid}").respond(json=_state(eid, "0.0"))
+    respx_mock.route(method="GET").respond(404, json={"message": "not found"})
+    async with httpx.AsyncClient() as http:
+        raw = await Hass(http).read_settings()
+    assert raw.persons["vrijdag"] == 0 and raw.persons["maandag"] == 2
+    assert eid not in raw.defaulted
+    assert raw.away == {"vrijdag"}
+
+
+async def test_set_setting_accepts_zero_persons(respx_mock):
+    route = respx_mock.post(f"{BASE_URL}/services/input_number/set_value").respond(200, json={})
+    eid = helper_persons()["vrijdag"]
+    async with httpx.AsyncClient() as http:
+        await Hass(http).set_setting(eid, 0)
+    assert json.loads(route.calls[0].request.content) == {"entity_id": eid, "value": 0}
+
+
+def test_message_names_the_days_not_at_home():
+    away = [date(2026, 11, 6), date(2026, 11, 9)]
+    _, text = format_message(_plan(), WriteResult("order"), "Niet deze week", None, away=away)
+    assert "vr niet thuis" in text and "ma niet thuis" in text
+    _, text = format_message(_plan(), WriteResult("order"), "Niet deze week", None)
+    assert "niet thuis" not in text
+
+
+def test_plan_view_marks_the_evenings_without_food():
+    view = plan_view(_plan(), date(2026, 11, 4), "order", "Niet deze week",
+                     away=[date(2026, 11, 6)])
+    assert view["niet_thuis"] == ["2026-11-06"]
+    assert plan_view(_plan(), date(2026, 11, 4), "order", "Niet deze week")["niet_thuis"] == []
