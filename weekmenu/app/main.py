@@ -56,7 +56,14 @@ from app.planner import (
 from app import staples
 from app.durable import fsync_dir
 from app.tokens import TokenStore
-from app.week import GEEN_OUDERAVOND, WEEKDAGEN, evenings, lange_datum, menu_week_start
+from app.week import (
+    GEEN_OUDERAVOND,
+    WEEKDAGEN,
+    away_dates,
+    evenings,
+    lange_datum,
+    menu_week_start,
+)
 from app.writer import WriteResult, apply
 
 # swap_dish, rescale_dish and restore_dish are looked up here by the web API
@@ -85,6 +92,8 @@ LOGIN_EXPIRED_COMPLETION = ("AH-login verlopen. Log opnieuw in via de Weekmenu-a
                             "daarna wordt het menu vanzelf afgemaakt.")
 FINAL_FAILURE = ("Weekmenu kon niet gemaakt worden: Home Assistant/AH niet bereikbaar. "
                  "Tik op Nu maken in de Weekmenu-app.")
+ALL_AWAY = ("Alle avonden van deze week staan op niet thuis (0 personen) of bij de ouders. "
+            "Er is geen menu gemaakt.")
 WRITE_FAILED_HINT = "Tik op Nu maken in de Weekmenu-app om de rest toe te voegen."
 STAPLES_TIMEOUT = 60  # seconds for the whole purchase-history step before the message
 PORT = 8099
@@ -131,6 +140,7 @@ class Context:
     waiting: Waiting | None = None
     error_kind: str | None = None  # "read": a read that failed; a waiting result clears it
     button_notified: date | None = None  # menu week of the last "folder not out" push
+    away_notified: date | None = None  # menu week of the last "all evenings away" push
     total_day: date | None = None
     # bonus offers per period start: the folder is the same all week
     bonus_cache: dict[date, list[Product]] = field(default_factory=dict)
@@ -177,7 +187,7 @@ def week_of(day: date) -> date:
 def make_settings(ctx: Context, raw: RawSettings, start: date, exclude=()) -> Settings:
     aantal = min(7, max(1, raw.aantal))
     ouders = raw.ouders if raw.ouders in WEEKDAGEN else GEEN_OUDERAVOND
-    days = evenings(start, aantal, ouders)
+    days = evenings(start, aantal, ouders, raw.away)
     persons = {d: max(1, raw.persons.get(WEEKDAGEN[d.weekday()], 2)) for d in days}
     recent = ctx.ledger.recent_recipe_ids(start) | set(exclude)
     return Settings(days, persons, list(ctx.pantry), recent)
@@ -331,6 +341,12 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
             reused = True
             plan, replaced = Plan.from_dict(wlog.plan), None  # same menu, only fill gaps
         else:
+            if not make_settings(ctx, raw, start).evenings:  # nobody eats at home: no menu
+                log.info("Alle avonden van de week van %s zijn niet thuis: geen menu", start)
+                if mode != "schema" or ctx.away_notified != start:
+                    ctx.away_notified = start
+                    await guard(ctx.hass.notify("Weekmenu", ALL_AWAY, ctx.ingress_url), "melding")
+                return RoundOutcome("skipped", start)
             got = await bonus_for_week(ctx, start, now, fallback=fallback)
             if isinstance(got, Waiting):
                 log.info("Folder voor de week van %s nog niet uit (verwacht %s)",
@@ -387,7 +403,8 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     # before the message, which names the count; bounded so the message is never late
     await refresh_staples(ctx, wlog, plan, start, now)
     recount_extras(ctx, wlog)  # apply may have settled a staple write
-    await guard(ctx.hass.publish(plan_view(plan, start, result.target, raw.ouders),
+    await guard(ctx.hass.publish(plan_view(plan, start, result.target, raw.ouders,
+                                          away_dates(start, raw.away)),
                                  plan.savings + wlog.extras_savings), "sensoren")
     nothing_new = not (result.added or result.pending or result.unknown)
     if completing:  # the message only if it never went out, or something changed
@@ -400,7 +417,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         # no count when the history failed or took too long (staples_error is set then)
         title, body = format_message(plan, result, raw.ouders, warning,
                                      staples=staples.open_count(wlog, plan.basket),
-                                     start=start)
+                                     start=start, away=away_dates(start, raw.away))
         if await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding"):
             wlog.notified = True  # saved at once: a crash now must not repeat the message
             try:

@@ -7,6 +7,7 @@ from app import main
 from app.ahclient import AhApiError, AhLoginExpired, AhNotJson, BonusPeriod
 from app.ledger import Ledger, WeekLog
 from app.planner import Plan
+from app.hass import helper_persons
 from app.main import PERIOD_WARNING, handle_command, run_round, tick, update_total
 from tests.fakes import CURRENT, NEXT, SUNDAY, W, FakeAh, FakeHass, dish, make_ctx, make_plan
 
@@ -855,3 +856,66 @@ async def test_crash_after_the_message_sends_no_second_message(tmp_path, planned
     assert ctx2.hass.notifications() == [] and len(ah.writes) == n
     assert ctx2.ledger.load(W).round_done is True
 
+
+
+# --- 0 personen = niet thuis eten ---------------------------------------------------------
+
+
+def names(days):
+    return [main.WEEKDAGEN[d.weekday()][:2] for d in days]
+
+
+async def test_zero_persons_on_friday_is_skipped_in_the_settings(tmp_path, planned):
+    calls, _ = planned
+    hass = FakeHass(tmp_path / "totaal.json", aantal=5)
+    hass.states["input_number.weekmenu_personen_vrijdag"] = "0"
+    ctx = make_ctx(tmp_path, hass=hass)
+    await run_round(ctx, SUNDAY, "nu_maken")
+    s = calls[0]
+    assert names(s.evenings) == ["wo", "do", "za", "zo", "ma"]
+    assert VR not in s.persons and all(n >= 1 for n in s.persons.values())
+
+
+async def test_zero_on_friday_and_parents_on_saturday(tmp_path, planned):
+    calls, _ = planned
+    hass = FakeHass(tmp_path / "totaal.json", aantal=5, ouders="zaterdag")
+    hass.states["input_number.weekmenu_personen_vrijdag"] = "0"
+    ctx = make_ctx(tmp_path, hass=hass)
+    await run_round(ctx, SUNDAY, "nu_maken")
+    assert names(calls[0].evenings) == ["wo", "do", "zo", "ma", "di"]
+
+
+async def test_message_and_sensor_name_the_evening_not_at_home(tmp_path, planned):
+    hass = FakeHass(tmp_path / "totaal.json", aantal=5)
+    hass.states["input_number.weekmenu_personen_vrijdag"] = "0"
+    ctx = make_ctx(tmp_path, hass=hass)
+    await run_round(ctx, SUNDAY, "nu_maken")
+    assert "vr niet thuis" in hass.notifications()[0]["message"]
+    sensor = next(p for path, p in hass.posts if path == "states/sensor.weekmenu")
+    assert sensor["attributes"]["niet_thuis"] == ["2026-11-06"]
+
+
+async def test_all_days_zero_makes_no_menu_and_says_so(tmp_path, planned):
+    calls, _ = planned
+    hass = FakeHass(tmp_path / "totaal.json", aantal=5)
+    for eid in helper_persons().values():
+        hass.states[eid] = "0"
+    ctx = make_ctx(tmp_path, hass=hass)
+    out = await run_round(ctx, SUNDAY, "nu_maken")
+    assert out.status == "skipped" and calls == []
+    assert ctx.ledger.load(W).plan is None
+    [note] = hass.notifications()
+    assert "niet thuis" in note["message"] and "geen menu" in note["message"].lower()
+    assert "—" not in note["message"] and "–" not in note["message"]
+    assert ctx.error is None
+
+
+async def test_all_days_zero_tells_the_schedule_once_a_week(tmp_path, planned):
+    calls, _ = planned
+    hass = FakeHass(tmp_path / "totaal.json", aantal=5)
+    for eid in helper_persons().values():
+        hass.states[eid] = "0"
+    ctx = make_ctx(tmp_path, hass=hass)
+    await run_round(ctx, at(date(2026, 11, 6), 9), "schema")
+    await run_round(ctx, at(date(2026, 11, 6), 10), "schema")
+    assert calls == [] and len(hass.notifications()) == 1
