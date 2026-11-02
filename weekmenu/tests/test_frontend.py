@@ -17,7 +17,7 @@ from aiohttp import web
 
 from app.ahclient import Product, Recipe
 from app.main import PERIOD_WARNING, Waiting
-from app.hass import HELPER_OUDERS, _save_total, helper_persons
+from app.hass import _save_total, helper_persons
 from app.ledger import WeekLog
 from app.planner import Dish, Line, Plan
 from app.staples import Staple
@@ -146,7 +146,7 @@ def fake_staples() -> list[Staple]:
 def build_ctx(tmp_path):
     ctx = make_ctx(tmp_path, now=NOW)
     ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
-    ctx.hass.states[HELPER_OUDERS] = "vrijdag"
+    ctx.hass.states[helper_persons()["vrijdag"]] = "0"  # niet thuis
     ctx.hass.states[helper_persons()["zaterdag"]] = "4"
     ctx.hass.states[helper_persons()["dinsdag"]] = "0"  # niet thuis
     plan = fake_plan()
@@ -241,7 +241,7 @@ def test_app_screens_in_chrome(tmp_path):
         assert dom.index("in bestelling") < dom.index(order)
         for title in TITLES:
             assert title.replace("'", "&#39;") in dom or title in dom, title
-        assert "bij de ouders" in dom
+        assert "Vrijdag</b> · niet thuis" in dom and "ouders" not in dom
         assert "Dinsdag</b> · niet thuis" in dom
         assert "€ 14,85" in dom
         assert "geschat" in dom
@@ -271,9 +271,14 @@ def test_app_screens_in_chrome(tmp_path):
         assert "€ 57,15" in dom and "€ 14,85" in dom and "wk 45" in dom
 
         dom = render(base, "#instellingen", tmp_path, "instellingen")
-        assert "Kookavonden" in dom and "Bij de ouders" in dom and "Nieuw menu" in dom
+        assert "Kookavonden" in dom and "Niet thuis eten" in dom and "ouders" not in dom and "Nieuw menu" in dom
         assert "Nu maken" in dom
         assert 'class="box away"' in dom and "Personen op dinsdag: niet thuis" in dom
+        # chips wo..di: vr and di are pressed (di and vr are at 0 in Home Assistant)
+        assert dom.count('class="chip x"') == 2
+        assert 'class="chip x" data-away="vrijdag"' in dom and 'class="chip x" data-away="dinsdag"' in dom
+        assert 'class="chip" data-away="woensdag"' in dom
+        assert dom.count("disabled") >= 2 and "<b>–</b>" in dom
         assert 'href="#inloggen"' in dom and "Opnieuw inloggen" in dom
 
         dom = render(base, "#inloggen", tmp_path, "opnieuw-inloggen")

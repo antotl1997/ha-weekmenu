@@ -14,7 +14,6 @@ const DAGEN_KORT = { maandag: "ma", dinsdag: "di", woensdag: "wo", donderdag: "d
 const WEEK_ORDER = ["woensdag", "donderdag", "vrijdag", "zaterdag", "zondag", "maandag", "dinsdag"];
 const MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus",
   "september", "oktober", "november", "december"];
-const GEEN_OUDERAVOND = "Niet deze week";
 const BUSY_TEXT = "Er loopt al een ronde";
 
 const state = { status: null, week: null, weekParam: null, savings: null, settings: null,
@@ -106,7 +105,6 @@ function plural(n, one, many) { return `${n} ${n === 1 ? one : many}`; }
 
 const ICON = {
   plate: '<svg class="fallback" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.5"/><path d="M3 3.5v5a2 2 0 0 0 2 2v10M5 3.5v4M7 3.5v5a2 2 0 0 1-2 2M21 3.5c-1.7.6-2.5 2.6-2.5 5.5v3.5H21v8"/></svg>',
-  home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></svg>',
   moon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>',
   back: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
   people: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19.5c.6-3.3 3-5 6-5s5.4 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.6c2.6-.2 4.5 1.4 5 4.4"/></svg>',
@@ -292,10 +290,6 @@ function dayCard(d) {
   const dt = parseDate(d.date);
   const weekend = dt.getDay() === 6 || dt.getDay() === 0;
   const tonight = d.date === todayIso();
-  if (d.ouders) {
-    return `<div class="card skip"><div class="ic">${ICON.home}</div>
-      <div><b>${esc(cap(d.dag))}</b> · bij de ouders</div></div>`;
-  }
   if (d.niet_thuis) {
     return `<div class="card skip"><div class="ic">${ICON.moon}</div>
       <div><b>${esc(cap(d.dag))}</b> · niet thuis</div></div>`;
@@ -356,7 +350,7 @@ function weekScreen() {
   }
   if (!w.days.length && w.geen_avonden) {
     html += `<div class="card empty"><b>Alle avonden niet thuis</b>
-      Er wordt geen menu gemaakt. Zet bij Instellingen een avond weer op 1 of meer personen om een menu te krijgen.</div>`;
+      Er wordt geen menu gemaakt. Tik bij Instellingen een dag weer uit bij Niet thuis eten om een menu te krijgen.</div>`;
   } else if (!w.days.length && w.enabled === false) {
     html += `<div class="card empty"><b>Het weekmenu staat uit</b>
       Er wordt nu geen menu gemaakt. Zet het aan bij Instellingen, of tik op Nu maken.</div>
@@ -471,13 +465,11 @@ function savingsScreen() {
 
 function settingsScreen() {
   const s = state.settings;
-  const opts = s.ouders_options || [GEEN_OUDERAVOND].concat(WEEK_ORDER);
-  const chips = opts.map((o) => `<button class="chip${o === s.ouders ? " x" : ""}${o === GEEN_OUDERAVOND ? " wide" : ""}" data-ouders="${esc(o)}">${o === GEEN_OUDERAVOND ? "Niet" : esc(DAGEN_KORT[o] || o)}</button>`).join("");
+  const isAway = (dag) => Number(s.persons[dag]) === 0;  // also when set in Home Assistant
+  const chips = WEEK_ORDER.map((dag) => `<button class="chip${isAway(dag) ? " x" : ""}" data-away="${dag}" aria-pressed="${isAway(dag)}" aria-label="Niet thuis eten op ${dag}">${esc(DAGEN_KORT[dag])}</button>`).join("");
   const boxes = WEEK_ORDER.map((dag) => {
-    const ouders = dag === s.ouders;
-    const n = s.persons[dag];
-    const away = !ouders && Number(n) === 0;
-    return `<button class="box${ouders ? " x" : ""}${away ? " away" : ""}" data-pers="${dag}" ${ouders ? "disabled" : ""} aria-label="${away ? `Personen op ${dag}: niet thuis` : `Personen op ${dag}`}"><b>${ouders ? "–" : esc(n)}</b>${DAGEN_KORT[dag]}</button>`;
+    const away = isAway(dag);
+    return `<button class="box${away ? " away" : ""}" data-pers="${dag}" ${away ? "disabled" : ""} aria-label="${away ? `Personen op ${dag}: niet thuis` : `Personen op ${dag}`}"><b>${away ? "–" : esc(s.persons[dag])}</b>${DAGEN_KORT[dag]}</button>`;
   }).join("");
   const note = s.defaulted && s.defaulted.length
     ? `<div class="card note"><span class="dot"></span><div><b>Niet alle helpers gevonden in Home Assistant</b><span class="muted">Waar een helper ontbreekt, staat de standaardwaarde.</span></div></div>` : "";
@@ -491,9 +483,9 @@ function settingsScreen() {
         <button data-avonden="${s.avonden - 1}" aria-label="Minder kookavonden" ${s.avonden <= 1 ? "disabled" : ""}>−</button>
         <b>${esc(s.avonden)}</b>
         <button data-avonden="${s.avonden + 1}" aria-label="Meer kookavonden" ${s.avonden >= 7 ? "disabled" : ""}>+</button></div></div>
-      <div class="lbl2">Bij de ouders</div>
+      <div class="lbl2">Niet thuis eten <span class="hint">· tik de dagen aan</span></div>
       <div class="tw">${chips}</div>
-      <div class="lbl2">Personen per avond <span class="hint">· tik om te wijzigen, 0 is niet thuis</span></div>
+      <div class="lbl2">Personen per avond <span class="hint">· tik om te wijzigen</span></div>
       <div class="days">${boxes}</div>
     </div>
     <div class="btnrow"><button class="btn sec2" data-run="nieuw_menu">${ICON.refresh} Nieuw menu</button>
@@ -714,16 +706,20 @@ app.addEventListener("click", async (ev) => {
     render();
     return;
   }
-  if (t.dataset.ouders) {
-    const o = t.dataset.ouders;
-    if (o === s.ouders) return;
-    await busy(t, async () => { await setSetting(s.entities.ouders, o); s.ouders = o; });
+  if (t.dataset.away) {
+    const dag = t.dataset.away;
+    const away = Number(s.persons[dag]) !== 0;  // tapping flips it
+    await busy(t, async () => {
+      const r = await api("api/settings", { entity_id: s.entities.persons[dag], away });
+      s.persons[dag] = r && typeof r.value === "number" ? r.value : (away ? 0 : 2);
+    });
     render();
     return;
   }
   if (t.dataset.pers) {
     const dag = t.dataset.pers;
-    const n = (Number(s.persons[dag]) + 1) % 9;  // 0 (niet thuis) t/m 8
+    if (Number(s.persons[dag]) === 0) return;  // niet thuis: only the chip changes that
+    const n = Number(s.persons[dag]) % 8 + 1;  // 1 t/m 8
     await busy(t, async () => { await setSetting(s.entities.persons[dag], n); s.persons[dag] = n; });
     render();
   }
