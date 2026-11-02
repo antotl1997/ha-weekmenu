@@ -148,6 +148,7 @@ def build_ctx(tmp_path):
     ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
     ctx.hass.states[HELPER_OUDERS] = "vrijdag"
     ctx.hass.states[helper_persons()["zaterdag"]] = "4"
+    ctx.hass.states[helper_persons()["dinsdag"]] = "0"  # niet thuis
     plan = fake_plan()
     ctx.ledger.save(WeekLog(W, plan=plan.to_dict(), added=dict(plan.basket), target="order",
                             savings=plan.savings, counted=True,
@@ -241,6 +242,7 @@ def test_app_screens_in_chrome(tmp_path):
         for title in TITLES:
             assert title.replace("'", "&#39;") in dom or title in dom, title
         assert "bij de ouders" in dom
+        assert "Dinsdag</b> · niet thuis" in dom
         assert "€ 14,85" in dom
         assert "geschat" in dom
         assert "19 producten" in dom and "10 in de bonus" in dom
@@ -271,6 +273,7 @@ def test_app_screens_in_chrome(tmp_path):
         dom = render(base, "#instellingen", tmp_path, "instellingen")
         assert "Kookavonden" in dom and "Bij de ouders" in dom and "Nieuw menu" in dom
         assert "Nu maken" in dom
+        assert 'class="box away"' in dom and "Personen op dinsdag: niet thuis" in dom
         assert 'href="#inloggen"' in dom and "Opnieuw inloggen" in dom
 
         dom = render(base, "#inloggen", tmp_path, "opnieuw-inloggen")

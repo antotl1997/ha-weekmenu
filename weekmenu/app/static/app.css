@@ -146,6 +146,8 @@ h2{font-size:22px;margin:4px 20px 8px;letter-spacing:-.3px;line-height:1.25}
 .box b{display:block;font-size:15px;color:#22201c}
 .box.x{background:#22201c;color:#fff}
 .box.x b{color:#fff}
+.box.away{background:transparent;border:1px dashed #cfc8bc}
+.box.away b{color:#9a9388}
 
 /* login */
 .login{padding:18px 16px 16px}
