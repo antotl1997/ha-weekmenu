@@ -11,3 +11,7 @@ In Home Assistant: Settings, Add-ons, Add-on Store, the three-dot menu, Reposito
     https://github.com/antotl1997/ha-weekmenu
 
 Then install "Weekmenu AH" from the store.
+
+## When it runs
+
+The menu is made as soon as the AH bonus folder of the delivery week is out, usually on the Friday before. From `schedule_time` (default 08:00) until 18:00 the add-on checks once an hour, as long as there is no menu for that week yet. If the folder is still not out on Sunday at 18:00, it uses the current folder and says so in the message. You get one push message, when the menu is made.
