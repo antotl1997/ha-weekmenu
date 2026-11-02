@@ -51,8 +51,9 @@ class RawSettings:
 
     @property
     def away(self) -> set[str]:
-        """Weekdays with 0 persons: not at home, no dinner."""
-        return {dag for dag, n in self.persons.items() if n == 0}
+        """Weekdays with 0 persons: not at home, no dinner. The parents' day is
+        reported as that only."""
+        return {dag for dag, n in self.persons.items() if n == 0 and dag != self.ouders}
 
 
 def format_eur(x: float) -> str:
@@ -127,6 +128,7 @@ def plan_view(plan: Plan, week_start: date, target: str, ouders: str,
     """Attributes for sensor.weekmenu. `target` is "order" or "list"; `away`: the
     evenings with 0 persons, without food."""
     dishes = []
+    eaten = {d.date for d in plan.dishes}
     for d in plan.dishes:
         dishes.append({
             "datum": d.date.isoformat(),
@@ -147,7 +149,7 @@ def plan_view(plan: Plan, week_start: date, target: str, ouders: str,
         "doel": "bestelling" if target == "order" else "lijst",
         "niet_gevonden": list(plan.not_found),
         "ouders": ouders,
-        "niet_thuis": [d.isoformat() for d in sorted(away)],
+        "niet_thuis": [d.isoformat() for d in sorted(away) if d not in eaten],
         "dishes": dishes,
     }
 

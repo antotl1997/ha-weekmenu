@@ -136,6 +136,7 @@ def week_view(wlog, plan: Plan | None, start: date, ouders: str | None,
     if plan is None:
         return out
     by_day = {d.date: d for d in plan.dishes}
+    out["niet_thuis"] = [i for i in out["niet_thuis"] if date.fromisoformat(i) not in by_day]
     for i in range(7):
         day = date.fromordinal(start.toordinal() + i)
         dag = WEEKDAGEN[day.weekday()]

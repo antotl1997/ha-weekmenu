@@ -234,3 +234,17 @@ def test_plan_view_marks_the_evenings_without_food():
                      away=[date(2026, 11, 6)])
     assert view["niet_thuis"] == ["2026-11-06"]
     assert plan_view(_plan(), date(2026, 11, 4), "order", "Niet deze week")["niet_thuis"] == []
+
+
+def test_plan_view_and_message_skip_away_days_that_have_a_dish():
+    plan = _plan([_dish(date(2026, 11, 6))])
+    view = plan_view(plan, date(2026, 11, 4), "order", "Niet deze week",
+                     away=[date(2026, 11, 6), date(2026, 11, 9)])
+    assert view["niet_thuis"] == ["2026-11-09"]
+
+
+def test_parents_day_with_zero_persons_is_only_the_parents():
+    from app.hass import RawSettings
+    raw = RawSettings(True, 5, "vrijdag", {"vrijdag": 0, "zaterdag": 0, "maandag": 2})
+    assert raw.away == {"zaterdag"}
+

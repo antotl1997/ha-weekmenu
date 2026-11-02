@@ -434,3 +434,19 @@ async def test_api_settings_accepts_zero_persons(aiohttp_client, ctx):
     r = await client.post("api/settings", json={"entity_id": eid, "value": 0})
     assert r.status == 200
     assert ctx.hass.posts[-1] == ("services/input_number/set_value", {"entity_id": eid, "value": 0})
+
+
+async def test_api_week_niet_thuis_skips_parents_day_and_days_with_a_dish(aiohttp_client, ctx):
+    await planned_ctx(ctx)  # dishes on wo, do (and one more)
+    ctx.hass.states["input_select.weekmenu_ouders"] = "vrijdag"
+    ctx.hass.states["input_number.weekmenu_personen_vrijdag"] = "0"
+    ctx.hass.states["input_number.weekmenu_personen_donderdag"] = "0"  # still has a dish
+    ctx.hass.states["input_number.weekmenu_personen_zondag"] = "0"
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    dish_days = {d["date"] for d in body["days"] if d["recipe"]}
+    assert "2026-11-05" in dish_days
+    assert body["niet_thuis"] == ["2026-11-08"]
+    ouders = [d for d in body["days"] if d["ouders"]]
+    assert [d["date"] for d in ouders] == ["2026-11-06"] and ouders[0]["niet_thuis"] is False
+
