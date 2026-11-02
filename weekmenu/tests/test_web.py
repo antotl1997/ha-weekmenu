@@ -382,3 +382,24 @@ async def test_api_week_names_the_order_and_no_waiting_once_planned(aiohttp_clie
     assert body["bestelling"] == "Voor de bestelling van woensdag 4 november"
     assert body["waiting_for_folder"] is None
     assert (await (await client.get("api/status")).json())["waiting_for_folder"] is None
+
+
+async def test_api_week_says_whether_the_weekmenu_is_on(aiohttp_client, ctx):
+    client = await aiohttp_client(make_app(ctx))
+    assert (await (await client.get("api/week")).json())["enabled"] is True
+    ctx.hass.states["input_boolean.weekmenu_aan"] = "off"
+    assert (await (await client.get("api/week")).json())["enabled"] is False
+    ctx.hass.fail_reads = True
+    assert (await (await client.get("api/week")).json())["enabled"] is None
+
+
+def test_no_em_dash_in_user_texts():
+    from pathlib import Path
+    root = Path(__file__).parent.parent
+    files = [root / "app" / "static" / n for n in ("app.js", "index.html", "app.css")]
+    files += [root / "app" / "main.py", root / "app" / "hass.py", root / "app" / "web.py",
+              root.parent / "README.md"]
+    for f in files:
+        text = f.read_text(encoding="utf-8")
+        assert "\u2014" not in text and "\\u2014" not in text, f.name
+

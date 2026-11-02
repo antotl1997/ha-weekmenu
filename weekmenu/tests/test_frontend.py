@@ -236,6 +236,8 @@ def test_app_screens_in_chrome(tmp_path):
         # the order line, right under the title and above the savings
         order = "Voor de bestelling van woensdag 4 november"
         assert dom.index("<h1>Weekmenu</h1>") < dom.index(order) < dom.index("Bonus bespaard")
+        # its own full-width row, after the "in bestelling" pill rather than beside it
+        assert dom.index("in bestelling") < dom.index(order)
         for title in TITLES:
             assert title.replace("'", "&#39;") in dom or title in dom, title
         assert "bij de ouders" in dom
@@ -317,7 +319,10 @@ def test_app_waiting_for_folder_in_chrome(tmp_path):
     shutil.copytree(STATIC_DIR, static)
     with Server(ctx, static) as base:
         dom = render(base, "", tmp_path, "week-wachten")
-    line = "Volgende bestelling: woensdag 11 november \u2014 de folder komt vanaf vrijdag 6 november"
+        ctx.hass.states["input_boolean.weekmenu_aan"] = "off"
+        off = chrome(base, tmp_path / "profile-wachten-uit")
+    line = "Volgende bestelling: woensdag 11 november. De folder komt vanaf vrijdag 6 november."
     assert dom.index("<h1>Weekmenu</h1>") < dom.index(line)
     assert "De folder van volgende week is er nog niet" in dom
-    assert "Voor de bestelling van" not in dom
+    assert "Voor de bestelling van" not in dom and "\u2014" not in dom
+    assert "Het weekmenu staat uit" in off and "vanzelf" not in off

@@ -56,7 +56,7 @@ from app.planner import (
 from app import staples
 from app.durable import fsync_dir
 from app.tokens import TokenStore
-from app.week import GEEN_OUDERAVOND, WEEKDAGEN, evenings, menu_week_start
+from app.week import GEEN_OUDERAVOND, WEEKDAGEN, evenings, lange_datum, menu_week_start
 from app.writer import WriteResult, apply
 
 # swap_dish, rescale_dish and restore_dish are looked up here by the web API
@@ -74,12 +74,16 @@ OPTIONS_PATH = DATA / "options.json"
 DEFAULT_PANTRY = ["olie", "zout", "peper", "suiker", "bloem", "azijn"]
 DEFAULT_SCHEDULE = time(8, 0)
 LAST_CHECK = time(18, 0)  # the last look of the day; on the Sunday the fallback
+LAST_FALLBACK_TRY = time(23, 0)  # on the fallback Sunday: keep trying a failing round
 FALLBACK_DAYS = 3  # the fallback is on the Sunday, three days before the menu Wednesday
 PERIOD_WARNING = (
     "De folder van volgende week was er nog niet: "
     "prijzen gelden woensdag waarschijnlijk niet meer"
 )
 LOGIN_EXPIRED = "AH-login verlopen, log opnieuw in"
+FINAL_FAILURE = ("Weekmenu kon niet gemaakt worden: Home Assistant/AH niet bereikbaar. "
+                 "Tik op Nu maken in de Weekmenu-app.")
+WRITE_FAILED_HINT = "Tik op Nu maken in de Weekmenu-app om de rest toe te voegen."
 STAPLES_TIMEOUT = 60  # seconds for the whole purchase-history step before the message
 PORT = 8099
 INGRESS_PROXY = "172.30.32.2"
@@ -123,6 +127,8 @@ class Context:
     # schedule: the last hourly slot looked at, and the folder that is not out yet
     checked: datetime | None = None
     waiting: Waiting | None = None
+    error_kind: str | None = None  # "read": a read that failed; a waiting result clears it
+    button_notified: date | None = None  # menu week of the last "folder not out" push
     total_day: date | None = None
     # bonus offers per period start: the folder is the same all week
     bonus_cache: dict[date, list[Product]] = field(default_factory=dict)
@@ -134,6 +140,7 @@ class RoundOutcome:
     status: Literal["done", "skipped", "waiting_for_folder", "login_expired", "error"]
     week: date | None = None
     expected: date | None = None  # waiting_for_folder: when the folder should be out
+    kind: str = "round"  # of an error: "read" (nothing written) or "round"
     warning: str | None = None
     plan: Plan | None = None
     result: WriteResult | None = None
@@ -197,10 +204,24 @@ def check_slot(now: datetime, at: time, last: time = LAST_CHECK) -> datetime | N
     return max(now.replace(minute=0, second=0, microsecond=0), datetime.combine(day, at))
 
 
+def is_fallback_day(day: date, start: date) -> bool:
+    return day == start - timedelta(days=FALLBACK_DAYS)
+
+
+def last_try(ctx: Context, now: datetime, start: date) -> bool:
+    """The last automatic try for this menu week: the fallback Sunday, 23:00."""
+    return (is_fallback_day(now.date(), start)
+            and now.time() >= max(LAST_FALLBACK_TRY, ctx.schedule_time))
+
+
 def fallback_due(ctx: Context, now: datetime, start: date) -> bool:
     """The Sunday before the menu Wednesday, from 18:00: the current folder may be used."""
-    return (now.date() == start - timedelta(days=FALLBACK_DAYS)
-            and now.time() >= last_check(ctx))
+    return is_fallback_day(now.date(), start) and now.time() >= last_check(ctx)
+
+
+def auto_done(wlog: WeekLog) -> bool:
+    """Nothing left for the automatic round: a finished round, or its one completion."""
+    return bool(wlog.plan) and (wlog.round_done or wlog.completion_tried)
 
 
 async def bonus_for_week(
@@ -247,11 +268,13 @@ async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
         raw = await ctx.hass.read_settings()
     except Exception as e:  # not only HTTP: nothing may stop the schedule silently
         msg = f"Home Assistant-instellingen niet te lezen ({type(e).__name__})"
-        ctx.error = msg
+        ctx.error, ctx.error_kind = msg, "read"
         if mode != "schema":
             log.warning(msg)
-        elif fallback:
+        elif last_try(ctx, now, start):
             log.error("%s; geen menu voor de week van %s", msg, start)
+            await guard(ctx.hass.notify("Weekmenu mislukt", FINAL_FAILURE, ctx.ingress_url),
+                        "melding")
         else:
             log.warning("%s, volgend uur opnieuw", msg)
         return RoundOutcome("error", start, error=msg)
@@ -264,15 +287,18 @@ async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
     if outcome.status in ("done", "error", "login_expired"):
         ctx.last_round = now.isoformat(timespec="minutes")
     if outcome.status == "done":
-        ctx.error = None
+        ctx.error = ctx.error_kind = None
         ctx.login_expired = False
         if ctx.waiting is not None and ctx.waiting.week == start:
             ctx.waiting = None
     elif outcome.status == "waiting_for_folder":
-        ctx.error = None  # AH answered; waiting is not an error
+        if ctx.error_kind == "read":  # HA and AH answered now; other errors stay
+            ctx.error = ctx.error_kind = None
         ctx.waiting = Waiting(start, outcome.expected)
-    elif outcome.status in ("error", "login_expired"):
-        ctx.error = outcome.error
+    elif outcome.status == "login_expired":
+        ctx.error, ctx.error_kind = outcome.error, "login"
+    elif outcome.status == "error":
+        ctx.error, ctx.error_kind = outcome.error, outcome.kind
     if outcome.status != "skipped":
         log.info("Ronde %s voor week %s: %s", mode, start, outcome.status)
     if outcome.status in ("done", "waiting_for_folder"):
@@ -286,11 +312,19 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     warning = None
     had_error = ctx.error is not None
     reused = False
+    completing = False
     wlog = None
     try:
         wlog = ctx.ledger.load(start)
-        if mode == "schema" and wlog.plan:
+        if mode == "schema" and auto_done(wlog):
             return RoundOutcome("skipped", start)  # the log says done: never again
+        if mode == "schema" and wlog.plan:
+            # a round stopped halfway (crash or write error): complete it once, from the
+            # log (pending is settled first, so no write is ever repeated blind)
+            completing = True
+            wlog.completion_tried = True
+            ctx.ledger.save(wlog)
+            log.info("Ronde voor week %s was niet afgemaakt: één keer aanvullen", start)
         if mode != "nieuw_menu" and wlog.plan:
             reused = True
             plan, replaced = Plan.from_dict(wlog.plan), None  # same menu, only fill gaps
@@ -322,17 +356,21 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         return RoundOutcome("login_expired", start, error=LOGIN_EXPIRED)
     except Exception as e:
         msg = short_error(e)
-        if mode == "schema" and not fallback and (wlog is None or wlog.plan is None):
-            # nothing written (apply saves the plan before its first write): next hour
-            log.warning("Ronde mislukt: %s; volgend uur opnieuw", msg)
-            return RoundOutcome("error", start, error=msg)
+        written = wlog is not None and wlog.plan is not None  # apply saves it first
+        if mode == "schema" and not written:
+            if not last_try(ctx, now, start):
+                log.warning("Ronde mislukt: %s; volgend uur opnieuw", msg)
+                return RoundOutcome("error", start, error=msg, kind="read")
+            log.error("Ronde mislukt: %s; geen menu voor de week van %s", msg, start)
+            await guard(ctx.hass.notify("Weekmenu mislukt", FINAL_FAILURE, ctx.ingress_url),
+                        "melding")
+            return RoundOutcome("error", start, error=msg, kind="read")
         log.error("Ronde mislukt: %s", msg)
-        await guard(ctx.hass.notify(
-            "Weekmenu mislukt",
-            f"Er ging iets mis: {msg}. Er is verder niets toegevoegd; "
-            "wat al gelukt was staat in het logboek.",
-            ctx.ingress_url,
-        ), "melding")
+        text = (f"Er ging iets mis: {msg}. Er is verder niets toegevoegd; "
+                "wat al gelukt was staat in het logboek.")
+        if written:
+            text += " " + WRITE_FAILED_HINT
+        await guard(ctx.hass.notify("Weekmenu mislukt", text, ctx.ingress_url), "melding")
         return RoundOutcome("error", start, error=msg)
 
     # before the message, which names the count; bounded so the message is never late
@@ -340,7 +378,8 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     recount_extras(ctx, wlog)  # apply may have settled a staple write
     await guard(ctx.hass.publish(plan_view(plan, start, result.target, raw.ouders),
                                  plan.savings + wlog.extras_savings), "sensoren")
-    if reused and not (result.added or result.pending or result.unknown or had_error):
+    if reused and not (completing or result.added or result.pending or result.unknown
+                       or had_error):
         log.info("Menu stond er al en alles was al toegevoegd: geen nieuwe melding")
     else:
         # no count when the history failed or took too long (staples_error is set then)
@@ -348,6 +387,12 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
                                      staples=staples.open_count(wlog, plan.basket),
                                      start=start)
         await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding")
+    if not wlog.round_done:
+        wlog.round_done = True
+        try:
+            ctx.ledger.save(wlog)
+        except Exception as e:
+            log.warning("Logboek %s niet bijgewerkt (%s)", wlog.week, type(e).__name__)
     return RoundOutcome("done", start, warning=warning, plan=plan, result=result)
 
 
@@ -464,7 +509,9 @@ def load_state(ctx: Context) -> None:
         data = json.loads(Path(ctx.state_path).read_text(encoding="utf-8"))
         checked = data.get("checked")
         waiting = data.get("waiting")
+        notified = data.get("button_notified")
         ctx.checked = datetime.fromisoformat(checked) if checked else None
+        ctx.button_notified = date.fromisoformat(notified) if notified else None
         if isinstance(waiting, dict):
             exp = waiting.get("expected")
             ctx.waiting = Waiting(date.fromisoformat(waiting["week"]),
@@ -482,6 +529,8 @@ def _save_state(ctx: Context) -> None:
         "waiting": None if w is None else {
             "week": w.week.isoformat(),
             "expected": w.expected.isoformat() if w.expected else None},
+        "button_notified": (ctx.button_notified.isoformat()
+                            if ctx.button_notified else None),
     }
     path = Path(ctx.state_path)
     tmp = Path(str(path) + ".tmp")
@@ -501,11 +550,13 @@ async def tick(ctx: Context, now: datetime) -> None:
     """
     if ctx.total_day != now.date():
         await update_total(ctx, now.date())
-    slot = check_slot(now, ctx.schedule_time)
+    start = menu_week_start(now)
+    last = LAST_FALLBACK_TRY if is_fallback_day(now.date(), start) else LAST_CHECK
+    slot = check_slot(now, ctx.schedule_time, last)
     if slot is None or slot == ctx.checked:
         return
     ctx.checked = slot
-    if not ctx.ledger.load(menu_week_start(now)).plan:
+    if not auto_done(ctx.ledger.load(menu_week_start(now))):
         await run_round(ctx, now, "schema")
     _save_state(ctx)  # after the round: a crash halfway looks again after the restart
 
@@ -533,7 +584,17 @@ async def handle_command(ctx: Context, line: str) -> RoundOutcome | None:
     if cmd not in BUTTONS:
         log.warning("Onbekend stdin-commando genegeerd")
         return None
-    return await run_round(ctx, ctx.clock(), cmd)
+    out = await run_round(ctx, ctx.clock(), cmd)
+    if out.status == "waiting_for_folder" and ctx.button_notified != out.week:
+        # pressed in Home Assistant, where the app's notice is not seen: say it once
+        ctx.button_notified = out.week
+        _save_state(ctx)
+        when = f", verwacht vanaf {lange_datum(out.expected)}" if out.expected else ""
+        await guard(ctx.hass.notify(
+            "Weekmenu",
+            f"De folder van volgende week is er nog niet{when}. Het menu komt dan vanzelf.",
+            ctx.ingress_url), "melding")
+    return out
 
 
 async def stdin_loop(ctx: Context) -> None:

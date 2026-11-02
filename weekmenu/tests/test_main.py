@@ -109,20 +109,25 @@ async def test_restart_mid_write_then_schema_adds_no_duplicates(tmp_path, planne
     out = await run_round(ctx, SUNDAY, "schema")
     assert out.status == "error"
     assert "boom" in ctx.hass.notifications()[0]["message"]
+    assert ("Tik op Nu maken in de Weekmenu-app om de rest toe te voegen."
+            in ctx.hass.notifications()[0]["message"])
     assert len(ah.writes) == 2  # stopped, nothing retried
+    assert ctx.ledger.load(W).round_done is False
 
     # "restart": a fresh context on the same /data, same AH state
     ah.fail_on_call = None
     ctx2 = make_ctx(tmp_path, ah=ah)
     ctx2.ledger = Ledger(tmp_path / "weeks")
-    # the log has a plan: the automatic round never writes again (no AH write retried)
+    # the round did not finish: the next automatic slot completes it, once
     out = await run_round(ctx2, datetime(2026, 11, 1, 9, 0), "schema")
-    assert out.status == "skipped" and len(ah.writes) == 2
-    # Nu maken fills the gap from the log, without duplicates
-    out = await run_round(ctx2, datetime(2026, 11, 1, 9, 5), "nu_maken")
     assert out.status == "done"
     assert len(calls) == 1  # the plan of the first round is reused
     assert ah.held() == plan_a().basket == {1: 1, 2: 2, 3: 1}
+    assert len(ah.writes) == 3  # the write AH had applied was settled, not repeated
+    assert ctx2.ledger.load(W).round_done is True
+    assert len(ctx2.hass.notifications()) == 1  # the "klaar" message, once
+    out = await run_round(ctx2, datetime(2026, 11, 1, 10, 0), "schema")
+    assert out.status == "skipped"
     # and once more: nothing at all
     n = len(ah.writes)
     await run_round(ctx2, datetime(2026, 11, 1, 9, 10), "nu_maken")
@@ -446,10 +451,15 @@ async def test_monday_and_wednesday_after_failed_fallback_do_nothing(tmp_path, p
     ah = FakeAh(tmp_path, periods=[CUR])
     ah.raise_on["bonus_offers"] = AhApiError("boom", 500)
     ctx = make_ctx(tmp_path, ah=ah)
-    await tick(ctx, at(SUN, 18, 0))  # the fallback, and it fails: reported once
+    for hh in range(18, 23):  # the fallback fails: tried every hour, quietly
+        await tick(ctx, at(SUN, hh, 0))
+    assert ctx.hass.notifications() == []
+    await tick(ctx, at(SUN, 23, 0))  # the last try fails too: reported once
+    await tick(ctx, at(SUN, 23, 30))
     assert ctx.ledger.load(W).plan is None
     (note,) = ctx.hass.notifications()
-    assert note["title"] == "Weekmenu mislukt"
+    assert note["message"] == main.FINAL_FAILURE
+    assert ah.calls.count("bonus_offers") == 6
     del ah.raise_on["bonus_offers"]
     ah.periods = [CUR, NXT]  # Monday: the folder of the week of 4 November is there now
     ah.calls.clear()
@@ -627,3 +637,147 @@ def test_check_slots():
     assert t(at(FRI, 18, 0), at8) == at(FRI, 18, 0)
     assert t(at(FRI, 23, 30), at8) == at(FRI, 18, 0)  # a late start still gets the last look
     assert t(at(FRI, 20, 0), main.time(19, 0)) == at(FRI, 19, 0)
+
+
+# --- fix round 1 of the schedule change (Rulings 28-30) ------------------------------------
+
+
+class Crash(BaseException):
+    """The process dying halfway (not an Exception: nothing catches it)."""
+
+
+async def test_crash_after_one_write_is_completed_by_the_next_slot(tmp_path, planned):
+    calls, _ = planned
+    # write 1 succeeds, write 2 reaches AH and then the process dies
+    ah = FakeAh(tmp_path, periods=[CUR, NXT], fail_on_call=1, fail_after=True, exc=Crash())
+    ctx = make_ctx(tmp_path, ah=ah)
+    with pytest.raises(Crash):
+        await tick(ctx, at(FRI, 8, 0))
+    wlog = ctx.ledger.load(W)
+    assert wlog.plan is not None and wlog.round_done is False and wlog.pending
+    assert len(ah.writes) == 2 and ctx.hass.notifications() == []
+
+    ah.fail_on_call = None
+    ctx2 = make_ctx(tmp_path, ah=ah)  # restart
+    main.load_state(ctx2)
+    await tick(ctx2, at(FRI, 8, 20))
+    assert len(calls) == 1  # same plan
+    assert len(ah.writes) == 3  # only product 3; product 2 was settled from pending
+    assert ah.held() == {1: 1, 2: 2, 3: 1}
+    wlog = ctx2.ledger.load(W)
+    assert wlog.pending == {} and wlog.round_done is True
+    (note,) = ctx2.hass.notifications()
+    assert note["message"].splitlines()[0] == "Voor de bestelling van woensdag 4 november"
+    n = len(ah.calls)
+    await whole_day(ctx2, SAT)
+    assert len(ah.calls) == n and len(ctx2.hass.notifications()) == 1
+
+
+async def test_completion_round_runs_only_once(tmp_path, planned):
+    ah = FakeAh(tmp_path, periods=[CUR, NXT], fail_on_call=1, exc=Crash())
+    ctx = make_ctx(tmp_path, ah=ah)
+    with pytest.raises(Crash):
+        await tick(ctx, at(FRI, 8, 0))
+    ah.fail_on_call, ah.exc = 2, AhApiError("boom", 500)  # the completion fails as well
+    ctx2 = make_ctx(tmp_path, ah=ah)
+    await tick(ctx2, at(FRI, 9, 0))
+    (note,) = ctx2.hass.notifications()
+    assert note["title"] == "Weekmenu mislukt" and "Tik op Nu maken" in note["message"]
+    n = len(ah.writes)
+    await tick(ctx2, at(FRI, 10, 0))
+    await whole_day(ctx2, SAT)
+    assert len(ah.writes) == n and len(ctx2.hass.notifications()) == 1
+
+
+async def test_round_done_means_nothing_more(tmp_path, planned):
+    calls, _ = planned
+    ctx = make_ctx(tmp_path)
+    ctx.ledger.save(WeekLog(W, plan=plan_a().to_dict(), added={1: 1}, round_done=True))
+    await whole_day(ctx, FRI)
+    assert ctx.client.calls == [] and ctx.client.writes == [] and calls == []
+
+
+def test_old_log_with_a_plan_counts_as_done():
+    d = WeekLog(W, plan=plan_a().to_dict()).to_dict()
+    del d["round_done"]
+    assert WeekLog.from_dict(d).round_done is True
+    d = WeekLog(W).to_dict()
+    del d["round_done"]
+    assert WeekLog.from_dict(d).round_done is False
+
+
+async def test_fallback_day_retries_settings_until_2300_then_one_push(tmp_path, planned):
+    calls, _ = planned
+    ctx = make_ctx(tmp_path, ah=FakeAh(tmp_path, periods=[CUR]))
+    ctx.hass.fail_reads = True
+    for hh in range(17, 23):
+        await tick(ctx, at(SUN, hh, 0))
+        await tick(ctx, at(SUN, hh, 30))
+    assert ctx.hass.notifications() == [] and calls == []
+    await tick(ctx, at(SUN, 23, 0))
+    await tick(ctx, at(SUN, 23, 45))
+    (note,) = ctx.hass.notifications()
+    assert note["message"] == (
+        "Weekmenu kon niet gemaakt worden: Home Assistant/AH niet bereikbaar. "
+        "Tik op Nu maken in de Weekmenu-app.")
+    assert note["data"]["clickAction"] == ctx.ingress_url
+
+
+async def test_fallback_day_settings_back_at_2000_makes_the_menu(tmp_path, planned):
+    calls, _ = planned
+    ctx = make_ctx(tmp_path, ah=FakeAh(tmp_path, periods=[CUR]))
+    ctx.hass.fail_reads = True
+    await tick(ctx, at(SUN, 18, 0))
+    await tick(ctx, at(SUN, 19, 0))
+    ctx.hass.fail_reads = False
+    await tick(ctx, at(SUN, 20, 0))
+    assert len(calls) == 1
+    (note,) = ctx.hass.notifications()
+    assert PERIOD_WARNING in note["message"]
+
+
+async def test_final_failure_push_while_ha_is_down_is_logged(tmp_path, planned, caplog):
+    ctx = make_ctx(tmp_path, ah=FakeAh(tmp_path, periods=[CUR]),
+                   hass=FakeHass(tmp_path / "totaal.json", fail_posts=True))
+    ctx.hass.fail_reads = True
+    await tick(ctx, at(SUN, 23, 0))  # must not raise
+    assert any("melding" in r.getMessage() for r in caplog.records)
+
+
+async def test_stdin_button_before_folder_pushes_once_per_week(tmp_path, planned):
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah, now=at(date(2026, 10, 29), 10, 0))
+    out = await handle_command(ctx, '{"command": "nu_maken"}')
+    assert out.status == "waiting_for_folder"
+    await handle_command(ctx, '{"command": "nieuw_menu"}')
+    (note,) = ctx.hass.notifications()
+    assert note["message"] == ("De folder van volgende week is er nog niet, verwacht vanaf "
+                               "vrijdag 30 oktober. Het menu komt dan vanzelf.")
+    assert ah.writes == []
+    ctx2 = make_ctx(tmp_path, ah=ah, now=at(date(2026, 10, 29), 11, 0))  # after a restart
+    main.load_state(ctx2)
+    await handle_command(ctx2, '{"command": "nu_maken"}')
+    assert ctx2.hass.notifications() == []
+
+
+async def test_waiting_keeps_an_unrelated_error(tmp_path, planned):
+    ah = FakeAh(tmp_path, periods=[CUR, NXT], fail_on_call=0)
+    ctx = make_ctx(tmp_path, ah=ah)
+    await run_round(ctx, at(FRI, 10, 0), "nu_maken")  # a write failure for 4 November
+    write_error = ctx.error
+    assert write_error
+    ah.fail_on_call = None
+    ah.periods = [NXT]
+    await run_round(ctx, at(MON, 10, 0), "nu_maken")  # next week: waiting
+    assert ctx.error == write_error  # not cleared by an unrelated waiting
+
+
+async def test_waiting_clears_an_earlier_read_error(tmp_path, planned):
+    ctx = make_ctx(tmp_path, ah=FakeAh(tmp_path, periods=[CUR]))
+    ctx.hass.fail_reads = True
+    await tick(ctx, at(FRI, 8, 0))
+    assert ctx.error
+    ctx.hass.fail_reads = False
+    await tick(ctx, at(FRI, 9, 0))
+    assert ctx.error is None and ctx.waiting is not None
+

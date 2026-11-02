@@ -336,19 +336,24 @@ function weekScreen() {
   const where = w.target === "order" ? "in bestelling" : w.target === "list" ? "op de lijst" : "";
   const waiting = w.waiting_for_folder;
   const order = waiting
-    ? `Volgende bestelling: ${longDate(w.week)} \u2014 ` +
-      (waiting.expected ? `de folder komt vanaf ${longDate(waiting.expected)}` : "de folder is er nog niet")
+    ? `Volgende bestelling: ${longDate(w.week)}. ` +
+      (waiting.expected ? `De folder komt vanaf ${longDate(waiting.expected)}.` : "De folder is er nog niet.")
     : w.bestelling;
-  let html = `<header class="top"><div><h1>Weekmenu</h1>
-    ${order ? `<div class="order">${esc(order)}</div>` : ""}
-    <div class="sub">${shortDate(start)} – ${shortDate(end)}${w.target === "order" ? " · bezorging woensdag" : ""}</div></div>
-    ${where ? `<span class="pill grey">${where}</span>` : ""}</header>`;
+  // title and pill on one row; the order line and the dates each on a full-width row
+  let html = `<header class="top wk"><h1>Weekmenu</h1>
+    ${where ? `<span class="pill grey">${where}</span>` : ""}
+    ${order ? `<div class="full order">${esc(order)}</div>` : ""}
+    <div class="full sub">${shortDate(start)} – ${shortDate(end)}${w.target === "order" ? " · bezorging woensdag" : ""}</div></header>`;
 
   if (running) {
     html += `<div class="card note"><span class="spin dark"></span><div><b>Er wordt een menu gemaakt</b>
       <span class="muted">Dit duurt meestal een minuut.</span></div></div>`;
   }
-  if (!w.days.length && waiting) {
+  if (!w.days.length && w.enabled === false) {
+    html += `<div class="card empty"><b>Het weekmenu staat uit</b>
+      Er wordt nu geen menu gemaakt. Zet het aan bij Instellingen, of tik op Nu maken.</div>
+      <button class="btn pri full" data-run="nu_maken">Nu maken</button>`;
+  } else if (!w.days.length && waiting) {
     html += `<div class="card empty"><b>${esc(folderText(waiting.expected))}</b>
       Het menu wordt vanzelf gemaakt zodra de folder uit is, en je krijgt dan een melding.</div>`;
   } else if (!w.days.length) {

@@ -222,11 +222,15 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             raise web.HTTPBadRequest(text='{"error": "ongeldige datum"}',
                                      content_type="application/json") from None
 
-    async def ouders_now() -> str | None:
+    async def settings_now():
         try:
-            return (await ctx.hass.read_settings()).ouders
+            return await ctx.hass.read_settings()
         except httpx.HTTPError:
             return None
+
+    async def ouders_now() -> str | None:
+        raw = await settings_now()
+        return raw.ouders if raw is not None else None
 
     async def publish(start: date, plan: Plan, target: str, extras: float = 0.0) -> None:
         """Update sensor.weekmenu when this is the week it shows."""
@@ -312,7 +316,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         start = shown_week(request)
         wlog = ctx.ledger.load(start)
         plan = Plan.from_dict(wlog.plan) if wlog.plan else None
-        out = week_view(wlog, plan, start, await ouders_now())
+        raw = await settings_now()
+        out = week_view(wlog, plan, start, raw.ouders if raw is not None else None)
+        out["enabled"] = raw.enabled if raw is not None else None  # None: HA unreadable
         w = waiting_for(start) if plan is None else None
         out["waiting_for_folder"] = None if w is None else {
             "expected": w.expected.isoformat() if w.expected else None}

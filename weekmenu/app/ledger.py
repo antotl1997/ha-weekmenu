@@ -41,6 +41,10 @@ class WeekLog:
     unknown: dict[int, int] = field(default_factory=dict)
     # set when the menu was made from the current folder because next week's was missing
     period_warning: str | None = None
+    # a round finished: apply returned and the message was attempted. Until then the
+    # schedule completes the week once (completion_tried), from the log, never blind.
+    round_done: bool = False
+    completion_tried: bool = False
 
     def to_dict(self) -> dict:
         return {
@@ -60,6 +64,8 @@ class WeekLog:
             "pending": {str(k): dict(v) for k, v in self.pending.items()},
             "unknown": {str(k): v for k, v in self.unknown.items()},
             "period_warning": self.period_warning,
+            "round_done": self.round_done,
+            "completion_tried": self.completion_tried,
         }
 
     @classmethod
@@ -81,6 +87,9 @@ class WeekLog:
             pending={int(k): dict(v) for k, v in (d.get("pending") or {}).items()},
             unknown={int(k): int(v) for k, v in (d.get("unknown") or {}).items()},
             period_warning=d.get("period_warning"),
+            # a log from before this field: its round was handled by the old schedule
+            round_done=bool(d.get("round_done", d.get("plan") is not None)),
+            completion_tried=bool(d.get("completion_tried", False)),
         )
 
 
