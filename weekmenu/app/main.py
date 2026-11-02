@@ -1,8 +1,15 @@
-"""The add-on process: one round tied together, the Sunday schedule, stdin commands.
+"""The add-on process: one round tied together, the schedule, stdin commands.
 
 A round: read the helpers, take the bonus period of the menu Wednesday, build the
 whole menu (or reuse the week's menu from the log), then write the delta to AH,
 publish the sensors and send the push message.
+
+The schedule: every day from `schedule_time` to 18:00, once an hour, as long as the
+log has no menu for the next menu week, look whether its bonus period is out
+(`bonus_periods`, nothing more) and make the menu when it is. Only on the Sunday
+before that Wednesday, at 18:00, fall back to the current folder. The plan in the
+log is the source of truth for "done"; state.json only remembers the last hour
+looked at and when the folder is expected.
 
 Every path that writes to AH (the rounds and the write calls of the web API) runs
 under `Context.lock`: two writers at once could
@@ -47,6 +54,7 @@ from app.planner import (
     swap_dish,
 )
 from app import staples
+from app.durable import fsync_dir
 from app.tokens import TokenStore
 from app.week import GEEN_OUDERAVOND, WEEKDAGEN, evenings, menu_week_start
 from app.writer import WriteResult, apply
@@ -65,8 +73,8 @@ DATA = Path("/data")
 OPTIONS_PATH = DATA / "options.json"
 DEFAULT_PANTRY = ["olie", "zout", "peper", "suiker", "bloem", "azijn"]
 DEFAULT_SCHEDULE = time(8, 0)
-LAST_RETRY = time(18, 0)  # the last try on Sunday: folder (hourly) or HA settings
-SETTINGS_RETRY = timedelta(minutes=10)
+LAST_CHECK = time(18, 0)  # the last look of the day; on the Sunday the fallback
+FALLBACK_DAYS = 3  # the fallback is on the Sunday, three days before the menu Wednesday
 PERIOD_WARNING = (
     "De folder van volgende week was er nog niet: "
     "prijzen gelden woensdag waarschijnlijk niet meer"
@@ -88,6 +96,13 @@ def local_now() -> datetime:
 
 
 @dataclass
+class Waiting:
+    """No bonus period yet for the menu week `week`; `expected`: AH's own date for it."""
+    week: date
+    expected: date | None
+
+
+@dataclass
 class Context:
     client: Any  # AhClient
     ledger: Ledger
@@ -105,9 +120,9 @@ class Context:
     error: str | None = None
     login_expired: bool = False
     busy: bool = False  # a round started from the web API, not finished yet
-    # schedule
-    retry_at: datetime | None = None
-    schedule_done: date | None = None
+    # schedule: the last hourly slot looked at, and the folder that is not out yet
+    checked: datetime | None = None
+    waiting: Waiting | None = None
     total_day: date | None = None
     # bonus offers per period start: the folder is the same all week
     bonus_cache: dict[date, list[Product]] = field(default_factory=dict)
@@ -116,9 +131,9 @@ class Context:
 
 @dataclass
 class RoundOutcome:
-    status: Literal["done", "skipped", "retry", "login_expired", "error"]
+    status: Literal["done", "skipped", "waiting_for_folder", "login_expired", "error"]
     week: date | None = None
-    retry_at: datetime | None = None
+    expected: date | None = None  # waiting_for_folder: when the folder should be out
     warning: str | None = None
     plan: Plan | None = None
     result: WriteResult | None = None
@@ -163,25 +178,53 @@ def _period_for(periods: list[BonusPeriod], day: date) -> BonusPeriod | None:
     return next((p for p in periods if p.start <= day <= p.end), None)
 
 
+def last_check(ctx: Context) -> time:
+    return max(LAST_CHECK, ctx.schedule_time)
+
+
+def check_slot(now: datetime, at: time, last: time = LAST_CHECK) -> datetime | None:
+    """The hourly look `now` belongs to: `at`, then every full hour, the last at 18:00.
+
+    None before `at`. After the last look of the day, the last look itself: a start
+    at 20:00 still gets the 18:00 look (on the Sunday: the fallback).
+    """
+    last = max(last, at)
+    day = now.date()
+    if now.time() < at:
+        return None
+    if now.time() >= last:
+        return datetime.combine(day, last)
+    return max(now.replace(minute=0, second=0, microsecond=0), datetime.combine(day, at))
+
+
+def fallback_due(ctx: Context, now: datetime, start: date) -> bool:
+    """The Sunday before the menu Wednesday, from 18:00: the current folder may be used."""
+    return (now.date() == start - timedelta(days=FALLBACK_DAYS)
+            and now.time() >= last_check(ctx))
+
+
 async def bonus_for_week(
-    ctx: Context, start: date, now: datetime, may_retry: bool
-) -> tuple[list[Product], str | None] | datetime:
+    ctx: Context, start: date, now: datetime, fallback: bool
+) -> tuple[list[Product], str | None] | Waiting:
     """The offers of the period holding the menu Wednesday.
 
-    Missing and `may_retry` (the schedule): the next full hour while that is <= 18:00.
-    Otherwise fall back to the current period, with the warning for the message.
+    Not out yet: `Waiting` with AH's expected date (nextPeriodVisibleFrom of the
+    current period), and no bonus_offers call. With `fallback` the current period
+    instead, with the warning for the message.
     """
     periods = await ctx.client.bonus_periods()
     period = _period_for(periods, start)
     warning = None
     if period is None:
-        nxt = now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
-        if may_retry and nxt.date() == now.date() and nxt.time() <= LAST_RETRY:
-            return nxt
-        period = _period_for(periods, now.date())
-        if period is None:
+        current = _period_for(periods, now.date())
+        if not fallback:
+            return Waiting(start, current.next_visible_from if current else None)
+        if current is None:
             raise AhApiError("geen bonusfolder gevonden voor deze week")
+        period = current
         warning = PERIOD_WARNING
+    elif ctx.waiting is not None and ctx.waiting.week == start:
+        ctx.waiting = None  # the folder is out
     if period.start not in ctx.bonus_cache:
         ctx.bonus_cache = {period.start: await ctx.client.bonus_offers(period)}
     return ctx.bonus_cache[period.start], warning
@@ -191,56 +234,72 @@ async def bonus_for_week(
 
 
 async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
+    """One round for the next menu week.
+
+    "schema" is the automatic hourly look: it does nothing once the log has a menu
+    for that week, and before the Sunday 18:00 fallback a failure that wrote nothing
+    is left for the next hour, without a message. Buttons never use the old folder
+    before that fallback moment either: they report waiting_for_folder.
+    """
     start = menu_week_start(now)
+    fallback = fallback_due(ctx, now, start)
     try:
         raw = await ctx.hass.read_settings()
-    except Exception as e:  # not only HTTP: nothing may skip the Sunday round silently
+    except Exception as e:  # not only HTTP: nothing may stop the schedule silently
         msg = f"Home Assistant-instellingen niet te lezen ({type(e).__name__})"
         ctx.error = msg
-        if mode == "schema":  # nothing written yet: try again, it must not stop unnoticed
-            nxt = now.replace(second=0, microsecond=0) + SETTINGS_RETRY
-            if nxt.date() == now.date() and nxt.time() <= LAST_RETRY:
-                log.warning("%s, opnieuw om %s", msg, nxt.strftime("%H:%M"))
-                return RoundOutcome("retry", start, retry_at=nxt, error=msg)
-            log.error("%s; de zondagronde is opgegeven", msg)
-        else:
+        if mode != "schema":
             log.warning(msg)
+        elif fallback:
+            log.error("%s; geen menu voor de week van %s", msg, start)
+        else:
+            log.warning("%s, volgend uur opnieuw", msg)
         return RoundOutcome("error", start, error=msg)
     if mode == "schema" and not raw.enabled:
-        log.info("Weekmenu staat uit: geen zondagronde")
+        log.info("Weekmenu staat uit: geen automatische ronde")
         return RoundOutcome("skipped", start)
 
     async with ctx.lock:
-        outcome = await _round(ctx, now, mode, start, raw)
-    if outcome.status != "retry":
+        outcome = await _round(ctx, now, mode, start, raw, fallback)
+    if outcome.status in ("done", "error", "login_expired"):
         ctx.last_round = now.isoformat(timespec="minutes")
     if outcome.status == "done":
         ctx.error = None
         ctx.login_expired = False
-        if (mode in BUTTONS and ctx.retry_at is not None
-                and menu_week_start(ctx.retry_at) == start):
-            ctx.retry_at = None  # this week is done: no Sunday retry any more
+        if ctx.waiting is not None and ctx.waiting.week == start:
+            ctx.waiting = None
+    elif outcome.status == "waiting_for_folder":
+        ctx.error = None  # AH answered; waiting is not an error
+        ctx.waiting = Waiting(start, outcome.expected)
     elif outcome.status in ("error", "login_expired"):
         ctx.error = outcome.error
-    log.info("Ronde %s voor week %s: %s", mode, start, outcome.status)
+    if outcome.status != "skipped":
+        log.info("Ronde %s voor week %s: %s", mode, start, outcome.status)
+    if outcome.status in ("done", "waiting_for_folder"):
+        _save_state(ctx)
     await update_total(ctx, now.date())
     return outcome
 
 
-async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawSettings):
+async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawSettings,
+                 fallback: bool):
     warning = None
     had_error = ctx.error is not None
     reused = False
+    wlog = None
     try:
         wlog = ctx.ledger.load(start)
+        if mode == "schema" and wlog.plan:
+            return RoundOutcome("skipped", start)  # the log says done: never again
         if mode != "nieuw_menu" and wlog.plan:
             reused = True
             plan, replaced = Plan.from_dict(wlog.plan), None  # same menu, only fill gaps
         else:
-            got = await bonus_for_week(ctx, start, now, may_retry=(mode == "schema"))
-            if isinstance(got, datetime):
-                log.info("Folder van volgende week nog niet zichtbaar, opnieuw om %s", got)
-                return RoundOutcome("retry", start, retry_at=got)
+            got = await bonus_for_week(ctx, start, now, fallback=fallback)
+            if isinstance(got, Waiting):
+                log.info("Folder voor de week van %s nog niet uit (verwacht %s)",
+                         start, got.expected or "onbekend")
+                return RoundOutcome("waiting_for_folder", start, expected=got.expected)
             bonus, warning = got
             replaced = Plan.from_dict(wlog.plan) if wlog.plan else None
             old_ids = {d.recipe.id for d in replaced.dishes} if replaced else set()
@@ -254,12 +313,19 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
                 wlog.previous_dish.clear()
         result = await apply(ctx.client, ctx.ledger, wlog, plan, replaced)
     except AhLoginExpired:
+        known = ctx.login_expired
         ctx.login_expired = True
         log.warning("AH-login verlopen")
-        await guard(ctx.hass.notify("Weekmenu", LOGIN_EXPIRED, ctx.ingress_url), "melding")
+        if mode != "schema" or not known:  # the hourly look reports it once
+            await guard(ctx.hass.notify("Weekmenu", LOGIN_EXPIRED, ctx.ingress_url),
+                        "melding")
         return RoundOutcome("login_expired", start, error=LOGIN_EXPIRED)
     except Exception as e:
         msg = short_error(e)
+        if mode == "schema" and not fallback and (wlog is None or wlog.plan is None):
+            # nothing written (apply saves the plan before its first write): next hour
+            log.warning("Ronde mislukt: %s; volgend uur opnieuw", msg)
+            return RoundOutcome("error", start, error=msg)
         log.error("Ronde mislukt: %s", msg)
         await guard(ctx.hass.notify(
             "Weekmenu mislukt",
@@ -387,44 +453,61 @@ async def update_total(ctx: Context, today: date) -> None:
 
 
 def load_state(ctx: Context) -> None:
+    """state.json: {"checked": ISO datetime, "waiting": {"week", "expected"}}.
+
+    An older file ({"schedule_done": ...}) or a broken one loads as empty: the log
+    still knows which weeks have a menu, so nothing runs twice.
+    """
     if ctx.state_path is None:
         return
     try:
         data = json.loads(Path(ctx.state_path).read_text(encoding="utf-8"))
-        ctx.schedule_done = date.fromisoformat(data["schedule_done"])
-    except (FileNotFoundError, KeyError, ValueError, TypeError):
+        checked = data.get("checked")
+        waiting = data.get("waiting")
+        ctx.checked = datetime.fromisoformat(checked) if checked else None
+        if isinstance(waiting, dict):
+            exp = waiting.get("expected")
+            ctx.waiting = Waiting(date.fromisoformat(waiting["week"]),
+                                  date.fromisoformat(exp) if exp else None)
+    except (FileNotFoundError, KeyError, ValueError, TypeError, AttributeError):
         pass
 
 
 def _save_state(ctx: Context) -> None:
-    if ctx.state_path is None or ctx.schedule_done is None:
+    if ctx.state_path is None:
         return
+    w = ctx.waiting
+    data = {
+        "checked": ctx.checked.isoformat(timespec="minutes") if ctx.checked else None,
+        "waiting": None if w is None else {
+            "week": w.week.isoformat(),
+            "expected": w.expected.isoformat() if w.expected else None},
+    }
+    path = Path(ctx.state_path)
+    tmp = Path(str(path) + ".tmp")
     try:
-        path = Path(ctx.state_path)
-        tmp = Path(str(path) + ".tmp")
-        tmp.write_text(json.dumps({"schedule_done": ctx.schedule_done.isoformat()}),
-                       encoding="utf-8")
+        tmp.write_text(json.dumps(data), encoding="utf-8")
         os.replace(tmp, path)
+        fsync_dir(path.parent)
     except OSError as e:
         log.warning("Status niet opgeslagen (%s)", type(e).__name__)
 
 
 async def tick(ctx: Context, now: datetime) -> None:
-    """One look at the clock: the total once a day, the Sunday round, a pending retry."""
+    """One look at the clock: the total once a day, and the hourly look for the menu.
+
+    At most one look per slot, also over a restart (the slot is saved after the
+    round). A menu in the log for the next menu week ends the looking for that week.
+    """
     if ctx.total_day != now.date():
         await update_total(ctx, now.date())
-    due_sunday = (now.weekday() == 6 and now.time() >= ctx.schedule_time
-                  and ctx.schedule_done != now.date())
-    due_retry = ctx.retry_at is not None and now >= ctx.retry_at
-    if not (due_sunday or due_retry):
+    slot = check_slot(now, ctx.schedule_time)
+    if slot is None or slot == ctx.checked:
         return
-    if due_sunday:
-        ctx.schedule_done = now.date()
-    ctx.retry_at = None
-    out = await run_round(ctx, now, "schema")
-    ctx.retry_at = out.retry_at
-    if out.status != "retry":
-        _save_state(ctx)  # a restart after this does not run the Sunday round again
+    ctx.checked = slot
+    if not ctx.ledger.load(menu_week_start(now)).plan:
+        await run_round(ctx, now, "schema")
+    _save_state(ctx)  # after the round: a crash halfway looks again after the restart
 
 
 async def schedule_loop(ctx: Context) -> None:
@@ -524,7 +607,8 @@ async def amain() -> None:
         runner = web.AppRunner(make_app(ctx, allowed_remotes={INGRESS_PROXY}))
         await runner.setup()
         await web.TCPSite(runner, "0.0.0.0", PORT).start()
-        log.info("Weekmenu AH gestart, zondagronde om %s", at.strftime("%H:%M"))
+        log.info("Weekmenu AH gestart, kijkt elke dag vanaf %s elk uur of de folder er is",
+                 at.strftime("%H:%M"))
         await update_total(ctx, ctx.clock().date())  # publish_total from /data/totaal.json
         stdin_task = asyncio.create_task(stdin_loop(ctx))
         try:

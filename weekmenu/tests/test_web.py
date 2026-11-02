@@ -348,3 +348,37 @@ async def test_api_week_reports_period_warning(aiohttp_client, ctx):
     ctx.ledger.save(log)
     body = await (await client.get("api/week")).json()
     assert body["period_warning"] is None
+
+
+# --- schedule change (2 November 2026) ------------------------------------------------
+
+
+async def test_api_run_before_folder_waits_and_says_when(aiohttp_client, tmp_path):
+    from app.ahclient import BonusPeriod
+    cur = BonusPeriod(date(2026, 10, 26), date(2026, 11, 1), date(2026, 10, 30), ["Vlees"])
+    ah = FakeAh(tmp_path, periods=[cur])
+    ctx = make_ctx(tmp_path, ah=ah, now=datetime(2026, 10, 29, 10, 0))
+    client = await aiohttp_client(make_app(ctx))
+    status = await (await client.get("api/status")).json()
+    assert status["waiting_for_folder"] is None
+    assert (await client.post("api/run", json={"mode": "nu_maken"})).status == 202
+    await asyncio.gather(*ctx.tasks)
+    assert ah.writes == [] and "bonus_offers" not in ah.calls
+    assert ctx.hass.notifications() == []
+    status = await (await client.get("api/status")).json()
+    assert status["waiting_for_folder"] == {"week": "2026-11-04", "expected": "2026-10-30"}
+    assert status["error"] is None and status["running"] is False
+    body = await (await client.get("api/week")).json()
+    assert body["week"] == "2026-11-04" and body["days"] == []
+    assert body["bestelling"] == "Voor de bestelling van woensdag 4 november"
+    assert body["waiting_for_folder"] == {"expected": "2026-10-30"}
+
+
+async def test_api_week_names_the_order_and_no_waiting_once_planned(aiohttp_client, ctx):
+    await planned_ctx(ctx)
+    ctx.waiting = main.Waiting(W, date(2026, 10, 30))  # e.g. from before a restart
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert body["bestelling"] == "Voor de bestelling van woensdag 4 november"
+    assert body["waiting_for_folder"] is None
+    assert (await (await client.get("api/status")).json())["waiting_for_folder"] is None

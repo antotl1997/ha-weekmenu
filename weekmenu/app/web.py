@@ -30,7 +30,7 @@ from app.hass import (
 from app.ledger import leftovers
 from app.planner import Dish, Plan, Settings
 from app.staples import extras_savings, staple_list
-from app.week import GEEN_OUDERAVOND, WEEKDAGEN, menu_week_start
+from app.week import GEEN_OUDERAVOND, WEEKDAGEN, bestelling_zin, menu_week_start
 from app.writer import apply, apply_extras
 
 log = logging.getLogger("weekmenu.web")
@@ -113,7 +113,8 @@ def _leftovers(log, plan: Plan) -> list[dict]:
 
 def week_view(wlog, plan: Plan | None, start: date, ouders: str | None) -> dict:
     out = {
-        "week": start.isoformat(), "target": wlog.target, "ouders": ouders, "days": [],
+        "week": start.isoformat(), "bestelling": bestelling_zin(start),
+        "target": wlog.target, "ouders": ouders, "days": [],
         "savings": 0.0, "products": 0, "bonus_products": 0, "leftovers": [],
         "not_found": [], "short_by": 0, "pending": [], "unknown": [],
         "budget_exhausted": False, "period_warning": wlog.period_warning,
@@ -256,11 +257,22 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
 
     # --- status and login ---
 
+    def waiting_for(start: date | None = None):
+        """The folder of a menu week without a menu is not out yet (or None)."""
+        w = ctx.waiting
+        if w is None or (start is not None and w.week != start) or ctx.ledger.load(w.week).plan:
+            return None
+        return w
+
     async def status(request):
         logged_in = ctx.store.load() is not None and not ctx.login_expired
+        w = waiting_for()
         return web.json_response({
             "logged_in": logged_in, "last_round": ctx.last_round, "error": ctx.error,
             "running": ctx.busy or ctx.lock.locked(), "login_url": LOGIN_URL,
+            "waiting_for_folder": None if w is None else {
+                "week": w.week.isoformat(),
+                "expected": w.expected.isoformat() if w.expected else None},
         })
 
     async def login(request):
@@ -301,6 +313,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         wlog = ctx.ledger.load(start)
         plan = Plan.from_dict(wlog.plan) if wlog.plan else None
         out = week_view(wlog, plan, start, await ouders_now())
+        w = waiting_for(start) if plan is None else None
+        out["waiting_for_folder"] = None if w is None else {
+            "expected": w.expected.isoformat() if w.expected else None}
         nxt = menu_week_start(now)
         out["next_week"] = nxt.isoformat() if nxt != start and ctx.ledger.load(nxt).plan else None
         return web.json_response(out)
@@ -352,7 +367,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         iso = day.isoformat()
 
         async def change(wlog, plan, d):
-            bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(), may_retry=False)
+            bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(), fallback=True)
             exclude = set(wlog.swapped_out.get(iso, [])) | {d.recipe.id}
             new = await main.swap_dish(ctx.client, plan, day, bonus,
                                        settings_for(plan, wlog.week), exclude)
@@ -381,7 +396,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 new = main.put_dish(plan, main.dish_from_dict(saved))  # exact, no AH reads
             else:  # a log from before previous_dish: look the recipe up again
                 bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(),
-                                                     may_retry=False)
+                                                     fallback=True)
                 new = await main.restore_dish(ctx.client, plan, day, prev, bonus)
             if d.recipe.id not in wlog.swapped_out.setdefault(iso, []):
                 wlog.swapped_out[iso].append(d.recipe.id)

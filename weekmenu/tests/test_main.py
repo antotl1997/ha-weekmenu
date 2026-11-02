@@ -4,7 +4,7 @@ from datetime import date, datetime
 import pytest
 
 from app import main
-from app.ahclient import AhLoginExpired, AhNotJson
+from app.ahclient import AhApiError, AhLoginExpired, AhNotJson, BonusPeriod
 from app.ledger import Ledger, WeekLog
 from app.main import PERIOD_WARNING, handle_command, run_round, tick, update_total
 from tests.fakes import CURRENT, NEXT, SUNDAY, W, FakeAh, FakeHass, dish, make_ctx, make_plan
@@ -35,33 +35,6 @@ def planned(monkeypatch):
 
 
 # --- the brief's tests -------------------------------------------------------------
-
-
-async def test_schema_retries_hourly_until_18_when_next_period_missing(tmp_path, planned):
-    calls, _ = planned
-    ah = FakeAh(tmp_path, periods=[CURRENT])
-    ctx = make_ctx(tmp_path, ah=ah)
-
-    out = await run_round(ctx, SUNDAY, "schema")
-    assert out.status == "retry" and out.retry_at == datetime(2026, 11, 1, 9, 0)
-    out = await run_round(ctx, datetime(2026, 11, 1, 17, 0), "schema")
-    assert out.retry_at == datetime(2026, 11, 1, 18, 0)
-    assert calls == [] and ah.writes == [] and ctx.hass.notifications() == []
-
-    # the schedule loop: Sunday 08:00 round, nothing at 08:30, the retry at 09:00
-    ctx.retry_at = None
-    await tick(ctx, SUNDAY)
-    assert ctx.retry_at == datetime(2026, 11, 1, 9, 0)
-    await tick(ctx, datetime(2026, 11, 1, 8, 30))
-    assert ah.calls.count("bonus_periods") == 3
-    ah.periods = [CURRENT, NEXT]  # the folder appears
-    await tick(ctx, datetime(2026, 11, 1, 9, 0))
-    assert ctx.retry_at is None
-    assert ah.offers_for == [NEXT] and len(calls) == 1
-    assert ah.held() == {1: 1, 2: 2, 3: 1}
-    # no second Sunday round for the same day
-    await tick(ctx, datetime(2026, 11, 1, 10, 0))
-    assert len(calls) == 1
 
 
 async def test_after_18_falls_back_to_current_period_with_warning(tmp_path, planned):
@@ -142,13 +115,17 @@ async def test_restart_mid_write_then_schema_adds_no_duplicates(tmp_path, planne
     ah.fail_on_call = None
     ctx2 = make_ctx(tmp_path, ah=ah)
     ctx2.ledger = Ledger(tmp_path / "weeks")
-    out = await run_round(ctx2, datetime(2026, 11, 1, 8, 5), "schema")
+    # the log has a plan: the automatic round never writes again (no AH write retried)
+    out = await run_round(ctx2, datetime(2026, 11, 1, 9, 0), "schema")
+    assert out.status == "skipped" and len(ah.writes) == 2
+    # Nu maken fills the gap from the log, without duplicates
+    out = await run_round(ctx2, datetime(2026, 11, 1, 9, 5), "nu_maken")
     assert out.status == "done"
     assert len(calls) == 1  # the plan of the first round is reused
     assert ah.held() == plan_a().basket == {1: 1, 2: 2, 3: 1}
     # and once more: nothing at all
     n = len(ah.writes)
-    await run_round(ctx2, datetime(2026, 11, 1, 8, 10), "nu_maken")
+    await run_round(ctx2, datetime(2026, 11, 1, 9, 10), "nu_maken")
     assert len(ah.writes) == n
 
 
@@ -217,45 +194,7 @@ async def test_stdin_commands(tmp_path, planned):
     assert await handle_command(ctx, "") is None
 
 
-async def test_schedule_done_survives_restart(tmp_path, planned):
-    calls, _ = planned
-    ctx = make_ctx(tmp_path)
-    await tick(ctx, SUNDAY)
-    assert len(calls) == 1
-    ctx2 = make_ctx(tmp_path)
-    main.load_state(ctx2)
-    await tick(ctx2, datetime(2026, 11, 1, 9, 0))
-    assert len(calls) == 1 and ctx2.hass.notifications() == []
-
-
 # --- fix round 1 (Ruling 22) -------------------------------------------------------
-
-
-async def test_schema_retries_when_settings_unreadable(tmp_path, planned):
-    calls, _ = planned
-    ctx = make_ctx(tmp_path)
-    ctx.hass.fail_reads = True
-    await tick(ctx, SUNDAY)
-    assert ctx.retry_at == datetime(2026, 11, 1, 8, 10)
-    assert ctx.client.calls == [] and calls == []
-    assert not (tmp_path / "state.json").exists()  # a restart tries again
-    # buttons do not retry; they report
-    out = await run_round(ctx, SUNDAY, "nu_maken")
-    assert out.status == "error"
-    # HA is back at the retry
-    ctx.hass.fail_reads = False
-    await tick(ctx, datetime(2026, 11, 1, 8, 10))
-    assert ctx.retry_at is None and len(calls) == 1
-    assert ctx.client.held() == {1: 1, 2: 2, 3: 1}
-
-
-async def test_settings_retry_gives_up_after_18(tmp_path, planned):
-    ctx = make_ctx(tmp_path)
-    ctx.hass.fail_reads = True
-    out = await run_round(ctx, datetime(2026, 11, 1, 17, 50), "schema")
-    assert out.status == "retry" and out.retry_at == datetime(2026, 11, 1, 18, 0)
-    out = await run_round(ctx, datetime(2026, 11, 1, 18, 0), "schema")
-    assert out.status == "error" and out.retry_at is None
 
 
 async def test_total_not_counted_twice_after_crash_between_file_and_flags(
@@ -294,22 +233,19 @@ async def test_old_total_file_is_migrated_from_ledger_flags(tmp_path, planned, o
     assert data == {"total": 16.5, "counted": {"2026-10-21": 3.0, "2026-10-28": 4.0}}
 
 
-async def test_button_round_clears_pending_schema_retry(tmp_path, planned):
-    ctx = make_ctx(tmp_path, ah=FakeAh(tmp_path, periods=[CURRENT]))
-    await tick(ctx, SUNDAY)
-    assert ctx.retry_at == datetime(2026, 11, 1, 9, 0)
-    out = await run_round(ctx, datetime(2026, 11, 1, 8, 30), "nu_maken")
-    assert out.status == "done" and ctx.retry_at is None
-
-
 async def test_reused_plan_adding_nothing_sends_no_second_message(tmp_path, planned):
     ctx = make_ctx(tmp_path)
     await run_round(ctx, datetime(2026, 10, 31, 12, 0), "nu_maken")  # Saturday button
     assert len(ctx.hass.notifications()) == 1
-    out = await run_round(ctx, SUNDAY, "schema")
+    out = await run_round(ctx, SUNDAY, "nu_maken")
     assert out.status == "done" and out.result.added == {}
     assert len(ctx.hass.notifications()) == 1  # no second "klaar"
     assert sum(p == "states/sensor.weekmenu" for p, _ in ctx.hass.posts) == 2  # still published
+    # the automatic round sees the plan in the log and does nothing at all
+    out = await run_round(ctx, datetime(2026, 11, 1, 10, 0), "schema")
+    assert out.status == "skipped"
+    assert len(ctx.hass.notifications()) == 1
+    assert sum(p == "states/sensor.weekmenu" for p, _ in ctx.hass.posts) == 2
 
 
 async def test_period_warning_is_kept_in_the_log_and_cleared_by_a_proper_round(
@@ -383,20 +319,6 @@ async def test_total_never_goes_down(tmp_path, planned):
 # --- final review fixes ----------------------------------------------------------------
 
 
-async def test_non_http_settings_error_retries_the_sunday_round(tmp_path, planned):
-    calls, _ = planned
-    ctx = make_ctx(tmp_path)
-
-    async def broken():
-        raise ValueError("bad helper value")
-
-    ctx.hass.read_settings = broken
-    await tick(ctx, SUNDAY)
-    assert ctx.retry_at == datetime(2026, 11, 1, 8, 10)  # same path as an HTTP error
-    assert "ValueError" in ctx.error and "bad helper value" not in ctx.error
-    assert calls == [] and not (tmp_path / "state.json").exists()
-
-
 async def test_refused_refresh_in_a_round_asks_for_login(tmp_path, planned, respx_mock,
                                                          aiohttp_client):
     import time as _time
@@ -423,3 +345,285 @@ async def test_refused_refresh_in_a_round_asks_for_login(tmp_path, planned, resp
     client = await aiohttp_client(make_app(ctx))
     status = await (await client.get("/api/status")).json()
     assert status["logged_in"] is False  # app.js shows the login screen
+
+
+# --- schedule: as soon as the folder is out (2 November 2026) ------------------------------
+
+# Real AH data: periods run Monday to Sunday; the next one shows from the Friday before.
+CUR = BonusPeriod(date(2026, 10, 26), date(2026, 11, 1), date(2026, 10, 30), ["Vlees"])
+NXT = BonusPeriod(date(2026, 11, 2), date(2026, 11, 8), date(2026, 11, 6), ["Vlees"])
+NXT2 = BonusPeriod(date(2026, 11, 9), date(2026, 11, 15), date(2026, 11, 13), ["Vlees"])
+FRI, SAT, SUN, MON, WED = (date(2026, 10, 30), date(2026, 10, 31), date(2026, 11, 1),
+                           date(2026, 11, 2), date(2026, 11, 4))
+
+
+def at(day, hh, mm=0):
+    return datetime(day.year, day.month, day.day, hh, mm)
+
+
+async def whole_day(ctx, day):
+    """The schedule loop over one day, a look every 30 minutes."""
+    for minute in range(0, 24 * 60, 30):
+        await tick(ctx, at(day, minute // 60, minute % 60))
+
+
+def first_lines(ctx):
+    return [n["message"].splitlines()[0] for n in ctx.hass.notifications()]
+
+
+async def test_friday_0800_without_folder_does_nothing(tmp_path, planned):
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await tick(ctx, at(FRI, 7, 30))
+    assert ah.calls == []  # before schedule_time: not even a look
+    await tick(ctx, at(FRI, 8, 0))
+    assert ah.calls == ["bonus_periods"]  # one look, no bonus_offers
+    await tick(ctx, at(FRI, 8, 30))
+    assert ah.calls == ["bonus_periods"]  # at most once per hour
+    assert calls == [] and ah.writes == [] and ctx.hass.notifications() == []
+    assert ctx.ledger.load(W).plan is None
+    assert ctx.waiting == main.Waiting(W, date(2026, 10, 30))
+    assert ctx.error is None and ctx.last_round is None
+
+
+async def test_friday_0900_folder_out_makes_menu_and_one_message(tmp_path, planned):
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await tick(ctx, at(FRI, 8, 0))
+    ah.periods = [CUR, NXT]  # the folder appears
+    await tick(ctx, at(FRI, 9, 0))
+    assert len(calls) == 1 and ah.offers_for == [NXT]
+    assert ah.held() == {1: 1, 2: 2, 3: 1}
+    (note,) = ctx.hass.notifications()
+    assert note["message"].splitlines()[0] == "Voor de bestelling van woensdag 4 november"
+    assert PERIOD_WARNING not in note["message"]
+    assert ctx.waiting is None
+
+
+async def test_no_second_round_on_saturday_or_sunday(tmp_path, planned):
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR, NXT])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await whole_day(ctx, FRI)
+    assert len(calls) == 1 and len(ctx.hass.notifications()) == 1
+    n_calls, n_writes, n_posts = len(ah.calls), len(ah.writes), len(ctx.hass.posts)
+    await whole_day(ctx, SAT)
+    await whole_day(ctx, SUN)
+    assert len(calls) == 1 and len(ctx.hass.notifications()) == 1
+    assert len(ah.calls) == n_calls and len(ah.writes) == n_writes  # not even a read
+    # only the daily total is published again, never the menu
+    assert all(p == "states/sensor.weekmenu_besparing_totaal"
+               for p, _ in ctx.hass.posts[n_posts:])
+
+
+async def test_sunday_1800_without_folder_falls_back_with_warning(tmp_path, planned):
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await whole_day(ctx, FRI)
+    await whole_day(ctx, SAT)
+    assert calls == [] and ctx.hass.notifications() == []  # Friday/Saturday 18:00: no fallback
+    for hh in range(0, 18):
+        await tick(ctx, at(SUN, hh, 0))
+        await tick(ctx, at(SUN, hh, 30))
+    assert calls == [] and "bonus_offers" not in ah.calls
+    assert ah.calls.count("bonus_periods") == 11 + 11 + 10  # hourly 08:00-18:00, no more
+    await tick(ctx, at(SUN, 18, 0))
+    assert len(calls) == 1 and ah.offers_for == [CUR]
+    (note,) = ctx.hass.notifications()
+    lines = note["message"].splitlines()
+    assert lines[0] == "Voor de bestelling van woensdag 4 november" and lines[1] == PERIOD_WARNING
+    assert ctx.ledger.load(W).period_warning == PERIOD_WARNING
+    await tick(ctx, at(SUN, 18, 30))
+    await tick(ctx, at(SUN, 23, 0))
+    assert len(calls) == 1 and len(ctx.hass.notifications()) == 1
+
+
+async def test_monday_and_wednesday_after_failed_fallback_do_nothing(tmp_path, planned):
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ah.raise_on["bonus_offers"] = AhApiError("boom", 500)
+    ctx = make_ctx(tmp_path, ah=ah)
+    await tick(ctx, at(SUN, 18, 0))  # the fallback, and it fails: reported once
+    assert ctx.ledger.load(W).plan is None
+    (note,) = ctx.hass.notifications()
+    assert note["title"] == "Weekmenu mislukt"
+    del ah.raise_on["bonus_offers"]
+    ah.periods = [CUR, NXT]  # Monday: the folder of the week of 4 November is there now
+    ah.calls.clear()
+    await whole_day(ctx, MON)
+    await whole_day(ctx, date(2026, 11, 3))
+    await whole_day(ctx, WED)
+    # the target is now the week of 11 November, whose folder is not out: only looks
+    assert calls == [] and ah.writes == [] and len(ctx.hass.notifications()) == 1
+    assert set(ah.calls) == {"bonus_periods"} and len(ah.calls) == 3 * 11
+    assert ctx.waiting == main.Waiting(date(2026, 11, 11), date(2026, 11, 6))
+
+
+async def test_monday_after_fallback_menu_makes_no_new_menu(tmp_path, planned):
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await tick(ctx, at(SUN, 18, 0))
+    assert len(calls) == 1
+    await whole_day(ctx, MON)
+    await whole_day(ctx, WED)
+    assert len(calls) == 1 and len(ctx.hass.notifications()) == 1
+
+
+async def test_nu_maken_before_folder_waits_and_writes_nothing(tmp_path, planned):
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah)
+    for mode in ("nu_maken", "nieuw_menu"):
+        out = await run_round(ctx, at(date(2026, 10, 29), 10, 0), mode)
+        assert out.status == "waiting_for_folder" and out.expected == date(2026, 10, 30)
+    assert calls == [] and ah.writes == [] and "bonus_offers" not in ah.calls
+    assert ctx.ledger.load(W).plan is None and ctx.hass.notifications() == []
+    assert ctx.waiting == main.Waiting(W, date(2026, 10, 30)) and ctx.error is None
+    # the folder is out: the same button makes the menu, and the waiting is over
+    ah.periods = [CUR, NXT]
+    out = await run_round(ctx, at(FRI, 10, 0), "nu_maken")
+    assert out.status == "done" and ctx.waiting is None and ah.offers_for == [NXT]
+
+
+async def test_nu_maken_after_sunday_1800_may_use_the_current_folder(tmp_path, planned):
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await run_round(ctx, at(SUN, 17, 59), "nu_maken")
+    assert out.status == "waiting_for_folder"
+    out = await run_round(ctx, at(SUN, 19, 0), "nu_maken")
+    assert out.status == "done" and out.warning == PERIOD_WARNING
+
+
+async def test_restart_while_waiting_runs_no_double_round(tmp_path, planned):
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await tick(ctx, at(FRI, 8, 0))
+    assert ah.calls == ["bonus_periods"]
+    ctx2 = make_ctx(tmp_path, ah=ah)  # restart at 08:20
+    main.load_state(ctx2)
+    assert ctx2.waiting == main.Waiting(W, date(2026, 10, 30))
+    await tick(ctx2, at(FRI, 8, 20))
+    assert ah.calls == ["bonus_periods"]  # this hour was already looked at
+    ah.periods = [CUR, NXT]
+    await tick(ctx2, at(FRI, 9, 0))
+    assert len(calls) == 1 and len(ctx2.hass.notifications()) == 1
+    ctx3 = make_ctx(tmp_path, ah=ah)  # and a restart after the menu: nothing more
+    main.load_state(ctx3)
+    n = len(ah.calls)
+    await tick(ctx3, at(FRI, 9, 40))
+    await whole_day(ctx3, SAT)
+    assert len(calls) == 1 and len(ah.calls) == n and ctx3.hass.notifications() == []
+
+
+def test_old_or_broken_state_file_loads(tmp_path):
+    ctx = make_ctx(tmp_path)
+    (tmp_path / "state.json").write_text('{"schedule_done": "2026-10-25"}', encoding="utf-8")
+    main.load_state(ctx)
+    assert ctx.checked is None and ctx.waiting is None
+    (tmp_path / "state.json").write_text("[1, 2]", encoding="utf-8")
+    main.load_state(ctx)
+    assert ctx.checked is None and ctx.waiting is None
+
+
+async def test_target_week_moves_on_after_sunday(tmp_path, planned):
+    calls, queue = planned
+    nov11 = date(2026, 11, 11)
+    queue[:] = [plan_a(), make_plan([dish(nov11, 301, [6], 1.0)])]
+    ah = FakeAh(tmp_path, periods=[CUR, NXT])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await tick(ctx, at(FRI, 8, 0))
+    assert ctx.ledger.load(W).plan is not None
+    ah.periods = [NXT]
+    await whole_day(ctx, WED)  # delivery day: the target is the week of 11 November now
+    await whole_day(ctx, date(2026, 11, 5))
+    assert len(calls) == 1 and ctx.waiting == main.Waiting(nov11, date(2026, 11, 6))
+    ah.periods = [NXT, NXT2]
+    await tick(ctx, at(date(2026, 11, 6), 8, 0))
+    assert len(calls) == 2 and ah.offers_for[-1] == NXT2
+    assert ctx.ledger.load(nov11).plan is not None
+    assert first_lines(ctx) == ["Voor de bestelling van woensdag 4 november",
+                                "Voor de bestelling van woensdag 11 november"]
+
+
+async def test_unreadable_settings_try_again_next_hour(tmp_path, planned):
+    calls, _ = planned
+    ctx = make_ctx(tmp_path)
+    ctx.hass.fail_reads = True
+    await tick(ctx, at(FRI, 8, 0))
+    await tick(ctx, at(FRI, 8, 30))
+    assert ctx.client.calls == [] and calls == [] and ctx.error
+    assert "HA is weg" not in ctx.error
+    ctx.hass.fail_reads = False
+    await tick(ctx, at(FRI, 9, 0))
+    assert len(calls) == 1 and ctx.error is None
+    assert ctx.client.held() == {1: 1, 2: 2, 3: 1}
+
+
+async def test_non_http_settings_error_tries_again_next_hour(tmp_path, planned):
+    calls, _ = planned
+    ctx = make_ctx(tmp_path)
+    real = ctx.hass.read_settings
+
+    async def broken():
+        raise ValueError("bad helper value")
+
+    ctx.hass.read_settings = broken
+    await tick(ctx, at(FRI, 8, 0))
+    assert "ValueError" in ctx.error and "bad helper value" not in ctx.error
+    assert calls == []
+    ctx.hass.read_settings = real
+    await tick(ctx, at(FRI, 9, 0))
+    assert len(calls) == 1
+
+
+async def test_ah_read_error_before_writing_is_quiet_and_retried(tmp_path, planned):
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR, NXT])
+    ah.raise_on["bonus_offers"] = AhApiError("boom", 503)
+    ctx = make_ctx(tmp_path, ah=ah)
+    await tick(ctx, at(SAT, 8, 0))
+    assert ctx.hass.notifications() == [] and ah.writes == [] and ctx.error
+    assert ctx.ledger.load(W).plan is None
+    del ah.raise_on["bonus_offers"]
+    await tick(ctx, at(SAT, 9, 0))
+    assert len(calls) == 1 and len(ctx.hass.notifications()) == 1 and ctx.error is None
+
+
+async def test_expired_login_is_reported_once_not_every_hour(tmp_path, planned):
+    ah = FakeAh(tmp_path, periods=[CUR, NXT])
+    ah.raise_on["bonus_periods"] = AhLoginExpired("login expired", 401)
+    ctx = make_ctx(tmp_path, ah=ah)
+    await tick(ctx, at(FRI, 8, 0))
+    await tick(ctx, at(FRI, 9, 0))
+    await tick(ctx, at(FRI, 10, 0))
+    assert [n["message"] for n in ctx.hass.notifications()] == [main.LOGIN_EXPIRED]
+    assert ah.writes == []
+
+
+async def test_disabled_addon_does_not_look_at_the_folder(tmp_path, planned):
+    calls, _ = planned
+    ctx = make_ctx(tmp_path, hass=FakeHass(tmp_path / "totaal.json", enabled=False))
+    await whole_day(ctx, FRI)
+    assert ctx.client.calls == [] and calls == []
+    ctx.hass.states["input_boolean.weekmenu_aan"] = "on"  # switched on Saturday
+    await tick(ctx, at(SAT, 11, 0))
+    assert len(calls) == 1
+
+
+def test_check_slots():
+    t = main.check_slot
+    at8, at830 = main.time(8, 0), main.time(8, 30)
+    assert t(at(FRI, 7, 59), at8) is None
+    assert t(at(FRI, 8, 0), at8) == at(FRI, 8, 0)
+    assert t(at(FRI, 8, 59), at8) == at(FRI, 8, 0)
+    assert t(at(FRI, 8, 15), at830) is None
+    assert t(at(FRI, 8, 45), at830) == at(FRI, 8, 30)
+    assert t(at(FRI, 9, 5), at830) == at(FRI, 9, 0)
+    assert t(at(FRI, 18, 0), at8) == at(FRI, 18, 0)
+    assert t(at(FRI, 23, 30), at8) == at(FRI, 18, 0)  # a late start still gets the last look
+    assert t(at(FRI, 20, 0), main.time(19, 0)) == at(FRI, 19, 0)
