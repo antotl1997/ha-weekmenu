@@ -182,7 +182,8 @@ async def test_empty_plan_is_not_written(tmp_path, monkeypatch):
 
 async def test_settings_follow_helpers(tmp_path, planned):
     calls, _ = planned
-    hass = FakeHass(tmp_path / "totaal.json", aantal=3, ouders="donderdag")
+    hass = FakeHass(tmp_path / "totaal.json", aantal=3)
+    hass.states["input_number.weekmenu_personen_donderdag"] = "0"
     hass.states["input_number.weekmenu_personen_vrijdag"] = "4"
     ctx = make_ctx(tmp_path, hass=hass)
     await run_round(ctx, SUNDAY, "nu_maken")
@@ -876,9 +877,10 @@ async def test_zero_persons_on_friday_is_skipped_in_the_settings(tmp_path, plann
     assert VR not in s.persons and all(n >= 1 for n in s.persons.values())
 
 
-async def test_zero_on_friday_and_parents_on_saturday(tmp_path, planned):
+async def test_zero_on_friday_and_saturday_shifts_five_evenings(tmp_path, planned):
     calls, _ = planned
-    hass = FakeHass(tmp_path / "totaal.json", aantal=5, ouders="zaterdag")
+    hass = FakeHass(tmp_path / "totaal.json", aantal=5)
+    hass.states["input_number.weekmenu_personen_zaterdag"] = "0"
     hass.states["input_number.weekmenu_personen_vrijdag"] = "0"
     ctx = make_ctx(tmp_path, hass=hass)
     await run_round(ctx, SUNDAY, "nu_maken")
@@ -919,3 +921,27 @@ async def test_all_days_zero_tells_the_schedule_once_a_week(tmp_path, planned):
     await run_round(ctx, at(date(2026, 11, 6), 9), "schema")
     await run_round(ctx, at(date(2026, 11, 6), 10), "schema")
     assert calls == [] and len(hass.notifications()) == 1
+
+
+async def test_old_state_and_log_with_parents_fields_still_load(tmp_path):
+    ctx = make_ctx(tmp_path)
+    ctx.state_path.write_text(json.dumps(
+        {"checked": "2026-11-01T08:00", "ouders": "vrijdag", "waiting": None}), encoding="utf-8")
+    main.load_state(ctx)
+    assert ctx.checked == datetime(2026, 11, 1, 8, 0)
+    plan = make_plan([dish(W, 1, [1])]).to_dict()
+    plan["ouders"] = "vrijdag"
+    old = WeekLog(W, plan=plan).to_dict()
+    old["ouders"] = "vrijdag"
+    (tmp_path / "weeks").mkdir(exist_ok=True)
+    (tmp_path / "weeks" / f"{W.isoformat()}.json").write_text(json.dumps(old), encoding="utf-8")
+    loaded = ctx.ledger.load(W)
+    assert loaded.week == W and len(Plan.from_dict(loaded.plan).dishes) == 1
+
+
+def test_no_parents_text_anywhere_in_the_app():
+    from pathlib import Path
+    root = Path(main.__file__).parent
+    for path in [*root.glob("*.py"), *(root / "static").glob("*")]:
+        if path.suffix in {".py", ".js", ".html", ".css"}:
+            assert "ouder" not in path.read_text(encoding="utf-8").lower(), path.name

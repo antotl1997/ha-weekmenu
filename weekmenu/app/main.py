@@ -57,7 +57,6 @@ from app import staples
 from app.durable import fsync_dir
 from app.tokens import TokenStore
 from app.week import (
-    GEEN_OUDERAVOND,
     WEEKDAGEN,
     away_dates,
     evenings,
@@ -92,7 +91,7 @@ LOGIN_EXPIRED_COMPLETION = ("AH-login verlopen. Log opnieuw in via de Weekmenu-a
                             "daarna wordt het menu vanzelf afgemaakt.")
 FINAL_FAILURE = ("Weekmenu kon niet gemaakt worden: Home Assistant/AH niet bereikbaar. "
                  "Tik op Nu maken in de Weekmenu-app.")
-ALL_AWAY = ("Alle avonden van deze week staan op niet thuis (0 personen) of bij de ouders. "
+ALL_AWAY = ("Alle avonden van deze week staan op niet thuis (0 personen). "
             "Er is geen menu gemaakt.")
 WRITE_FAILED_HINT = "Tik op Nu maken in de Weekmenu-app om de rest toe te voegen."
 STAPLES_TIMEOUT = 60  # seconds for the whole purchase-history step before the message
@@ -186,8 +185,7 @@ def week_of(day: date) -> date:
 
 def make_settings(ctx: Context, raw: RawSettings, start: date, exclude=()) -> Settings:
     aantal = min(7, max(1, raw.aantal))
-    ouders = raw.ouders if raw.ouders in WEEKDAGEN else GEEN_OUDERAVOND
-    days = evenings(start, aantal, ouders, raw.away)
+    days = evenings(start, aantal, raw.away)
     persons = {d: max(1, raw.persons.get(WEEKDAGEN[d.weekday()], 2)) for d in days}
     recent = ctx.ledger.recent_recipe_ids(start) | set(exclude)
     return Settings(days, persons, list(ctx.pantry), recent)
@@ -403,7 +401,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     # before the message, which names the count; bounded so the message is never late
     await refresh_staples(ctx, wlog, plan, start, now)
     recount_extras(ctx, wlog)  # apply may have settled a staple write
-    await guard(ctx.hass.publish(plan_view(plan, start, result.target, raw.ouders,
+    await guard(ctx.hass.publish(plan_view(plan, start, result.target,
                                           away_dates(start, raw.away)),
                                  plan.savings + wlog.extras_savings), "sensoren")
     nothing_new = not (result.added or result.pending or result.unknown)
@@ -415,7 +413,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         log.info("Menu stond er al en alles was al toegevoegd: geen nieuwe melding")
     else:
         # no count when the history failed or took too long (staples_error is set then)
-        title, body = format_message(plan, result, raw.ouders, warning,
+        title, body = format_message(plan, result, warning,
                                      staples=staples.open_count(wlog, plan.basket),
                                      start=start, away=away_dates(start, raw.away))
         if await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding"):

@@ -9,7 +9,6 @@ from app.hass import (
     BASE_URL,
     HELPER_AAN,
     HELPER_AVONDEN,
-    HELPER_OUDERS,
     Hass,
     format_eur,
     format_message,
@@ -54,7 +53,7 @@ def _state(entity, state):
 
 async def test_read_settings_maps_helpers(respx_mock):
     persons = helper_persons()
-    values = {HELPER_AAN: "on", HELPER_AVONDEN: "4.0", HELPER_OUDERS: "vrijdag"}
+    values = {HELPER_AAN: "on", HELPER_AVONDEN: "4.0"}
     for i, eid in enumerate(persons.values()):
         values[eid] = f"{2 + (i % 2)}.0"
     values[persons["zaterdag"]] = "unavailable"
@@ -64,7 +63,6 @@ async def test_read_settings_maps_helpers(respx_mock):
         raw = await Hass(http).read_settings()
     assert raw.enabled is True
     assert raw.aantal == 4
-    assert raw.ouders == "vrijdag"
     assert raw.persons["maandag"] == 2
     assert raw.persons["dinsdag"] == 3
     assert raw.persons["zaterdag"] == 2
@@ -79,10 +77,9 @@ async def test_read_settings_defaults_when_missing(respx_mock):
         raw = await Hass(http).read_settings()
     assert raw.enabled is False
     assert raw.aantal == 5
-    assert raw.ouders == "Niet deze week"
     assert set(raw.persons.values()) == {2}
     assert HELPER_AAN in raw.defaulted
-    assert len(raw.defaulted) == 10
+    assert len(raw.defaulted) == 9
 
 
 async def test_publish_total_has_total_increasing(respx_mock, tmp_path):
@@ -104,7 +101,7 @@ def test_load_total_missing(tmp_path):
 async def test_publish_sets_both_sensors(respx_mock):
     r1 = respx_mock.post(f"{BASE_URL}/states/sensor.weekmenu").respond(200, json={})
     r2 = respx_mock.post(f"{BASE_URL}/states/sensor.weekmenu_besparing_week").respond(200, json={})
-    view = plan_view(_plan(not_found=["nootmuskaat"]), date(2026, 11, 4), "list", "vrijdag")
+    view = plan_view(_plan(not_found=["nootmuskaat"]), date(2026, 11, 4), "list")
     async with httpx.AsyncClient() as http:
         await Hass(http).publish(view, 1.2)
     a = json.loads(r1.calls[0].request.content)
@@ -112,7 +109,7 @@ async def test_publish_sets_both_sensors(respx_mock):
     assert a["attributes"]["week"] == "2026-11-04"
     assert a["attributes"]["doel"] == "lijst"
     assert a["attributes"]["niet_gevonden"] == ["nootmuskaat"]
-    assert a["attributes"]["ouders"] == "vrijdag"
+    assert "ouders" not in a["attributes"]
     assert a["attributes"]["bestelling"] == "Voor de bestelling van woensdag 4 november"
     d = a["attributes"]["dishes"][0]
     assert d["datum"] == "2026-11-04" and d["dag"] == "woensdag" and d["titel"] == "Pasta pesto"
@@ -125,19 +122,18 @@ async def test_publish_sets_both_sensors(respx_mock):
 
 async def test_set_setting_whitelist_and_services(respx_mock):
     num = respx_mock.post(f"{BASE_URL}/services/input_number/set_value").respond(200, json=[])
-    sel = respx_mock.post(f"{BASE_URL}/services/input_select/select_option").respond(200, json=[])
     on = respx_mock.post(f"{BASE_URL}/services/input_boolean/turn_on").respond(200, json=[])
     off = respx_mock.post(f"{BASE_URL}/services/input_boolean/turn_off").respond(200, json=[])
     async with httpx.AsyncClient() as http:
         h = Hass(http)
         await h.set_setting(HELPER_AVONDEN, 4)
-        await h.set_setting(HELPER_OUDERS, "vrijdag")
+        with pytest.raises(ValueError):
+            await h.set_setting("input_select.weekmenu_ouders", "vrijdag")
         await h.set_setting(HELPER_AAN, True)
         await h.set_setting(HELPER_AAN, False)
         with pytest.raises(ValueError):
             await h.set_setting("light.keuken", True)
     assert json.loads(num.calls[0].request.content) == {"entity_id": HELPER_AVONDEN, "value": 4}
-    assert json.loads(sel.calls[0].request.content) == {"entity_id": HELPER_OUDERS, "option": "vrijdag"}
     assert on.called and off.called
 
 
@@ -158,43 +154,45 @@ def test_format_eur():
     assert format_eur(1234.5) == "€ 1234,50"
 
 
-def test_message_mentions_parents_day_and_target():
+def test_message_mentions_target_and_leftovers():
     plan = _plan([_dish(date(2026, 11, 4)), _dish(date(2026, 11, 5), "Wraps", 0.5)])
-    title, text = format_message(plan, WriteResult("order", leftovers=[("Melk", 1)]), "vrijdag", None)
+    title, text = format_message(plan, WriteResult("order", leftovers=[("Melk", 1)]), None)
     assert title == "Weekmenu klaar · € 1,70 bespaard"
     assert "wo Pasta pesto (€ 1,20)" in text
     assert "do Wraps (€ 0,50)" in text
-    assert "vr bij de ouders" in text
+    assert "ouders" not in text and "niet thuis" not in text
     assert "in je bestelling" in text
     assert "Melk" in text
 
 
-def test_message_mentions_no_parents_this_week():
-    _, text = format_message(_plan(), WriteResult("list"), "Niet deze week", None)
-    assert "deze week niet bij de ouders" in text
+def test_message_has_no_parents_text_and_names_away_evenings():
+    _, text = format_message(_plan(), WriteResult("list"), None,
+                             away=[date(2026, 11, 7), date(2026, 11, 9)])
+    assert "ouders" not in text
+    assert "za niet thuis" in text and "ma niet thuis" in text
     assert "op Mijn lijst" in text
 
 
 def test_message_includes_period_warning():
-    _, text = format_message(_plan(), WriteResult("order"), "Niet deze week", "Folder nog niet zichtbaar")
+    _, text = format_message(_plan(), WriteResult("order"), "Folder nog niet zichtbaar")
     assert "Folder nog niet zichtbaar" in text
 
 
 def test_message_extra_lines():
     plan = _plan(not_found=["snufje nootmuskaat"], short_by=2, budget_exhausted=True)
     result = WriteResult("order", unknown=[("Kaas", 1), ("Pesto", 2)])
-    _, text = format_message(plan, result, "Niet deze week", None)
+    _, text = format_message(plan, result, None)
     assert "Controleer in de AH-app: Kaas, Pesto" in text
     assert "Te weinig recepten voor 2 avonden" in text
     assert "Zoeken ingekort" in text
     assert "snufje nootmuskaat" in text
-    _, one = format_message(_plan(short_by=1), WriteResult("order"), "Niet deze week", None)
+    _, one = format_message(_plan(short_by=1), WriteResult("order"), None)
     assert "Te weinig recepten voor 1 avond" in one
     assert "1 avonden" not in one
 
 
 def test_message_opens_with_the_order_sentence():
-    _, text = format_message(_plan(), WriteResult("order"), "Niet deze week", "Let op",
+    _, text = format_message(_plan(), WriteResult("order"), "Let op",
                              start=date(2026, 11, 11))
     lines = text.splitlines()
     assert lines[0] == "Voor de bestelling van woensdag 11 november"
@@ -223,28 +221,89 @@ async def test_set_setting_accepts_zero_persons(respx_mock):
 
 def test_message_names_the_days_not_at_home():
     away = [date(2026, 11, 6), date(2026, 11, 9)]
-    _, text = format_message(_plan(), WriteResult("order"), "Niet deze week", None, away=away)
+    _, text = format_message(_plan(), WriteResult("order"), None, away=away)
     assert "vr niet thuis" in text and "ma niet thuis" in text
-    _, text = format_message(_plan(), WriteResult("order"), "Niet deze week", None)
+    _, text = format_message(_plan(), WriteResult("order"), None)
     assert "niet thuis" not in text
 
 
 def test_plan_view_marks_the_evenings_without_food():
-    view = plan_view(_plan(), date(2026, 11, 4), "order", "Niet deze week",
+    view = plan_view(_plan(), date(2026, 11, 4), "order",
                      away=[date(2026, 11, 6)])
     assert view["niet_thuis"] == ["2026-11-06"]
-    assert plan_view(_plan(), date(2026, 11, 4), "order", "Niet deze week")["niet_thuis"] == []
+    assert plan_view(_plan(), date(2026, 11, 4), "order")["niet_thuis"] == []
 
 
 def test_plan_view_and_message_skip_away_days_that_have_a_dish():
     plan = _plan([_dish(date(2026, 11, 6))])
-    view = plan_view(plan, date(2026, 11, 4), "order", "Niet deze week",
-                     away=[date(2026, 11, 6), date(2026, 11, 9)])
+    away = [date(2026, 11, 6), date(2026, 11, 9)]
+    view = plan_view(plan, date(2026, 11, 4), "order", away=away)
     assert view["niet_thuis"] == ["2026-11-09"]
+    # a reused plan still has a dish on vr: the message does not call it niet thuis
+    _, text = format_message(plan, WriteResult("order"), None, away=away)
+    assert "vr niet thuis" not in text and "ma niet thuis" in text
 
 
-def test_parents_day_with_zero_persons_is_only_the_parents():
+def test_raw_settings_away_is_every_day_at_zero():
     from app.hass import RawSettings
-    raw = RawSettings(True, 5, "vrijdag", {"vrijdag": 0, "zaterdag": 0, "maandag": 2})
-    assert raw.away == {"zaterdag"}
+    raw = RawSettings(True, 5, {"vrijdag": 0, "zaterdag": 0, "maandag": 2})
+    assert raw.away == {"vrijdag", "zaterdag"}
 
+
+# --- Niet thuis eten: the add-on remembers the number from before -----------------------
+
+
+def _fake(tmp_path):
+    from tests.fakes import FakeHass
+    return FakeHass(tmp_path / "totaal.json")
+
+
+async def test_set_away_remembers_the_old_number_and_restores_it(tmp_path):
+    hass = _fake(tmp_path)
+    eid = helper_persons()["vrijdag"]
+    hass.states[eid] = "4"
+    assert await hass.set_away("vrijdag", True) == 0
+    assert hass.posts[-1] == ("services/input_number/set_value", {"entity_id": eid, "value": 0})
+    hass.states[eid] = "0.0"  # what Home Assistant now says
+    assert await hass.set_away("vrijdag", False) == 4
+    assert hass.posts[-1] == ("services/input_number/set_value", {"entity_id": eid, "value": 4})
+
+
+async def test_set_away_restore_survives_a_restart(tmp_path):
+    first = _fake(tmp_path)
+    eid = helper_persons()["zaterdag"]
+    first.states[eid] = "3"
+    await first.set_away("zaterdag", True)
+    second = _fake(tmp_path)  # the add-on restarted: same /data
+    second.states[eid] = "0"
+    assert await second.set_away("zaterdag", False) == 3
+
+
+async def test_set_away_off_without_memory_gives_the_default(tmp_path):
+    hass = _fake(tmp_path)
+    eid = helper_persons()["zondag"]
+    hass.states[eid] = "0"  # set to 0 in Home Assistant itself
+    assert await hass.set_away("zondag", False) == 2
+
+
+async def test_set_away_off_leaves_a_day_that_is_not_away(tmp_path):
+    hass = _fake(tmp_path)
+    eid = helper_persons()["maandag"]
+    hass.states[eid] = "5"
+    assert await hass.set_away("maandag", False) == 5
+    assert hass.posts == []
+
+
+async def test_set_away_twice_keeps_the_first_number(tmp_path):
+    hass = _fake(tmp_path)
+    eid = helper_persons()["dinsdag"]
+    hass.states[eid] = "6"
+    await hass.set_away("dinsdag", True)
+    hass.states[eid] = "0"
+    await hass.set_away("dinsdag", True)
+    assert await hass.set_away("dinsdag", False) == 6
+
+
+async def test_set_away_rejects_a_non_weekday(tmp_path):
+    with pytest.raises(ValueError):
+        await _fake(tmp_path).set_away("light.keuken", True)

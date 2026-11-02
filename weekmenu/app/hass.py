@@ -1,5 +1,6 @@
 """Home Assistant via de Supervisor: helpers lezen, sensoren zetten, melding sturen."""
 
+import asyncio
 import json
 import os
 from dataclasses import dataclass, field
@@ -11,16 +12,16 @@ import httpx
 
 from app.durable import fsync_dir
 from app.planner import Plan
-from app.week import GEEN_OUDERAVOND, WEEKDAGEN, bestelling_zin
+from app.week import WEEKDAGEN, bestelling_zin
 from app.writer import WriteResult
 
 BASE_URL = "http://supervisor/core/api"
 TOTAL_PATH = Path("/data/totaal.json")
+AWAY_PATH = Path("/data/niet_thuis.json")  # {weekday: persons before "niet thuis"}
 
 # All helper entity IDs live here, and nowhere else.
 HELPER_AAN = "input_boolean.weekmenu_aan"
 HELPER_AVONDEN = "input_number.weekmenu_avonden"
-HELPER_OUDERS = "input_select.weekmenu_ouders"
 
 
 def helper_persons() -> dict[str, str]:
@@ -33,6 +34,7 @@ NOTIFY_SERVICE = "notify/mobile_app_s_26_ultra_anto"
 
 DEFAULT_AANTAL = 5
 DEFAULT_PERSONEN = 2
+MIN_PERSONEN, MAX_PERSONEN = 1, 8  # at home; 0 only through "niet thuis"
 
 _ABBR = {
     "maandag": "ma", "dinsdag": "di", "woensdag": "wo", "donderdag": "do",
@@ -45,15 +47,13 @@ _UNUSABLE = {"unavailable", "unknown", "none", ""}
 class RawSettings:
     enabled: bool
     aantal: int
-    ouders: str
     persons: dict[str, int]
     defaulted: list[str] = field(default_factory=list)
 
     @property
     def away(self) -> set[str]:
-        """Weekdays with 0 persons: not at home, no dinner. The parents' day is
-        reported as that only."""
-        return {dag for dag, n in self.persons.items() if n == 0 and dag != self.ouders}
+        """Weekdays with 0 persons: not at home, no dinner."""
+        return {dag for dag, n in self.persons.items() if n == 0}
 
 
 def format_eur(x: float) -> str:
@@ -123,7 +123,7 @@ def _save_total(path: Path, total: float,
     fsync_dir(path.parent)
 
 
-def plan_view(plan: Plan, week_start: date, target: str, ouders: str,
+def plan_view(plan: Plan, week_start: date, target: str,
               away: Iterable[date] = ()) -> dict:
     """Attributes for sensor.weekmenu. `target` is "order" or "list"; `away`: the
     evenings with 0 persons, without food."""
@@ -148,16 +148,19 @@ def plan_view(plan: Plan, week_start: date, target: str, ouders: str,
         "bestelling": bestelling_zin(week_start),
         "doel": "bestelling" if target == "order" else "lijst",
         "niet_gevonden": list(plan.not_found),
-        "ouders": ouders,
         "niet_thuis": [d.isoformat() for d in sorted(away) if d not in eaten],
         "dishes": dishes,
     }
 
 
 class Hass:
-    def __init__(self, http: httpx.AsyncClient, total_path: Path = TOTAL_PATH):
+    def __init__(self, http: httpx.AsyncClient, total_path: Path = TOTAL_PATH,
+                 away_path: Path | None = None):
         self._http = http
         self._total_path = Path(total_path)
+        self._away_path = (Path(away_path) if away_path is not None
+                           else self._total_path.with_name(AWAY_PATH.name))
+        self._away_lock = asyncio.Lock()
         self._headers = {"Authorization": f"Bearer {os.environ.get('SUPERVISOR_TOKEN', '')}"}
 
     async def _get_state(self, entity_id: str) -> str | None:
@@ -190,15 +193,11 @@ class Hass:
         if aan is None:
             defaulted.append(HELPER_AAN)
         aantal = await self._int(HELPER_AVONDEN, DEFAULT_AANTAL, defaulted)
-        ouders = await self._get_state(HELPER_OUDERS)
-        if ouders is None:
-            defaulted.append(HELPER_OUDERS)
-            ouders = GEEN_OUDERAVOND
         persons = {
             dag: await self._int(eid, DEFAULT_PERSONEN, defaulted)
             for dag, eid in helper_persons().items()
         }
-        return RawSettings(aan == "on", aantal, ouders, persons, defaulted)
+        return RawSettings(aan == "on", aantal, persons, defaulted)
 
     async def publish(self, plan_view: dict, week_savings: float) -> None:
         await self._post("states/sensor.weekmenu", {
@@ -209,7 +208,6 @@ class Hass:
                 "bestelling": plan_view["bestelling"],
                 "doel": plan_view["doel"],
                 "niet_gevonden": plan_view["niet_gevonden"],
-                "ouders": plan_view["ouders"],
                 "niet_thuis": plan_view.get("niet_thuis", []),
                 "dishes": plan_view["dishes"],
             },
@@ -241,14 +239,62 @@ class Hass:
         if entity_id == HELPER_AAN:
             action = "turn_on" if value else "turn_off"
             await self._post(f"services/input_boolean/{action}", {"entity_id": entity_id})
-        elif entity_id == HELPER_OUDERS:
-            await self._post("services/input_select/select_option",
-                             {"entity_id": entity_id, "option": str(value)})
         elif entity_id in _ALLOWED_NUMBERS:
             await self._post("services/input_number/set_value",
                              {"entity_id": entity_id, "value": value})
         else:
             raise ValueError(f"geen weekmenu-helper: {entity_id!r}")
+
+    def _load_away_memory(self) -> dict[str, int]:
+        try:
+            data = json.loads(self._away_path.read_text(encoding="utf-8"))
+        except (FileNotFoundError, ValueError):
+            return {}
+        if not isinstance(data, dict):
+            return {}
+        out: dict[str, int] = {}
+        for dag, n in data.items():
+            if dag in WEEKDAGEN and isinstance(n, int) and not isinstance(n, bool)                     and MIN_PERSONEN <= n <= MAX_PERSONEN:
+                out[dag] = n
+        return out
+
+    def _save_away_memory(self, memory: dict[str, int]) -> None:
+        path = self._away_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = Path(str(path) + ".tmp")
+        try:
+            tmp.write_text(json.dumps(memory), encoding="utf-8")
+            os.replace(tmp, path)
+        except BaseException:
+            tmp.unlink(missing_ok=True)
+            raise
+        fsync_dir(path.parent)
+
+    async def set_away(self, dag: str, away: bool) -> int:
+        """Not eating at home on `dag`: persons go to 0 and the old number is
+        remembered (written first, so a failed post loses nothing); turning it off
+        puts the old number back (only if the day is at 0), or the default. Returns the persons now set."""
+        if dag not in WEEKDAGEN:
+            raise ValueError(f"geen weekdag: {dag!r}")
+        entity = helper_persons()[dag]
+        async with self._away_lock:
+            memory = self._load_away_memory()
+            if away:
+                current = await self._int(entity, DEFAULT_PERSONEN, [])
+                if current >= MIN_PERSONEN:  # already 0: keep what was remembered
+                    memory[dag] = min(current, MAX_PERSONEN)
+                    self._save_away_memory(memory)
+                await self.set_setting(entity, 0)
+                return 0
+            current = await self._int(entity, 0, [])
+            if current >= MIN_PERSONEN:  # not away: never overwrite a number set by hand
+                return current
+            value = memory.get(dag, DEFAULT_PERSONEN)
+            await self.set_setting(entity, value)
+            if dag in memory:
+                del memory[dag]
+                self._save_away_memory(memory)
+            return value
 
     async def notify(self, title: str, message: str, url: str | None = None) -> None:
         payload: dict = {"title": title, "message": message}
@@ -262,12 +308,12 @@ def _plural(n: int, one: str, many: str) -> str:
 
 
 def format_message(
-    plan: Plan, result: WriteResult, ouders: str, period_warning: str | None,
+    plan: Plan, result: WriteResult, period_warning: str | None,
     staples: int = 0, start: date | None = None, away: Iterable[date] = (),
 ) -> tuple[str, str]:
     """The message when the menu is made. `staples`: suggestions in the app not added
     yet; `start`: the menu Wednesday, named in the first line; `away`: evenings
-    with 0 persons."""
+    not at home (0 persons); a day that still has a dish is not named."""
     title = f"Weekmenu klaar · {format_eur(plan.savings)} bespaard"
     lines: list[str] = []
     if start is not None:
@@ -276,11 +322,10 @@ def format_message(
         lines.append(period_warning)
     for d in plan.dishes:
         lines.append(f"{_ABBR[WEEKDAGEN[d.date.weekday()]]} {d.recipe.title} ({format_eur(d.savings)})")
-    if ouders == GEEN_OUDERAVOND:
-        lines.append("deze week niet bij de ouders")
-    else:
-        lines.append(f"{_ABBR.get(ouders, ouders)} bij de ouders")
+    eaten = {d.date for d in plan.dishes}
     for d in sorted(away):
+        if d in eaten:
+            continue
         lines.append(f"{_ABBR[WEEKDAGEN[d.weekday()]]} niet thuis")
     lines.append("Alles staat in je bestelling" if result.target == "order"
                  else "Alles staat op Mijn lijst")

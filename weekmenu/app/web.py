@@ -23,7 +23,6 @@ from app.ahclient import LOGIN_URL, AhApiError, AhLoginExpired, extract_code
 from app.hass import (
     HELPER_AAN,
     HELPER_AVONDEN,
-    HELPER_OUDERS,
     helper_persons,
     load_total,
     plan_view,
@@ -32,7 +31,6 @@ from app.ledger import leftovers
 from app.planner import Dish, Plan, Settings
 from app.staples import extras_savings, staple_list
 from app.week import (
-    GEEN_OUDERAVOND,
     WEEKDAGEN,
     away_dates,
     bestelling_zin,
@@ -119,15 +117,14 @@ def _leftovers(log, plan: Plan) -> list[dict]:
     return [{"product": _title(plan, p), "qty": n} for p, n in leftovers(log, plan).items()]
 
 
-def week_view(wlog, plan: Plan | None, start: date, ouders: str | None,
+def week_view(wlog, plan: Plan | None, start: date,
               away: Iterable[str] = ()) -> dict:
     away = set(away)
     out = {
         "week": start.isoformat(), "bestelling": bestelling_zin(start),
-        "target": wlog.target, "ouders": ouders, "days": [],
+        "target": wlog.target, "days": [],
         "niet_thuis": [d.isoformat() for d in away_dates(start, away)],
-        "geen_avonden": not evenings(start, 7, ouders if ouders in WEEKDAGEN else GEEN_OUDERAVOND,
-                                     away),
+        "geen_avonden": not evenings(start, 7, away),
         "savings": 0.0, "products": 0, "bonus_products": 0, "leftovers": [],
         "not_found": [], "short_by": 0, "pending": [], "unknown": [],
         "budget_exhausted": False, "period_warning": wlog.period_warning,
@@ -142,15 +139,11 @@ def week_view(wlog, plan: Plan | None, start: date, ouders: str | None,
         dag = WEEKDAGEN[day.weekday()]
         d = by_day.get(day)
         if d is not None:
-            out["days"].append({"date": day.isoformat(), "dag": dag, "ouders": False,
+            out["days"].append({"date": day.isoformat(), "dag": dag,
                                 "niet_thuis": False, "persons": d.persons, "recipe": _recipe_view(d),
                                 "savings": d.savings})
-        elif ouders == dag:
-            out["days"].append({"date": day.isoformat(), "dag": dag, "ouders": True,
-                                "niet_thuis": False, "persons": 0, "recipe": None,
-                                "savings": 0.0})
         elif dag in away:
-            out["days"].append({"date": day.isoformat(), "dag": dag, "ouders": False,
+            out["days"].append({"date": day.isoformat(), "dag": dag,
                                 "niet_thuis": True, "persons": 0, "recipe": None,
                                 "savings": 0.0})
     out.update(
@@ -257,7 +250,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         raw = await settings_now()
         if raw is None:
             return
-        view = plan_view(plan, start, target, raw.ouders, away_dates(start, raw.away))
+        view = plan_view(plan, start, target, away_dates(start, raw.away))
         await main.guard(ctx.hass.publish(view,
                                           plan.savings + extras), "sensoren")
 
@@ -333,7 +326,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         wlog = ctx.ledger.load(start)
         plan = Plan.from_dict(wlog.plan) if wlog.plan else None
         raw = await settings_now()
-        out = week_view(wlog, plan, start, raw.ouders if raw is not None else None,
+        out = week_view(wlog, plan, start,
                         raw.away if raw is not None else ())
         out["enabled"] = raw.enabled if raw is not None else None  # None: HA unreadable
         w = waiting_for(start) if plan is None else None
@@ -515,23 +508,35 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     async def get_settings(request):
         raw = await ctx.hass.read_settings()
         return web.json_response({
-            "enabled": raw.enabled, "avonden": raw.aantal, "ouders": raw.ouders,
+            "enabled": raw.enabled, "avonden": raw.aantal,
             "persons": raw.persons, "defaulted": raw.defaulted,
-            "ouders_options": [GEEN_OUDERAVOND] + WEEKDAGEN[2:] + WEEKDAGEN[:2],
+            "away": [dag for dag in WEEKDAGEN[2:] + WEEKDAGEN[:2] if dag in raw.away],
             "entities": {"enabled": HELPER_AAN, "avonden": HELPER_AVONDEN,
-                         "ouders": HELPER_OUDERS, "persons": helper_persons()},
+                         "persons": helper_persons()},
         })
 
     async def post_settings(request):
         body = await body_of(request)
-        entity, value = body.get("entity_id"), body.get("value")
-        if not isinstance(entity, str) or value is None:
-            return _err(400, "entity_id en value zijn nodig")
+        entity, value, away = body.get("entity_id"), body.get("value"), body.get("away")
+        if not isinstance(entity, str) or (value is None and not isinstance(away, bool)):
+            return _err(400, "entity_id en value (of away) zijn nodig")
+        by_entity = {eid: dag for dag, eid in helper_persons().items()}
+        if isinstance(away, bool) and entity not in by_entity:
+            return _err(400, "away hoort bij een personen-helper")
+        if entity in by_entity and not isinstance(away, bool) and value == 0                 and not isinstance(value, bool):
+            away = True  # 0 persons is "niet thuis", whoever asks
         try:
-            await ctx.hass.set_setting(entity, value)
+            if entity in by_entity and isinstance(away, bool):
+                # "Niet thuis eten": the add-on remembers the number from before
+                value = await ctx.hass.set_away(by_entity[entity], away)
+            elif entity in by_entity and (isinstance(value, bool) or not isinstance(value, int)
+                                          or not MIN_PERSONS <= value <= MAX_PERSONS):
+                return _err(400, "personen moeten 1 tot 8 zijn")
+            else:
+                await ctx.hass.set_setting(entity, value)
         except ValueError:
             return _err(400, "geen weekmenu-helper")
-        return web.json_response({"ok": True})
+        return web.json_response({"ok": True, "value": value})
 
     app.router.add_get("/", index)
     app.router.add_get("/api/status", status)

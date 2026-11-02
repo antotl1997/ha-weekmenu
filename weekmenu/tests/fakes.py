@@ -6,7 +6,7 @@ from datetime import date, datetime
 import httpx
 
 from app.ahclient import ActiveOrder, AhApiError, BonusPeriod, Product, Recipe
-from app.hass import HELPER_AAN, HELPER_AVONDEN, HELPER_OUDERS, Hass, helper_persons
+from app.hass import HELPER_AAN, HELPER_AVONDEN, Hass, helper_persons
 from app.ledger import Ledger
 from app.main import Context
 from app.planner import Dish, Line, Plan
@@ -159,13 +159,12 @@ class FakeAh:
 class FakeHass(Hass):
     """The real Hass logic on top of an in-memory state table; posts are recorded."""
 
-    def __init__(self, total_path, enabled=True, aantal=5, ouders="Niet deze week",
+    def __init__(self, total_path, enabled=True, aantal=5,
                  fail_posts=False):
         super().__init__(http=None, total_path=total_path)
         self.states = {
             HELPER_AAN: "on" if enabled else "off",
             HELPER_AVONDEN: str(aantal),
-            HELPER_OUDERS: ouders,
             **{eid: "2" for eid in helper_persons().values()},
         }
         self.posts: list[tuple[str, dict]] = []

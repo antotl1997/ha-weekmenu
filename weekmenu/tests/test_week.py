@@ -45,33 +45,24 @@ def test_week_start_on_next_sunday():
     assert menu_week_start(dt(2026, 11, 8, 18)) == date(2026, 11, 11)
 
 
-def test_five_evenings_no_parents():
-    assert [d.day for d in evenings(date(2026, 11, 4), 5, "Niet deze week")] == [4, 5, 6, 7, 8]
+def test_five_evenings_all_at_home():
+    assert [d.day for d in evenings(date(2026, 11, 4), 5)] == [4, 5, 6, 7, 8]
 
 
-def test_parents_on_friday_shifts():
-    assert [d.day for d in evenings(date(2026, 11, 4), 5, "vrijdag")] == [4, 5, 7, 8, 9]
-
-
-def test_seven_evenings_with_parents_gives_six():
-    assert len(evenings(date(2026, 11, 4), 7, "zaterdag")) == 6
+def test_seven_evenings_with_one_away_gives_six():
+    assert len(evenings(date(2026, 11, 4), 7, {"zaterdag"})) == 6
 
 
 def test_evenings_never_go_past_tuesday():
-    days = evenings(date(2026, 11, 4), 7, "Niet deze week")
+    days = evenings(date(2026, 11, 4), 7)
     assert days[-1] == date(2026, 11, 10)
     assert len(days) == 7
-
-
-def test_unknown_parents_value_raises():
-    with pytest.raises(ValueError):
-        evenings(date(2026, 11, 4), 5, "fundag")
 
 
 @pytest.mark.parametrize("aantal", [0, 8, -1])
 def test_aantal_outside_range_raises(aantal):
     with pytest.raises(ValueError):
-        evenings(date(2026, 11, 4), aantal, "Niet deze week")
+        evenings(date(2026, 11, 4), aantal)
 
 
 def test_weekdagen_order():
@@ -99,27 +90,20 @@ def test_bestelling_zin_names_the_delivery_wednesday():
 WO = date(2026, 11, 4)
 
 
-def test_zero_persons_on_friday_shifts_like_the_parents():
-    days = evenings(WO, 5, "Niet deze week", {"vrijdag"})
-    assert [WEEKDAGEN[d.weekday()] for d in days] == [
-        "woensdag", "donderdag", "zaterdag", "zondag", "maandag"]
-
-
-def test_zero_on_friday_and_parents_on_saturday():
-    days = evenings(WO, 5, "zaterdag", {"vrijdag"})
+def test_two_away_days_friday_and_saturday_shift_five_evenings():
+    days = evenings(WO, 5, {"vrijdag", "zaterdag"})
     assert [WEEKDAGEN[d.weekday()] for d in days] == [
         "woensdag", "donderdag", "zondag", "maandag", "dinsdag"]
 
 
-def test_zero_persons_never_goes_past_tuesday():
-    days = evenings(WO, 7, "Niet deze week", {"vrijdag", "zaterdag"})
+def test_away_never_goes_past_tuesday():
+    days = evenings(WO, 7, {"vrijdag", "zaterdag"})
     assert days[-1] == date(2026, 11, 10)
     assert len(days) == 5
 
 
 def test_zero_on_every_day_gives_no_evenings():
-    assert evenings(WO, 5, "Niet deze week", set(WEEKDAGEN)) == []
-    assert evenings(WO, 5, "vrijdag", set(WEEKDAGEN) - {"vrijdag"}) == []
+    assert evenings(WO, 5, set(WEEKDAGEN)) == []
 
 
 def test_away_dates_lists_the_week_in_order():

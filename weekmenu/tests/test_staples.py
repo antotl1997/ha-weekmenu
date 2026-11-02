@@ -401,11 +401,11 @@ async def test_slow_history_message_without_count(tmp_path, planned, monkeypatch
 
 def test_message_mentions_staples_count():
     plan = make_plan([dish(W, 101, [1], 1.0)])
-    _, text = format_message(plan, WriteResult("order"), "Niet deze week", None, staples=4)
+    _, text = format_message(plan, WriteResult("order"), None, staples=4)
     assert "Ook 4 vaste boodschappen in de bonus" in text
-    _, text = format_message(plan, WriteResult("order"), "Niet deze week", None, staples=1)
+    _, text = format_message(plan, WriteResult("order"), None, staples=1)
     assert "Ook 1 vaste boodschap in de bonus" in text
-    _, text = format_message(plan, WriteResult("order"), "Niet deze week", None)
+    _, text = format_message(plan, WriteResult("order"), None)
     assert "vaste boodschap" not in text
 
 

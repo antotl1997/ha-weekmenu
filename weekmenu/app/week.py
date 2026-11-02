@@ -8,8 +8,6 @@ WEEKDAGEN = ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag
 MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus",
            "september", "oktober", "november", "december"]
 
-GEEN_OUDERAVOND = "Niet deze week"
-
 _ZONDAG = 6  # date.weekday(): maandag=0 ... zondag=6
 _WOENSDAG_NA_ZONDAG = 3  # de woensdag na de zondag
 
@@ -26,17 +24,14 @@ def menu_week_start(now: datetime) -> date:
     return zondag + timedelta(days=_WOENSDAG_NA_ZONDAG)
 
 
-def evenings(start: date, aantal: int, ouders: str, away: Iterable[str] = ()) -> list[date]:
+def evenings(start: date, aantal: int, away: Iterable[str] = ()) -> list[date]:
     """Kookavonden vanaf `start`, woensdag t/m dinsdag (start + 6).
 
-    De ouderavond (een weekdag, of GEEN_OUDERAVOND) en de weekdagen in `away`
-    (0 personen, niet thuis) worden overgeslagen; de volgende dag schuift op.
-    Geeft minder dagen terug als de week er niet genoeg heeft, en geen enkele
-    als elke dag wegvalt.
+    De weekdagen in `away` (0 personen, niet thuis eten) worden overgeslagen; de
+    volgende dag schuift op. Geeft minder dagen terug als de week er niet genoeg
+    heeft, en geen enkele als elke dag wegvalt.
     """
     away = set(away)
-    if ouders != GEEN_OUDERAVOND and ouders not in WEEKDAGEN:
-        raise ValueError(f"onbekende ouderavond: {ouders!r}")
     if not 1 <= aantal <= 7:
         raise ValueError(f"aantal avonden moet tussen 1 en 7 liggen, niet {aantal}")
 
@@ -45,8 +40,7 @@ def evenings(start: date, aantal: int, ouders: str, away: Iterable[str] = ()) ->
         if len(result) == aantal:
             break
         day = start + timedelta(days=offset)
-        dag = WEEKDAGEN[day.weekday()]
-        if dag == ouders or dag in away:
+        if WEEKDAGEN[day.weekday()] in away:
             continue
         result.append(day)
     return result

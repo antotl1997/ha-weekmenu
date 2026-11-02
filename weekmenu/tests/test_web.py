@@ -158,7 +158,7 @@ async def test_api_settings_rejects_unknown_entity(aiohttp_client, ctx):
 
 async def test_api_week_and_dish_shape(aiohttp_client, ctx):
     await planned_ctx(ctx)
-    ctx.hass.states["input_select.weekmenu_ouders"] = "vrijdag"
+    ctx.hass.states["input_number.weekmenu_personen_vrijdag"] = "0"
     client = await aiohttp_client(make_app(ctx))
     body = await (await client.get("api/week")).json()
     assert body["week"] == W.isoformat() and body["target"] == "list"
@@ -168,7 +168,8 @@ async def test_api_week_and_dish_shape(aiohttp_client, ctx):
     assert days[0]["dag"] == "woensdag" and days[0]["recipe"]["title"] == "Recept 101"
     assert set(days[0]["recipe"]) == {"id", "title", "image", "cook", "oven", "wait",
                                       "cuisine", "url"}
-    assert days[2]["ouders"] is True and days[2]["recipe"] is None
+    assert days[2]["niet_thuis"] is True and days[2]["recipe"] is None
+    assert "ouders" not in body and all("ouders" not in d for d in days)
 
     d = await (await client.get(f"api/dish/{WO.isoformat()}")).json()
     assert d["steps"] == ["Snijd de ui."]
@@ -415,7 +416,7 @@ async def test_api_week_marks_the_evenings_not_at_home(aiohttp_client, ctx):
     assert body["geen_avonden"] is False
     away = [d for d in body["days"] if d["niet_thuis"]]
     assert [d["date"] for d in away] == ["2026-11-07", "2026-11-09"]
-    assert all(d["recipe"] is None and d["persons"] == 0 and d["ouders"] is False for d in away)
+    assert all(d["recipe"] is None and d["persons"] == 0 for d in away)
     assert all(d["niet_thuis"] is False for d in body["days"] if d["recipe"])
 
 
@@ -436,9 +437,8 @@ async def test_api_settings_accepts_zero_persons(aiohttp_client, ctx):
     assert ctx.hass.posts[-1] == ("services/input_number/set_value", {"entity_id": eid, "value": 0})
 
 
-async def test_api_week_niet_thuis_skips_parents_day_and_days_with_a_dish(aiohttp_client, ctx):
+async def test_api_week_niet_thuis_skips_days_with_a_dish(aiohttp_client, ctx):
     await planned_ctx(ctx)  # dishes on wo, do (and one more)
-    ctx.hass.states["input_select.weekmenu_ouders"] = "vrijdag"
     ctx.hass.states["input_number.weekmenu_personen_vrijdag"] = "0"
     ctx.hass.states["input_number.weekmenu_personen_donderdag"] = "0"  # still has a dish
     ctx.hass.states["input_number.weekmenu_personen_zondag"] = "0"
@@ -446,7 +446,49 @@ async def test_api_week_niet_thuis_skips_parents_day_and_days_with_a_dish(aiohtt
     body = await (await client.get("api/week")).json()
     dish_days = {d["date"] for d in body["days"] if d["recipe"]}
     assert "2026-11-05" in dish_days
-    assert body["niet_thuis"] == ["2026-11-08"]
-    ouders = [d for d in body["days"] if d["ouders"]]
-    assert [d["date"] for d in ouders] == ["2026-11-06"] and ouders[0]["niet_thuis"] is False
+    assert body["niet_thuis"] == ["2026-11-06", "2026-11-08"]
 
+
+
+# --- Niet thuis eten ---------------------------------------------------------------------
+
+
+async def test_api_settings_away_taps_remember_and_restore(aiohttp_client, ctx):
+    client = await aiohttp_client(make_app(ctx))
+    eid = helper_persons()["vrijdag"]
+    ctx.hass.states[eid] = "4"
+    r = await client.post("api/settings", json={"entity_id": eid, "away": True})
+    assert r.status == 200 and (await r.json())["value"] == 0
+    assert ctx.hass.posts[-1] == ("services/input_number/set_value", {"entity_id": eid, "value": 0})
+    ctx.hass.states[eid] = "0"
+    settings = await (await client.get("api/settings")).json()
+    assert settings["away"] == ["vrijdag"] and "ouders" not in settings
+    assert "ouders_options" not in settings and "ouders" not in settings["entities"]
+    r = await client.post("api/settings", json={"entity_id": eid, "away": False})
+    assert (await r.json())["value"] == 4
+    assert ctx.hass.posts[-1] == ("services/input_number/set_value", {"entity_id": eid, "value": 4})
+
+
+async def test_api_settings_helper_set_to_zero_outside_shows_as_away(aiohttp_client, ctx):
+    ctx.hass.states[helper_persons()["dinsdag"]] = "0"
+    ctx.hass.states[helper_persons()["woensdag"]] = "0"
+    client = await aiohttp_client(make_app(ctx))
+    settings = await (await client.get("api/settings")).json()
+    assert settings["away"] == ["woensdag", "dinsdag"]  # in app order, wo first
+
+
+async def test_api_settings_persons_outside_1_to_8_are_refused(aiohttp_client, ctx):
+    client = await aiohttp_client(make_app(ctx))
+    eid = helper_persons()["vrijdag"]
+    for bad in (9, -1, 2.5, "3", True):
+        r = await client.post("api/settings", json={"entity_id": eid, "value": bad})
+        assert r.status == 400, bad
+    assert ctx.hass.posts == []
+    r = await client.post("api/settings", json={"entity_id": eid, "value": 8})
+    assert r.status == 200
+
+
+async def test_api_settings_away_flag_is_only_for_person_helpers(aiohttp_client, ctx):
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post("api/settings", json={"entity_id": HELPER_AVONDEN, "away": True})
+    assert r.status == 400 and ctx.hass.posts == []
