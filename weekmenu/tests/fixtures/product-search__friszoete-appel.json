@@ -1,0 +1,2972 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 298,
+  "totalPages": 15,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 608513,
+   "hqId": 0,
+   "title": "Optimel Magere kwark appel kaneel 4-pack",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6c4b6c71306b3147516d575a4579796e6c7079612d67?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6c4b6c71306b3147516d575a4579796e6c7079612d67?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6c4b6c71306b3147516d575a4579796e6c7079612d67?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6c4b6c71306b3147516d575a4579796e6c7079612d67?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6c4b6c71306b3147516d575a4579796e6c7079612d67?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "10% volume voordeel",
+   "currentPrice": 8.6,
+   "priceBeforeBonus": 9.56,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Zuivel, eieren",
+   "subCategory": "Kwark met smaak",
+   "brand": "Optimel",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Optimel Magere kwark appel kaneel 4x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 166359,
+     "quantity": 4
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "10% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 117190,
+   "hqId": 516797,
+   "title": "Pink Lady Appels schaal",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353935393435?revLabel=4&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353935393435?revLabel=4&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353935393435?revLabel=4&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353935393435?revLabel=4&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353935393435?revLabel=4&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 3.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Schaal",
+   "brand": "Pink Lady",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Pink lady is een volzoet en aromatisch handappeltje met hard, stevig en zeer knapperig vruchtvlees. Ook ideaal om te bakken of in een salade.</p><p><ul><li>Smaak: volzoet</li><li>Bereiden: de appel wassen en eventueel schillen</li><li>Bewaren: appels na aankoop bewaren in de koelkast</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> In 1973 had de australische onderzoeker john cripps het goede idee om een golden delicious en een lady Williams natuurlijk te kruisen. Uit deze combinatie is de het appelras cripps pink geboren. De Pink Lady appels zijn een selectie van de beste appels van dit ras. Ontdek het avontuur van pink lady.  </p>\n  <p>Land van oorsprong: november-april: Frankrijk/Itali&#x00EB;. Mei-september: Chili en Zuid-Afrika. Oktober: Australi&#x00EB;.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 8,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 608512,
+   "hqId": 0,
+   "title": "Optimel Magere kwark appel kaneel 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6f2d683757716b57537a4f656e47794c504f62556367?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6f2d683757716b57537a4f656e47794c504f62556367?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6f2d683757716b57537a4f656e47794c504f62556367?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6f2d683757716b57537a4f656e47794c504f62556367?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6f2d683757716b57537a4f656e47794c504f62556367?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 4.54,
+   "priceBeforeBonus": 4.78,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Zuivel, eieren",
+   "subCategory": "Kwark met smaak",
+   "brand": "Optimel",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Optimel Magere kwark appel kaneel 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 166359,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 559182,
+   "hqId": 0,
+   "title": "AH Zoete kleine appeltjes 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4379625151435f66514b4b545056396a434647494c67?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4379625151435f66514b4b545056396a434647494c67?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4379625151435f66514b4b545056396a434647494c67?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4379625151435f66514b4b545056396a434647494c67?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4379625151435f66514b4b545056396a434647494c67?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 8.52,
+   "priceBeforeBonus": 8.97,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Zakken",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Zoete kleine appeltjes 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 129993,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 618583,
+   "hqId": 0,
+   "title": "AH Gala schaal 4-pack",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_30656761536f765f51633664487467306e726e624151?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_30656761536f765f51633664487467306e726e624151?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_30656761536f765f51633664487467306e726e624151?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_30656761536f765f51633664487467306e726e624151?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_30656761536f765f51633664487467306e726e624151?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": null,
+   "currentPrice": 5.26,
+   "priceBeforeBonus": 8.76,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Schaal",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Gala schaal 4x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 456588,
+     "quantity": 4
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PRODUCT_DISCOUNT_BUNDLE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE",
+     "defaultDescription": "pakketkorting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 581563,
+   "hqId": 0,
+   "title": "Danoontje Knijpyoghurt appel en aardbei 5-pack",
+   "salesUnitSize": "5 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313038303738?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313038303738?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313038303738?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313038303738?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313038303738?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 4.7,
+   "priceBeforeBonus": 4.95,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Zuivel, eieren",
+   "subCategory": "Yoghurt tussendoortjes",
+   "brand": "Danoontje",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Danoontje knijpyoghurt appel aardbei zonder toegevoegde suikers van Danone is een knijpzakje vol fruityoghurt. Heerlijk als tussendoortje, toetje of traktatie. Nu in een multipack van 5 Danoontjes, zodat er elke schooldag een in de tas mee kan!</p><p><ul><li>Danoontje Knijpyoghurt appel en aardbei 5x</li><li>Verantwoorde vruchtenyoghurt voor kinderen zonder toegevoegde suikers</li><li>Bron van calcium en vitamine D</li><li>Laag in vet met nutriscore A: een verantwoord tussendoortje</li><li>Deze yoghurt bevat geen kunstmatige geur-, kleur- en smaakstoffen</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 503341,
+     "quantity": 5
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 123723,
+   "hqId": 522986,
+   "title": "AH Biologisch Elstar schaal",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_517762536e61573751662d454d684a68335a35667841?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_517762536e61573751662d454d684a68335a35667841?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_517762536e61573751662d454d684a68335a35667841?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_517762536e61573751662d454d684a68335a35667841?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_517762536e61573751662d454d684a68335a35667841?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 2.69,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Schaal",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Na aankoop bewaren in de koelkast.</p>",
+   "propertyIcons": [
+    "vegan",
+    "lokaal",
+    "biologisch"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 5,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 618314,
+   "hqId": 0,
+   "title": "AH Vers geperst sap appel peer framboos 4pk",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_674f444347324d7152552d33524d77456c69584d3751?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_674f444347324d7152552d33524d77456c69584d3751?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_674f444347324d7152552d33524d77456c69584d3751?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_674f444347324d7152552d33524d77456c69584d3751?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_674f444347324d7152552d33524d77456c69584d3751?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": null,
+   "currentPrice": 7.5,
+   "priceBeforeBonus": 10.36,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Multivruchtensap (vers)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Vers geperst sap appel peer framboos 4x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 104114,
+     "quantity": 4
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PRODUCT_DISCOUNT_BUNDLE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE",
+     "defaultDescription": "pakketkorting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 618313,
+   "hqId": 0,
+   "title": "AH Vers geperst sap appel peer framboos 3pk",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6c53643063536d6f533369547a47503463366a595767?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6c53643063536d6f533369547a47503463366a595767?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6c53643063536d6f533369547a47503463366a595767?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6c53643063536d6f533369547a47503463366a595767?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6c53643063536d6f533369547a47503463366a595767?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": null,
+   "currentPrice": 6.34,
+   "priceBeforeBonus": 7.77,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Multivruchtensap (vers)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Vers geperst sap appel peer framboos 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 104114,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PRODUCT_DISCOUNT_BUNDLE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE",
+     "defaultDescription": "pakketkorting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 612208,
+   "hqId": 0,
+   "title": "DubbelFrisss Appel & perzik 72-pack",
+   "salesUnitSize": "12 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_782d68566b3772695436697a5054677a38736b653341?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_782d68566b3772695436697a5054677a38736b653341?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_782d68566b3772695436697a5054677a38736b653341?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_782d68566b3772695436697a5054677a38736b653341?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_782d68566b3772695436697a5054677a38736b653341?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "20% volume voordeel",
+   "currentPrice": 33.5,
+   "priceBeforeBonus": 41.88,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Fruitdrank drinkpakjes",
+   "brand": "DubbelFrisss",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>DubbelFrisss Appel & perzik 6-pack 12x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 520758,
+     "quantity": 12
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "20% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 20,
+     "unit": null,
+     "precisePercentage": 20
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 612522,
+   "hqId": 0,
+   "title": "Van de Boom Appel 6-pack",
+   "salesUnitSize": "6 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_794e6649794673375450537877773868556764396651?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_794e6649794673375450537877773868556764396651?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_794e6649794673375450537877773868556764396651?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_794e6649794673375450537877773868556764396651?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_794e6649794673375450537877773868556764396651?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "15% volume voordeel",
+   "currentPrice": 12.7,
+   "priceBeforeBonus": 14.94,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Appelsap en perensap",
+   "brand": "Van de Boom",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Van de Boom Appel 6x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 403957,
+     "quantity": 6
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "15% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 15,
+     "unit": null,
+     "precisePercentage": 15
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 612880,
+   "hqId": 0,
+   "title": "Organix Knijpfruit haver appel banaan 12m+ 4-pck",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_54594c4c6479383754663675516e644c786e41546e77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_54594c4c6479383754663675516e644c786e41546e77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_54594c4c6479383754663675516e644c786e41546e77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_54594c4c6479383754663675516e644c786e41546e77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_54594c4c6479383754663675516e644c786e41546e77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": "AHOO",
+   "segmentType": null,
+   "promotionType": "AHONLINE",
+   "bonusMechanism": null,
+   "currentPrice": 4.86,
+   "priceBeforeBonus": 5.4,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Baby en kind",
+   "subCategory": "Knijpfruit vanaf 12 maanden",
+   "brand": "Organix",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Organix Knijpfruit haver appel banaan 12m+ 4x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 445214,
+     "quantity": 4
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": null,
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BONUS",
+     "defaultDescription": "BONUS",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 612113,
+   "hqId": 0,
+   "title": "Appelsientje Kids fruitdrink appel 18-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_35386d6a476c57695355477663577a7a4c776a703177?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_35386d6a476c57695355477663577a7a4c776a703177?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_35386d6a476c57695355477663577a7a4c776a703177?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_35386d6a476c57695355477663577a7a4c776a703177?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_35386d6a476c57695355477663577a7a4c776a703177?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": null,
+   "currentPrice": 6.98,
+   "priceBeforeBonus": 10.47,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Fruitdrank drinkpakjes",
+   "brand": "Appelsientje",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Appelsientje Kids fruitdrink appel 6-pack 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 436173,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PRODUCT_DISCOUNT_BUNDLE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE",
+     "defaultDescription": "pakketkorting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 612114,
+   "hqId": 0,
+   "title": "Appelsientje Kids fruitdrink appel 30-pack",
+   "salesUnitSize": "5 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6a68705f4f36414451624f6c70546c756b7a614b5451?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6a68705f4f36414451624f6c70546c756b7a614b5451?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6a68705f4f36414451624f6c70546c756b7a614b5451?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6a68705f4f36414451624f6c70546c756b7a614b5451?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6a68705f4f36414451624f6c70546c756b7a614b5451?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": null,
+   "currentPrice": 10.47,
+   "priceBeforeBonus": 17.45,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Fruitdrank drinkpakjes",
+   "brand": "Appelsientje",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Appelsientje Kids fruitdrink appel 6-pack 5x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 436173,
+     "quantity": 5
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PRODUCT_DISCOUNT_BUNDLE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE",
+     "defaultDescription": "pakketkorting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 618365,
+   "hqId": 0,
+   "title": "AH Zoete kleine appeltjes 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_66656f383673397652626945704e32635438556d2d51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_66656f383673397652626945704e32635438556d2d51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_66656f383673397652626945704e32635438556d2d51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_66656f383673397652626945704e32635438556d2d51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_66656f383673397652626945704e32635438556d2d51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "3% volume voordeel",
+   "currentPrice": 5.8,
+   "priceBeforeBonus": 5.98,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Zakken",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Zoete kleine appeltjes 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 129993,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "3% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 3,
+     "unit": null,
+     "precisePercentage": 3
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 195431,
+   "hqId": 799126,
+   "title": "AH Granny Smith schaal",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313031373031?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313031373031?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313031373031?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313031373031?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313031373031?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Schaal",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>De Granny Smith is een citrusfrisse dorstlesser, een knapperig handappeltje met een felgroene kleur. Dankzij zijn frisse smaak doet ie het ook heel goed in vele gerechten en salades.</p><p><ul><li>Smaak: friszuur</li><li>Bereiden: de appel wassen en eventueel schillen</li><li>Bewaren: appels na aankoop bewaren in de koelkast</li><li>Lekker als gezond tussendoortje of in de salade</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 8,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 485577,
+   "hqId": 740436,
+   "title": "DubbelFrisss 1Kcal Appel & perzik",
+   "salesUnitSize": "1,5 l",
+   "unitPriceDescription": "prijs per liter €1.83",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_576f59356f2d68625334715845554f2d616e5a365941?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_576f59356f2d68625334715845554f2d616e5a365941?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_576f59356f2d68625334715845554f2d616e5a365941?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_576f59356f2d68625334715845554f2d616e5a365941?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_576f59356f2d68625334715845554f2d616e5a365941?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.75,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Frisdrank, sappen, water",
+   "subCategory": "Frisse fruitdranken",
+   "brand": "DubbelFrisss",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Dubbelfrisss 1kcal appel-perzik heeft een verfrissende volle smaak, zonder de calorieen..</p><p><ul><li>We geven je the best of both worlds: een mix tussen sap en frisdrank</li><li>Vol van smaak, slechts 1kcal per 100ml</li><li>Verfrissende dubbele smaken</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "C",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 129993,
+   "hqId": 590269,
+   "title": "AH Zoete kleine appeltjes",
+   "salesUnitSize": "1 kg",
+   "unitPriceDescription": "normale prijs per kg €2.99",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_526e4c674f396a67546669676f78414a526f676c3067?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_526e4c674f396a67546669676f78414a526f676c3067?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_526e4c674f396a67546669676f78414a526f676c3067?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_526e4c674f396a67546669676f78414a526f676c3067?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_526e4c674f396a67546669676f78414a526f676c3067?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-02",
+   "bonusEndDate": "2026-11-08",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "VOOR 1.99",
+   "currentPrice": 1.99,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Zakken",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vanaf maandag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Royal Gala zijn zoete kleine appeltjes: sappig en zoet van smaak. Een echte allemansvriend met een toegankelijke smaak met tonen van nectarine.</p><p><ul><li>Smaak: volzoet</li><li>Bereiden: de appel wassen en eventueel schillen</li><li>Bewaren: appels na aankoop bewaren in de koelkast</li><li>Geschikt voor: snack</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 826986,
+   "bonusSegmentDescription": "AH Zoete kleine appeltjes 1 kilo",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1,
+   "multipleItemPromotion": true,
+   "labelType": null,
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_FIXED_PRICE",
+     "defaultDescription": "voor 1.99",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": 1.99,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 8,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 167880,
+   "hqId": 644800,
+   "title": "AH Knijpfruit appel-aardbei",
+   "salesUnitSize": "4 x 90 g",
+   "unitPriceDescription": "prijs per kg €5.14",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313931323832?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313931323832?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313931323832?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313931323832?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313931323832?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.85,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Fruitmix conserven",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Met uitsluitend natuurlijke ingredi&#235;nten</li><li>Zonder kunstmatige kleur-, geur- en smaakstoffen</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 182915,
+   "hqId": 644801,
+   "title": "AH Knijpfruit appel banaan",
+   "salesUnitSize": "4 x 90 g",
+   "unitPriceDescription": "prijs per kg €5.14",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4a42347034676d6251616d5f76426b54646f6b496177?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4a42347034676d6251616d5f76426b54646f6b496177?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4a42347034676d6251616d5f76426b54646f6b496177?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4a42347034676d6251616d5f76426b54646f6b496177?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4a42347034676d6251616d5f76426b54646f6b496177?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.85,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Fruitmix conserven",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Met uitsluitend natuurlijke ingredi&#235;nten</li><li>Zonder kunstmatige kleur-, geur- en smaakstoffen</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=friszoete%20appel&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=friszoete%20appel&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=friszoete%20appel&sortBy=RELEVANCE&page=1&size=20"
+  },
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=friszoete%20appel&sortBy=RELEVANCE&page=14&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "1Fruit",
+     "label": "1Fruit",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 111,
+     "display": true
+    },
+    {
+     "id": "AH Biologisch",
+     "label": "AH Biologisch",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "AH Glutenvrij",
+     "label": "AH Glutenvrij",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "AH Hamsterchef",
+     "label": "AH Hamsterchef",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "AH Terra",
+     "label": "AH Terra",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Aarts",
+     "label": "Aarts",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Appelsientje",
+     "label": "Appelsientje",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Bolletje",
+     "label": "Bolletje",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Bolsius",
+     "label": "Bolsius",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Bonduelle",
+     "label": "Bonduelle",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Brinta",
+     "label": "Brinta",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Calvé",
+     "label": "Calvé",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Crystal Clear",
+     "label": "Crystal Clear",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Danoontje",
+     "label": "Danoontje",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "De Kleine Keuken",
+     "label": "De Kleine Keuken",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Dixap",
+     "label": "Dixap",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "DubbelFrisss",
+     "label": "DubbelFrisss",
+     "count": 25,
+     "display": true
+    },
+    {
+     "id": "Ella's kitchen",
+     "label": "Ella's kitchen",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "Flevosap",
+     "label": "Flevosap",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Frutesse",
+     "label": "Frutesse",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Hak",
+     "label": "Hak",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Het sapgilde",
+     "label": "Het sapgilde",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Hipp",
+     "label": "Hipp",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Iglo",
+     "label": "Iglo",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Jazz",
+     "label": "Jazz",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Kanzi",
+     "label": "Kanzi",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Leentjes",
+     "label": "Leentjes",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Look-O-Look",
+     "label": "Look-O-Look",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Nestlé",
+     "label": "Nestlé",
+     "count": 14,
+     "display": true
+    },
+    {
+     "id": "Oasis",
+     "label": "Oasis",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Olvarit",
+     "label": "Olvarit",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "Optimel",
+     "label": "Optimel",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Organix",
+     "label": "Organix",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Pedigree",
+     "label": "Pedigree",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Pink Lady",
+     "label": "Pink Lady",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Poms",
+     "label": "Poms",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Red Bull",
+     "label": "Red Bull",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Roosvicee",
+     "label": "Roosvicee",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Sultana",
+     "label": "Sultana",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Upfront",
+     "label": "Upfront",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Van de Boom",
+     "label": "Van de Boom",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "Zonnatura",
+     "label": "Zonnatura",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "43813",
+     "label": "AH groene thee",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "884",
+     "label": "Appels",
+     "count": 35,
+     "display": true
+    },
+    {
+     "id": "21050",
+     "label": "Appels los",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "8305",
+     "label": "Appelsap drinkpakjes",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "5704",
+     "label": "Appelsap en perensap",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "20847",
+     "label": "Appelstroop",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "8416",
+     "label": "Baby drankjes",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "44095",
+     "label": "Baby fruitpotjes",
+     "count": 18,
+     "display": true
+    },
+    {
+     "id": "4135",
+     "label": "Baby knijpfruit",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "8695",
+     "label": "Baby snacks",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "1974",
+     "label": "Babyvoeding",
+     "count": 38,
+     "display": true
+    },
+    {
+     "id": "911",
+     "label": "Bakbenodigdheden",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "10299",
+     "label": "Bakproducten",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "11640",
+     "label": "Biscuits",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "10139",
+     "label": "Crackers",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "2206",
+     "label": "Crackers, beschuit",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "5883",
+     "label": "Diepvries groente",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "903",
+     "label": "Diksap",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "20724",
+     "label": "Dreumes- en peutervoeding",
+     "count": 21,
+     "display": true
+    },
+    {
+     "id": "8304",
+     "label": "Drinkpakjes",
+     "count": 23,
+     "display": true
+    },
+    {
+     "id": "20915",
+     "label": "Energy drink, sportdranken",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "2218",
+     "label": "Energydrinks",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "8316",
+     "label": "Frisse fruitdranken",
+     "count": 14,
+     "display": true
+    },
+    {
+     "id": "9004",
+     "label": "Fruit en groente smoothies",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "9624",
+     "label": "Fruit en groenteshots",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "19283",
+     "label": "Fruit knijphapjes vanaf 4 maanden",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "19285",
+     "label": "Fruit knijphapjes vanaf 6 maanden",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "21186",
+     "label": "Fruit tussendoortjes",
+     "count": 15,
+     "display": true
+    },
+    {
+     "id": "11642",
+     "label": "Fruit-, noten-, haver-, mueslirepen",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "2537",
+     "label": "Fruitbiscuit en melkbiscuit",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "2724",
+     "label": "Fruitconserven",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "8309",
+     "label": "Fruitdrank drinkpakjes",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "2560",
+     "label": "Fruitmix conserven",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "1967",
+     "label": "Fruitpotjes vanaf 12 maanden",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "4136",
+     "label": "Fruitpotjes vanaf 4 maanden",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "4137",
+     "label": "Fruitpotjes vanaf 6 maanden",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "4138",
+     "label": "Fruitpotjes vanaf 8 maanden",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "2561",
+     "label": "Fruitsalade",
+     "count": 15,
+     "display": true
+    },
+    {
+     "id": "20921",
+     "label": "Fruitwater",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "6408",
+     "label": "Gebak en taart",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "20746",
+     "label": "Glutenvrij ontbijt",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "20779",
+     "label": "Glutenvrije muesli",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "20758",
+     "label": "Glutenvrije ontbijtgranen",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "2124",
+     "label": "Groene thee",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "2723",
+     "label": "Groenteconserven",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "18226",
+     "label": "Havermout",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "20839",
+     "label": "Havermout, pap, granen",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "1171",
+     "label": "IJs",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "2451",
+     "label": "Kaarsen",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "19289",
+     "label": "Knijpfruit vanaf 12 maanden",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "1246",
+     "label": "Koek",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "2326",
+     "label": "Kwark",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "1279",
+     "label": "Kwark met smaak",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "2269",
+     "label": "Maaltijdsalades (L/XL)",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "44969",
+     "label": "Middelgrote salades (M)",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "9972",
+     "label": "Multivruchtensap & drank",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "7005",
+     "label": "Multivruchtensap (vers)",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "1019",
+     "label": "Ontbijtgranen",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "18339",
+     "label": "Proteïnerepen",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "1458",
+     "label": "Rode kool (conserven)",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "2688",
+     "label": "Rode kool (diepvries)",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "18891",
+     "label": "Schaal",
+     "count": 15,
+     "display": true
+    },
+    {
+     "id": "2223",
+     "label": "Siroop",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "20964",
+     "label": "Snacks vanaf 3 jaar",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "1972",
+     "label": "Snacks vanaf 6 maanden",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "20907",
+     "label": "Spinazie, spruiten, artisjok, koolsoorten conserven",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "10866",
+     "label": "Sportvoeding",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "10308",
+     "label": "Stroop",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "12045",
+     "label": "Tafelen",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "2120",
+     "label": "Thee",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "20726",
+     "label": "Tussendoortjes (dreumes en peuter)",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "1302",
+     "label": "Verse salades",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "9464",
+     "label": "Verse sappen en smoothies",
+     "count": 36,
+     "display": true
+    },
+    {
+     "id": "1677",
+     "label": "Vruchtensappen en fruitdrank",
+     "count": 61,
+     "display": true
+    },
+    {
+     "id": "3228",
+     "label": "Wonen, slapen",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "1253",
+     "label": "Woonaccessoires",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "18879",
+     "label": "Zakken",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "962",
+     "label": "Zoet beleg",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "17859",
+     "label": "Zuivel tussendoortjes",
+     "count": 2,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 189,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 176,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 168,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 195,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 170,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 192,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 180,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 188,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 198,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 197,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 195,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 184,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 195,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 199,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 21,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 163,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 164,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 146,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 187,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "a",
+     "label": "Score A",
+     "count": 58,
+     "display": true
+    },
+    {
+     "id": "b",
+     "label": "Score B",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "c",
+     "label": "Score C",
+     "count": 52,
+     "display": true
+    },
+    {
+     "id": "d",
+     "label": "Score D",
+     "count": 24,
+     "display": true
+    },
+    {
+     "id": "e",
+     "label": "Score E",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "n-a",
+     "label": "Score N/A",
+     "count": 3,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 184,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_vegetarisch",
+   "allLabel": null,
+   "label": "Vegetarisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 187,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_veganistisch",
+   "allLabel": null,
+   "label": "Veganistisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 146,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_biologisch",
+   "allLabel": null,
+   "label": "Biologisch",
+   "options": [
+    {
+     "id": "np_biologisch",
+     "label": "Biologisch",
+     "count": 33,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_verbluffen",
+   "allLabel": null,
+   "label": "Prijsfavoriet",
+   "options": [
+    {
+     "id": "np_verbluffen",
+     "label": "Prijsfavoriet",
+     "count": 15,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "diepvries",
+   "allLabel": null,
+   "label": "Diepvries",
+   "options": [
+    {
+     "id": "diepvries",
+     "label": "Diepvries",
+     "count": 7,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_nieuw",
+   "allLabel": null,
+   "label": "Nieuw",
+   "options": [
+    {
+     "id": "np_nieuw",
+     "label": "Nieuw",
+     "count": 4,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

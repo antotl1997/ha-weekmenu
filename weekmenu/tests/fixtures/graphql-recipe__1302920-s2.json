@@ -1,0 +1,183 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302920,
+   "title": "Gezonde hutspot met pittige gehaktballetjes",
+   "description": "Lekker betaalbaar én gezond: deze hutspot met pittige gehaktballetjes. Eten er kinderen mee? Rol dan wat gehaktballetjes zonder chilivlokken en het hele gezin kan ervan genieten.",
+   "href": "/allerhande/recept/R-R1302920/gezonde-hutspot-met-pittige-gehaktballetjes",
+   "cookTime": 30,
+   "nutriScore": "B",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036867_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 4.2,
+    "count": 15
+   },
+   "ingredients": [
+    {
+     "text": "150 g winterpeen",
+     "name": {
+      "singular": "winterpeen"
+     }
+    },
+    {
+     "text": "2 middelgrote uien",
+     "name": {
+      "singular": "middelgrote ui"
+     }
+    },
+    {
+     "text": "2 el traditionele olijfolie",
+     "name": {
+      "singular": "traditionele olijfolie"
+     }
+    },
+    {
+     "text": "150 g diepvries biologische pompoenstukjes",
+     "name": {
+      "singular": "diepvries biologische pompoenstukjes"
+     }
+    },
+    {
+     "text": "500 g kruimige aardappel",
+     "name": {
+      "singular": "kruimige aardappel"
+     }
+    },
+    {
+     "text": "100 g rundertartaar",
+     "name": {
+      "singular": "rundertartaar"
+     }
+    },
+    {
+     "text": "&#189; middelgroot scharrelei",
+     "name": {
+      "singular": "middelgroot scharrelei"
+     }
+    },
+    {
+     "text": "&#8539; tl chilivlokken",
+     "name": {
+      "singular": "chilivlokken"
+     }
+    },
+    {
+     "text": "7.5 g verse peterselie",
+     "name": {
+      "singular": "verse peterselie"
+     }
+    },
+    {
+     "text": "35 g zuivelspread naturel",
+     "name": {
+      "singular": "zuivelspread naturel"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Schil de winterpeen en snijd in blokjes van 2 cm. Snijd de uien in halve ringen. Verhit de olie in een hapjespan en bak de ui 10 min.",
+     "Voeg de winterpeen en pompoen toe en bak 10 min. Roer regelmatig.",
+     "Schil ondertussen de aardappelen, snijd in gelijke stukken en kook in 20 min. gaar.",
+     "Meng ondertussen de rundertartaar met het ei en de chilivlokken. Snijd de peterselie fijn en voeg de helft toe aan de tartaar.",
+     "Meng goed en vorm er 12 gehaktballetjes van (per 4 personen).",
+     "Verhit de rest van de olie in een koekenpan op middelhoog vuur en bak de gehaktballetjes in 15 min. gaar.",
+     "Giet de aardappelen af en vang wat kookvocht op.",
+     "Voeg de zuivelspread en eventueel wat kookvocht toe en stamp met de pureestamper tot puree. Breng op smaak met peper en eventueel zout.",
+     "Meng de gebakken ui, peen en pompoen erdoor en serveer de stamppot met de gehaktballetjes en de rest van de peterselie."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 500,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 48,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 23,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 20,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

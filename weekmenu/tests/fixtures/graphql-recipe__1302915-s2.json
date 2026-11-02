@@ -1,0 +1,195 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302915,
+   "title": "Eenpansorzo met pastinaak, kip en peer",
+   "description": "Deze gezonde orzo zit boordevol herfstsmaken met pastinaak en peer. Leg er een sappig kippetje bovenop en je hebt een heerlijk herfstrecept voor doordeweeks. Liever vega? Vervang de kip door gebakken kikkererwten of een gebakken eitje. ",
+   "href": "/allerhande/recept/R-R1302915/eenpansorzo-met-pastinaak-kip-en-peer",
+   "cookTime": 35,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036862_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 2.833333,
+    "count": 30
+   },
+   "ingredients": [
+    {
+     "text": "1 el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "117.5 g scharrelkipdijfilet",
+     "name": {
+      "singular": "scharrelkipdijfilet"
+     }
+    },
+    {
+     "text": "1 middelgrote ui",
+     "name": {
+      "singular": "middelgrote ui"
+     }
+    },
+    {
+     "text": "1&#189; teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "400 g biologische pastinaken",
+     "name": {
+      "singular": "biologische pastinaak"
+     }
+    },
+    {
+     "text": "&#8539; tl chilivlokken",
+     "name": {
+      "singular": "chilivlokken"
+     }
+    },
+    {
+     "text": "&#189; tl komijnzaad",
+     "name": {
+      "singular": "komijnzaad"
+     }
+    },
+    {
+     "text": "150 g biologische volkorenorzo",
+     "name": {
+      "singular": "biologische volkorenorzo"
+     }
+    },
+    {
+     "text": "300 ml water",
+     "name": {
+      "singular": "water"
+     }
+    },
+    {
+     "text": "&#189; peer",
+     "name": {
+      "singular": "peer"
+     }
+    },
+    {
+     "text": "&#188; biologische citroen",
+     "name": {
+      "singular": "biologische citroen"
+     }
+    },
+    {
+     "text": "3.8 g verse peterselie",
+     "name": {
+      "singular": "verse peterselie"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verhit de olie in de pan op middelhoog vuur en bak de kip in 10 min. gaar. Keer halverwege.",
+     "Schep de kip uit de pan maar laat het bakvet zitten. Laat rusten op een bord, afgedekt met aluminiumfolie.",
+     "Snipper ondertussen de uien en snijd de knoflook fijn. Schil de pastinaak en snijd in blokjes van 1 cm.",
+     "Bak de ui, knoflook, pastinaak, chilivlokken en het komijnzaad 5 min. op middelhoog vuur in het achtergebleven bakvet.",
+     "Voeg de orzo toe en bak 3 min. mee. Voeg het water en eventueel wat braadvocht van de kip toe.",
+     "Breng aan de kook en laat met de deksel op de pan 15 min. op laag vuur zachtjes koken. Roer af en toe",
+     "Schil ondertussen de peer en snijd in kleine blokjes. Voeg de laatste 5 min. toe aan de orzo.",
+     "Boen de citroen schoon, rasp de gele schil en pers de vrucht uit. Snijd de peterselie fijn en roer erdoor.",
+     "Breng de orzo op smaak met 1½ el citroensap, het -rasp (per 4 personen), peper en eventueel zout. Snijd de kip in repen en verdeel erover."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 580,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 76,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 16,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 25,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

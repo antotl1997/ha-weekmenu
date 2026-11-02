@@ -1,0 +1,251 @@
+{
+ "status": 200,
+ "body": {
+  "data": {
+   "posReceiptDetails": {
+    "id": "receipt-4",
+    "products": [
+     {
+      "id": 512438,
+      "name": "WOKGROENTE",
+      "quantity": 2,
+      "price": {
+       "amount": 1.99
+      },
+      "amount": {
+       "amount": 3.98
+      }
+     },
+     {
+      "id": 817384,
+      "name": "BABYSPINAZIE",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.39
+      }
+     },
+     {
+      "id": 842514,
+      "name": "PHILADELPHIA",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 4.19
+      }
+     },
+     {
+      "id": 842512,
+      "name": "PHILADELPHIA",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.99
+      }
+     },
+     {
+      "id": 65086,
+      "name": "KRUIDENBOTER",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.09
+      }
+     },
+     {
+      "id": 576899,
+      "name": "MOZZARELLA",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.75
+      }
+     },
+     {
+      "id": 75654,
+      "name": "AH SKYR",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.99
+      }
+     },
+     {
+      "id": 697208,
+      "name": "ZAANSE HOEVE",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.25
+      }
+     },
+     {
+      "id": 99375,
+      "name": "AH SOUR CR",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.19
+      }
+     },
+     {
+      "id": 581905,
+      "name": "BIO EIEREN",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.79
+      }
+     },
+     {
+      "id": 795,
+      "name": "BOLLETJE",
+      "quantity": 2,
+      "price": {
+       "amount": 2.99
+      },
+      "amount": {
+       "amount": 5.98
+      }
+     },
+     {
+      "id": 819724,
+      "name": "AH DROP",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.25
+      }
+     },
+     {
+      "id": 849328,
+      "name": "HARIBO",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.25
+      }
+     },
+     {
+      "id": 700399,
+      "name": "AH CHOCOLADE",
+      "quantity": 2,
+      "price": {
+       "amount": 0.99
+      },
+      "amount": {
+       "amount": 1.98
+      }
+     },
+     {
+      "id": 616257,
+      "name": "KANDIJKOEK",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.15
+      }
+     },
+     {
+      "id": 626010,
+      "name": "PICKWICK",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.19
+      }
+     },
+     {
+      "id": 739629,
+      "name": "LIPTON GREEN",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.99
+      }
+     },
+     {
+      "id": 631846,
+      "name": "AH FRAMBOZEN",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.99
+      }
+     },
+     {
+      "id": 718960,
+      "name": "AH VISSTICKS",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.49
+      }
+     },
+     {
+      "id": 10603,
+      "name": "TOPPITS VERS",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.19
+      }
+     },
+     {
+      "id": 727043,
+      "name": "WITTE REUS",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 7.29
+      }
+     }
+    ],
+    "discounts": [
+     {
+      "name": "ALLEKLEINTJE",
+      "amount": {
+       "amount": -1
+      }
+     },
+     {
+      "name": "BIOPREMIUMST",
+      "amount": {
+       "amount": -0.28
+      }
+     },
+     {
+      "name": "PICKWICKGREE",
+      "amount": {
+       "amount": -1.53
+      }
+     },
+     {
+      "name": "ALLEWITTEREU",
+      "amount": {
+       "amount": -5.1
+      }
+     },
+     {
+      "name": "LIPTON500ML(",
+      "amount": {
+       "amount": -1.99
+      }
+     },
+     {
+      "name": "AMERKCRACKKN",
+      "amount": {
+       "amount": -2.99
+      }
+     },
+     {
+      "name": "HARIBOSTARMI",
+      "amount": {
+       "amount": -1.13
+      }
+     }
+    ]
+   }
+  }
+ }
+}

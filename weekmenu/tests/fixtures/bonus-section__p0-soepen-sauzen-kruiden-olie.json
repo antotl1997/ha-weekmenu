@@ -1,0 +1,123 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Soepen, sauzen, kruiden, olie",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "816495",
+    "offerId": 200293,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816495,
+    "segmentDescription": "Alle Knorr, Unox soep in zak en Hellmann's en Calvé sauzen",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 + 2 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200293_AH_NL_WK44_ALLE_KNORR_UNOX_SOEP_IN_ZAK_EN_HELLMANS_EN_CALVE_SAUZEN?rendition=200px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200293_AH_NL_WK44_ALLE_KNORR_UNOX_SOEP_IN_ZAK_EN_HELLMANS_EN_CALVE_SAUZEN?rendition=708px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     }
+    ],
+    "category": "Soepen, sauzen, kruiden, olie",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "labelType": "SPOTLIGHT",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "2+2 gratis",
+      "count": 2,
+      "freeCount": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821882",
+    "offerId": 205684,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821882,
+    "segmentDescription": "Namdong k-noodles cup creamy cheese flavour",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_524f7049355248645252654a314658692d4865524341?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_524f7049355248645252654a314658692d4865524341?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_524f7049355248645252654a314658692d4865524341?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_524f7049355248645252654a314658692d4865524341?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_524f7049355248645252654a314658692d4865524341?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Soepen, sauzen, kruiden, olie",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

@@ -1,0 +1,335 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Frisdrank, sappen, water",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817977",
+    "offerId": 201769,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817977,
+    "segmentDescription": "Alle Lipton Ice Tea 0.5 en 1.5 literflessen*",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201769_AH_NL_WK45_ALLE_LIPTON_ICE_TEA_05_EN_15_LITERFLESSEN?rendition=200px&fileType=binary&version=Qu2vuN2xBLJ4xGXL0Ri_Lw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201769_AH_NL_WK45_ALLE_LIPTON_ICE_TEA_05_EN_15_LITERFLESSEN?rendition=708px&fileType=binary&version=Qu2vuN2xBLJ4xGXL0Ri_Lw"
+     }
+    ],
+    "category": "Frisdrank, sappen, water",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. gekoeld"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. gekoeld"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817927",
+    "offerId": 201719,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817927,
+    "segmentDescription": "Alle Pepsi, 7UP en Sisi 1.5 literflessen",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201719_AH_NL_WK45_ALLE_PEPSI_7UP_EN_SISI_15_LITERFLESSEN?rendition=200px&fileType=binary&version=AW1Xl9wWs-husYjQiBttRg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201719_AH_NL_WK45_ALLE_PEPSI_7UP_EN_SISI_15_LITERFLESSEN?rendition=708px&fileType=binary&version=AW1Xl9wWs-husYjQiBttRg"
+     }
+    ],
+    "category": "Frisdrank, sappen, water",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817915",
+    "offerId": 201707,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817915,
+    "segmentDescription": "Alle Raak siropen",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 2.39",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4d555a4767496770546436376351464a305a6e597351?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4d555a4767496770546436376351464a305a6e597351?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4d555a4767496770546436376351464a305a6e597351?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4d555a4767496770546436376351464a305a6e597351?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4d555a4767496770546436376351464a305a6e597351?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Frisdrank, sappen, water",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 2.39",
+      "price": 2.39
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817987",
+    "offerId": 201779,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817987,
+    "segmentDescription": "Alle DubbelFrisss Boost 1.5 liter",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201779_AH_NL_WK45_ALLE_DUBBELFRISSS_BOOST_15_LITER?rendition=200px&fileType=binary&version=jB615afSCjZvcoU30fy1kQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201779_AH_NL_WK45_ALLE_DUBBELFRISSS_BOOST_15_LITER?rendition=708px&fileType=binary&version=jB615afSCjZvcoU30fy1kQ"
+     }
+    ],
+    "category": "Frisdrank, sappen, water",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817911",
+    "offerId": 201703,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817911,
+    "segmentDescription": "Pepsi of 7UP 1.5 literflessen 4-pack",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303534323034?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303534323034?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303534323034?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303534323034?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303534323034?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Frisdrank, sappen, water",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817926",
+    "offerId": 201718,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817926,
+    "segmentDescription": "Alle Celsius",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201718_AH_NL_WK45_ALLE_CELSIUS?rendition=200px&fileType=binary&version=O0AdXEo541kEHR1q6GNR7g"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201718_AH_NL_WK45_ALLE_CELSIUS?rendition=708px&fileType=binary&version=O0AdXEo541kEHR1q6GNR7g"
+     }
+    ],
+    "category": "Frisdrank, sappen, water",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

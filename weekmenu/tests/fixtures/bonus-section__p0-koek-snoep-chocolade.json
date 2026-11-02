@@ -1,0 +1,658 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Koek, snoep, chocolade",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "816434",
+    "offerId": 200232,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816434,
+    "segmentDescription": "Alle A-merk uitdeelsnoep en -chocolade*",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e HALVE PRIJS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200232_AH_NL_WK44_ALLE_AMERK_UITDEELSNOEP_EN_CHOCOLADE?rendition=200px&fileType=binary&version=WAgsVAlMu7hfSale8QChtw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200232_AH_NL_WK44_ALLE_AMERK_UITDEELSNOEP_EN_CHOCOLADE?rendition=708px&fileType=binary&version=WAgsVAlMu7hfSale8QChtw"
+     }
+    ],
+    "category": "Koek, snoep, chocolade",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. Mars minimix uitdeelzak 500 gram"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_HALF_PRICE",
+      "defaultDescription": "2e halve prijs",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. Mars minimix uitdeelzak 500 gram"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816469",
+    "offerId": 200267,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816469,
+    "segmentDescription": "Alle LU koek",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200267_AH_NL_WK44_ALLE_LU_KOEK?rendition=200px&fileType=binary&version=hV_h3NTHeSYyNmK1WdkzTQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200267_AH_NL_WK44_ALLE_LU_KOEK?rendition=708px&fileType=binary&version=hV_h3NTHeSYyNmK1WdkzTQ"
+     }
+    ],
+    "category": "Koek, snoep, chocolade",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "2+1 gratis",
+      "count": 2,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821929",
+    "offerId": 205731,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821929,
+    "segmentDescription": "Alle Klene puur",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_716e79655f6e614e53353631754343667972474e3651?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_716e79655f6e614e53353631754343667972474e3651?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_716e79655f6e614e53353631754343667972474e3651?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_716e79655f6e614e53353631754343667972474e3651?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_716e79655f6e614e53353631754343667972474e3651?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koek, snoep, chocolade",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821915",
+    "offerId": 205717,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821915,
+    "segmentDescription": "Alle True Dates",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_62344b6e74667a4c5439574d7a49566778536a6f4741?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_62344b6e74667a4c5439574d7a49566778536a6f4741?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_62344b6e74667a4c5439574d7a49566778536a6f4741?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_62344b6e74667a4c5439574d7a49566778536a6f4741?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_62344b6e74667a4c5439574d7a49566778536a6f4741?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koek, snoep, chocolade",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821921",
+    "offerId": 205723,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821921,
+    "segmentDescription": "Hands Off Veggilaine's rocky road",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_45666f725657463654384f5a2d777042556145696467?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_45666f725657463654384f5a2d777042556145696467?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_45666f725657463654384f5a2d777042556145696467?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_45666f725657463654384f5a2d777042556145696467?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_45666f725657463654384f5a2d777042556145696467?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koek, snoep, chocolade",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821926",
+    "offerId": 205728,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821926,
+    "segmentDescription": "Alle Red Band sprinkled foamies",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4a53317131684661513665684579383179624a6f3267?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4a53317131684661513665684579383179624a6f3267?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4a53317131684661513665684579383179624a6f3267?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4a53317131684661513665684579383179624a6f3267?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4a53317131684661513665684579383179624a6f3267?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koek, snoep, chocolade",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 625388,
+    "hqId": 80337,
+    "title": "Verkade Istanbul style melkchocolade",
+    "brand": "Verkade",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €32.15",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4769416b7738355a5252714d482d53576965336e6e51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4769416b7738355a5252714d482d53576965336e6e51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4769416b7738355a5252714d482d53576965336e6e51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4769416b7738355a5252714d482d53576965336e6e51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4769416b7738355a5252714d482d53576965336e6e51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "821870",
+    "bonusSegmentId": 821870,
+    "offerId": 205672,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "Verkade Istanbul style melkchocolade",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "50% korting",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 2.99,
+    "hasListPrice": false,
+    "currentPrice": 1.49,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Koek, snoep, chocolade",
+    "subCategory": "Melkchocolade met noten",
+    "subCategoryId": 8725,
+    "propertyIcons": [
+     "nieuw"
+    ],
+    "properties": {
+     "sp_exclude_intolerance_geen_gluten": [
+      "Geen gluten"
+     ],
+     "sp_exclude_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "sp_exclude_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "da_taste": [
+      "Chocolade",
+      "Melkchocolade",
+      "Hazelnoot"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_exclude_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "sp_exclude_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Gezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Nee"
+     ],
+     "da_store_department": [
+      "Houdbaar"
+     ],
+     "da_grape": [],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "da_moments_of_use": [
+      "Dag"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_exclude_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "np_nieuw": [
+      "Nieuw"
+     ],
+     "da_type_of_grain": [
+      "Tarwe"
+     ],
+     "sp_exclude_intolerance_geen_eieren": [
+      "Geen eieren"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Naast dubai style ook de istanbul style chocolade van verkade. Verkade melkchocolade met een rijke vulling van hazelnoot en krokante kadayif. Heerlijke combinatie van volle hazelnoot smaak en crunch.</p><p><ul><li>Romige melkchocolade met hazelnootcreme en krokante kadayif</li><li>Gevulde chocoladereep met de smaak van istanbul chocolade</li><li>Fairtrade chocolade</li><li>Perfect om samen van te genieten</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821916",
+    "offerId": 205718,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821916,
+    "segmentDescription": "The Flower Farm Regenwoud Rakkers zonder palmolie",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6e35366e6b674b545235717966567479504f67324941?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6e35366e6b674b545235717966567479504f67324941?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6e35366e6b674b545235717966567479504f67324941?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6e35366e6b674b545235717966567479504f67324941?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6e35366e6b674b545235717966567479504f67324941?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koek, snoep, chocolade",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821903",
+    "offerId": 205705,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821903,
+    "segmentDescription": "AH Kruidnoten specials",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 5.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205705_AH_NL_WK44_AH_KRUIDNOTEN_SPECIALS?rendition=200px&fileType=binary&version=PuVSCqx5-MRYhz-B45jVEA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205705_AH_NL_WK44_AH_KRUIDNOTEN_SPECIALS?rendition=708px&fileType=binary&version=PuVSCqx5-MRYhz-B45jVEA"
+     }
+    ],
+    "category": "Koek, snoep, chocolade",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 5.00",
+      "count": 2,
+      "price": 5.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

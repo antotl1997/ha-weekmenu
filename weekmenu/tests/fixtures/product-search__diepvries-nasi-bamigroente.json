@@ -1,0 +1,3300 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 1252,
+  "totalPages": 63,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 585192,
+   "hqId": 0,
+   "title": "Hertog Ijssalon drie chocolades 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_36443546644d43555245474c7a796241743359666677?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_36443546644d43555245474c7a796241743359666677?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_36443546644d43555245474c7a796241743359666677?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_36443546644d43555245474c7a796241743359666677?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_36443546644d43555245474c7a796241743359666677?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "10% volume voordeel",
+   "currentPrice": 10.78,
+   "priceBeforeBonus": 11.98,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Schepijs",
+   "brand": "Hertog",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Hertog Ijssalon drie chocolades 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 221373,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "10% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 614284,
+   "hqId": 0,
+   "title": "Ben & Jerry's Cookie dough 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_487461683257414b542d7545494239764c7649694277?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_487461683257414b542d7545494239764c7649694277?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_487461683257414b542d7545494239764c7649694277?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_487461683257414b542d7545494239764c7649694277?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_487461683257414b542d7545494239764c7649694277?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "10% volume voordeel",
+   "currentPrice": 6.45,
+   "priceBeforeBonus": 7.17,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Roomijs pints",
+   "brand": "Ben & Jerry's",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Ben & Jerry's Cookie dough 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 451124,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "10% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 590452,
+   "hqId": 0,
+   "title": "Ben & Jerry's Chocolate fudge brownie 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_38536b476958624c544b4b5a48444a47577173645051?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_38536b476958624c544b4b5a48444a47577173645051?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_38536b476958624c544b4b5a48444a47577173645051?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_38536b476958624c544b4b5a48444a47577173645051?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_38536b476958624c544b4b5a48444a47577173645051?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "10% volume voordeel",
+   "currentPrice": 4.3,
+   "priceBeforeBonus": 4.78,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Roomijs pints",
+   "brand": "Ben & Jerry's",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Ben & Jerry's Chocolate fudge brownie 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 515697,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "10% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 567348,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza salami 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_55487149617a37535137715932614e666d45504a4f67?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_55487149617a37535137715932614e666d45504a4f67?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_55487149617a37535137715932614e666d45504a4f67?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_55487149617a37535137715932614e666d45504a4f67?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_55487149617a37535137715932614e666d45504a4f67?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 6.06,
+   "priceBeforeBonus": 6.38,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza salami 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 514003,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 582311,
+   "hqId": 25126,
+   "title": "AH Nasi bami groente",
+   "salesUnitSize": "450 g",
+   "unitPriceDescription": "prijs per kg €3.53",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838373235?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838373235?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838373235?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838373235?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838373235?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.59,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Groentemix (diepvries)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627714,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza hawaii 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6557305f78766c4d54707146456577525f30764d6641?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6557305f78766c4d54707146456577525f30764d6641?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6557305f78766c4d54707146456577525f30764d6641?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6557305f78766c4d54707146456577525f30764d6641?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6557305f78766c4d54707146456577525f30764d6641?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 5.87,
+   "priceBeforeBonus": 6.18,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza hawaii 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 513996,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627726,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza quattro formaggi 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_43576363536a577753582d395135534b615f6a4e4267?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_43576363536a577753582d395135534b615f6a4e4267?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_43576363536a577753582d395135534b615f6a4e4267?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_43576363536a577753582d395135534b615f6a4e4267?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_43576363536a577753582d395135534b615f6a4e4267?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 7.39,
+   "priceBeforeBonus": 7.78,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza quattro formaggi 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 514065,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627748,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza hawaii 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_624758676a51785353657953566e474b46676b357077?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_624758676a51785353657953566e474b46676b357077?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_624758676a51785353657953566e474b46676b357077?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_624758676a51785353657953566e474b46676b357077?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_624758676a51785353657953566e474b46676b357077?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "8% volume voordeel",
+   "currentPrice": 8.53,
+   "priceBeforeBonus": 9.27,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza hawaii 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 513996,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "8% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 8,
+     "unit": null,
+     "precisePercentage": 8
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 376520,
+   "hqId": 837921,
+   "title": "AH Zakje met zomerfruit",
+   "salesUnitSize": "1 kg",
+   "unitPriceDescription": "prijs per kg €5.55",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343731?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343731?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343731?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343731?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343731?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 5.55,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Fruitmix (diepvries)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Blauwe bes, zwarte bes, braam, rode bes, framboos, bosbes</li><li>Tip: haal het diepvriesfruit voor het slapen gaan uit de vriezer. Laat het fruit ontdooien in een glazen bakje in de koelkast</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "vegan",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 445512,
+   "hqId": 707469,
+   "title": "AH Zakje met mangostukjes",
+   "salesUnitSize": "1 kg",
+   "unitPriceDescription": "prijs per kg €5.99",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313839383134?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313839383134?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313839383134?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313839383134?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313839383134?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 5.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Mango, ananas (diepvries)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Mango heeft een rijke, volzoete smaak. Lekker om zo in stukjes te eten, in een fruitsalade of tropische smoothie. Tip: probeer een Mango ook eens in een gezonde wrap of salade.</p><p><ul><li>Een rijpe Mango ruikt lekker zoet en kan licht ingedrukt worden</li><li>De kleur van de schil zegt niets over de rijpheid van de vrucht</li><li>Een Mango zit vol vitamine c</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "vegan",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627755,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza salami 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_786e637741786d635262717a4d71536d7579715a6477?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_786e637741786d635262717a4d71536d7579715a6477?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_786e637741786d635262717a4d71536d7579715a6477?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_786e637741786d635262717a4d71536d7579715a6477?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_786e637741786d635262717a4d71536d7579715a6477?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "8% volume voordeel",
+   "currentPrice": 8.8,
+   "priceBeforeBonus": 9.57,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza salami 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 514003,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "8% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 8,
+     "unit": null,
+     "precisePercentage": 8
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 615519,
+   "hqId": 0,
+   "title": "Crosta & Mollica Pizzetta margherita 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6458676b53616e475365715a54315451457a4d646551?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6458676b53616e475365715a54315451457a4d646551?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6458676b53616e475365715a54315451457a4d646551?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6458676b53616e475365715a54315451457a4d646551?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6458676b53616e475365715a54315451457a4d646551?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "10% volume voordeel",
+   "currentPrice": 18.87,
+   "priceBeforeBonus": 20.97,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (zuurdesem)",
+   "brand": "Crosta & Mollica",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Crosta Mollica Pizzetta margherita 2-pack 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 550167,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "10% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627725,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza sal-moz-pes 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_5f6b787751506d41515071425a4c3457547962354477?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_5f6b787751506d41515071425a4c3457547962354477?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_5f6b787751506d41515071425a4c3457547962354477?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_5f6b787751506d41515071425a4c3457547962354477?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_5f6b787751506d41515071425a4c3457547962354477?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 7.39,
+   "priceBeforeBonus": 7.78,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza salami mozzarella pest 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 514008,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627716,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza tonno 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_745276644f734e5f534679784e787952643065514d41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_745276644f734e5f534679784e787952643065514d41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_745276644f734e5f534679784e787952643065514d41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_745276644f734e5f534679784e787952643065514d41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_745276644f734e5f534679784e787952643065514d41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 6.06,
+   "priceBeforeBonus": 6.38,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza tonno 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 513998,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627750,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza tonno 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_466c39632d386d2d534b326647753434536f646d5867?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_466c39632d386d2d534b326647753434536f646d5867?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_466c39632d386d2d534b326647753434536f646d5867?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_466c39632d386d2d534b326647753434536f646d5867?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_466c39632d386d2d534b326647753434536f646d5867?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "8% volume voordeel",
+   "currentPrice": 8.8,
+   "priceBeforeBonus": 9.57,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza tonno 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 513998,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "8% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 8,
+     "unit": null,
+     "precisePercentage": 8
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627717,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza mozzarella 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4d5f7967466459533043357a755a6f6b304a376767?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4d5f7967466459533043357a755a6f6b304a376767?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4d5f7967466459533043357a755a6f6b304a376767?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4d5f7967466459533043357a755a6f6b304a376767?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4d5f7967466459533043357a755a6f6b304a376767?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 5.49,
+   "priceBeforeBonus": 5.78,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza mozzarella 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 513999,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627751,
+   "hqId": 0,
+   "title": "Dr. Oetker Ristorante pizza mozzarella 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_5253497a5a56486c52692d7178594f59724b5f775667?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_5253497a5a56486c52692d7178594f59724b5f775667?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_5253497a5a56486c52692d7178594f59724b5f775667?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_5253497a5a56486c52692d7178594f59724b5f775667?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_5253497a5a56486c52692d7178594f59724b5f775667?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "8% volume voordeel",
+   "currentPrice": 7.98,
+   "priceBeforeBonus": 8.67,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "Dr. Oetker",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Dr. Oetker Ristorante pizza mozzarella 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 513999,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "8% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 8,
+     "unit": null,
+     "precisePercentage": 8
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 164070,
+   "hqId": 631848,
+   "title": "AH Doosje met mangostukjes",
+   "salesUnitSize": "250 g",
+   "unitPriceDescription": "prijs per kg €7.96",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933343034?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933343034?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933343034?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933343034?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933343034?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Mango, ananas (diepvries)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": true,
+   "descriptionHighlights": "<p>Frisse tropische smaak van heerlijk gerijpte Mango. Perfect eetbaar. Leg het doosje op een bord en laat de Mango 1 uur ontdooien op kamertemperatuur of 3 uur in de koelkast.</p><p><ul><li><strong>Weetje of tip: </strong>Tip: lekker in smoothies, op cake of op ijs. Na ontdooiing niet opnieuw invriezen</li></ul></p>",
+   "propertyIcons": [
+    "vegan",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Leg het doosje op een bord en laat de Mango 1 uur ontdooien op kamertemperatuur of 3 uur in de koelkast.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 429057,
+   "hqId": 696700,
+   "title": "AH Saté ajam",
+   "salesUnitSize": "160 g",
+   "unitPriceDescription": "prijs per kg €11.81",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303538343033?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303538343033?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303538343033?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303538343033?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303538343033?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.89,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Sate (diepvries)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Heerlijke malse kipsat&#x00E9; in een bakje, met smaakvolle pindasaus voor een ouderwets lekkere sat&#x00E9; maaltijd. Serveer met bijvoorbeeld friet, rijst of brood.</p><p><ul><li>Van de Nieuwe AH Kip</li><li>Erg lekker bij bijvoorbeeld friet, rijst of brood</li><li>Makkelijk en bovenal lekker</li></ul></p>",
+   "propertyIcons": [
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 568226,
+   "hqId": 0,
+   "title": "AH Doosje met mangostukjes 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303234393834?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303234393834?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303234393834?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303234393834?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303234393834?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "4% volume voordeel",
+   "currentPrice": 5.73,
+   "priceBeforeBonus": 5.97,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Mango, ananas (diepvries)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>AH Doosje met mangostukjes 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 164070,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "4% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 4,
+     "unit": null,
+     "precisePercentage": 4
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=diepvries%20nasi-bamigroente&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=diepvries%20nasi-bamigroente&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=diepvries%20nasi-bamigroente&sortBy=RELEVANCE&page=1&size=20"
+  },
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=diepvries%20nasi-bamigroente&sortBy=RELEVANCE&page=62&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "528",
+     "label": "528",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 370,
+     "display": true
+    },
+    {
+     "id": "AH Biologisch",
+     "label": "AH Biologisch",
+     "count": 23,
+     "display": true
+    },
+    {
+     "id": "AH Excellent",
+     "label": "AH Excellent",
+     "count": 28,
+     "display": true
+    },
+    {
+     "id": "AH Liefde & Passie",
+     "label": "AH Liefde & Passie",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "AH Terra",
+     "label": "AH Terra",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "AH Visspecialist",
+     "label": "AH Visspecialist",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "AH Zaanlander",
+     "label": "AH Zaanlander",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Ajinomoto",
+     "label": "Ajinomoto",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Almondy",
+     "label": "Almondy",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Asian choice",
+     "label": "Asian choice",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Australian",
+     "label": "Australian",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Aviko",
+     "label": "Aviko",
+     "count": 54,
+     "display": true
+    },
+    {
+     "id": "Ben & Jerry's",
+     "label": "Ben & Jerry's",
+     "count": 39,
+     "display": true
+    },
+    {
+     "id": "Bibigo",
+     "label": "Bibigo",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "Binggrae",
+     "label": "Binggrae",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Bonduelle",
+     "label": "Bonduelle",
+     "count": 15,
+     "display": true
+    },
+    {
+     "id": "Boujee",
+     "label": "Boujee",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Bounty",
+     "label": "Bounty",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Buono",
+     "label": "Buono",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Chiquita",
+     "label": "Chiquita",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Clevers",
+     "label": "Clevers",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Consenza",
+     "label": "Consenza",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "Crop's",
+     "label": "Crop's",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Crosta & Mollica",
+     "label": "Crosta & Mollica",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Crosta Mollica",
+     "label": "Crosta Mollica",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "De Friesche koe",
+     "label": "De Friesche koe",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Delicata",
+     "label": "Delicata",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Diepvries Specialist",
+     "label": "Diepvries Specialist",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Dr. Oetker",
+     "label": "Dr. Oetker",
+     "count": 102,
+     "display": true
+    },
+    {
+     "id": "Duca",
+     "label": "Duca",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "Easy Bakery",
+     "label": "Easy Bakery",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Fast Fruit",
+     "label": "Fast Fruit",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Fitmeals",
+     "label": "Fitmeals",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "Franui",
+     "label": "Franui",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Freasy",
+     "label": "Freasy",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "Friends of Asia",
+     "label": "Friends of Asia",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Goodoo",
+     "label": "Goodoo",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Happy belly",
+     "label": "Happy belly",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Hebro",
+     "label": "Hebro",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Hertog",
+     "label": "Hertog",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "Hydro Ice",
+     "label": "Hydro Ice",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Häagen-Dazs",
+     "label": "Häagen-Dazs",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "Iglo",
+     "label": "Iglo",
+     "count": 72,
+     "display": true
+    },
+    {
+     "id": "Itsu",
+     "label": "Itsu",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "Jude's",
+     "label": "Jude's",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "Koopmans",
+     "label": "Koopmans",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Kwekkeboom",
+     "label": "Kwekkeboom",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "LambWeston",
+     "label": "LambWeston",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "Lazy",
+     "label": "Lazy",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Little Moons",
+     "label": "Little Moons",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Lotus Biscoff",
+     "label": "Lotus Biscoff",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Magnum",
+     "label": "Magnum",
+     "count": 53,
+     "display": true
+    },
+    {
+     "id": "Mama's",
+     "label": "Mama's",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "Mars",
+     "label": "Mars",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Mekkafood",
+     "label": "Mekkafood",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "Mexicano",
+     "label": "Mexicano",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Milka",
+     "label": "Milka",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Mini Melts",
+     "label": "Mini Melts",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Mora",
+     "label": "Mora",
+     "count": 67,
+     "display": true
+    },
+    {
+     "id": "Nestlé",
+     "label": "Nestlé",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Nikori",
+     "label": "Nikori",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Nutella",
+     "label": "Nutella",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Ola",
+     "label": "Ola",
+     "count": 33,
+     "display": true
+    },
+    {
+     "id": "Oppo Brothers",
+     "label": "Oppo Brothers",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "Oreo",
+     "label": "Oreo",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Picard",
+     "label": "Picard",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "Pukpip",
+     "label": "Pukpip",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Reese's",
+     "label": "Reese's",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Rengi",
+     "label": "Rengi",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Rodi",
+     "label": "Rodi",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Sammontana",
+     "label": "Sammontana",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Schär",
+     "label": "Schär",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Shinsegae Food",
+     "label": "Shinsegae Food",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Smuldier",
+     "label": "Smuldier",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "Snickers",
+     "label": "Snickers",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Spring Home",
+     "label": "Spring Home",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Streeckgenoten",
+     "label": "Streeckgenoten",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Synear",
+     "label": "Synear",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "The Frosbro's",
+     "label": "The Frosbro's",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Topking",
+     "label": "Topking",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Toppits",
+     "label": "Toppits",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "Trü Frü",
+     "label": "Trü Frü",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Twix",
+     "label": "Twix",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Van Dobben",
+     "label": "Van Dobben",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Van Gils",
+     "label": "Van Gils",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Viennetta",
+     "label": "Viennetta",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Wagner",
+     "label": "Wagner",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "Wahid",
+     "label": "Wahid",
+     "count": 8,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "3301",
+     "label": "Afbakbrood",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "6361",
+     "label": "Aziatische diepvries maaltijd",
+     "count": 23,
+     "display": true
+    },
+    {
+     "id": "20195",
+     "label": "Bolletjes, broodjes, croissants",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "4508",
+     "label": "Borrelhapjes",
+     "count": 266,
+     "display": true
+    },
+    {
+     "id": "9228",
+     "label": "Borrelmix (oven)",
+     "count": 21,
+     "display": true
+    },
+    {
+     "id": "2186",
+     "label": "Brood",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "4835",
+     "label": "Croissants",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "44223",
+     "label": "Desembrood",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "20786",
+     "label": "Diepvries Aziatische snacks",
+     "count": 79,
+     "display": true
+    },
+    {
+     "id": "5885",
+     "label": "Diepvries aardappelproducten",
+     "count": 86,
+     "display": true
+    },
+    {
+     "id": "44698",
+     "label": "Diepvries bakkerijsnacks",
+     "count": 32,
+     "display": true
+    },
+    {
+     "id": "2196",
+     "label": "Diepvries bakkerijsnacks hartig",
+     "count": 14,
+     "display": true
+    },
+    {
+     "id": "44697",
+     "label": "Diepvries bakkerijsnacks zoet",
+     "count": 14,
+     "display": true
+    },
+    {
+     "id": "5886",
+     "label": "Diepvries brood, gebak, bladerdeeg",
+     "count": 98,
+     "display": true
+    },
+    {
+     "id": "6348",
+     "label": "Diepvries croissants",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "5882",
+     "label": "Diepvries fruit",
+     "count": 63,
+     "display": true
+    },
+    {
+     "id": "5888",
+     "label": "Diepvries gebak",
+     "count": 17,
+     "display": true
+    },
+    {
+     "id": "5883",
+     "label": "Diepvries groente",
+     "count": 58,
+     "display": true
+    },
+    {
+     "id": "19728",
+     "label": "Diepvries halal",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "21005",
+     "label": "Diepvries hapjes (oven)",
+     "count": 17,
+     "display": true
+    },
+    {
+     "id": "5891",
+     "label": "Diepvries hondenvoeding",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "20787",
+     "label": "Diepvries maaltijden",
+     "count": 63,
+     "display": true
+    },
+    {
+     "id": "5884",
+     "label": "Diepvries pizza",
+     "count": 154,
+     "display": true
+    },
+    {
+     "id": "6360",
+     "label": "Diepvries vis",
+     "count": 68,
+     "display": true
+    },
+    {
+     "id": "5887",
+     "label": "Diepvries vlees, vis",
+     "count": 105,
+     "display": true
+    },
+    {
+     "id": "1047",
+     "label": "Diepvries- en hersluitbare zakjes",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "20797",
+     "label": "Dimsum en bao's (diepvries)",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "1080",
+     "label": "Friet (frituur)",
+     "count": 15,
+     "display": true
+    },
+    {
+     "id": "4463",
+     "label": "Friet (oven)",
+     "count": 26,
+     "display": true
+    },
+    {
+     "id": "11454",
+     "label": "Frituur snacks",
+     "count": 51,
+     "display": true
+    },
+    {
+     "id": "2743",
+     "label": "Fruitmix (diepvries)",
+     "count": 29,
+     "display": true
+    },
+    {
+     "id": "2599",
+     "label": "Garnalen",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "2598",
+     "label": "Garnalen (diepvries)",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "12320",
+     "label": "Gebak (diepvries)",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "2601",
+     "label": "Gepaneerde vis",
+     "count": 41,
+     "display": true
+    },
+    {
+     "id": "2600",
+     "label": "Gepaneerde vis (diepvries)",
+     "count": 32,
+     "display": true
+    },
+    {
+     "id": "8125",
+     "label": "Glutenvrije diepvries",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "2506",
+     "label": "Groentemix (diepvries)",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "20795",
+     "label": "Gyoza's (diepvries)",
+     "count": 18,
+     "display": true
+    },
+    {
+     "id": "20214",
+     "label": "Hartige snacks",
+     "count": 36,
+     "display": true
+    },
+    {
+     "id": "2017",
+     "label": "Honden",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "44567",
+     "label": "Huishoudfolies, vershoudbakjes",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "1171",
+     "label": "IJs",
+     "count": 331,
+     "display": true
+    },
+    {
+     "id": "20010",
+     "label": "IJs bitesizes",
+     "count": 30,
+     "display": true
+    },
+    {
+     "id": "6362",
+     "label": "Italiaanse diepvries maaltijd",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "11459",
+     "label": "Kaas hapjes (oven)",
+     "count": 17,
+     "display": true
+    },
+    {
+     "id": "9230",
+     "label": "Kaassouffle (oven)",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "1226",
+     "label": "Kip en gevogelte",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "20798",
+     "label": "Kiphapjes (diepvries)",
+     "count": 27,
+     "display": true
+    },
+    {
+     "id": "6336",
+     "label": "Kipnuggets",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "20790",
+     "label": "Kipsnacks (oven)",
+     "count": 27,
+     "display": true
+    },
+    {
+     "id": "12044",
+     "label": "Koken",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "9224",
+     "label": "Kroket (oven)",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "44067",
+     "label": "Lekkerbekjes (diepvries)",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "11461",
+     "label": "Loempia (diepvries)",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "20792",
+     "label": "Loempia's (oven)",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "3261",
+     "label": "Mango, ananas (diepvries)",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "4203",
+     "label": "Meenemen en bewaren",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "2343",
+     "label": "Mini pizza's",
+     "count": 15,
+     "display": true
+    },
+    {
+     "id": "9210",
+     "label": "Oven- en airfryersnacks",
+     "count": 195,
+     "display": true
+    },
+    {
+     "id": "1424",
+     "label": "Pizza (dikke bodem)",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "2342",
+     "label": "Pizza (dunne bodem)",
+     "count": 67,
+     "display": true
+    },
+    {
+     "id": "20788",
+     "label": "Pizza (zuurdesem)",
+     "count": 18,
+     "display": true
+    },
+    {
+     "id": "6062",
+     "label": "Pizzabroodjes",
+     "count": 27,
+     "display": true
+    },
+    {
+     "id": "11394",
+     "label": "Plantaardig ijs",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "1849",
+     "label": "Room handijs",
+     "count": 108,
+     "display": true
+    },
+    {
+     "id": "11398",
+     "label": "Roomijs",
+     "count": 194,
+     "display": true
+    },
+    {
+     "id": "11397",
+     "label": "Roomijs bekertjes",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "2156",
+     "label": "Roomijs pints",
+     "count": 70,
+     "display": true
+    },
+    {
+     "id": "8698",
+     "label": "Sate (diepvries)",
+     "count": 17,
+     "display": true
+    },
+    {
+     "id": "1492",
+     "label": "Schaal- en schelpdieren",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "6381",
+     "label": "Schelpdieren (diepvries)",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "11696",
+     "label": "Schepijs",
+     "count": 53,
+     "display": true
+    },
+    {
+     "id": "11460",
+     "label": "Snackbroodjes (oven)",
+     "count": 35,
+     "display": true
+    },
+    {
+     "id": "2695",
+     "label": "Spinazie",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "1579",
+     "label": "Spinazie (diepvries)",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "1342",
+     "label": "Spinazie, andijvie, witlof, kool",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "2322",
+     "label": "Toetjes",
+     "count": 194,
+     "display": true
+    },
+    {
+     "id": "6539",
+     "label": "Verse vis",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "6344",
+     "label": "Vissticks (diepvries)",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "44403",
+     "label": "Vriesvers desembrood",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "44492",
+     "label": "Warme borrelhapjes",
+     "count": 266,
+     "display": true
+    },
+    {
+     "id": "1847",
+     "label": "Waterijs",
+     "count": 41,
+     "display": true
+    },
+    {
+     "id": "6364",
+     "label": "Wereld diepvries maaltijden",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "10458",
+     "label": "Zoete snacks",
+     "count": 40,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 641,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 351,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 354,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 888,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 357,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 763,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 660,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 685,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 883,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 799,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 834,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 430,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 897,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 837,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 503,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 182,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 353,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 184,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 456,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "a",
+     "label": "Score A",
+     "count": 163,
+     "display": true
+    },
+    {
+     "id": "b",
+     "label": "Score B",
+     "count": 70,
+     "display": true
+    },
+    {
+     "id": "c",
+     "label": "Score C",
+     "count": 235,
+     "display": true
+    },
+    {
+     "id": "d",
+     "label": "Score D",
+     "count": 252,
+     "display": true
+    },
+    {
+     "id": "e",
+     "label": "Score E",
+     "count": 140,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 466,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "previouslyBought",
+   "allLabel": null,
+   "label": "Eerder gekocht",
+   "options": [
+    {
+     "id": "previouslyBought",
+     "label": "Eerder gekocht",
+     "count": 14,
+     "display": true
+    }
+   ],
+   "type": "PREVIOUSLY_BOUGHT",
+   "booleanFilter": true
+  },
+  {
+   "id": "diepvries",
+   "allLabel": null,
+   "label": "Diepvries",
+   "options": [
+    {
+     "id": "diepvries",
+     "label": "Diepvries",
+     "count": 971,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_nieuw",
+   "allLabel": null,
+   "label": "Nieuw",
+   "options": [
+    {
+     "id": "np_nieuw",
+     "label": "Nieuw",
+     "count": 77,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_verbluffen",
+   "allLabel": null,
+   "label": "Prijsfavoriet",
+   "options": [
+    {
+     "id": "np_verbluffen",
+     "label": "Prijsfavoriet",
+     "count": 57,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_biologisch",
+   "allLabel": null,
+   "label": "Biologisch",
+   "options": [
+    {
+     "id": "np_biologisch",
+     "label": "Biologisch",
+     "count": 23,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_vegetarisch",
+   "allLabel": null,
+   "label": "Vegetarisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 456,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_veganistisch",
+   "allLabel": null,
+   "label": "Veganistisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 184,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

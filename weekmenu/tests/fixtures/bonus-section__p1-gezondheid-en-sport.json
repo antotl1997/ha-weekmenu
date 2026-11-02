@@ -1,0 +1,105 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Gezondheid en sport",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817974",
+    "offerId": 201766,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817974,
+    "segmentDescription": "Alle Davitamon",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201766_AH_NL_WK45_ALLE_DAVITAMON?rendition=200px&fileType=binary&version=3mPxF-eEhaT_SPUacQTDMQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201766_AH_NL_WK45_ALLE_DAVITAMON?rendition=708px&fileType=binary&version=3mPxF-eEhaT_SPUacQTDMQ"
+     }
+    ],
+    "category": "Gezondheid en sport",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817949",
+    "offerId": 201741,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817949,
+    "segmentDescription": "Alle Roter Vitamine C en Dagravit",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201741_AH_NL_WK45_ALLE_ROTER_VITAMINE_C_EN_DAGRAVIT?rendition=200px&fileType=binary&version=hxXUqJHOwgysDxNR929nYw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201741_AH_NL_WK45_ALLE_ROTER_VITAMINE_C_EN_DAGRAVIT?rendition=708px&fileType=binary&version=hxXUqJHOwgysDxNR929nYw"
+     }
+    ],
+    "category": "Gezondheid en sport",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

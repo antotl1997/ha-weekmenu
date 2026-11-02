@@ -1,0 +1,172 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1202132,
+   "title": "Wraps met kibbeling en geroosterde paprika",
+   "description": "Is er iemand niet niet van wraps houdt? Deze met kibbeling, mais, bosui en geroosterde paprika zijn allemansvrienden! Lekker met je handen eten, wat wil een mens nog meer?",
+   "href": "/allerhande/recept/R-R1202132/wraps-met-kibbeling-en-geroosterde-paprika",
+   "cookTime": 15,
+   "nutriScore": "C",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_RAM_PRD217243_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 4,
+    "count": 59
+   },
+   "ingredients": [
+    {
+     "text": "&#189; zak paprikamix (rood, groen, geel)",
+     "name": {
+      "singular": "paprikamix (rood, groen, geel)"
+     }
+    },
+    {
+     "text": "&#189; bos bosui",
+     "name": {
+      "singular": "bosui"
+     }
+    },
+    {
+     "text": "1 el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "250 g diepvries kibbeling",
+     "name": {
+      "singular": "diepvries kibbeling"
+     }
+    },
+    {
+     "text": "170 g mais in blik",
+     "name": {
+      "singular": "mais in blik"
+     }
+    },
+    {
+     "text": "4 tortillawraps medium",
+     "name": {
+      "singular": "tortillawraps medium"
+     }
+    },
+    {
+     "text": "2 el mayonaise",
+     "name": {
+      "singular": "mayonaise"
+     }
+    },
+    {
+     "text": "&#189; el natuurazijn",
+     "name": {
+      "singular": "natuurazijn"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verwarm de oven voor op 200 °C. ",
+     "Snijd de paprika in dikke repen. Hou het donkergroene deel van de bosui apart en snijd de rest in stukken van 3 cm. ",
+     "Verdeel de groente apart van elkaar over een met bakpapier beklede bakplaat. ",
+     "Besprenkel met de olie en rooster ca. 25 min. net boven het midden van de oven.",
+     "Schep na 10 min. om. Verdeel de kibbeling over een rooster en bak net onder de bakplaat 18-20 min. mee.",
+     "Spoel ondertussen de mais af en laat uitlekken. Verwarm de tortilla’s volgens de aanwijzingen op de verpakking. Snijd de rest van de bosui in ringen.",
+     "Haal de groente en kibbeling uit de oven, hou de kibbeling warm onder aluminiumfolie.",
+     "Pureer de gegrilde bosui en mayonaise glad in de hoge beker van de staafmixer.",
+     "Meng de paprika met de azijn en breng op smaak met peper en eventueel zout. ",
+     "Besmeer de tortilla’s met wat bosui-mayo en beleg met de kibbeling, paprika, mais en bosuiringen. "
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 755,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 76,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 39,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 21,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

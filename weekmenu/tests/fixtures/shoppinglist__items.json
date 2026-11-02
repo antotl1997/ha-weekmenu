@@ -1,0 +1,11 @@
+{
+ "status": 200,
+ "body": {
+  "id": "00000000-0000-0000-0000-000000000000",
+  "items": [],
+  "dateLastSynced": "2026-01-07T12:00:00",
+  "dateLastSyncedMillis": 1767787200000,
+  "activeSorting": "E",
+  "storeNumber": 0
+ }
+}

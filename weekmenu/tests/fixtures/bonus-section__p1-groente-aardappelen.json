@@ -1,0 +1,1043 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Groente, aardappelen",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817950",
+    "offerId": 201742,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817950,
+    "segmentDescription": "AH Stamppotgroenten en -aardappelen",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "1 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201742_AH_NL_WK45_AH_STAMPPOTGROENTEN_EN_AARDAPPELEN?rendition=200px&fileType=binary&version=4sRb4g_vkKBLbAfon0sbMA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201742_AH_NL_WK45_AH_STAMPPOTGROENTEN_EN_AARDAPPELEN?rendition=708px&fileType=binary&version=4sRb4g_vkKBLbAfon0sbMA"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "1+1 gratis",
+      "count": 1,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "826868",
+    "offerId": 210138,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 826868,
+    "segmentDescription": "AH Aubergine en courgette",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 1.19",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313936?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313936?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313936?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313936?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313936?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "salesUnitSize": "Los",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 1.19",
+      "count": 2,
+      "price": 1.19
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "818000",
+    "offerId": 201792,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 818000,
+    "segmentDescription": "Alle Hak*",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2E HALVE PRIJS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201792_AH_NL_WK45_ALLE_HAK?rendition=200px&fileType=binary&version=xhZkeRbs68v6-qlHX04mvA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201792_AH_NL_WK45_ALLE_HAK?rendition=708px&fileType=binary&version=xhZkeRbs68v6-qlHX04mvA"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. taart- en vlaaifruit"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_HALF_PRICE",
+      "defaultDescription": "2e halve prijs",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. taart- en vlaaifruit"
+   }
+  },
+  {
+   "product": {
+    "webshopId": 96049,
+    "hqId": 549729,
+    "title": "AH Iets kruimige aardappelen 3 kilo",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €1.28",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "826871",
+    "bonusSegmentId": 826871,
+    "offerId": 210141,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "AH Iets kruimige aardappelen 3 kilo",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "2e gratis",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 3.85,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Groente, aardappelen",
+    "subCategory": "Iets kruimige aardappelen",
+    "subCategoryId": 5255,
+    "propertyIcons": [
+     "lokaal"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "np_lokaal": [
+      "nederland"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan",
+      "Magnetron",
+      "Oven",
+      "Pan"
+     ],
+     "np_vegafav": [
+      "vegafavoriet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "B"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Nee"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "da_accreditation": [
+      "NATUUR_BOER"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "np_soort": [
+      "kruimig"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": true,
+    "nix18": false,
+    "descriptionHighlights": "<p>Iets kruimige aardappelen met een blanke schil. Ze zijn na het koken stevig in de kern en aan de buitenkant kruimelig en los van structuur. De\nrassen die worden verpakt zijn o.a. Milva, Vivaldi, Monalisa, Melody, Victoria en Berber. De vleeskleur is lichtgeel en de aardappelen zijn rond-ovaal van vorm.</p>",
+    "descriptionFull": "<p>\n   <ul>\n   <li><strong>Smaak:</strong> Veelzijdig en gewoon lekker. </li>\n   <li><strong>Bewaren:</strong> Bewaar de aardappelen op een koele donkere plek, liefst in de koelkast. </li>\n   <li><strong>Bereiden:</strong> Geschikt om te koken, bakken of te pureren. Het stomen van aardappelen zorgt ervoor dat ze\n smaakvol en knapperig blijven en de vitamines blijven behouden. Het is een veelzijdige aardappel waar je bijna alle toepassingen mee kunt maken.  </li>\n   </ul>\n  </p>"
+   }
+  },
+  {
+   "product": {
+    "webshopId": 171425,
+    "hqId": 767852,
+    "title": "AH Prei",
+    "brand": "AH",
+    "isSample": false,
+    "salesUnitSize": "Los",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303836?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303836?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303836?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303836?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303836?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "826856",
+    "bonusSegmentId": 826856,
+    "offerId": 210126,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "AH Prei",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 0.39",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 0.39",
+      "price": 0.39
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 0.59,
+    "hasListPrice": false,
+    "currentPrice": 0.39,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Groente, aardappelen",
+    "subCategory": "Prei",
+    "subCategoryId": 5210,
+    "propertyIcons": [
+     "goedkoopje",
+     "lokaal"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "da_taste": [
+      "Prei"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "np_lokaal": [
+      "nederland"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "np_vegafav": [
+      "vegafavoriet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "np_goedkoopje": [
+      "prijsfavoriet"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "np_vorm": [
+      "heel"
+     ],
+     "da_accreditation": [
+      "NATUUR_BOER"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "np_verbluffen": [
+      "verbluffend goedkoop"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": true,
+    "nix18": false,
+    "descriptionHighlights": "<p>Prei is een kruidachtige plant met een karakteristieke geur. De enigszins lange stengels zijn wit tot lichtgroen, het blad is donkergroen.\nPrei behoort tot de lookfamilie waartoe ook ui, bieslook en knoflook behoren.</p><p><ul><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+    "descriptionFull": "<p>\n   <ul>\n   <li><strong>Smaak:</strong> Prei heeft een aromatische en pittige smaak. </li>\n   <li><strong>Bewaren:</strong> In de koelkast. </li>\n   <li><strong>Bereiden:</strong> Bladgroen eventueel verwijderen en het worteluiteinde afsnijden. De prei in ringen, stukjes of in moten snijden en\n goed wassen. Roerbakken: prei in hete olie gedurende enkele minuten omscheppen. Koken: in weinig water in 8-12 minuten gaarkoken. Prei kan worden gekookt, gestoofd of geroerbakt.  </li>\n   </ul>\n  </p><p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817944",
+    "offerId": 201736,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817944,
+    "segmentDescription": "Alle AH Roerbakgroenten 400 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 3.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201736_AH_NL_WK45_ALLE_AH_ROERBAKGROENTEN_400_GRAM?rendition=200px&fileType=binary&version=TNEjgrsz7jQaITX0TVVfNg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201736_AH_NL_WK45_ALLE_AH_ROERBAKGROENTEN_400_GRAM?rendition=708px&fileType=binary&version=TNEjgrsz7jQaITX0TVVfNg"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 3.99",
+      "count": 2,
+      "price": 3.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817982",
+    "offerId": 201774,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817982,
+    "segmentDescription": "AH Ongesneden verspakketten",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "1 EURO KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201774_AH_NL_WK45_AH_ONGESNEDEN_VERSPAKKETTEN?rendition=200px&fileType=binary&version=72hFWhxl0CxZHpY1DMtjuA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201774_AH_NL_WK45_AH_ONGESNEDEN_VERSPAKKETTEN?rendition=708px&fileType=binary&version=72hFWhxl0CxZHpY1DMtjuA"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_AMOUNT",
+      "defaultDescription": "€1.00 euro korting",
+      "amount": 1.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 470588,
+    "hqId": 723066,
+    "title": "AH Baby avocado eetrijp 4 stuks",
+    "brand": "AH",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303734343537?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303734343537?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303734343537?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303734343537?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303734343537?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "826873",
+    "bonusSegmentId": 826873,
+    "offerId": 210143,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "AH Baby avocado eetrijp 4 stuks",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "30% korting",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "30% korting",
+      "percentage": 30,
+      "precisePercentage": 30
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 3.29,
+    "hasListPrice": false,
+    "currentPrice": 2.3,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Groente, aardappelen",
+    "subCategory": "Avocado",
+    "subCategoryId": 900,
+    "propertyIcons": [],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "da_taste": [
+      "Avocado"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "np_vegafav": [
+      "vegafavoriet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Avocado is een zachte en romige vrucht. Lekker in een salade of op brood. Avocado is het hoofdingredient voor het maken van verse guacamole.</p><p><ul><li>Smaak: de avocada heeft een zacht en romige smaak</li><li>Bewaren: buiten de koelkast</li><li>De baby avocado's zijn makkelijk om mee te nemen in je broodtrommel</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "product": {
+    "webshopId": 4178,
+    "hqId": 20948,
+    "title": "AH Bleekselderij",
+    "brand": "AH",
+    "isSample": false,
+    "salesUnitSize": "Los",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031353439?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031353439?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031353439?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031353439?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031353439?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "826872",
+    "bonusSegmentId": 826872,
+    "offerId": 210142,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "AH Bleekselderij",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 0.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 0.99",
+      "price": 0.99
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 1.39,
+    "hasListPrice": false,
+    "currentPrice": 0.99,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Groente, aardappelen",
+    "subCategory": "Bleekselderij",
+    "subCategoryId": 934,
+    "propertyIcons": [
+     "goedkoopje",
+     "lokaal"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_exclude_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "da_taste": [
+      "Prei"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "np_lokaal": [
+      "nederland"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Pan"
+     ],
+     "np_vegafav": [
+      "vegafavoriet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Nee"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "np_goedkoopje": [
+      "prijsfavoriet"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "da_accreditation": [
+      "NATUUR_BOER"
+     ],
+     "np_verbluffen": [
+      "verbluffend goedkoop"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": true,
+    "nix18": false,
+    "descriptionHighlights": "<p>Bleekselderij heeft frisse, knapperige en iets pittige smaak. Heerlijk door een salade of als gezonde snack.</p><p><ul><li>Smaak: Bleekselderij heeft een frisse, knapperige en iets pittige smaak.</li><li>Bewaren: In de koelkast.</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+    "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823263",
+    "offerId": 207070,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823263,
+    "segmentDescription": "Alle AH Rauwkost",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 4.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207070_AH_NL_WK45_ALLE_AH_RAUWKOST?rendition=200px&fileType=binary&version=_2Bd5x5hUh8g9sPdLuHHXA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207070_AH_NL_WK45_ALLE_AH_RAUWKOST?rendition=708px&fileType=binary&version=_2Bd5x5hUh8g9sPdLuHHXA"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 4.00",
+      "count": 2,
+      "price": 4.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823272",
+    "offerId": 207079,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823272,
+    "segmentDescription": "AH Slaverrijkers",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 6.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207079_AH_NL_WK45_AH_SLAVERRIJKERS?rendition=200px&fileType=binary&version=y5yU-tXnqOY1XRhk0CjTiA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207079_AH_NL_WK45_AH_SLAVERRIJKERS?rendition=708px&fileType=binary&version=y5yU-tXnqOY1XRhk0CjTiA"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 6.00",
+      "count": 3,
+      "price": 6.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

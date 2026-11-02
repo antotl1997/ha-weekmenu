@@ -1,0 +1,321 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Drogisterij",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "811168",
+    "offerId": 194826,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 811168,
+    "segmentDescription": "Alle Aquafresh, Colgate, Jordan en Prodent",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_194826_AH_NL_WK45_ALLE_AQUAFRESH_COLGATE_JORDAN_EN_PRODENT?rendition=200px&fileType=binary&version=_ifutYIomTgHqhliOBZbDg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_194826_AH_NL_WK45_ALLE_AQUAFRESH_COLGATE_JORDAN_EN_PRODENT?rendition=708px&fileType=binary&version=_ifutYIomTgHqhliOBZbDg"
+     }
+    ],
+    "category": "Drogisterij",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "818002",
+    "offerId": 201794,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 818002,
+    "segmentDescription": "Alle Elvive, Studio Line, Loving Blends, Head & Shoulders, Taft en Syoss",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201794_AH_NL_WK45_ALLE_ELVIVE_STUDIO_LINE_LOVING_BLENDS_HEAD_SHOULDERS_TAFT_EN_SYOSS?rendition=200px&fileType=binary&version=AW1Xl9wWs-husYjQiBttRg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201794_AH_NL_WK45_ALLE_ELVIVE_STUDIO_LINE_LOVING_BLENDS_HEAD_SHOULDERS_TAFT_EN_SYOSS?rendition=708px&fileType=binary&version=AW1Xl9wWs-husYjQiBttRg"
+     }
+    ],
+    "category": "Drogisterij",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "824983",
+    "offerId": 208217,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 824983,
+    "segmentDescription": "Care kerstartikelen",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_208217_AH_NL_WK45_CARE_KERSTARTIKELEN?rendition=200px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_208217_AH_NL_WK45_CARE_KERSTARTIKELEN?rendition=708px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     }
+    ],
+    "category": "Drogisterij",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817952",
+    "offerId": 201744,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817952,
+    "segmentDescription": "Alle Gillette*",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201744_AH_NL_WK45_ALLE_GILLETTE?rendition=200px&fileType=binary&version=j5Ak6w0woyQsLYRx1NaMbg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201744_AH_NL_WK45_ALLE_GILLETTE?rendition=708px&fileType=binary&version=j5Ak6w0woyQsLYRx1NaMbg"
+     }
+    ],
+    "category": "Drogisterij",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. wegwerpmesjes"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. wegwerpmesjes"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817956",
+    "offerId": 201748,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817956,
+    "segmentDescription": "Alle Guhl en John Frieda",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201748_AH_NL_WK45_ALLE_GUHL_EN_JOHN_FRIEDA?rendition=200px&fileType=binary&version=1lwCN7wxPkvdioMk4h9gYg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201748_AH_NL_WK45_ALLE_GUHL_EN_JOHN_FRIEDA?rendition=708px&fileType=binary&version=1lwCN7wxPkvdioMk4h9gYg"
+     }
+    ],
+    "category": "Drogisterij",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823346",
+    "offerId": 207157,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823346,
+    "segmentDescription": "Libresse menstruatie ondergoed",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_7877364752353236527336514c474966516f744a7651?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_7877364752353236527336514c474966516f744a7651?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_7877364752353236527336514c474966516f744a7651?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_7877364752353236527336514c474966516f744a7651?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_7877364752353236527336514c474966516f744a7651?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Drogisterij",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

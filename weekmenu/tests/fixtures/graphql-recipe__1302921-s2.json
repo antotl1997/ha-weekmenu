@@ -1,0 +1,175 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302921,
+   "title": "Witlofstamppot met visfrietjes en tuinerwten",
+   "description": "Romige witlofstamppot met knapperige visfrietjes en lichtzoete tuinerwten: een voedzame, budgetproof maaltijd perfect voor herfstige doordeweekse avonden.",
+   "href": "/allerhande/recept/R-R1302921/witlofstamppot-met-visfrietjes-en-tuinerwten",
+   "cookTime": 25,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036897_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 3.888888,
+    "count": 18
+   },
+   "ingredients": [
+    {
+     "text": "225 g diepvries tuinerwten",
+     "name": {
+      "singular": "diepvries tuinerwten"
+     }
+    },
+    {
+     "text": "500 g kruimige aardappel",
+     "name": {
+      "singular": "kruimige aardappel"
+     }
+    },
+    {
+     "text": "2 stronken witlof",
+     "name": {
+      "singular": "witlof"
+     }
+    },
+    {
+     "text": "3 el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "150 g visfrietjes",
+     "name": {
+      "singular": "visfrietjes"
+     }
+    },
+    {
+     "text": "3.8 g verse munt",
+     "name": {
+      "singular": "verse munt"
+     }
+    },
+    {
+     "text": "&#189; sjalot",
+     "name": {
+      "singular": "sjalot"
+     }
+    },
+    {
+     "text": "37.5 ml volle melk",
+     "name": {
+      "singular": "volle melk"
+     }
+    },
+    {
+     "text": "15 g ongezouten roomboter",
+     "name": {
+      "singular": "ongezouten roomboter"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Laat de tuinerwten ontdooien. Schil de aardappelen, snijd in gelijke stukken en kook in 20 min. gaar. Snijd ondertussen het witlof in repen.",
+     "Verhit de olie in een koekenpan op middelhoog vuur en bak het witlof 5 min. Breng op smaak met peper en eventueel zout.",
+     "Verhit de olie in een koekenpan op middelhoog vuur en bak de visfrietjes volgens de aanwijzingen op de verpakking. Pluk de blaadje van de takjes munt.",
+     "Snipper ondertussen de sjalot, snijd de muntblaadjes fijn. Verhit de rest van de olie in een steelpan op middelhoog vuur en bak de sjalot 1 min.",
+     "Voeg de tuinerwten en de munt toe en bak 6 min. Prak grof met een vork.",
+     "Giet de aardappelen af en stamp met de pureestamper samen met het witlof, de melk en boter tot stamppot. Breng op smaak met peper en eventueel zout.",
+     "Verdeel de stamppot met de tuinerwten en visfrietjes over borden."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 695,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 59,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 40,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 19,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

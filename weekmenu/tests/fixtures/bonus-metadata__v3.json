@@ -1,0 +1,876 @@
+{
+ "periods": [
+  {
+   "bonusStartDate": "2026-10-26",
+   "bonusEndDate": "2026-11-01",
+   "nextPeriodVisibleFrom": "2026-10-30",
+   "bonusFolderUrl": "https://folder.ah.nl/bonus-week-44-2026/?publitas_embed=embedded",
+   "bonusFolderIconUrl": "https://folder.ah.nl/bonus-week-44-2026/cover_page.jpg?ts=1793117631&size=at200",
+   "voordeelshopFolderUrl": "https://folder.ah.nl/voordeelshop-folder-week-44-2026/?publitas_embed=embedded",
+   "voordeelshopIconUrl": "https://folder.ah.nl/voordeelshop-folder-week-44-2026/cover_page.jpg?ts=1793204936&size=at200",
+   "tabs": [
+    {
+     "description": "Uitgelicht",
+     "urlMetadataList": [
+      {
+       "url": "bonuspage/v2/section/previously-bought?application=AHWEBSHOP&date=2026-10-26",
+       "count": 36,
+       "images": [],
+       "bonusType": "PREVIOUSLY_BOUGHT",
+       "description": "Eerder gekocht",
+       "untranslatedDescription": "Eerder gekocht"
+      }
+     ]
+    },
+    {
+     "description": "Alle Bonus",
+     "urlMetadataList": [
+      {
+       "url": "bonuspage/v2/section/spotlight?application=AHWEBSHOP&date=2026-10-26",
+       "count": 5,
+       "images": [],
+       "bonusType": "SPOTLIGHT",
+       "description": "Uit de Bonusfolder",
+       "untranslatedDescription": "Uit de Bonusfolder"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Groente%2C%20aardappelen",
+       "count": 13,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk44/combiebeelden_categorietegels_600x400px_app_nl_groente-aardappelen.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Groente, aardappelen",
+       "untranslatedDescription": "Groente, aardappelen"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Fruit%2C%20verse%20sappen",
+       "count": 11,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk18/categoriebeelden_600x400px_nl_fruit-sappen.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Fruit, verse sappen",
+       "untranslatedDescription": "Fruit, verse sappen"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Maaltijden%2C%20salades",
+       "count": 11,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk44/combiebeelden_categorietegels_600x400px_app_nl_maaltijden-salades.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Maaltijden, salades",
+       "untranslatedDescription": "Maaltijden, salades"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Vlees",
+       "count": 14,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk18/nl_producttegels_vlees.wk18.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Vlees",
+       "untranslatedDescription": "Vlees"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Vis",
+       "count": 6,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk09/categoriebeelden_600x400px_nl_vis.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Vis",
+       "untranslatedDescription": "Vis"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Vegetarisch%2C%20vegan%20en%20plantaardig",
+       "count": 3,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_vega.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Vegetarisch, vegan en plantaardig",
+       "untranslatedDescription": "Vegetarisch, vegan en plantaardig"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Vleeswaren",
+       "count": 5,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk18/nl_producttegels_vleeswaren_wk18.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Vleeswaren",
+       "untranslatedDescription": "Vleeswaren"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Kaas",
+       "count": 7,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_kaas.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Kaas",
+       "untranslatedDescription": "Kaas"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Zuivel%2C%20eieren",
+       "count": 5,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_zuivel.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Zuivel, eieren",
+       "untranslatedDescription": "Zuivel, eieren"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Bakkerij",
+       "count": 6,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_bakkerij_v2.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Bakkerij",
+       "untranslatedDescription": "Bakkerij"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Glutenvrij",
+       "count": 1,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk09/glutenvrij_app.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Glutenvrij",
+       "untranslatedDescription": "Glutenvrij"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Borrel%2C%20chips%2C%20snacks",
+       "count": 11,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_borrel.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Borrel, chips, snacks",
+       "untranslatedDescription": "Borrel, chips, snacks"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Pasta%2C%20rijst%2C%20wereldkeuken",
+       "count": 3,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_pasta.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Pasta, rijst, wereldkeuken",
+       "untranslatedDescription": "Pasta, rijst, wereldkeuken"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Soepen%2C%20sauzen%2C%20kruiden%2C%20olie",
+       "count": 2,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_sauzen.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Soepen, sauzen, kruiden, olie",
+       "untranslatedDescription": "Soepen, sauzen, kruiden, olie"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Koek%2C%20snoep%2C%20chocolade",
+       "count": 9,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_koek.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Koek, snoep, chocolade",
+       "untranslatedDescription": "Koek, snoep, chocolade"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Diepvries",
+       "count": 4,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_diepvries.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Diepvries",
+       "untranslatedDescription": "Diepvries"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Koffie%2C%20thee",
+       "count": 9,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_koek-1.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Koffie, thee",
+       "untranslatedDescription": "Koffie, thee"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Frisdrank%2C%20sappen%2C%20water",
+       "count": 13,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_frisdrank.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Frisdrank, sappen, water",
+       "untranslatedDescription": "Frisdrank, sappen, water"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Bier%2C%20wijn%2C%20aperitieven",
+       "count": 7,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_bier.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Bier, wijn, aperitieven",
+       "untranslatedDescription": "Bier, wijn, aperitieven"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Drogisterij",
+       "count": 10,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_drogist.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Drogisterij",
+       "untranslatedDescription": "Drogisterij"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Gezondheid%20en%20sport",
+       "count": 5,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_sport.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Gezondheid en sport",
+       "untranslatedDescription": "Gezondheid en sport"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Huishouden",
+       "count": 14,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_huishouden.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Huishouden",
+       "untranslatedDescription": "Huishouden"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Baby%20en%20kind",
+       "count": 10,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_babykind.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Baby en kind",
+       "untranslatedDescription": "Baby en kind"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=Koken%2C%20tafelen%2C%20vrije%20tijd",
+       "count": 16,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_vrijetijd.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Koken, tafelen, vrije tijd",
+       "untranslatedDescription": "Koken, tafelen, vrije tijd"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=NATIONAL&category=AH%20Voordeelshop",
+       "count": 2,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk09/voordeelshop_app.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "AH Voordeelshop",
+       "untranslatedDescription": "AH Voordeelshop"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=GALL",
+       "count": 16,
+       "images": [],
+       "bonusType": "GALL",
+       "description": "Gall & Gall acties",
+       "untranslatedDescription": "Gall & Gall acties"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=GALLCARD",
+       "count": 6,
+       "images": [],
+       "bonusType": "GALLCARD",
+       "description": "Gall & Gall klantenkaart",
+       "untranslatedDescription": "Gall & Gall klantenkaart"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-10-26&promotionType=ETOS",
+       "count": 37,
+       "images": [],
+       "bonusType": "ETOS",
+       "description": "Etos acties",
+       "untranslatedDescription": "Etos acties"
+      }
+     ]
+    }
+   ],
+   "mmiBannerUrl": "/21888805090/ah.nl_app/bonus/bonusbooster",
+   "mmiBanner2Url": "/21888805090/ah.nl_app/bonus/bonusregulier",
+   "adheseSlots": [
+    "myahapp-nl-bonus-1-horizontal",
+    "myahapp-nl-bonus-2-horizontal",
+    "myahapp-nl-bonus-3-horizontal"
+   ]
+  },
+  {
+   "bonusStartDate": "2026-11-02",
+   "bonusEndDate": "2026-11-08",
+   "nextPeriodVisibleFrom": "2026-11-06",
+   "bonusFolderUrl": "https://folder.ah.nl/bonus-week-45-2026/?publitas_embed=embedded",
+   "bonusFolderIconUrl": "https://folder.ah.nl/bonus-week-45-2026/cover_page.jpg?ts=1793392076&size=at200",
+   "voordeelshopFolderUrl": "https://folder.ah.nl/voordeelshop-folder-week-45-2026/?publitas_embed=embedded",
+   "voordeelshopIconUrl": "https://folder.ah.nl/voordeelshop-folder-week-45-2026/cover_page.jpg?ts=1793391990&size=at200",
+   "tabs": [
+    {
+     "description": "Uitgelicht",
+     "urlMetadataList": [
+      {
+       "url": "bonuspage/v2/section/personal?application=AHWEBSHOP&date=2026-11-02",
+       "count": 2,
+       "images": [],
+       "bonusType": "PERSONAL",
+       "description": "Persoonlijke Bonus",
+       "untranslatedDescription": "Persoonlijke Bonus"
+      },
+      {
+       "url": "bonuspage/v2/section/previously-bought?application=AHWEBSHOP&date=2026-11-02",
+       "count": 27,
+       "images": [],
+       "bonusType": "PREVIOUSLY_BOUGHT",
+       "description": "Eerder gekocht",
+       "untranslatedDescription": "Eerder gekocht"
+      }
+     ]
+    },
+    {
+     "description": "Alle Bonus",
+     "urlMetadataList": [
+      {
+       "url": "bonuspage/v2/section/spotlight?application=AHWEBSHOP&date=2026-11-02",
+       "count": 6,
+       "images": [],
+       "bonusType": "SPOTLIGHT",
+       "description": "Uit de Bonusfolder",
+       "untranslatedDescription": "Uit de Bonusfolder"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Groente%2C%20aardappelen",
+       "count": 11,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk44/combiebeelden_categorietegels_600x400px_app_nl_groente-aardappelen.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Groente, aardappelen",
+       "untranslatedDescription": "Groente, aardappelen"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Fruit%2C%20verse%20sappen",
+       "count": 9,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk18/categoriebeelden_600x400px_nl_fruit-sappen.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Fruit, verse sappen",
+       "untranslatedDescription": "Fruit, verse sappen"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Maaltijden%2C%20salades",
+       "count": 9,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk44/combiebeelden_categorietegels_600x400px_app_nl_maaltijden-salades.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Maaltijden, salades",
+       "untranslatedDescription": "Maaltijden, salades"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Vlees",
+       "count": 13,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk18/nl_producttegels_vlees.wk18.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Vlees",
+       "untranslatedDescription": "Vlees"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Vis",
+       "count": 4,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk09/categoriebeelden_600x400px_nl_vis.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Vis",
+       "untranslatedDescription": "Vis"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Vegetarisch%2C%20vegan%20en%20plantaardig",
+       "count": 3,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_vega.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Vegetarisch, vegan en plantaardig",
+       "untranslatedDescription": "Vegetarisch, vegan en plantaardig"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Vleeswaren",
+       "count": 5,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk18/nl_producttegels_vleeswaren_wk18.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Vleeswaren",
+       "untranslatedDescription": "Vleeswaren"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Kaas",
+       "count": 7,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_kaas.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Kaas",
+       "untranslatedDescription": "Kaas"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Zuivel%2C%20eieren",
+       "count": 6,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_zuivel.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Zuivel, eieren",
+       "untranslatedDescription": "Zuivel, eieren"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Bakkerij",
+       "count": 7,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_bakkerij_v2.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Bakkerij",
+       "untranslatedDescription": "Bakkerij"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Glutenvrij",
+       "count": 1,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk09/glutenvrij_app.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Glutenvrij",
+       "untranslatedDescription": "Glutenvrij"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Borrel%2C%20chips%2C%20snacks",
+       "count": 8,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_borrel.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Borrel, chips, snacks",
+       "untranslatedDescription": "Borrel, chips, snacks"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Pasta%2C%20rijst%2C%20wereldkeuken",
+       "count": 1,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_pasta.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Pasta, rijst, wereldkeuken",
+       "untranslatedDescription": "Pasta, rijst, wereldkeuken"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Soepen%2C%20sauzen%2C%20kruiden%2C%20olie",
+       "count": 4,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_sauzen.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Soepen, sauzen, kruiden, olie",
+       "untranslatedDescription": "Soepen, sauzen, kruiden, olie"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Koek%2C%20snoep%2C%20chocolade",
+       "count": 6,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_koek.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Koek, snoep, chocolade",
+       "untranslatedDescription": "Koek, snoep, chocolade"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Ontbijtgranen%2C%20beleg",
+       "count": 2,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_ontbijten.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Ontbijtgranen, beleg",
+       "untranslatedDescription": "Ontbijtgranen, beleg"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Diepvries",
+       "count": 5,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_diepvries.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Diepvries",
+       "untranslatedDescription": "Diepvries"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Koffie%2C%20thee",
+       "count": 3,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_koek-1.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Koffie, thee",
+       "untranslatedDescription": "Koffie, thee"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Frisdrank%2C%20sappen%2C%20water",
+       "count": 6,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_frisdrank.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Frisdrank, sappen, water",
+       "untranslatedDescription": "Frisdrank, sappen, water"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Bier%2C%20wijn%2C%20aperitieven",
+       "count": 5,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_bier.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Bier, wijn, aperitieven",
+       "untranslatedDescription": "Bier, wijn, aperitieven"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Drogisterij",
+       "count": 6,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_drogist.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Drogisterij",
+       "untranslatedDescription": "Drogisterij"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Gezondheid%20en%20sport",
+       "count": 2,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_sport.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Gezondheid en sport",
+       "untranslatedDescription": "Gezondheid en sport"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Huishouden",
+       "count": 10,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk35/categoriebeelden_300x200px_nl_huishouden.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Huishouden",
+       "untranslatedDescription": "Huishouden"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Baby%20en%20kind",
+       "count": 1,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_babykind.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Baby en kind",
+       "untranslatedDescription": "Baby en kind"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Huisdier",
+       "count": 1,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2024/wk44/nl_producttegels_app_huisdier_wk44.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Huisdier",
+       "untranslatedDescription": "Huisdier"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=Koken%2C%20tafelen%2C%20vrije%20tijd",
+       "count": 14,
+       "images": [
+        {
+         "width": 300,
+         "height": 200,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2026/wk44/categoriebeelden_300x200px_nl_vrijetijd.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "Koken, tafelen, vrije tijd",
+       "untranslatedDescription": "Koken, tafelen, vrije tijd"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=NATIONAL&category=AH%20Voordeelshop",
+       "count": 2,
+       "images": [
+        {
+         "width": 600,
+         "height": 400,
+         "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2025/wk09/voordeelshop_app.png"
+        }
+       ],
+       "bonusType": "NATIONAL",
+       "description": "AH Voordeelshop",
+       "untranslatedDescription": "AH Voordeelshop"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=AHONLINE",
+       "count": 1,
+       "images": [],
+       "bonusType": "AHONLINE",
+       "description": "Online aanbiedingen",
+       "untranslatedDescription": "Online aanbiedingen"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=GALL",
+       "count": 6,
+       "images": [],
+       "bonusType": "GALL",
+       "description": "Gall & Gall acties",
+       "untranslatedDescription": "Gall & Gall acties"
+      },
+      {
+       "url": "bonuspage/v2/section?application=AHWEBSHOP&date=2026-11-02&promotionType=ETOS",
+       "count": 35,
+       "images": [],
+       "bonusType": "ETOS",
+       "description": "Etos acties",
+       "untranslatedDescription": "Etos acties"
+      }
+     ]
+    }
+   ],
+   "mmiBannerUrl": "/21888805090/ah.nl_app/bonus/volgendeweek/bonusbooster",
+   "mmiBanner2Url": "/21888805090/ah.nl_app/bonus/volgendeweek/bonusregulier",
+   "adheseSlots": [
+    "myahapp-nl-bonus-next-1-horizontal",
+    "myahapp-nl-bonus-next-2-horizontal",
+    "myahapp-nl-bonus-next-3-horizontal"
+   ]
+  }
+ ]
+}

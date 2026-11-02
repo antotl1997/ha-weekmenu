@@ -1,0 +1,28 @@
+{
+ "status": 200,
+ "body": {
+  "data": {
+   "posReceiptDetails": {
+    "id": "receipt-3",
+    "products": [
+     {
+      "name": "E-TICKET",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 55
+      }
+     }
+    ],
+    "discounts": [
+     {
+      "name": "MIJN AH MILES",
+      "amount": {
+       "amount": -7
+      }
+     }
+    ]
+   }
+  }
+ }
+}
