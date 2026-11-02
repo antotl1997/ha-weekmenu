@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from collections.abc import Iterable
 from datetime import date
 from pathlib import Path
 
@@ -30,7 +31,14 @@ from app.hass import (
 from app.ledger import leftovers
 from app.planner import Dish, Plan, Settings
 from app.staples import extras_savings, staple_list
-from app.week import GEEN_OUDERAVOND, WEEKDAGEN, bestelling_zin, menu_week_start
+from app.week import (
+    GEEN_OUDERAVOND,
+    WEEKDAGEN,
+    away_dates,
+    bestelling_zin,
+    evenings,
+    menu_week_start,
+)
 from app.writer import apply, apply_extras
 
 log = logging.getLogger("weekmenu.web")
@@ -111,10 +119,15 @@ def _leftovers(log, plan: Plan) -> list[dict]:
     return [{"product": _title(plan, p), "qty": n} for p, n in leftovers(log, plan).items()]
 
 
-def week_view(wlog, plan: Plan | None, start: date, ouders: str | None) -> dict:
+def week_view(wlog, plan: Plan | None, start: date, ouders: str | None,
+              away: Iterable[str] = ()) -> dict:
+    away = set(away)
     out = {
         "week": start.isoformat(), "bestelling": bestelling_zin(start),
         "target": wlog.target, "ouders": ouders, "days": [],
+        "niet_thuis": [d.isoformat() for d in away_dates(start, away)],
+        "geen_avonden": not evenings(start, 7, ouders if ouders in WEEKDAGEN else GEEN_OUDERAVOND,
+                                     away),
         "savings": 0.0, "products": 0, "bonus_products": 0, "leftovers": [],
         "not_found": [], "short_by": 0, "pending": [], "unknown": [],
         "budget_exhausted": False, "period_warning": wlog.period_warning,
@@ -129,11 +142,16 @@ def week_view(wlog, plan: Plan | None, start: date, ouders: str | None) -> dict:
         d = by_day.get(day)
         if d is not None:
             out["days"].append({"date": day.isoformat(), "dag": dag, "ouders": False,
-                                "persons": d.persons, "recipe": _recipe_view(d),
+                                "niet_thuis": False, "persons": d.persons, "recipe": _recipe_view(d),
                                 "savings": d.savings})
         elif ouders == dag:
             out["days"].append({"date": day.isoformat(), "dag": dag, "ouders": True,
-                                "persons": 0, "recipe": None, "savings": 0.0})
+                                "niet_thuis": False, "persons": 0, "recipe": None,
+                                "savings": 0.0})
+        elif dag in away:
+            out["days"].append({"date": day.isoformat(), "dag": dag, "ouders": False,
+                                "niet_thuis": True, "persons": 0, "recipe": None,
+                                "savings": 0.0})
     out.update(
         savings=plan.savings,
         products=len(plan.basket),
@@ -228,10 +246,6 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         except httpx.HTTPError:
             return None
 
-    async def ouders_now() -> str | None:
-        raw = await settings_now()
-        return raw.ouders if raw is not None else None
-
     async def publish(start: date, plan: Plan, target: str, extras: float = 0.0) -> None:
         """Update sensor.weekmenu when this is the week it shows."""
         now = ctx.clock()
@@ -239,10 +253,11 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         shown = nxt if ctx.ledger.load(nxt).plan else main.week_of(now.date())
         if start != shown:
             return
-        ouders = await ouders_now()
-        if ouders is None:
+        raw = await settings_now()
+        if raw is None:
             return
-        await main.guard(ctx.hass.publish(plan_view(plan, start, target, ouders),
+        view = plan_view(plan, start, target, raw.ouders, away_dates(start, raw.away))
+        await main.guard(ctx.hass.publish(view,
                                           plan.savings + extras), "sensoren")
 
     # --- pages ---
@@ -317,7 +332,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         wlog = ctx.ledger.load(start)
         plan = Plan.from_dict(wlog.plan) if wlog.plan else None
         raw = await settings_now()
-        out = week_view(wlog, plan, start, raw.ouders if raw is not None else None)
+        out = week_view(wlog, plan, start, raw.ouders if raw is not None else None,
+                        raw.away if raw is not None else ())
         out["enabled"] = raw.enabled if raw is not None else None  # None: HA unreadable
         w = waiting_for(start) if plan is None else None
         out["waiting_for_folder"] = None if w is None else {

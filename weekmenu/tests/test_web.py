@@ -6,7 +6,7 @@ import pytest
 
 from app import main
 from app.ahclient import AhApiError
-from app.hass import HELPER_AVONDEN
+from app.hass import HELPER_AVONDEN, helper_persons
 from app.ledger import WeekLog
 from app.web import make_app
 from tests.fakes import SUNDAY, W, FakeAh, dish, make_ctx, make_plan
@@ -403,3 +403,34 @@ def test_no_em_dash_in_user_texts():
         text = f.read_text(encoding="utf-8")
         assert "\u2014" not in text and "\\u2014" not in text, f.name
 
+
+
+async def test_api_week_marks_the_evenings_not_at_home(aiohttp_client, ctx):
+    await planned_ctx(ctx)
+    ctx.hass.states["input_number.weekmenu_personen_zaterdag"] = "0"
+    ctx.hass.states["input_number.weekmenu_personen_maandag"] = "0"
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert body["niet_thuis"] == ["2026-11-07", "2026-11-09"]
+    assert body["geen_avonden"] is False
+    away = [d for d in body["days"] if d["niet_thuis"]]
+    assert [d["date"] for d in away] == ["2026-11-07", "2026-11-09"]
+    assert all(d["recipe"] is None and d["persons"] == 0 and d["ouders"] is False for d in away)
+    assert all(d["niet_thuis"] is False for d in body["days"] if d["recipe"])
+
+
+async def test_api_week_without_a_menu_says_when_nobody_eats_at_home(aiohttp_client, ctx):
+    for eid in helper_persons().values():
+        ctx.hass.states[eid] = "0"
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert body["days"] == [] and body["geen_avonden"] is True
+    assert len(body["niet_thuis"]) == 7
+
+
+async def test_api_settings_accepts_zero_persons(aiohttp_client, ctx):
+    client = await aiohttp_client(make_app(ctx))
+    eid = helper_persons()["vrijdag"]
+    r = await client.post("api/settings", json={"entity_id": eid, "value": 0})
+    assert r.status == 200
+    assert ctx.hass.posts[-1] == ("services/input_number/set_value", {"entity_id": eid, "value": 0})
