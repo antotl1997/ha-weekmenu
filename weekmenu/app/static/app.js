@@ -47,6 +47,18 @@ function todayIso() {
   return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
 }
 
+/* "woensdag 11 november", like the push message and sensor.weekmenu. */
+function longDate(iso) {
+  const dt = parseDate(iso);
+  const dag = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"][dt.getDay()];
+  return `${dag} ${dt.getDate()} ${MAANDEN[dt.getMonth()]}`;
+}
+
+function folderText(expected) {
+  return "De folder van volgende week is er nog niet" +
+    (expected ? `, verwacht vanaf ${longDate(expected)}` : "");
+}
+
 function shortDate(dt) {
   const dag = ["zo", "ma", "di", "wo", "do", "vr", "za"][dt.getDay()];
   return `${dag} ${dt.getDate()} ${MAANDEN[dt.getMonth()].slice(0, 3)}`;
@@ -228,7 +240,9 @@ function pollRound() {
     state.polling = false;
     state.dishes = {};
     try { await loadWeek(); } catch (e) { /* shown on the tab */ }
+    const waiting = state.status && state.status.waiting_for_folder;
     if (state.status && state.status.error) toast(state.status.error, true);
+    else if (waiting) toast(folderText(waiting.expected));
     else toast("Het menu is bijgewerkt");
     render();
   };
@@ -320,7 +334,13 @@ function weekScreen() {
   const start = parseDate(w.week);
   const end = new Date(start); end.setDate(end.getDate() + 6);
   const where = w.target === "order" ? "in bestelling" : w.target === "list" ? "op de lijst" : "";
+  const waiting = w.waiting_for_folder;
+  const order = waiting
+    ? `Volgende bestelling: ${longDate(w.week)} \u2014 ` +
+      (waiting.expected ? `de folder komt vanaf ${longDate(waiting.expected)}` : "de folder is er nog niet")
+    : w.bestelling;
   let html = `<header class="top"><div><h1>Weekmenu</h1>
+    ${order ? `<div class="order">${esc(order)}</div>` : ""}
     <div class="sub">${shortDate(start)} – ${shortDate(end)}${w.target === "order" ? " · bezorging woensdag" : ""}</div></div>
     ${where ? `<span class="pill grey">${where}</span>` : ""}</header>`;
 
@@ -328,9 +348,12 @@ function weekScreen() {
     html += `<div class="card note"><span class="spin dark"></span><div><b>Er wordt een menu gemaakt</b>
       <span class="muted">Dit duurt meestal een minuut.</span></div></div>`;
   }
-  if (!w.days.length) {
+  if (!w.days.length && waiting) {
+    html += `<div class="card empty"><b>${esc(folderText(waiting.expected))}</b>
+      Het menu wordt vanzelf gemaakt zodra de folder uit is, en je krijgt dan een melding.</div>`;
+  } else if (!w.days.length) {
     html += `<div class="card empty"><b>Nog geen menu voor deze week</b>
-      Het menu wordt zondagochtend vanzelf gemaakt. Wil je niet wachten, tik dan op Nu maken.</div>
+      Het menu wordt vanzelf gemaakt zodra de folder van die week uit is, meestal op vrijdag. Wil je niet wachten, tik dan op Nu maken.</div>
       <button class="btn pri full" data-run="nu_maken">Nu maken</button>`;
   } else {
     const extras = Number(w.extras_savings) || 0;
@@ -448,7 +471,7 @@ function settingsScreen() {
     <div class="sub">dezelfde instellingen als in Home Assistant</div></div></header>
     ${note}
     <div class="card set">
-      <div class="srow">Elke zondag een menu maken
+      <div class="srow">Elke week vanzelf een menu maken
         <button class="toggle ${s.enabled ? "on" : "off"}" data-toggle>${s.enabled ? "● aan" : "○ uit"}</button></div>
       <div class="srow">Kookavonden <div class="stp">
         <button data-avonden="${s.avonden - 1}" aria-label="Minder kookavonden" ${s.avonden <= 1 ? "disabled" : ""}>−</button>

@@ -16,7 +16,7 @@ import pytest
 from aiohttp import web
 
 from app.ahclient import Product, Recipe
-from app.main import PERIOD_WARNING
+from app.main import PERIOD_WARNING, Waiting
 from app.hass import HELPER_OUDERS, _save_total, helper_persons
 from app.ledger import WeekLog
 from app.planner import Dish, Line, Plan
@@ -233,6 +233,9 @@ def test_app_screens_in_chrome(tmp_path):
     shutil.copytree(STATIC_DIR, static)
     with Server(ctx, static) as base:
         dom = render(base, "", tmp_path, "week", size=PHONE_LONG)
+        # the order line, right under the title and above the savings
+        order = "Voor de bestelling van woensdag 4 november"
+        assert dom.index("<h1>Weekmenu</h1>") < dom.index(order) < dom.index("Bonus bespaard")
         for title in TITLES:
             assert title.replace("'", "&#39;") in dom or title in dom, title
         assert "bij de ouders" in dom
@@ -302,3 +305,19 @@ def test_app_screens_in_chrome(tmp_path):
         ctx.login_expired = True
         dom = render(base, "", tmp_path, "login")
         assert "appie://login-exit" in dom and "F12" in dom
+
+
+@pytest.mark.slow
+def test_app_waiting_for_folder_in_chrome(tmp_path):
+    """Thursday before the menu week of 11 November: no folder yet, no menu."""
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 5, 10, 0))
+    ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
+    ctx.waiting = Waiting(date(2026, 11, 11), date(2026, 11, 6))
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "", tmp_path, "week-wachten")
+    line = "Volgende bestelling: woensdag 11 november \u2014 de folder komt vanaf vrijdag 6 november"
+    assert dom.index("<h1>Weekmenu</h1>") < dom.index(line)
+    assert "De folder van volgende week is er nog niet" in dom
+    assert "Voor de bestelling van" not in dom
