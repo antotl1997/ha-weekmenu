@@ -114,6 +114,8 @@ class FakeAh:
         self.store.save(Tokens("secret-access-token", "secret-refresh-token", 9e9))
 
     async def active_order(self):
+        if "active_order" in self.raise_on:  # not in `calls`, like ensure_fresh
+            raise self.raise_on["active_order"]
         if self.order is None:
             return None
         return ActiveOrder(self.order.id, dict(self.order.items))

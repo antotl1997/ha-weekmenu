@@ -6,6 +6,7 @@ import pytest
 from app import main
 from app.ahclient import AhApiError, AhLoginExpired, AhNotJson, BonusPeriod
 from app.ledger import Ledger, WeekLog
+from app.planner import Plan
 from app.main import PERIOD_WARNING, handle_command, run_round, tick, update_total
 from tests.fakes import CURRENT, NEXT, SUNDAY, W, FakeAh, FakeHass, dish, make_ctx, make_plan
 
@@ -780,4 +781,77 @@ async def test_waiting_clears_an_earlier_read_error(tmp_path, planned):
     ctx.hass.fail_reads = False
     await tick(ctx, at(FRI, 9, 0))
     assert ctx.error is None and ctx.waiting is not None
+
+
+# --- fix round 2 of the schedule change ---------------------------------------------------
+
+
+async def test_expired_login_does_not_use_up_the_completion(tmp_path, planned):
+    ah = FakeAh(tmp_path, periods=[CUR, NXT], fail_on_call=1, exc=Crash())
+    ctx = make_ctx(tmp_path, ah=ah)
+    with pytest.raises(Crash):
+        await tick(ctx, at(FRI, 8, 0))
+    ah.fail_on_call = None
+    ah.raise_on["active_order"] = AhLoginExpired("login expired", 401)
+    ctx2 = make_ctx(tmp_path, ah=ah)  # restart, and the login has expired meanwhile
+    await tick(ctx2, at(FRI, 9, 0))
+    (note,) = ctx2.hass.notifications()
+    assert note["message"] == main.LOGIN_EXPIRED_COMPLETION
+    assert "Log opnieuw in via de Weekmenu-app; daarna wordt het menu vanzelf afgemaakt." \
+        in note["message"]
+    wlog = ctx2.ledger.load(W)
+    assert wlog.completion_tried is False and wlog.round_done is False
+    assert len(ah.writes) == 2
+    # logged in again (api/login clears the flag): the next slot completes the week
+    del ah.raise_on["active_order"]
+    ctx2.login_expired = False
+    await tick(ctx2, at(FRI, 10, 0))
+    assert ah.held() == {1: 1, 2: 2, 3: 1}
+    assert ctx2.ledger.load(W).round_done is True
+    assert len(ctx2.hass.notifications()) == 2  # the login message, then "klaar"
+
+
+async def test_crash_during_nieuw_menu_is_completed_by_the_next_slot(tmp_path, planned):
+    calls, queue = planned
+    queue[:] = [plan_a(), plan_b()]
+    ah = FakeAh(tmp_path, periods=[CUR, NXT])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await run_round(ctx, at(FRI, 10, 0), "nu_maken")
+    assert ctx.ledger.load(W).round_done is True and len(ah.writes) == 3
+    ah.fail_on_call, ah.exc = 4, Crash()  # plan_b adds 4 and 5; dies writing 5
+    with pytest.raises(Crash):
+        await run_round(ctx, at(FRI, 11, 0), "nieuw_menu")
+    wlog = ctx.ledger.load(W)
+    assert wlog.round_done is False and wlog.completion_tried is False
+    assert Plan.from_dict(wlog.plan).dishes[0].recipe.id == 201  # the new menu
+    ah.fail_on_call = None
+    ctx2 = make_ctx(tmp_path, ah=ah)
+    await tick(ctx2, at(FRI, 12, 0))
+    assert ah.held() == {1: 1, 2: 2, 3: 1, 4: 1, 5: 1}
+    assert len(calls) == 2  # completed from the log, not a third menu
+    assert ctx2.ledger.load(W).round_done is True
+    assert len(ctx2.hass.notifications()) == 1
+
+
+async def test_crash_after_the_message_sends_no_second_message(tmp_path, planned, monkeypatch):
+    ah = FakeAh(tmp_path, periods=[CUR, NXT])
+    ctx = make_ctx(tmp_path, ah=ah)
+    real_save = ctx.ledger.save
+
+    def dies_on_round_done(log):
+        if log.round_done:
+            raise Crash()
+        real_save(log)
+
+    monkeypatch.setattr(ctx.ledger, "save", dies_on_round_done)
+    with pytest.raises(Crash):
+        await tick(ctx, at(FRI, 8, 0))
+    assert len(ctx.hass.notifications()) == 1
+    wlog = Ledger(tmp_path / "weeks").load(W)
+    assert wlog.notified is True and wlog.round_done is False
+    ctx2 = make_ctx(tmp_path, ah=ah)  # restart
+    n = len(ah.writes)
+    await tick(ctx2, at(FRI, 9, 0))
+    assert ctx2.hass.notifications() == [] and len(ah.writes) == n
+    assert ctx2.ledger.load(W).round_done is True
 

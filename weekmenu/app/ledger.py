@@ -45,6 +45,7 @@ class WeekLog:
     # schedule completes the week once (completion_tried), from the log, never blind.
     round_done: bool = False
     completion_tried: bool = False
+    notified: bool = False  # the "klaar" message for this menu went out
 
     def to_dict(self) -> dict:
         return {
@@ -66,6 +67,7 @@ class WeekLog:
             "period_warning": self.period_warning,
             "round_done": self.round_done,
             "completion_tried": self.completion_tried,
+            "notified": self.notified,
         }
 
     @classmethod
@@ -90,6 +92,7 @@ class WeekLog:
             # a log from before this field: its round was handled by the old schedule
             round_done=bool(d.get("round_done", d.get("plan") is not None)),
             completion_tried=bool(d.get("completion_tried", False)),
+            notified=bool(d.get("notified", False)),
         )
 
 

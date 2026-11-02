@@ -81,6 +81,8 @@ PERIOD_WARNING = (
     "prijzen gelden woensdag waarschijnlijk niet meer"
 )
 LOGIN_EXPIRED = "AH-login verlopen, log opnieuw in"
+LOGIN_EXPIRED_COMPLETION = ("AH-login verlopen. Log opnieuw in via de Weekmenu-app; "
+                            "daarna wordt het menu vanzelf afgemaakt.")
 FINAL_FAILURE = ("Weekmenu kon niet gemaakt worden: Home Assistant/AH niet bereikbaar. "
                  "Tik op Nu maken in de Weekmenu-app.")
 WRITE_FAILED_HINT = "Tik op Nu maken in de Weekmenu-app om de rest toe te voegen."
@@ -345,14 +347,23 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
                 wlog.swapped_out.clear()
                 wlog.previous.clear()
                 wlog.previous_dish.clear()
+            # a new menu is a new round: apply saves these with the plan, before writing,
+            # so a crash halfway is completed by the next automatic slot
+            wlog.round_done = wlog.completion_tried = wlog.notified = False
         result = await apply(ctx.client, ctx.ledger, wlog, plan, replaced)
     except AhLoginExpired:
         known = ctx.login_expired
         ctx.login_expired = True
         log.warning("AH-login verlopen")
+        if completing:  # not a real try: after logging in again the next slot completes
+            wlog.completion_tried = False
+            try:
+                ctx.ledger.save(wlog)
+            except Exception as e:
+                log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
         if mode != "schema" or not known:  # the hourly look reports it once
-            await guard(ctx.hass.notify("Weekmenu", LOGIN_EXPIRED, ctx.ingress_url),
-                        "melding")
+            text = LOGIN_EXPIRED_COMPLETION if completing else LOGIN_EXPIRED
+            await guard(ctx.hass.notify("Weekmenu", text, ctx.ingress_url), "melding")
         return RoundOutcome("login_expired", start, error=LOGIN_EXPIRED)
     except Exception as e:
         msg = short_error(e)
@@ -378,15 +389,24 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     recount_extras(ctx, wlog)  # apply may have settled a staple write
     await guard(ctx.hass.publish(plan_view(plan, start, result.target, raw.ouders),
                                  plan.savings + wlog.extras_savings), "sensoren")
-    if reused and not (completing or result.added or result.pending or result.unknown
-                       or had_error):
+    nothing_new = not (result.added or result.pending or result.unknown)
+    if completing:  # the message only if it never went out, or something changed
+        send = not (wlog.notified and nothing_new)
+    else:
+        send = not (reused and nothing_new and not had_error)
+    if not send:
         log.info("Menu stond er al en alles was al toegevoegd: geen nieuwe melding")
     else:
         # no count when the history failed or took too long (staples_error is set then)
         title, body = format_message(plan, result, raw.ouders, warning,
                                      staples=staples.open_count(wlog, plan.basket),
                                      start=start)
-        await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding")
+        if await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding"):
+            wlog.notified = True  # saved at once: a crash now must not repeat the message
+            try:
+                ctx.ledger.save(wlog)
+            except Exception as e:
+                log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
     if not wlog.round_done:
         wlog.round_done = True
         try:
