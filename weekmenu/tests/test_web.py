@@ -563,3 +563,55 @@ async def test_api_week_removed_day_that_is_also_away_shows_once(aiohttp_client,
     wo = [d for d in body["days"] if d["date"] == WO.isoformat()]
     assert len(wo) == 1 and wo[0]["geen_gerecht"] is True and wo[0]["niet_thuis"] is False
     assert WO.isoformat() not in body["niet_thuis"]
+
+
+# --- kookmomenten en restjes (v0.4) ----------------------------------------------------
+
+
+def leftover_plan():
+    wo = dish(WO, 101, [1, 2], 2.0, persons=4)
+    wo.leftover_date = DO
+    return make_plan([wo, dish(VR, 103, [3], 1.0)])
+
+
+async def test_api_week_shows_the_leftover_night(aiohttp_client, ctx):
+    from app.writer import apply
+    await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), leftover_plan())
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert [d["date"] for d in body["days"]] == [WO.isoformat(), DO.isoformat(), VR.isoformat()]
+    do = body["days"][1]
+    assert do["restjes"] is True and do["recipe"] is None and do["niet_thuis"] is False
+    assert do["restjes_van"] == {"date": WO.isoformat(), "title": "Recept 101"}
+    assert DO.isoformat() not in body["niet_thuis"]
+    d = await (await client.get(f"api/dish/{WO.isoformat()}")).json()
+    assert d["restjes"] == DO.isoformat() and d["persons"] == 4
+
+
+async def test_api_remove_dish_drops_its_leftover_night(aiohttp_client, ctx):
+    from app.writer import apply
+    await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), leftover_plan())
+    client = await aiohttp_client(make_app(ctx))
+    assert (await client.post(f"api/dish/{WO.isoformat()}/remove")).status == 200
+    body = await (await client.get("api/week")).json()
+    days = {d["date"]: d for d in body["days"]}
+    assert days[WO.isoformat()]["geen_gerecht"] and days[DO.isoformat()]["geen_gerecht"]
+    assert not days[DO.isoformat()].get("restjes")
+    sensor = [p for path, p in ctx.hass.posts if path == "states/sensor.weekmenu"][-1]
+    assert sensor["attributes"]["geen_gerecht"] == [WO.isoformat(), DO.isoformat()]
+    assert all("restjes_van" not in x for x in sensor["attributes"]["dishes"])
+
+
+async def test_api_settings_bounds_cooking_moments_to_eat_days(aiohttp_client, ctx):
+    for dag in ("zaterdag", "zondag", "maandag", "dinsdag"):
+        ctx.hass.states[helper_persons()[dag]] = "0"
+    ctx.hass.states[HELPER_AVONDEN] = "5"
+    client = await aiohttp_client(make_app(ctx))
+    s = await (await client.get("api/settings")).json()
+    assert s["avonden"] == 3 and s["eetdagen"] == 3
+    r = await client.post("api/settings", json={"entity_id": HELPER_AVONDEN, "value": 6})
+    assert r.status == 200 and (await r.json())["value"] == 3
+    assert ctx.hass.posts[-1] == (
+        "services/input_number/set_value", {"entity_id": HELPER_AVONDEN, "value": 3})
+    r = await client.post("api/settings", json={"entity_id": HELPER_AVONDEN, "value": "x"})
+    assert r.status == 400

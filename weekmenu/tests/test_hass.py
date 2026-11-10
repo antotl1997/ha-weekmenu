@@ -124,6 +124,9 @@ async def test_set_setting_whitelist_and_services(respx_mock):
     num = respx_mock.post(f"{BASE_URL}/services/input_number/set_value").respond(200, json=[])
     on = respx_mock.post(f"{BASE_URL}/services/input_boolean/turn_on").respond(200, json=[])
     off = respx_mock.post(f"{BASE_URL}/services/input_boolean/turn_off").respond(200, json=[])
+    # cooking moments are bounded by the eat days: set_setting reads the persons first
+    respx_mock.get(url__startswith=f"{BASE_URL}/states/input_number.weekmenu_personen_").respond(
+        json=_state("x", "2"))
     async with httpx.AsyncClient() as http:
         h = Hass(http)
         await h.set_setting(HELPER_AVONDEN, 4)
@@ -334,3 +337,74 @@ def test_removed_day_that_is_also_away_is_named_once():
     assert view["geen_gerecht"] == ["2026-11-05"] and view["niet_thuis"] == []
     _, text = format_message(plan, WriteResult("order"), None, away=away)
     assert "do geen gerecht" in text and "do niet thuis" not in text
+
+
+# --- kookmomenten en restjes (v0.4) ---
+
+
+def _leftover_plan():
+    wo = Dish(date(2026, 11, 4), _recipe("Stamppot"), "Hollandse pot", False, [], 1.0,
+              persons=4, cook=30, leftover_date=date(2026, 11, 5))
+    vr = _dish(date(2026, 11, 6), "Wraps", 0.5)
+    return _plan([wo, vr])
+
+
+def test_message_names_the_leftover_night():
+    _, text = format_message(_leftover_plan(), WriteResult("order"), None)
+    lines = text.splitlines()
+    i = lines.index("wo Stamppot (€ 1,00)")
+    assert lines[i + 1] == "do restjes van Stamppot"
+    assert lines[i + 2] == "vr Wraps (€ 0,50)"
+
+
+def test_sensor_has_leftover_nights_as_entries():
+    view = plan_view(_leftover_plan(), date(2026, 11, 4), "order",
+                     away=[date(2026, 11, 5)])  # a leftover night is never "niet thuis"
+    assert [d["datum"] for d in view["dishes"]] == ["2026-11-04", "2026-11-05", "2026-11-06"]
+    rest = view["dishes"][1]
+    assert rest["restjes_van"] == "Stamppot" and rest["dag"] == "donderdag"
+    assert rest["titel"] == "Restjes van Stamppot" and rest["besparing"] == 0.0
+    assert "restjes_van" not in view["dishes"][0]
+    assert view["niet_thuis"] == []
+
+
+async def test_sensor_state_counts_cooked_dishes_only(respx_mock):
+    r1 = respx_mock.post(f"{BASE_URL}/states/sensor.weekmenu").respond(200, json={})
+    respx_mock.post(f"{BASE_URL}/states/sensor.weekmenu_besparing_week").respond(200, json={})
+    async with httpx.AsyncClient() as http:
+        await Hass(http).publish(plan_view(_leftover_plan(), date(2026, 11, 4), "list"), 1.5)
+    a = json.loads(r1.calls[0].request.content)
+    assert a["state"] == 2 and len(a["attributes"]["dishes"]) == 3
+
+
+async def test_read_settings_bounds_cooking_moments_to_eat_days(respx_mock):
+    persons = helper_persons()
+    values = {HELPER_AAN: "on", HELPER_AVONDEN: "6"}
+    for dag, eid in persons.items():  # 3 eat days: wo, do, vr
+        values[eid] = "2" if dag in ("woensdag", "donderdag", "vrijdag") else "0"
+    for eid, st in values.items():
+        respx_mock.get(f"{BASE_URL}/states/{eid}").respond(json=_state(eid, st))
+    async with httpx.AsyncClient() as http:
+        raw = await Hass(http).read_settings()
+    assert raw.aantal == 3
+    values[HELPER_AVONDEN] = "0"
+    respx_mock.get(f"{BASE_URL}/states/{HELPER_AVONDEN}").respond(
+        json=_state(HELPER_AVONDEN, "0"))
+    async with httpx.AsyncClient() as http:
+        raw = await Hass(http).read_settings()
+    assert raw.aantal == 1
+
+
+async def test_set_setting_bounds_cooking_moments(respx_mock):
+    persons = helper_persons()
+    for dag, eid in persons.items():  # 4 eat days
+        st = "0" if dag in ("zaterdag", "zondag", "maandag") else "2"
+        respx_mock.get(f"{BASE_URL}/states/{eid}").respond(json=_state(eid, st))
+    num = respx_mock.post(f"{BASE_URL}/services/input_number/set_value").respond(200, json=[])
+    async with httpx.AsyncClient() as http:
+        h = Hass(http)
+        assert await h.set_setting(HELPER_AVONDEN, 7) == 4
+        assert await h.set_setting(HELPER_AVONDEN, 0) == 1
+        assert await h.set_setting(persons["zaterdag"], 3) == 3  # persons: not bounded here
+    values = [json.loads(c.request.content)["value"] for c in num.calls]
+    assert values == [4, 1, 3]

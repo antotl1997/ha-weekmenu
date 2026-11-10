@@ -23,6 +23,7 @@ from app.ahclient import LOGIN_URL, AhApiError, AhLoginExpired, extract_code
 from app.hass import (
     HELPER_AAN,
     HELPER_AVONDEN,
+    eat_count,
     helper_persons,
     load_total,
     plan_view,
@@ -34,7 +35,7 @@ from app.week import (
     WEEKDAGEN,
     away_dates,
     bestelling_zin,
-    evenings,
+    eat_days,
     menu_week_start,
 )
 from app.writer import apply, apply_extras
@@ -124,7 +125,7 @@ def week_view(wlog, plan: Plan | None, start: date,
         "week": start.isoformat(), "bestelling": bestelling_zin(start),
         "target": wlog.target, "days": [],
         "niet_thuis": [d.isoformat() for d in away_dates(start, away)],
-        "geen_avonden": not evenings(start, 7, away),
+        "geen_avonden": not eat_days(start, away),
         "savings": 0.0, "products": 0, "bonus_products": 0, "leftovers": [],
         "not_found": [], "short_by": 0, "pending": [], "unknown": [],
         "budget_exhausted": False, "period_warning": wlog.period_warning,
@@ -133,9 +134,11 @@ def week_view(wlog, plan: Plan | None, start: date,
     if plan is None:
         return out
     by_day = {d.date: d for d in plan.dishes}
+    rest_of = {d.leftover_date: d for d in plan.dishes if d.leftover_date}
     removed = set(plan.removed_days)
     out["niet_thuis"] = [i for i in out["niet_thuis"]
                          if date.fromisoformat(i) not in by_day
+                         and date.fromisoformat(i) not in rest_of
                          and date.fromisoformat(i) not in removed]
     for i in range(7):
         day = date.fromordinal(start.toordinal() + i)
@@ -145,6 +148,13 @@ def week_view(wlog, plan: Plan | None, start: date,
             out["days"].append({"date": day.isoformat(), "dag": dag,
                                 "niet_thuis": False, "persons": d.persons, "recipe": _recipe_view(d),
                                 "savings": d.savings})
+        elif day in rest_of:  # "<Dag> · restjes van <gerecht>": a tap opens that dish
+            src = rest_of[day]
+            out["days"].append({"date": day.isoformat(), "dag": dag, "niet_thuis": False,
+                                "restjes": True, "persons": 0, "recipe": None,
+                                "restjes_van": {"date": src.date.isoformat(),
+                                                "title": src.recipe.title},
+                                "savings": 0.0})
         elif day in removed:
             out["days"].append({"date": day.isoformat(), "dag": dag,
                                 "niet_thuis": False, "geen_gerecht": True, "persons": 0,
@@ -193,6 +203,7 @@ def dish_view(wlog, plan: Plan, d: Dish, today: date) -> dict:
     return {
         "date": iso, "dag": WEEKDAGEN[d.date.weekday()], "week": wlog.week.isoformat(),
         "persons": d.persons, "savings": d.savings, "recipe": _recipe_view(d),
+        "restjes": d.leftover_date.isoformat() if d.leftover_date else None,
         "lines": lines, "not_found": list(d.not_found), "steps": list(d.recipe.steps),
         "can_back": iso in wlog.previous and today < wlog.week,
         "week_savings": plan.savings, "leftovers": _leftovers(wlog, plan),
@@ -386,6 +397,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         return Settings(
             evenings=sorted(x.date for x in plan.dishes),
             persons={x.date: x.persons for x in plan.dishes},
+            leftovers={x.date: x.leftover_date for x in plan.dishes if x.leftover_date},
             pantry=list(plan.pantry or ctx.pantry),
             recent_recipe_ids=ctx.ledger.recent_recipe_ids(start),
         )
@@ -532,7 +544,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     async def get_settings(request):
         raw = await ctx.hass.read_settings()
         return web.json_response({
-            "enabled": raw.enabled, "avonden": raw.aantal,
+            # avonden: the cooking moments, at most the eat days (read_settings bounds it)
+            "enabled": raw.enabled, "avonden": raw.aantal, "eetdagen": eat_count(raw.persons),
             "persons": raw.persons, "defaulted": raw.defaulted,
             "away": [dag for dag in WEEKDAGEN[2:] + WEEKDAGEN[:2] if dag in raw.away],
             "entities": {"enabled": HELPER_AAN, "avonden": HELPER_AVONDEN,
@@ -556,8 +569,12 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             elif entity in by_entity and (isinstance(value, bool) or not isinstance(value, int)
                                           or not MIN_PERSONS <= value <= MAX_PERSONS):
                 return _err(400, "personen moeten 1 tot 8 zijn")
+            elif entity == HELPER_AVONDEN and (isinstance(value, bool)
+                                               or not isinstance(value, int)):
+                return _err(400, "kookmomenten moeten een getal zijn")
             else:
-                await ctx.hass.set_setting(entity, value)
+                # cooking moments outside 1 .. eat days are bounded, not refused
+                value = await ctx.hass.set_setting(entity, value)
         except ValueError:
             return _err(400, "geen weekmenu-helper")
         return web.json_response({"ok": True, "value": value})

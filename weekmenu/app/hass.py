@@ -21,7 +21,7 @@ AWAY_PATH = Path("/data/niet_thuis.json")  # {weekday: persons before "niet thui
 
 # All helper entity IDs live here, and nowhere else.
 HELPER_AAN = "input_boolean.weekmenu_aan"
-HELPER_AVONDEN = "input_number.weekmenu_avonden"
+HELPER_AVONDEN = "input_number.weekmenu_avonden"  # since 0.4: the number of cooking moments
 
 
 def helper_persons() -> dict[str, str]:
@@ -54,6 +54,16 @@ class RawSettings:
     def away(self) -> set[str]:
         """Weekdays with 0 persons: not at home, no dinner."""
         return {dag for dag, n in self.persons.items() if n == 0}
+
+
+def clamp_kookmomenten(n: int, eat: int) -> int:
+    """Cooking moments bounded to 1 .. the number of eat days (at least 1)."""
+    return max(1, min(int(n), max(1, eat)))
+
+
+def eat_count(persons: dict[str, int]) -> int:
+    """Eat days in a menu week: the weekdays not at 0 persons."""
+    return sum(1 for dag in WEEKDAGEN if persons.get(dag, DEFAULT_PERSONEN) != 0)
 
 
 def format_eur(x: float) -> str:
@@ -128,8 +138,20 @@ def plan_view(plan: Plan, week_start: date, target: str,
     """Attributes for sensor.weekmenu. `target` is "order" or "list"; `away`: the
     evenings with 0 persons, without food."""
     dishes = []
-    eaten = {d.date for d in plan.dishes}
+    eaten = {d.date for d in plan.dishes} | {d.leftover_date for d in plan.dishes
+                                             if d.leftover_date}
     for d in plan.dishes:
+        if d.leftover_date:  # "do · restjes van <gerecht>": an entry of its own
+            dishes.append({
+                "datum": d.leftover_date.isoformat(),
+                "dag": WEEKDAGEN[d.leftover_date.weekday()],
+                "titel": f"Restjes van {d.recipe.title}",
+                "restjes_van": d.recipe.title,
+                "restjes_datum": d.date.isoformat(),
+                "url": d.recipe.url,
+                "image": d.recipe.image,
+                "besparing": 0.0,
+            })
         dishes.append({
             "datum": d.date.isoformat(),
             "dag": WEEKDAGEN[d.date.weekday()],
@@ -143,6 +165,7 @@ def plan_view(plan: Plan, week_start: date, target: str,
             "personen": d.persons,
             "besparing": round(d.savings, 2),
         })
+    dishes.sort(key=lambda x: x["datum"])
     return {
         "week": week_start.isoformat(),
         "bestelling": bestelling_zin(week_start),
@@ -199,11 +222,14 @@ class Hass:
             dag: await self._int(eid, DEFAULT_PERSONEN, defaulted)
             for dag, eid in helper_persons().items()
         }
+        # cooking moments: never more than eat days, out of bounds is bounded, not refused
+        aantal = clamp_kookmomenten(aantal, eat_count(persons))
         return RawSettings(aan == "on", aantal, persons, defaulted)
 
     async def publish(self, plan_view: dict, week_savings: float) -> None:
         await self._post("states/sensor.weekmenu", {
-            "state": len(plan_view["dishes"]),
+            # the number of dishes cooked; leftover nights are entries, not dishes
+            "state": sum(1 for d in plan_view["dishes"] if "restjes_van" not in d),
             "attributes": {
                 "friendly_name": "Weekmenu",
                 "week": plan_view["week"],
@@ -238,15 +264,22 @@ class Hass:
             },
         })
 
-    async def set_setting(self, entity_id: str, value: str | int | bool) -> None:
+    async def set_setting(self, entity_id: str, value: str | int | bool):
+        """Set a weekmenu helper; returns the value set. Cooking moments are bounded
+        to 1 .. the eat days of the week first."""
         if entity_id == HELPER_AAN:
             action = "turn_on" if value else "turn_off"
             await self._post(f"services/input_boolean/{action}", {"entity_id": entity_id})
         elif entity_id in _ALLOWED_NUMBERS:
+            if entity_id == HELPER_AVONDEN:
+                persons = {dag: await self._int(eid, DEFAULT_PERSONEN, [])
+                           for dag, eid in helper_persons().items()}
+                value = clamp_kookmomenten(int(value), eat_count(persons))
             await self._post("services/input_number/set_value",
                              {"entity_id": entity_id, "value": value})
         else:
             raise ValueError(f"geen weekmenu-helper: {entity_id!r}")
+        return value
 
     def _load_away_memory(self) -> dict[str, int]:
         try:
@@ -323,9 +356,15 @@ def format_message(
         lines.append(bestelling_zin(start))
     if period_warning:
         lines.append(period_warning)
+    days: list[tuple[date, str]] = []
     for d in plan.dishes:
-        lines.append(f"{_ABBR[WEEKDAGEN[d.date.weekday()]]} {d.recipe.title} ({format_eur(d.savings)})")
-    eaten = {d.date for d in plan.dishes}
+        days.append((d.date, f"{_ABBR[WEEKDAGEN[d.date.weekday()]]} {d.recipe.title} "
+                             f"({format_eur(d.savings)})"))
+        if d.leftover_date:
+            days.append((d.leftover_date, f"{_ABBR[WEEKDAGEN[d.leftover_date.weekday()]]} "
+                                          f"restjes van {d.recipe.title}"))
+    lines += [text for _, text in sorted(days, key=lambda x: x[0])]
+    eaten = {day for day, _ in days}
     for d in sorted(away):
         if d in eaten or d in plan.removed_days:  # a removed dish: "geen gerecht" below
             continue

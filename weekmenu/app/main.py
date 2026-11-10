@@ -60,9 +60,10 @@ from app.tokens import TokenStore
 from app.week import (
     WEEKDAGEN,
     away_dates,
-    evenings,
+    eat_days,
     lange_datum,
     menu_week_start,
+    plan_days,
 )
 from app.writer import WriteResult, apply
 
@@ -185,11 +186,18 @@ def week_of(day: date) -> date:
 
 
 def make_settings(ctx: Context, raw: RawSettings, start: date, exclude=()) -> Settings:
-    aantal = min(7, max(1, raw.aantal))
-    days = evenings(start, aantal, raw.away)
-    persons = {d: max(1, raw.persons.get(WEEKDAGEN[d.weekday()], 2)) for d in days}
+    """Cook days from the eat days and the cooking moments (raw.aantal, bounded by
+    plan_days). A cook day with a leftover night cooks for the persons of both days."""
+    def persons_on(d: date) -> int:
+        return max(1, raw.persons.get(WEEKDAGEN[d.weekday()], 2))
+
+    pairs = plan_days(eat_days(start, raw.away), raw.aantal)
+    days = [cook for cook, _ in pairs]
+    leftovers = {cook: rest for cook, rest in pairs if rest is not None}
+    persons = {cook: persons_on(cook) + (persons_on(rest) if rest else 0)
+               for cook, rest in pairs}
     recent = ctx.ledger.recent_recipe_ids(start) | set(exclude)
-    return Settings(days, persons, list(ctx.pantry), recent)
+    return Settings(days, persons, list(ctx.pantry), recent, leftovers)
 
 
 def _period_for(periods: list[BonusPeriod], day: date) -> BonusPeriod | None:

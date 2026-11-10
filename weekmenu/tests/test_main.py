@@ -191,8 +191,11 @@ async def test_settings_follow_helpers(tmp_path, planned):
     ctx = make_ctx(tmp_path, hass=hass)
     await run_round(ctx, SUNDAY, "nu_maken")
     s = calls[0]
-    assert s.evenings == [WO, VR, date(2026, 11, 7)]
-    assert s.persons[VR] == 4 and s.persons[WO] == 2
+    # 6 eat days, 3 cooking moments: every cook day has a leftover night
+    za, zo, ma, di = (date(2026, 11, d) for d in (7, 8, 9, 10))
+    assert s.evenings == [WO, za, ma]
+    assert s.leftovers == {WO: VR, za: zo, ma: di}
+    assert s.persons == {WO: 2 + 4, za: 4, ma: 4}
     assert s.pantry == ctx.pantry
 
 
@@ -876,7 +879,9 @@ async def test_zero_persons_on_friday_is_skipped_in_the_settings(tmp_path, plann
     ctx = make_ctx(tmp_path, hass=hass)
     await run_round(ctx, SUNDAY, "nu_maken")
     s = calls[0]
-    assert names(s.evenings) == ["wo", "do", "za", "zo", "ma"]
+    # 6 eat days, 5 cooking moments: one leftover night, the day after Wednesday
+    assert names(s.evenings) == ["wo", "za", "zo", "ma", "di"]
+    assert names(s.leftovers.values()) == ["do"]
     assert VR not in s.persons and all(n >= 1 for n in s.persons.values())
 
 
@@ -948,3 +953,33 @@ def test_no_parents_text_anywhere_in_the_app():
     for path in [*root.glob("*.py"), *(root / "static").glob("*")]:
         if path.suffix in {".py", ".js", ".html", ".css"}:
             assert "ouder" not in path.read_text(encoding="utf-8").lower(), path.name
+
+
+# --- kookmomenten en restjes (v0.4) ----------------------------------------------------
+
+
+def only_eat(hass, *dagen):
+    for dag, eid in helper_persons().items():
+        hass.states[eid] = "2" if dag in dagen else "0"
+
+
+async def test_three_eat_days_two_cooking_moments_give_one_leftover_night(tmp_path, planned):
+    calls, _ = planned
+    hass = FakeHass(tmp_path / "totaal.json", aantal=2)
+    only_eat(hass, "woensdag", "donderdag", "vrijdag")
+    hass.states["input_number.weekmenu_personen_donderdag"] = "3"
+    ctx = make_ctx(tmp_path, hass=hass)
+    await run_round(ctx, SUNDAY, "nu_maken")
+    s = calls[0]
+    assert s.evenings == [WO, VR]
+    assert s.leftovers == {WO: DO}  # the day after the first cook day
+    assert s.persons == {WO: 5, VR: 2}  # the cook day cooks for both days
+
+
+async def test_more_cooking_moments_than_eat_days_is_bounded(tmp_path, planned):
+    calls, _ = planned
+    hass = FakeHass(tmp_path / "totaal.json", aantal=7)
+    only_eat(hass, "woensdag", "donderdag", "vrijdag")
+    ctx = make_ctx(tmp_path, hass=hass)
+    await run_round(ctx, SUNDAY, "nu_maken")
+    assert calls[0].evenings == [WO, DO, VR] and calls[0].leftovers == {}
