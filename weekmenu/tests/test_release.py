@@ -52,8 +52,9 @@ def test_store_files_exist():
 def test_icon_sizes():
     from PIL import Image
 
-    assert Image.open(ROOT / "icon.png").size == (128, 128)
-    assert Image.open(ROOT / "logo.png").size == (250, 100)
+    with Image.open(ROOT / "icon.png") as icon, Image.open(ROOT / "logo.png") as logo:
+        assert icon.size == (128, 128)
+        assert logo.size == (250, 100)
 
 
 def test_translations_cover_every_option():
