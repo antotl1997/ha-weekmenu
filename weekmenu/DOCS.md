@@ -38,6 +38,7 @@ Onder Configuratie van de add-on:
 
 - **schedule_time (Schema-tijd)**: vanaf dit tijdstip (standaard 08:00) kijkt de add-on elk uur of de folder van de bezorgweek er is, tot 18:00 en zolang er nog geen menu is. Meestal komt de folder op vrijdag.
 - **pantry (Basisvoorraad)**: producten die je altijd in huis hebt, zoals olie, zout en peper. Die komen niet op je lijst.
+- **ah_app_version (AH-appversie)**: de versie van de AH-app waarmee de add-on zich bij AH meldt, standaard 9.28. Pas dit alleen aan als AH de add-on weigert met een melding over een oude app-versie; zet er dan de versie in van de AH-app op je telefoon.
 
 In de app, onder Instellingen:
 
@@ -60,8 +61,22 @@ De AH-login staat in het bestand `tokens.json` in de datamap van de add-on. Die 
 Is er een backup of de login gelekt:
 
 1. Wijzig je AH-wachtwoord. Dat maakt de oude login ongeldig.
-2. Verwijder `tokens.json` bij de add-on, via uitloggen in de app. De uitlogknop komt in versie 0.7. Tot die tijd kun je de add-on verwijderen en opnieuw installeren (dat wist zijn data), of het bestand in de datamap van de add-on weghalen. Haal dan ook `tokens.json.bak` weg als die er staat: dat is de kopie van vóór versie 0.6.
+2. Log uit bij de add-on: in de app onder Instellingen, AH-login, Uitloggen bij AH. Dat wist `tokens.json` en ook `tokens.json.bak` (de kopie van vóór versie 0.6), en de app toont daarna het inlogscherm. Oudere backups bevatten de login nog wel; het nieuwe wachtwoord uit stap 1 maakt die ongeldig.
 3. Log daarna opnieuw in, zoals hierboven.
+
+## Uitloggen
+
+In de app onder Instellingen staat bij AH-login de knop Uitloggen bij AH. Na bevestigen wist de add-on de AH-login. Daarna zet hij niets meer in je bestelling of op je lijst tot je opnieuw inlogt.
+
+## Als AH iets verandert
+
+De add-on controleert of de antwoorden van AH de vorm hebben die hij verwacht, voor de bonus, de recepten, de producten, je lijst en je bestelling. Gaat het op hetzelfde onderdeel twee keer achter elkaar mis, dan schrijft hij niets meer naar je bestelling of lijst. Je krijgt dan één melding, en de app toont bovenaan dat schrijven stilstaat. Het menu wordt wel gewoon gemaakt en bewaard.
+
+Elk uur probeert de add-on of AH weer normaal antwoordt. Lukt dat, dan gaat schrijven vanzelf weer aan en vult de volgende ronde aan wat bleef liggen. In Instellingen, Diagnose kun je ook zelf op Opnieuw proberen tikken; tik daarna op Nu maken om aan te vullen.
+
+Met Kopieer diagnose zet je de gegevens voor een melding op je klembord: de versies, de status per onderdeel, de laatste logregels en een samenvatting per week. Er staat geen login, code of antwoord van AH in.
+
+De add-on heeft een watchdog: reageert hij niet meer, dan start Home Assistant hem opnieuw. Een pauze in het schrijven blijft na zo'n herstart staan.
 
 ## Problemen oplossen
 
@@ -69,4 +84,4 @@ Is er een backup of de login gelekt:
 - **"AH-login verlopen"**: log opnieuw in. Het menu van die week wordt daarna alsnog gemaakt.
 - **Er komt geen menu**: het menu wordt gemaakt zodra de folder van de bezorgweek er is. Kies Nu maken in de app om het met de huidige folder te maken. Controleer ook of `input_boolean.weekmenu_aan` aan staat.
 - **De producten staan er niet**: zie "In je bestelling". Is er nog geen bestelling voor de menuweek, dan melden de app en de melding dat, en komen de producten erbij zodra er een is. Anders staat in de melding welke producten je zelf in de AH-app toevoegt.
-- **Het werkte opeens niet meer**: AH kan zijn API aanpassen. Kijk in het logboek van de add-on en meld het via https://github.com/antotl1997/ha-weekmenu/issues, zonder tokens of persoonsgegevens.
+- **"AH lijkt iets veranderd te hebben"** of **het werkte opeens niet meer**: AH kan zijn API aanpassen. Zie "Als AH iets verandert". Meld het via https://github.com/antotl1997/ha-weekmenu/issues met de gekopieerde diagnose; die bevat geen login. Weigert AH de add-on met een melding over een oude app-versie, zet dan `ah_app_version` op de versie van je AH-app.

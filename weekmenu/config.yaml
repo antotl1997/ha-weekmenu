@@ -1,5 +1,5 @@
 name: Weekmenu AH
-version: "0.6.0"
+version: "0.7.0"
 slug: weekmenu
 description: Weekmenu rond de AH-bonus, met de boodschappen in je bestelling of op Mijn lijst
 url: https://github.com/antotl1997/ha-weekmenu
@@ -11,6 +11,9 @@ startup: application
 boot: auto
 ingress: true
 ingress_port: 8099
+# The Supervisor restarts the add-on when this stops answering. It comes from the
+# Supervisor (172.30.32.2, also the ingress proxy), which the allowlist lets through.
+watchdog: http://[HOST]:[PORT:8099]/api/health
 panel_icon: mdi:food
 panel_title: Weekmenu
 stdin: true
@@ -24,7 +27,9 @@ options:
     - suiker
     - bloem
     - azijn
+  ah_app_version: "9.28"
 schema:
   schedule_time: match(^([01][0-9]|2[0-3]):[0-5][0-9]$)
   pantry:
     - str
+  ah_app_version: match(^[0-9]+(\.[0-9]+){1,2}$)

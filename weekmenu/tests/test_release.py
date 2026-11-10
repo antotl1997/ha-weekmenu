@@ -14,7 +14,21 @@ REPO = ROOT.parent
 def test_versions_in_sync():
     config = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    assert config["version"] == project["project"]["version"] == "0.6.0"
+    assert config["version"] == project["project"]["version"] == "0.7.0"
+
+
+def test_app_knows_its_own_version():
+    from app import __version__
+    config = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
+    assert __version__ == config["version"]
+
+
+def test_watchdog_and_app_version_option():
+    from app.ahclient import APP_VERSION
+    config = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
+    assert config["watchdog"] == "http://[HOST]:[PORT:8099]/api/health"
+    assert config["options"]["ah_app_version"] == APP_VERSION == "9.28"
+    assert "ports" not in config  # still no host port: only the Supervisor reaches it
 
 
 def test_changelog_has_current_version():

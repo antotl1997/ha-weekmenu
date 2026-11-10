@@ -5,3 +5,6 @@ configuration:
   pantry:
     name: Pantry staples
     description: Products you always have at home, such as oil and salt. They are not put on your list or in your order.
+  ah_app_version:
+    name: AH app version
+    description: The version of the AH app the add-on presents itself as (for example 9.28). Only change it when AH refuses the add-on with a message about an old app version.

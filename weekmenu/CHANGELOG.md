@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.0
+
+- **Als AH iets verandert, weet je het meteen.** De add-on controleert of de antwoorden van AH (bonus, recepten, producten, lijst en bestelling) de vorm hebben die hij verwacht. Gaat het twee keer achter elkaar mis op hetzelfde onderdeel, dan schrijft hij niets meer naar je bestelling of lijst en krijg je één melding: "AH lijkt iets veranderd te hebben, schrijven naar je bestelling staat stil. Kijk in de Weekmenu-app bij Diagnose." Het menu wordt wel bewaard. Zodra AH weer normaal antwoordt gaat het schrijven vanzelf weer aan en vult het elk uur aan wat bleef liggen, of je tikt in Diagnose op Opnieuw proberen.
+- **Een blokkade van AH (HTTP 403) stopt de ronde meteen**, net als te veel verzoeken (429), in plaats van door te gaan met de volgende categorie.
+- **Diagnose in Instellingen.** Zie of AH antwoordt zoals verwacht, wanneer de laatste geslaagde AH-sync was en met welke app-versie de add-on zich meldt. "Kopieer diagnose" zet de versie, de status per onderdeel, de laatste 50 logregels, een samenvatting per week en de duur van de laatste menuberekening op je klembord, zonder login, codes of antwoorden van AH. Handig bij een melding op GitHub.
+- **Uitloggen bij AH.** Een knop in Instellingen wist de AH-login (ook de oude kopie `tokens.json.bak`). Daarna toont de app het inlogscherm.
+- **AH-appversie als instelling** (`ah_app_version`, standaard 9.28). Weigert AH een oude app-versie, dan pas je dit aan zonder op een nieuwe versie van de add-on te wachten.
+- **Watchdog.** Home Assistant start de add-on opnieuw als hij niet meer reageert.
+- De melding "werk de add-on bij" komt nu echt één keer, ook na een herstart. Staat de AH-login in een bestand van een nieuwere versie, dan toont de app die melding in plaats van het inlogscherm.
+- Voor ontwikkelaars: `python -m tools.record_fixtures --check <tokens.json>` vergelijkt een verse, alleen-lezen opname met de opgeslagen voorbeeldantwoorden en noemt de verschillen.
+
 ## 0.6.0
 
 - **Geen half bestand meer na een stroomstoring.** Elk bestand dat de add-on bijhoudt (de weeklogboeken, `totaal.json`, `niet_thuis.json`, `state.json` en de AH-login in `tokens.json`) wordt eerst volledig naar een tijdelijk bestand geschreven en pas daarna verwisseld. Valt de stroom halverwege weg, dan staat de vorige versie er nog heel.

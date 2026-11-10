@@ -5,3 +5,6 @@ configuration:
   pantry:
     name: Basisvoorraad
     description: Producten die je altijd in huis hebt, zoals olie en zout. Die komen niet op je lijst of in je bestelling.
+  ah_app_version:
+    name: AH-appversie
+    description: De versie van de AH-app waarmee de add-on zich meldt (bijvoorbeeld 9.28). Alleen aanpassen als AH de add-on weigert met een melding over een oude app-versie.
