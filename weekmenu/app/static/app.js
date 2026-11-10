@@ -270,6 +270,7 @@ function notesHtml(w, soft) {
     (items && items.length ? `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : "") +
     `</div></div>`);
   if (soft) return softNotes(w, note, out);
+  if (w.writes_paused) note("bad", w.writes_paused, "Kijk bij Instellingen, Diagnose.", []);
   if (w.period_warning) note("", w.period_warning, "", []);
   if (w.held) note("", w.held, "", []);
   if (w.short_by > 0) {
@@ -592,7 +593,49 @@ function settingsScreen() {
     <div class="btnrow"><button class="btn sec2" data-run="nieuw_menu">${ICON.refresh} Nieuw menu</button>
       <button class="btn pri" data-run="nu_maken">Nu maken</button></div>
     <p class="foot">Nu maken vult aan wat nog ontbreekt. Nieuw menu kiest andere gerechten.</p>
+    ${diagnoseHtml()}
     <p class="foot"><a href="#inloggen">Opnieuw inloggen</a> bij AH, als de add-on de login kwijt is.</p>`;
+}
+
+/* "2026-11-11T09:30:12" as "11 november 09:30" (empty when unknown). */
+function stampText(iso) {
+  if (typeof iso !== "string" || iso.length < 16) return "";
+  return `${longDate(iso.slice(0, 10)).split(" ").slice(1).join(" ")} ${iso.slice(11, 16)}`;
+}
+
+/* Instellingen, Diagnose: is AH still answering as expected, and the two buttons. */
+function diagnoseHtml() {
+  const st = state.status || {};
+  const paused = !!st.writes_paused;
+  const sync = stampText(st.last_ah_sync);
+  const version = `AH-appversie ${esc(st.ah_app_version || "?")}.`;
+  const line = paused
+    ? `<b>Schrijven staat stil</b><span class="muted">AH lijkt iets veranderd te hebben. Er gaat niets naar je bestelling of lijst tot het weer werkt. Kopieer de diagnose en meld het, of probeer het opnieuw. ${version}</span>`
+    : `<b>AH antwoordt zoals verwacht</b><span class="muted">${sync ? `Laatste geslaagde AH-sync: ${esc(sync)}.` : "Nog geen AH-sync sinds de start."} ${version}</span>`;
+  return `<div class="sec">Diagnose</div>
+    <div class="card note${paused ? " bad" : ""}"><span class="dot"></span><div>${line}</div></div>
+    <div class="btnrow"><button class="btn sec2" data-diagcopy>Kopieer diagnose</button>
+      ${paused ? `<button class="btn pri" data-diagretry>Opnieuw proberen</button>` : ""}</div>
+    <div class="sec">AH-login</div>
+    <div class="btnrow"><button class="btn sec2" data-logout>Uitloggen bij AH</button></div>`;
+}
+
+/* Copy text; the Clipboard API needs https, Home Assistant often runs on http. */
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (e) { /* fallback */ }
+  }
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+  ta.remove();
+  return ok;
 }
 
 // --- screens: login --------------------------------------------------------------------
@@ -617,6 +660,12 @@ function loginScreen(again) {
       <div class="btnrow"><button class="btn pri" data-login>Inloggen</button></div>
     </div>
     ${again ? `<p class="foot"><a href="#instellingen">Terug naar instellingen</a></p>` : ""}`;
+}
+
+/* A file or the login is from a newer add-on: no login screen, the update message. */
+function updateScreen(msg) {
+  return `<header class="top"><div><h1>Weekmenu</h1></div></header>
+    <div class="card empty"><b>Werk de add-on bij</b>${esc(msg)}</div>`;
 }
 
 function errorScreen(msg) {
@@ -645,6 +694,7 @@ async function render() {
   app.classList.toggle("bare", !loggedIn || !!r.dish || relogin);
   for (const a of nav.querySelectorAll("a")) a.classList.toggle("on", a.dataset.tab === r.tab);
   if (!state.status) return;
+  if (!loggedIn && state.status.update_needed) { app.innerHTML = updateScreen(state.status.update_needed); return; }
   if (!loggedIn || relogin) { app.innerHTML = loginScreen(loggedIn && relogin); return; }
 
   const need = r.dish ? (state.dishes[r.dish] ? null : () => loadDish(r.dish))
@@ -681,7 +731,7 @@ async function refreshQuietly(what) {
     if (what === "week") await loadWeek();
     if (what === "aanbiedingen") { if (!state.week) await loadWeek(); await loadOffers(); }
     if (what === "besparing") state.savings = await api("api/savings");
-    if (what === "instellingen") state.settings = await api("api/settings");
+    if (what === "instellingen") { state.settings = await api("api/settings"); await loadStatus(); }
     if (route().tab === what && !route().dish) render();
   } catch (e) { /* the cached view stays */ }
 }
@@ -837,6 +887,38 @@ app.addEventListener("click", async (ev) => {
       });
       return;
     }
+  }
+
+  // settings: diagnose and logging out
+  if ("diagcopy" in t.dataset) {
+    await busy(t, async () => {
+      const d = await api("api/diagnose");
+      const ok = await copyText(JSON.stringify(d, null, 2));
+      toast(ok ? "Diagnose gekopieerd" : "Kopiëren lukte niet", !ok);
+    });
+    return;
+  }
+  if ("diagretry" in t.dataset) {
+    await busy(t, async () => {
+      await api("api/diagnose/retry", {});
+      await loadStatus();
+      toast("Schrijven staat weer aan. Tik op Nu maken om aan te vullen wat bleef liggen.");
+    });
+    render();
+    return;
+  }
+  if ("logout" in t.dataset) {
+    const ok = await confirmSheet("Uitloggen bij AH?",
+      "De add-on vergeet de AH-login. Daarna zet hij niets meer in je bestelling of op je lijst tot je opnieuw inlogt.",
+      "Uitloggen");
+    if (!ok) return;
+    await busy(t, async () => {
+      await api("api/logout", {});
+      await loadStatus();
+      toast("Uitgelogd bij AH");
+    });
+    render();
+    return;
   }
 
   // settings

@@ -447,3 +447,30 @@ def test_app_offers_tab_in_chrome(tmp_path):
         assert "waarvan losse aanbiedingen € 2,49" in week and "€ 18,82" in week
         assert "waarvan vaste boodschappen € 1,48" in week
         assert "—" not in dom
+
+
+@pytest.mark.slow
+def test_app_diagnose_paused_and_update_in_chrome(tmp_path):
+    """v0.7: Diagnose in Instellingen, the paused note on the week, and the update
+    screen instead of the login when tokens.json is from a newer add-on."""
+    from app.health import PAUSED_NOTE
+
+    ctx = build_ctx(tmp_path)
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "#instellingen", tmp_path, "instellingen-diagnose")
+        assert "Diagnose" in dom and "AH antwoordt zoals verwacht" in dom
+        assert "Kopieer diagnose" in dom and "data-diagretry" not in dom
+        assert "Uitloggen bij AH" in dom and "AH-appversie 9.28" in dom
+
+        ctx.health.failed("lijst", "vorm")
+        ctx.health.failed("lijst", "vorm")
+        dom = render(base, "#instellingen", tmp_path, "instellingen-stil")
+        assert "Schrijven staat stil" in dom and "Opnieuw proberen" in dom
+        dom = chrome(base, tmp_path / "profile-week-stil")
+        assert PAUSED_NOTE in dom
+
+        ctx.store.path.write_text('{"schema": 99}', encoding="utf-8")
+        dom = render(base, "", tmp_path, "werk-bij")
+        assert "Werk de add-on bij" in dom and "appie://login-exit" not in dom
