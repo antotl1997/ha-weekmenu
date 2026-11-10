@@ -38,6 +38,13 @@ Aanbiedingen) use the same route with "kind": "offer": they settle into
 `log.offers_added`, and their saving (kept in the pending entry as "savings")
 into `log.offers_savings`, in the same save. Neither is ever lowered.
 
+Which order (Ruling 42): an active order is only written to (added, lowered,
+staples, offers) when its delivery day lies inside the log's menu week (Wednesday
+to Tuesday). Another week's order, or one whose day cannot be read, gets nothing:
+the plan is saved, `log.held` says why and the result carries `held` (the note
+for the message and the app); a later round writes once there is an order for the
+week, or no order at all (the list). Never a fallback to the wrong order.
+
 Deliberate gap: the gap lasts until the next `apply`. If AH did not apply a
 write, or the user removes the product again before the next round, the entry
 looks "not applied" and the product is written once more. Example: a list
@@ -46,11 +53,12 @@ before the next round, current <= before, so it is written once more.
 """
 import logging
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from typing import Literal
 
 from app.ledger import Ledger, WeekLog, leftovers
 from app.planner import Plan
+from app.week import lange_datum
 
 
 @dataclass
@@ -61,6 +69,7 @@ class WriteResult:
     leftovers: list[tuple[str, int]] = field(default_factory=list)  # (product title, quantity)
     pending: list[tuple[str, int]] = field(default_factory=list)  # outcome still unsure
     unknown: list[tuple[str, int]] = field(default_factory=list)  # status unknown, check in the AH app
+    held: str | None = None  # nothing written: no order or list for this week yet (the note)
 
 
 EXTRA = "extra"  # pending "kind" of a staple write
@@ -75,6 +84,26 @@ def _log_target(what: str, order, count: int) -> None:
     why = (f"actieve bestelling {order.id}" if order is not None
            else "geen actieve bestelling -> lijst")
     log_.info("%s: %d product(en) naar %s", what, count, why)
+
+
+def held_note(week: date) -> str:
+    """For the message and the app when a write waits for this week's order or list."""
+    return ("Het menu staat klaar; de producten worden toegevoegd zodra er een "
+            f"bestelling of lijst voor {lange_datum(week)} is")
+
+
+async def _destination(client, week: date):
+    """The active order (or None: the list) and, when it may not be written, why."""
+    order = await client.active_order()
+    if order is None:
+        return None, None
+    day = await client.order_delivery_date(order)
+    if day is None:
+        return order, f"bezorgdatum van bestelling {order.id} onbekend"
+    if not week <= day <= week + timedelta(days=6):
+        return order, (f"bestelling {order.id} wordt {day.isoformat()} bezorgd, "
+                       f"buiten de menuweek van {week.isoformat()}")
+    return order, None
 
 
 def _title(plan: Plan, replaced: Plan | None, pid: int) -> str:
@@ -264,8 +293,18 @@ async def apply(
         for p, n in plan.basket.items()
         if n - log.added.get(p, 0) > 0 and p not in log.pending and p not in log.unknown
     }
-    order = await client.active_order()
+    order, why = await _destination(client, log.week)
     target: Literal["order", "list"] = "order" if order is not None else "list"
+    if why is not None:  # another week's order: save the plan, write nothing at all
+        log.plan = plan.to_dict()
+        log.savings = plan.savings
+        log.held = why
+        ledger.save(log)
+        log_.info("Menu: niets geschreven, %s", why)
+        result = WriteResult(target=target, held=held_note(log.week))
+        _report(result, log, plan, replaced)
+        return result
+    log.held = None
     dest = _dest(target, order)
     cuts: dict[int, int] = {}
     if (replaced is not None and today is not None and today < log.week
@@ -292,13 +331,17 @@ async def apply(
         _log_target("Opschonen", order, len(cuts))
         await _reduce_each(client, ledger, log, order, cuts, result)
 
+    _report(result, log, plan, replaced)
+    return result
+
+
+def _report(result: WriteResult, log: WeekLog, plan: Plan, replaced: Plan | None) -> None:
     left = leftovers(log, plan)
     if replaced is not None:
         left = {p: n for p, n in left.items() if p in replaced.basket}
     result.leftovers = [(_title(plan, replaced, p), n) for p, n in left.items()]
     result.pending = [(_title(plan, replaced, p), int(e["delta"])) for p, e in log.pending.items()]
     result.unknown = [(_title(plan, replaced, p), n) for p, n in log.unknown.items()]
-    return result
 
 
 async def apply_extras(
@@ -321,8 +364,13 @@ async def apply_extras(
         p: n for p, n in adds.items()
         if n > 0 and p not in into and p not in log.pending and p not in log.unknown
     }
-    order = await client.active_order()
+    order, why = await _destination(client, log.week)
     result = WriteResult(target="order" if order is not None else "list")
+    if why is not None:  # another week's order: nothing written, the caller says so
+        log_.info("%s: niets geschreven, %s",
+                  "Losse aanbieding" if kind == OFFER else "Vaste boodschappen", why)
+        result.held = held_note(log.week)
+        return result
     if log.target is None:
         log.target = result.target
     _log_target("Losse aanbieding" if kind == OFFER else "Vaste boodschappen", order, len(delta))

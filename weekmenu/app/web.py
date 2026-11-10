@@ -39,7 +39,7 @@ from app.week import (
     eat_days,
     menu_week_start,
 )
-from app.writer import OFFER, apply, apply_extras
+from app.writer import OFFER, apply, apply_extras, held_note
 
 log = logging.getLogger("weekmenu.web")
 
@@ -133,6 +133,8 @@ def week_view(wlog, plan: Plan | None, start: date,
         "budget_exhausted": False, "period_warning": wlog.period_warning,
         "extras_savings": wlog.extras_savings, "offers_savings": wlog.offers_savings,
         "staples_error": wlog.staples_error,
+        # Ruling 42: the menu is saved but waits for an order or list for this week
+        "held": held_note(start) if wlog.held and wlog.plan else None,
     }
     if plan is None:
         return out
@@ -437,7 +439,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         nd = next((x for x in new.dishes if x.date == day), None)
         await publish(wlog.week, new, wlog.target or "list", wlog.extras_total)
         # removed: how many products went off the list or out of the order (opschonen)
-        done = {"removed": len(res.removed), "target": res.target}
+        done = {"removed": len(res.removed), "target": res.target, "held": res.held}
         if nd is None:  # "Gerecht weghalen": no dish left to show
             return web.json_response({"date": day.isoformat(), **done})
         return web.json_response({**dish_view(wlog, new, nd, ctx.clock().date()), **done})
@@ -562,6 +564,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             if pid not in wlog.extras_added and pid not in wlog.offers_added:
                 res = await apply_extras(ctx.client, ctx.ledger, wlog, {pid: staple.qty},
                                          {pid: staple.product.title})
+                if res.held:  # the open order is for another week: nothing written
+                    return _err(409, res.held, items=staples_view(wlog))
                 target = res.target
                 wlog.extras_savings = extras_savings(wlog)
                 ctx.ledger.save(wlog)
@@ -650,6 +654,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 res = await apply_extras(
                     ctx.client, ctx.ledger, wlog, {pid: qty}, {pid: product.title},
                     kind=OFFER, savings={pid: deal_savings(product, qty)})
+                if res.held:  # the open order is for another week: nothing written
+                    return _err(409, res.held, added_qty=0)
                 target = res.target
                 if pid not in wlog.offers_added:  # outcome unsure, or unknown: never blind
                     return _err(409, "Onzeker of gelukt, controleer in de AH-app",

@@ -424,8 +424,11 @@ def format_message(
     if start is not None:
         for d in no_cooking_moment(plan, start, away):
             lines.append(f"{_ABBR[WEEKDAGEN[d.weekday()]]} geen kookmoment")
-    lines.append("Alles staat in je bestelling" if result.target == "order"
-                 else "Alles staat op Mijn lijst")
+    if result.held:  # nothing written yet: no order or list for this week (Ruling 42)
+        lines.append(result.held)
+    else:
+        lines.append("Alles staat in je bestelling" if result.target == "order"
+                     else "Alles staat op Mijn lijst")
     if result.removed:
         where = "uit je bestelling" if result.target == "order" else "van je lijst"
         lines.append(f"{_plural(len(result.removed), 'product', 'producten')} {where} gehaald")

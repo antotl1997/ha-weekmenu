@@ -118,7 +118,13 @@ class FakeAh:
             raise self.raise_on["active_order"]
         if self.order is None:
             return None
-        return ActiveOrder(self.order.id, dict(self.order.items))
+        return ActiveOrder(self.order.id, dict(self.order.items), self.order.delivery_date)
+
+    async def order_delivery_date(self, order):
+        """Like AhClient: the day the summary names (None: unknown, nothing written)."""
+        if "order_delivery_date" in self.raise_on:
+            raise self.raise_on["order_delivery_date"]
+        return order.delivery_date
 
     async def shopping_list(self):
         return dict(self.listed)

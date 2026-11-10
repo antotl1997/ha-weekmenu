@@ -465,8 +465,22 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         await guard(ctx.hass.notify("Weekmenu mislukt", text, ctx.ingress_url), "melding")
         return RoundOutcome("error", start, error=msg)
 
-    # before the message, which names the count; bounded so the message is never late
-    await refresh_staples(ctx, wlog, plan, start, now)
+    held = result.held is not None
+    if held:
+        # Ruling 42: the open order is for another week (or its day is unknown), so
+        # nothing was written. round_done stays False: every hourly look tries again,
+        # from the log, until there is an order for this week or the list is usable.
+        log.info("Week %s: menu bewaard, nog niets toegevoegd (%s)", start, wlog.held)
+        if completing:
+            wlog.completion_tried = False  # not a real try
+            try:
+                ctx.ledger.save(wlog)
+            except Exception as e:
+                log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
+    # before the message, which names the count; bounded so the message is never late.
+    # A held completion skips it: the hourly retry would read the history every hour.
+    if not (held and completing):
+        await refresh_staples(ctx, wlog, plan, start, now)
     recount_extras(ctx, wlog)  # apply may have settled a staple write
     await guard(ctx.hass.publish(plan_view(plan, start, result.target,
                                           away_dates(start, raw.away),
@@ -490,7 +504,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
                 ctx.ledger.save(wlog)
             except Exception as e:
                 log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
-    if not wlog.round_done:
+    if not wlog.round_done and not held:
         wlog.round_done = True
         try:
             ctx.ledger.save(wlog)

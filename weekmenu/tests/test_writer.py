@@ -39,11 +39,16 @@ class FakeAh:
         self.fail_on_call = fail_on_call
         self.fail_after = fail_after
         self.exc = exc or AhApiError("boom", 500)
+        self.date_reads = 0
 
     async def active_order(self):
         if self.order is None:
             return None
-        return ActiveOrder(self.order.id, dict(self.order.items))
+        return ActiveOrder(self.order.id, dict(self.order.items), self.order.delivery_date)
+
+    async def order_delivery_date(self, order):
+        self.date_reads += 1
+        return order.delivery_date
 
     async def shopping_list(self):
         return dict(self.listed)
@@ -108,7 +113,7 @@ def led(tmp_path):
 
 
 async def test_apply_uses_order_when_active(led):
-    ah = FakeAh(order=ActiveOrder(1, {}))
+    ah = FakeAh(order=ActiveOrder(1, {}, W))
     log = WeekLog(W)
     res = await apply(ah, led, log, plan({1: 2, 2: 1}))
     assert res.target == "order" and res.added == {1: 2, 2: 1}
@@ -181,6 +186,9 @@ async def test_never_lowers_quantity(respx_mock, led, tmp_path, monkeypatch):
     respx_mock.get(BASE + "/mobile-services/order/v1/summaries/active").respond(
         json={"id": 7, "orderedProducts": [{"quantity": 5, "product": {"webshopId": 1}}]}
     )
+    # the delivery day comes from the open orders (Ruling 42)
+    respx_mock.post(BASE + "/graphql").respond(json={"data": {"orderFulfillments": {
+        "result": [{"orderId": 7, "delivery": {"slot": {"date": "2026-11-04"}}}]}}})
     put = respx_mock.put(BASE + "/mobile-services/order/v1/items").respond(200)
     store = TokenStore(tmp_path / "t.json")
     store.save(Tokens("a", "r", time.time() + 3600))
@@ -230,7 +238,7 @@ async def test_ah_applied_but_call_raised_is_not_doubled(led):
 
 
 async def test_ah_applied_but_call_raised_on_order_is_not_doubled(led):
-    ah = FakeAh(order=ActiveOrder(5, {1: 1}), fail_on_call=0, fail_after=True)
+    ah = FakeAh(order=ActiveOrder(5, {1: 1}, W), fail_on_call=0, fail_after=True)
     p = plan({1: 2})
     with pytest.raises(AhApiError):
         await apply(ah, led, WeekLog(W), p)
@@ -288,7 +296,7 @@ async def test_pending_with_order_gone_moves_to_unknown_and_is_never_written(led
 
 async def test_pending_with_other_order_id_moves_to_unknown(led):
     log = WeekLog(W, pending={1: {"before": 0, "delta": 2, "target": "order", "order_id": 5}})
-    ah = FakeAh(order=ActiveOrder(6, {}))
+    ah = FakeAh(order=ActiveOrder(6, {}, W))
     res = await apply(ah, led, log, plan({1: 2}))
     assert ah.calls == [] and led.load(W).unknown == {1: 2} and res.unknown == [("Product 1", 2)]
 
@@ -343,7 +351,7 @@ async def test_leftovers_come_from_log_with_quantities_and_limited_to_replaced(l
 
 
 async def test_apply_extras_writes_once_into_extras_added(led):
-    ah = FakeAh(order=ActiveOrder(3, {9: 1}))
+    ah = FakeAh(order=ActiveOrder(3, {9: 1}, W))
     log = WeekLog(W)
     res = await apply_extras(ah, led, log, {9: 2})
     assert res.target == "order" and res.added == {9: 2}
@@ -393,7 +401,7 @@ async def test_extras_skip_unsure_and_unknown_products(led):
 
 async def test_apply_logs_target_and_why(led, caplog):
     caplog.set_level("INFO", logger="weekmenu.writer")
-    await apply(FakeAh(order=ActiveOrder(4242, {})), led, WeekLog(W), plan({1: 1}))
+    await apply(FakeAh(order=ActiveOrder(4242, {}, W)), led, WeekLog(W), plan({1: 1}))
     await apply(FakeAh(), led, WeekLog(date(2026, 11, 11)), plan({1: 1}))
     lines = [r.getMessage() for r in caplog.records if r.name == "weekmenu.writer"]
     assert any("actieve bestelling 4242" in m for m in lines)
@@ -439,7 +447,7 @@ async def test_users_own_part_stays_current_3_added_1_goes_to_2(led):
 
 
 async def test_lowers_only_the_part_no_longer_needed(led):
-    ah = FakeAh(order=ActiveOrder(5, {}))
+    ah = FakeAh(order=ActiveOrder(5, {}, W))
     old = plan({1: 3})
     await apply(ah, led, WeekLog(W), old)
     res = await apply(ah, led, led.load(W), plan({1: 1}), replaced=old, today=BEFORE)
@@ -492,14 +500,14 @@ async def test_no_lowering_on_another_destination(led):
     ah = FakeAh()
     old = plan({1: 1})
     await apply(ah, led, WeekLog(W), old)
-    ah.order = ActiveOrder(5, {1: 1})
+    ah.order = ActiveOrder(5, {1: 1}, W)
     res = await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
     assert ah.order.items == {1: 1} and ah.listed == {1: 1} and res.removed == {}
     # added to order 5, now order 6 is the active one
-    ah = FakeAh(order=ActiveOrder(5, {}))
+    ah = FakeAh(order=ActiveOrder(5, {}, W))
     log = WeekLog(date(2026, 11, 11))
     await apply(ah, led, log, old)
-    ah.order = ActiveOrder(6, {1: 1})
+    ah.order = ActiveOrder(6, {1: 1}, W)
     res = await apply(ah, led, led.load(log.week), plan({}), replaced=old, today=BEFORE)
     assert ah.order.items == {1: 1} and res.removed == {}
 
@@ -508,7 +516,7 @@ async def test_adds_on_two_destinations_are_never_lowered(led):
     ah = FakeAh()
     old = plan({1: 1})
     await apply(ah, led, WeekLog(W), old)
-    ah.order = ActiveOrder(5, {})
+    ah.order = ActiveOrder(5, {}, W)
     both = plan({1: 1, 2: 1})
     await apply(ah, led, led.load(W), both)
     assert led.load(W).added_to == "mixed"
@@ -535,7 +543,7 @@ async def test_reduce_write_ahead_entry(led):
 
 
 async def test_crash_after_lowering_is_not_lowered_twice(led):
-    ah = FakeAh(order=ActiveOrder(5, {1: 2}))  # 2 of the user's own
+    ah = FakeAh(order=ActiveOrder(5, {1: 2}, W))  # 2 of the user's own
     old = plan({1: 1, 2: 1})
     await apply(ah, led, WeekLog(W), old)
     ah.fail_on_call, ah.fail_after = len(ah.calls), True  # AH lowered, then the call raised
@@ -624,3 +632,75 @@ async def test_struck_through_line_is_not_lowered_and_stays_a_leftover(led):
     saved = led.load(W)
     assert saved.added == {1: 1} and saved.pending == {}
     assert res.leftovers == [("Product 1", 1)]
+
+
+# --- Ruling 42: only an order delivered inside the menu week (Wed..Tue) ---
+
+HELD_W = ("Het menu staat klaar; de producten worden toegevoegd zodra er een "
+          "bestelling of lijst voor woensdag 4 november is")
+
+
+@pytest.mark.parametrize("day", [None, date(2026, 10, 28), date(2026, 11, 3),
+                                 date(2026, 11, 11)])
+async def test_order_of_another_week_or_unknown_date_gets_nothing(led, day):
+    ah = FakeAh(order=ActiveOrder(5, {}, day))
+    log = WeekLog(W)
+    res = await apply(ah, led, log, plan({1: 2, 2: 1}))
+    assert ah.calls == [] and res.added == {} and res.held == HELD_W
+    saved = led.load(W)
+    assert saved.plan["basket"] == {"1": 2, "2": 1} and saved.savings == 2.5
+    assert saved.added == {} and saved.pending == {} and saved.held  # why, for the app
+    assert saved.added_to is None
+
+
+@pytest.mark.parametrize("day", [W, date(2026, 11, 10)])
+async def test_order_inside_the_menu_week_is_written(led, day):
+    ah = FakeAh(order=ActiveOrder(5, {}, day))
+    res = await apply(ah, led, WeekLog(W), plan({1: 2}))
+    assert ah.calls == [("order", {1: 2})] and res.held is None
+    assert led.load(W).held is None
+
+
+async def test_held_menu_goes_on_the_list_once_the_other_order_is_gone(led):
+    ah = FakeAh(order=ActiveOrder(5, {}, date(2026, 10, 28)))
+    await apply(ah, led, WeekLog(W), plan({1: 2}))
+    ah.order = None  # delivered: the list is usable again
+    res = await apply(ah, led, led.load(W), plan({1: 2}))
+    assert ah.calls == [("list", {1: 2})] and res.held is None
+    saved = led.load(W)
+    assert saved.held is None and saved.added == {1: 2} and saved.added_to == "list"
+
+
+async def test_no_cut_in_an_order_of_another_week(led):
+    ah = FakeAh(order=ActiveOrder(5, {1: 2}, W))
+    old = plan({1: 2})
+    log = WeekLog(W, added={1: 2}, added_to="order:5")
+    ah.order.delivery_date = date(2026, 10, 28)  # same id, but not this week's delivery
+    res = await apply(ah, led, log, plan({}), replaced=old, today=BEFORE)
+    assert ah.calls == [] and res.removed == {} and res.held == HELD_W
+    assert ah.order.items == {1: 2} and led.load(W).added == {1: 2}
+
+
+async def test_held_round_still_settles_pending_first(led):
+    # settling only reads; a pending write on the old order is resolved as usual
+    ah = FakeAh(order=ActiveOrder(5, {1: 2}, date(2026, 10, 28)))
+    log = WeekLog(W, pending={1: {"before": 0, "delta": 2, "target": "order", "order_id": 5}})
+    res = await apply(ah, led, log, plan({1: 2, 2: 1}))
+    assert ah.calls == [] and res.held == HELD_W
+    assert led.load(W).added == {1: 2} and led.load(W).pending == {}
+
+
+@pytest.mark.parametrize("kind", ["extra", "offer"])
+async def test_extras_never_go_into_an_order_of_another_week(led, kind):
+    ah = FakeAh(order=ActiveOrder(5, {}, date(2026, 10, 28)))
+    log = WeekLog(W)
+    res = await apply_extras(ah, led, log, {7: 1}, {7: "Koffie"}, kind=kind,
+                             savings={7: 1.0})
+    assert ah.calls == [] and res.added == {} and res.held == HELD_W
+    assert log.extras_added == {} and log.offers_added == {} and log.offers_savings == 0.0
+
+
+async def test_extras_go_into_this_weeks_order(led):
+    ah = FakeAh(order=ActiveOrder(5, {}, date(2026, 11, 6)))
+    res = await apply_extras(ah, led, WeekLog(W), {7: 1})
+    assert ah.calls == [("order", {7: 1})] and res.held is None

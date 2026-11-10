@@ -64,6 +64,9 @@ class WeekLog:
     # older one; with new_folder_notified the "De nieuwe folder is er" push went out
     new_folder: date | None = None
     new_folder_notified: bool = False
+    # why the last menu write wrote nothing (Ruling 42): the active order is delivered
+    # outside this menu week, or its delivery day is unknown. None once a write went out.
+    held: str | None = None
 
     @property
     def extras_total(self) -> float:
@@ -97,6 +100,7 @@ class WeekLog:
             "folder_period_start": _iso(self.folder_period_start),
             "new_folder": _iso(self.new_folder),
             "new_folder_notified": self.new_folder_notified,
+            "held": self.held,
         }
 
     @classmethod
@@ -128,6 +132,7 @@ class WeekLog:
             folder_period_start=_date(d.get("folder_period_start")),
             new_folder=_date(d.get("new_folder")),
             new_folder_notified=bool(d.get("new_folder_notified", False)),
+            held=d.get("held"),
         )
 
 

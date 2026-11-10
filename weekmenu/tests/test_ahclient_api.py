@@ -616,3 +616,56 @@ async def test_reduce_on_list_only_struck_lines_writes_nothing(respx_mock, tmp_p
     assert await client.reduce_on_shopping_list({5: 1}, on_before=seen.append) == {5}
     assert seen == [] and patch.call_count == 0
     await http.aclose()
+
+
+# --- delivery day of the active order (Ruling 42) ---
+
+
+async def test_active_order_takes_the_delivery_day_from_the_summary(respx_mock, tmp_path):
+    body = fx("handmade-order-active__items.json")["body"]
+    respx_mock.get(ORDER_GET).respond(json={**body, "deliveryDate": "2026-11-04"})
+    gql = respx_mock.post(GRAPHQL).respond(500)
+    client, http = make(tmp_path)
+    order = await client.active_order()
+    assert order.delivery_date == date(2026, 11, 4)
+    assert await client.order_delivery_date(order) == date(2026, 11, 4)
+    assert not gql.called  # no extra read when the summary names the day
+    await http.aclose()
+
+
+async def test_order_delivery_day_from_the_open_orders(respx_mock, tmp_path):
+    respx_mock.get(ORDER_GET).respond(json=fx("handmade-order-active__items.json")["body"])
+    gql = respx_mock.post(GRAPHQL).respond(
+        json=fx("handmade-graphql-fulfillments__open.json")["body"])
+    client, http = make(tmp_path)
+    order = await client.active_order()
+    assert order.delivery_date is None
+    assert await client.order_delivery_date(order) == date(2026, 11, 4)
+    sent = json.loads(gql.calls[0].request.content)
+    assert "orderFulfillments(status: OPEN)" in sent["query"]
+    assert "mutation" not in sent["query"]
+    await http.aclose()
+
+
+async def test_order_delivery_day_unknown_when_not_listed_or_unreadable(respx_mock, tmp_path):
+    client, http = make(tmp_path)
+    route = respx_mock.post(GRAPHQL).respond(
+        json=fx("handmade-graphql-fulfillments__open.json")["body"])
+    assert await client.order_delivery_date(ActiveOrder(999, {})) is None  # other id
+    route.respond(500)
+    assert await client.order_delivery_date(ActiveOrder(123456, {})) is None
+    route.respond(json={"errors": [{"message": "nope"}]})
+    assert await client.order_delivery_date(ActiveOrder(123456, {})) is None
+    route.respond(json={"data": {"orderFulfillments": {"result": [
+        {"orderId": 123456, "delivery": {"slot": {"date": "geen datum"}}}]}}})
+    assert await client.order_delivery_date(ActiveOrder(123456, {})) is None
+    await http.aclose()
+
+
+async def test_order_delivery_day_lets_an_expired_login_through(respx_mock, tmp_path):
+    from app.ahclient import AhLoginExpired
+    respx_mock.post(GRAPHQL).respond(401)
+    client, http = make(tmp_path)
+    with pytest.raises(AhLoginExpired):
+        await client.order_delivery_date(ActiveOrder(123456, {}))
+    await http.aclose()

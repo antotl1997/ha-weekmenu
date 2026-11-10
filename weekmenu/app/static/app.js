@@ -99,6 +99,7 @@ function cookMeta(r) {
 function plural(n, one, many) { return `${n} ${n === 1 ? one : many}`; }
 /* After opschonen: "2 producten uit je bestelling gehaald" ("" when nothing went). */
 function removedText(data) {
+  if (data && data.held) return data.held;  // nothing written: no order or list for this week yet
   const n = data && Number(data.removed);
   if (!n) return "";
   return `${plural(n, "product", "producten")} ${data.target === "order" ? "uit je bestelling" : "van je lijst"} gehaald`;
@@ -270,6 +271,7 @@ function notesHtml(w, soft) {
     `</div></div>`);
   if (soft) return softNotes(w, note, out);
   if (w.period_warning) note("", w.period_warning, "", []);
+  if (w.held) note("", w.held, "", []);
   if (w.short_by > 0) {
     note("", `${plural(w.short_by, "avond", "avonden")} zonder menu`,
       "Er waren te weinig recepten die binnen de regels passen.", []);

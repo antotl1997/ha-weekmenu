@@ -1,5 +1,6 @@
 import asyncio
 import html
+import logging
 import re
 import time
 from dataclasses import dataclass, field
@@ -25,6 +26,7 @@ LOGIN_URL = (
 APP_VERSION = "9.28"
 USER_AGENT = f"Appie/{APP_VERSION} (iPhone17,3; iPhone; CPU OS 26_1 like Mac OS X)"
 REFRESH_MARGIN = 300
+log = logging.getLogger("weekmenu.ahclient")
 
 
 def extract_code(text: str) -> str:
@@ -118,6 +120,8 @@ class Recipe:
 class ActiveOrder:
     id: int
     items: dict[int, int] = field(default_factory=dict)
+    # the delivery day, when the summary itself names it (else see order_delivery_date)
+    delivery_date: date | None = None
 
 
 GROUP_QUERY = (
@@ -144,6 +148,11 @@ FULFILLMENTS_QUERY = (
     "query Fulfillments { orderFulfillments(status: CLOSED) { result {"
     " orderId statusDescription shoppingType"
     " delivery { slot { date } } } } }"
+)
+# Open orders with their delivery day (albert-heijn-mcp getFulfillments, status OPEN).
+OPEN_FULFILLMENTS_QUERY = (
+    "query Fulfillments { orderFulfillments(status: OPEN) { result {"
+    " orderId delivery { slot { date } } } } }"
 )
 RECEIPTS_QUERY = (
     "query Receipts($limit: Int!) {"
@@ -228,6 +237,14 @@ def _pos_int(v: Any) -> int | None:
 
 def _iso(d: Any) -> date | None:
     return date.fromisoformat(d) if d else None
+
+
+def _day(d: Any) -> date | None:
+    """A delivery day from "2026-11-04" or "2026-11-04T..."; None when unreadable."""
+    try:
+        return date.fromisoformat(str(d)[:10]) if d else None
+    except ValueError:
+        return None
 
 
 def _local_day(stamp: Any) -> date | None:
@@ -785,7 +802,31 @@ class AhClient:
             pid = (op.get("product") or {}).get("webshopId")
             if pid:
                 items[int(pid)] = items.get(int(pid), 0) + int(op.get("quantity") or 0)
-        return ActiveOrder(id=int(r.body["id"]), items=items)
+        body = r.body
+        day = (_day(body.get("deliveryDate"))
+               or _day(((body.get("delivery") or {}).get("slot") or {}).get("date")))
+        return ActiveOrder(id=int(body["id"]), items=items, delivery_date=day)
+
+    async def order_delivery_date(self, order: ActiveOrder) -> date | None:
+        """The day `order` is delivered, or None when that cannot be known.
+
+        From the summary when it names the day, else from the open orders
+        (GraphQL orderFulfillments(status: OPEN)) by order id. Any failure but an
+        expired login gives None: the caller then writes nothing (never a guess).
+        """
+        if order.delivery_date is not None:
+            return order.delivery_date
+        try:
+            data = await self.graphql(OPEN_FULFILLMENTS_QUERY, {})
+        except AhLoginExpired:
+            raise
+        except Exception as e:
+            log.warning("Bezorgdatum van de bestelling niet te lezen (%s)", type(e).__name__)
+            return None
+        for f in (data.get("orderFulfillments") or {}).get("result") or []:
+            if _pos_int(f.get("orderId")) == order.id:
+                return _day(((f.get("delivery") or {}).get("slot") or {}).get("date"))
+        return None
 
     async def add_to_order(
         self,

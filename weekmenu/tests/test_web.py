@@ -569,7 +569,8 @@ async def test_api_remove_dish_cleans_up_and_leaves_no_dish(aiohttp_client, ctx)
     client = await aiohttp_client(make_app(ctx))
     r = await client.post(f"api/dish/{WO.isoformat()}/remove")
     assert r.status == 200, await r.text()
-    assert await r.json() == {"date": WO.isoformat(), "removed": 2, "target": "list"}
+    assert await r.json() == {"date": WO.isoformat(), "removed": 2, "target": "list",
+                              "held": None}
     assert ah.held() == {1: 2, 2: 1, 3: 1}  # the user's own two stay
     log = ctx.ledger.load(W)
     assert log.added == {2: 1, 3: 1} and log.previous == {}
@@ -757,3 +758,34 @@ async def test_api_status_running_is_a_menu_round_not_the_lock(aiohttp_client, c
         assert (await client.post("api/run", json={"mode": "nu_maken"})).status == 202
     await asyncio.gather(*ctx.tasks)
     assert (await (await client.get("api/status")).json())["rounds"] == 1
+
+
+# --- Ruling 42: never into an order of another week ---------------------------------
+
+HELD_W = ("Het menu staat klaar; de producten worden toegevoegd zodra er een "
+          "bestelling of lijst voor woensdag 4 november is")
+
+
+async def test_api_swap_writes_nothing_into_an_order_of_another_week(aiohttp_client, ctx,
+                                                                     swaps):
+    from app.ahclient import ActiveOrder
+    await planned_ctx(ctx)  # the menu is on the list
+    ah = ctx.client
+    ah.order = ActiveOrder(5, {7: 1}, date(2026, 10, 28))  # last week's order, still open
+    before = len(ah.writes)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post(f"api/dish/{WO.isoformat()}/swap")
+    assert r.status == 200, await r.text()
+    body = await r.json()
+    assert body["recipe"]["id"] == 301 and body["held"] == HELD_W and body["removed"] == 0
+    assert len(ah.writes) == before and ah.order.items == {7: 1}
+    log = ctx.ledger.load(W)
+    assert log.held and {d["recipe"]["id"] for d in log.plan["dishes"]} == {301, 102}
+    week = await (await client.get("api/week")).json()
+    assert week["held"] == HELD_W
+
+    ah.order = None  # delivered: the next write goes on the list
+    r = await client.post(f"api/dish/{WO.isoformat()}/back")
+    body = await r.json()
+    assert body["held"] is None
+    assert (await (await client.get("api/week")).json())["held"] is None

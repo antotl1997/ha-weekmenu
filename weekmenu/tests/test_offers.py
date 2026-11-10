@@ -109,7 +109,7 @@ async def test_tap_writes_once_with_the_quantity_the_deal_asks(aiohttp_client, t
 
 async def test_a_single_unit_deal_adds_one(aiohttp_client, tmp_path):
     ctx = ctx_with_cache(tmp_path)
-    ctx.client.order = ActiveOrder(9, {})
+    ctx.client.order = ActiveOrder(9, {}, W)
     client = await aiohttp_client(make_app(ctx))
     body = await (await client.post("api/offers/52")).json()  # 25% korting
     assert ctx.client.writes == [("order", {52: 1})] and body["target"] == "order"
@@ -293,3 +293,17 @@ async def test_own_folder_has_no_warning(aiohttp_client, tmp_path):
     ctx = ctx_with_cache(tmp_path)
     client = await aiohttp_client(make_app(ctx))
     assert (await (await client.get("api/offers")).json())["period_warning"] is None
+
+
+async def test_tap_refused_while_the_open_order_is_for_another_week(aiohttp_client, tmp_path):
+    from datetime import date
+    ctx = ctx_with_cache(tmp_path)
+    ctx.client.order = ActiveOrder(9, {}, date(2026, 10, 28))
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post("api/offers/52")
+    assert r.status == 409
+    body = await r.json()
+    assert body["error"] == ("Het menu staat klaar; de producten worden toegevoegd zodra er "
+                             "een bestelling of lijst voor woensdag 4 november is")
+    assert body["added_qty"] == 0
+    assert ctx.client.writes == [] and ctx.ledger.load(W).offers_added == {}

@@ -58,3 +58,13 @@ Ids zijn vervangen door vaste nep-ids die tussen de bestanden kloppen: bestellin
 - **"Eerder gekocht"** (`sectionType: PBO`) geeft alleen losse productkaartjes met `webshopId`, `hqId` (soms `0`: onbekend), `mainCategory`, `bonusMechanism` in wisselende hoofdletters (`2 VOOR 5.00`, `1 + 1 GRATIS`, `2e Halve Prijs`) en vaak geen `currentPrice`.
 - **Een bestelling** heeft `orderState` (`DELIVERED`, `CANCELLED`) en per product `quantity` en `allocatedQuantity`.
 - Hoofdcategorieen die voorkomen: `Vlees`, `Vleeswaren`, `Vis`, `Groente, aardappelen`, `Maaltijden, salades`, `Kaas`, `Zuivel, eieren`, `Frisdrank, sappen, water`, `Borrel, chips, snacks`, `Huishouden`, `Drogisterij`, `Bakkerij`, `Pasta, rijst, wereldkeuken`.
+
+## Met de hand gemaakt (`handmade-*`)
+
+Geen opname maar de vorm van albert-heijn-mcp `src/ahapi/shoppingList.ts` en `orders.ts`, omdat er bij het opnemen geen lijst met items en geen actieve bestelling was.
+
+| Bestand | Vorm van |
+|---|---|
+| `handmade-shoppinglist__items.json` | `GET /mobile-services/shoppinglist/v2/items` met items |
+| `handmade-order-active__items.json` | `GET /mobile-services/order/v1/summaries/active` met items (order-id `123456`) |
+| `handmade-graphql-fulfillments__open.json` | GraphQL `orderFulfillments(status: OPEN)` met de bezorgdag van die bestelling (`getFulfillments` in `orders.ts`). Niet geverifieerd op echte AH: of de actieve bestelling hierin staat en of de samenvatting zelf een bezorgdag noemt. |

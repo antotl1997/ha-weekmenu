@@ -288,7 +288,7 @@ async def test_api_add_staple_writes_once_and_logs(aiohttp_client, tmp_path):
 async def test_api_add_staple_reports_actual_target(aiohttp_client, tmp_path):
     from app.ahclient import ActiveOrder
     ctx = await staples_ctx(tmp_path)  # the menu went on the list
-    ctx.client.order = ActiveOrder(7, {})  # since then an order was opened
+    ctx.client.order = ActiveOrder(7, {}, W)  # since then an order was opened
     client = await aiohttp_client(make_app(ctx))
     body = await (await client.post("api/staples/50")).json()
     assert body["target"] == "order" and ctx.client.order.items == {50: 2}
@@ -447,3 +447,17 @@ async def test_staples_login_expired_is_reported_not_raised(tmp_path, planned):
     log = ctx.ledger.load(W)
     assert log.added == {1: 1, 2: 1} and "login expired" in log.staples_error
     assert "previously_bought_bonus" not in ah.calls
+
+
+async def test_api_add_staple_refused_while_the_open_order_is_for_another_week(aiohttp_client,
+                                                                              tmp_path):
+    from app.ahclient import ActiveOrder
+    ctx = await staples_ctx(tmp_path)
+    ctx.client.order = ActiveOrder(7, {}, None)  # delivery day unknown
+    n = len(ctx.client.writes)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post("api/staples/50")
+    assert r.status == 409
+    body = await r.json()
+    assert "woensdag 4 november" in body["error"] and body["items"][0]["added"] is False
+    assert len(ctx.client.writes) == n and ctx.ledger.load(W).extras_added == {}

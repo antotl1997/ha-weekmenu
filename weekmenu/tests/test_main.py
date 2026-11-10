@@ -1225,3 +1225,67 @@ async def test_hourly_look_is_no_round_for_the_app(tmp_path, planned):
     ah.periods = [CUR, NXT]
     await tick(ctx, at(FRI, 9, 0))
     assert seen == [(True, False)] and ctx.rounds == rounds
+
+
+# --- Ruling 42: never into an order of another week ---------------------------------
+
+W2 = date(2026, 11, 11)  # the menu week on Monday 2 November
+
+
+async def test_monday_button_with_this_weeks_open_order_writes_nothing(tmp_path, planned):
+    """Monday 08:00, Nu maken: the open order is for Wednesday 4 November, the menu for
+    the 11th. The plan is saved, nothing goes into that order, the message says why,
+    and the hourly look writes it once that order is gone (the list)."""
+    from app.ahclient import ActiveOrder
+    calls, _ = planned
+    ah = FakeAh(tmp_path, periods=[CUR, NXT], order=ActiveOrder(5, {9: 1}, WED))
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await run_round(ctx, at(MON, 8, 0), "nu_maken")
+    assert out.status == "done" and out.result.held
+    assert ah.writes == [] and ah.order.items == {9: 1}
+    log = ctx.ledger.load(W2)
+    assert log.plan is not None and log.held and log.added == {}
+    assert log.round_done is False  # the schedule completes it later
+    (note,) = ctx.hass.notifications()
+    assert ("Het menu staat klaar; de producten worden toegevoegd zodra er een "
+            "bestelling of lijst voor woensdag 11 november is") in note["message"]
+    assert "Alles staat" not in note["message"]
+
+    # the hourly looks on Monday and Tuesday: the order is still open, nothing happens
+    history_reads = len(ah.history_for)
+    await whole_day(ctx, date(2026, 11, 3))
+    assert ah.writes == [] and len(ctx.hass.notifications()) == 1
+    assert len(ah.history_for) == history_reads  # no hourly purchase-history reads
+    assert ctx.ledger.load(W2).round_done is False and len(calls) == 1
+
+    # Wednesday: delivered, no active order any more, so the list is usable
+    ah.order = None
+    await tick(ctx, at(WED, 12, 0))
+    assert ah.listed == {1: 1, 2: 2, 3: 1} and len(calls) == 1  # the same menu
+    log = ctx.ledger.load(W2)
+    assert log.round_done is True and log.held is None and log.added_to == "list"
+    assert len(ctx.hass.notifications()) == 2
+    assert "Alles staat op Mijn lijst" in ctx.hass.notifications()[1]["message"]
+    n = len(ah.writes)
+    await whole_day(ctx, date(2026, 11, 5))
+    assert len(ah.writes) == n and len(ctx.hass.notifications()) == 2
+
+
+async def test_held_menu_goes_into_the_order_for_its_own_week(tmp_path, planned):
+    from app.ahclient import ActiveOrder
+    ah = FakeAh(tmp_path, periods=[CUR, NXT], order=ActiveOrder(5, {}, WED))
+    ctx = make_ctx(tmp_path, ah=ah)
+    await run_round(ctx, at(MON, 8, 0), "nu_maken")
+    ah.order = ActiveOrder(6, {}, date(2026, 11, 13))  # the order for the menu week
+    await tick(ctx, at(date(2026, 11, 7), 10, 0))
+    assert ah.order.items == {1: 1, 2: 2, 3: 1} and ah.listed == {}
+    assert ctx.ledger.load(W2).added_to == "order:6"
+
+
+async def test_unknown_delivery_day_writes_nothing(tmp_path, planned):
+    from app.ahclient import ActiveOrder
+    ah = FakeAh(tmp_path, periods=[CUR, NXT], order=ActiveOrder(5, {}, None))
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await run_round(ctx, at(SUN, 10, 0), "nu_maken")  # the menu week of the 4th
+    assert out.status == "done" and out.result.held and ah.writes == []
+    assert ctx.ledger.load(W).round_done is False
