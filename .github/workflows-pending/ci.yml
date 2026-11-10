@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: weekmenu
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: weekmenu/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest -m "not slow" -W error
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: weekmenu
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: weekmenu/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: google-chrome --version
+      - run: python -m pytest -m slow -W error
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - platform: linux/amd64
+            arch: amd64
+          - platform: linux/arm64
+            arch: aarch64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - name: Build ${{ matrix.platform }} (no push)
+        run: |
+          base=$(sed -n 's|^ *${{ matrix.arch }}: *||p' weekmenu/build.yaml)
+          echo "base image: $base"
+          docker buildx build --platform ${{ matrix.platform }} \
+            --build-arg BUILD_FROM="$base" weekmenu
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pip-audit==2.10.1
+      - run: pip-audit -r weekmenu/requirements.txt
