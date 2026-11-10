@@ -9,11 +9,13 @@ four menu weeks. Too few candidates: fewer evenings, never looser rules.
 
 from __future__ import annotations
 
+import asyncio
 import dataclasses
 import itertools
 import logging
 import math
 import re
+import time
 import unicodedata
 from dataclasses import dataclass, field
 from datetime import date
@@ -136,6 +138,8 @@ class Plan:
     pantry: list[str] = field(default_factory=list)  # the pantry list the plan was made with
     budget_exhausted: bool = False  # the menu search ran out of budget: maybe not the best
     removed_days: list[date] = field(default_factory=list)  # "Gerecht weghalen": no dish
+    # not stored: seconds the menu search of build_plan took (for the status, v0.6)
+    search_seconds: float | None = field(default=None, compare=False, repr=False)
 
     def to_dict(self) -> dict:
         return {
@@ -718,12 +722,18 @@ def score_servings(s: Settings, days: list[date]) -> int:
 
 
 async def build_plan(client, bonus: list[Product], s: Settings) -> Plan:
+    """Async for the AH calls; the menu search itself (CPU only, up to _SEARCH_BUDGET
+    nodes) runs in a worker thread, so the web app stays responsive meanwhile."""
+    started = time.perf_counter()
     evenings = sorted(s.evenings)
     detail_budget = max(MAX_RECIPE_DETAILS - len(evenings), 0)
     cands, used = await _gather(
         client, bonus, s, set(), evenings, detail_budget, score_servings(s, evenings)
     )
-    menu, exhausted = _choose_menu(cands, evenings, frozenset(s.leftovers))
+    t0 = time.perf_counter()
+    menu, exhausted = await asyncio.to_thread(
+        _choose_menu, cands, evenings, frozenset(s.leftovers))
+    searched = time.perf_counter() - t0
     budget = [MAX_RECIPE_DETAILS - used]  # what is left for scaling to the persons
     resolve = _resolver(client, bonus, s.pantry, {})
     dishes = [
@@ -731,13 +741,19 @@ async def build_plan(client, bonus: list[Product], s: Settings) -> Plan:
                          s.leftovers.get(day))
         for day, c in sorted(menu.items())
     ]
-    return _finish(dishes, len(evenings) - len(dishes), s.pantry, exhausted)
+    plan = _finish(dishes, len(evenings) - len(dishes), s.pantry, exhausted)
+    plan.search_seconds = searched
+    log.info("Planner: menu in %.2f s (zoeken %.2f s over %d kandidaten%s)",
+             time.perf_counter() - started, searched, len(cands),
+             ", zoekbudget op" if exhausted else "")
+    return plan
 
 
 async def swap_dish(
     client, plan: Plan, day: date, bonus: list[Product], s: Settings, exclude: set[int]
 ) -> Plan:
     """Best other recipe for `day` under the same rules; the rest of the week stays."""
+    started = time.perf_counter()
     old = next((d for d in plan.dishes if d.date == day), None)
     others = [d for d in plan.dishes if d.date != day]
     skip = set(exclude) | {d.recipe.id for d in others} | ({old.recipe.id} if old else set())
@@ -756,12 +772,14 @@ async def swap_dish(
         and len(other_cuisines | {c.cuisine}) >= need
     ]
     if not ok:
+        log.info("Planner: geen ander gerecht, %.2f s", time.perf_counter() - started)
         return dataclasses.replace(plan, short_by=1)
     best = min(ok, key=_rank(day))
     resolve = _resolver(client, bonus, s.pantry, {})
     dish = await _make_dish(client, best, day, persons, resolve, leftover_date=leftover)
     dishes = others + [dish]
     filled = {d.date for d in dishes}
+    log.info("Planner: ander gerecht in %.2f s", time.perf_counter() - started)
     return _finish(
         dishes, sum(1 for e in s.evenings if e not in filled), s.pantry, plan.budget_exhausted,
         plan.removed_days,
@@ -773,6 +791,7 @@ async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
     old = next((d for d in plan.dishes if d.date == day), None)
     if old is None or persons < 1:
         return plan
+    started = time.perf_counter()
     recipe = await client.get_recipe(old.recipe.id, servings=persons)
 
     old_keys = [n or t for t, n in old.recipe.ingredients]
@@ -800,6 +819,7 @@ async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
         old, recipe=recipe, persons=persons, lines=lines, pantry=pantry, not_found=not_found
     )
     dishes = [dish if d.date == day else d for d in plan.dishes]
+    log.info("Planner: %d personen in %.2f s", persons, time.perf_counter() - started)
     return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
                    plan.removed_days)
 

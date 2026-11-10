@@ -905,3 +905,79 @@ async def test_rescale_keeps_the_leftover_night():
     plan = await build_plan(client, [GEHAKT, KIP], leftover_settings([WO, VR], {WO: DO}))
     new = await rescale_dish(client, plan, WO, 10)
     assert dish_on(new, WO).leftover_date == DO and dish_on(new, WO).persons == 10
+
+
+# --- v0.6: the planner off the event loop ---------------------------------------------
+
+
+async def _heavy_cands():
+    """30 candidates over 5 cuisines but only 6 different recipes: 7 evenings can never
+    be filled, and no cuisine rule prunes it, so the search runs until its budget."""
+    import dataclasses
+    week = [WO, DO, VR, ZA, ZO, MA, DI]
+    client = FakeClient([R(400 + i, f"Stamppot {i}", [(500, "g", "rundergehakt")])
+                         for i in range(6)])
+    cands, _ = await planner._gather(client, [GEHAKT], settings(week), set(), week, 40)
+    return week, [dataclasses.replace(c, cuisine=cu, order=k * 10 + j)
+                  for k, cu in enumerate("abcde") for j, c in enumerate(cands)]
+
+
+async def test_event_loop_stays_responsive_during_a_heavy_menu_search(monkeypatch, caplog):
+    """While _choose_menu searches for at least a second, sleep(0.01) tasks on the loop
+    keep coming back within 0.2 s. A probe only counts when it came back while the search
+    was still running: with the search on the loop itself no probe would.
+
+    The median is checked, not every probe: on Windows a busy worker thread makes an
+    occasional loop wake-up take 0.2 to 0.3 s (GIL hand-off and the 15.6 ms timer), also
+    with a thread that does nothing but count."""
+    import asyncio
+    import statistics
+    import threading
+    import time
+    week, many = await _heavy_cands()
+    # a fake search budget big enough for about 1.5 s of searching on this machine
+    monkeypatch.setattr(planner, "_SEARCH_BUDGET", 20_000)
+    t = time.perf_counter()
+    planner._choose_menu(many, week)
+    per_node = (time.perf_counter() - t) / 20_000
+    monkeypatch.setattr(planner, "_SEARCH_BUDGET", max(200_000, int(1.5 / per_node)))
+
+    async def gather(*a, **k):
+        return many, 6
+
+    started, finished = threading.Event(), threading.Event()
+    real = planner._choose_menu
+
+    def watched(*a, **k):
+        started.set()
+        try:
+            return real(*a, **k)
+        finally:
+            finished.set()
+
+    monkeypatch.setattr(planner, "_gather", gather)
+    monkeypatch.setattr(planner, "_choose_menu", watched)
+    caplog.set_level("INFO", logger="app.planner")
+    client = FakeClient([R(400 + i, f"Stamppot {i}", [(500, "g", "rundergehakt")])
+                         for i in range(6)])
+    task = asyncio.create_task(build_plan(client, [GEHAKT], settings(week)))
+    while not started.is_set():
+        await asyncio.sleep(0.001)
+    probes = []
+    while not finished.is_set():
+        t = time.perf_counter()
+        await asyncio.sleep(0.01)
+        if not finished.is_set():  # came back while the search still ran
+            probes.append(time.perf_counter() - t)
+    plan = await task
+    assert plan.budget_exhausted and plan.dishes
+    assert plan.search_seconds >= 1.0  # _choose_menu really ran that long
+    assert len(probes) >= 5, probes  # the loop answered all along
+    assert statistics.median(probes) < 0.2, probes
+    assert "Planner: menu in" in caplog.text
+
+
+def test_search_seconds_is_not_stored():
+    p = Plan([], {}, {}, 0.0, [], 0, search_seconds=1.5)
+    assert "search_seconds" not in p.to_dict()
+    assert Plan.from_dict(p.to_dict()) == p  # not compared either

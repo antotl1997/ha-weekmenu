@@ -236,6 +236,12 @@ def scan_too_new(ctx: Context) -> None:
         note_too_new(ctx, ctx.store.path)
 
 
+async def save_log(ctx: Context, wlog: WeekLog) -> None:
+    """Ledger.save in a worker thread (it fsyncs). Only called with ctx.lock held, so no
+    other writer can run meanwhile; the awaited save still ends before the next step."""
+    await asyncio.to_thread(ctx.ledger.save, wlog)
+
+
 def week_of(day: date) -> date:
     """The Wednesday that starts the menu week holding `day`."""
     return day - timedelta(days=(day.weekday() - 2) % 7)
@@ -437,7 +443,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
             # log (pending is settled first, so no write is ever repeated blind)
             completing = True
             wlog.completion_tried = True
-            ctx.ledger.save(wlog)
+            await save_log(ctx, wlog)
             log.info("Ronde voor week %s was niet afgemaakt: één keer aanvullen", start)
         if mode not in REBUILD and wlog.plan:
             reused = True
@@ -472,6 +478,8 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
                 old_ids = {d.recipe.id for d in replaced.dishes} if replaced else set()
                 plan = await build_plan(ctx.client, bonus,
                                         make_settings(ctx, raw, start, old_ids))
+            if plan.search_seconds is not None:
+                ctx.planner_seconds = round(plan.search_seconds, 2)
             if not plan.dishes:
                 raise AhApiError("geen enkel recept gevonden dat in de regels past")
             wlog.period_warning = warning  # a menu from the right folder clears it
@@ -491,7 +499,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         if completing:  # not a real try: after logging in again the next slot completes
             wlog.completion_tried = False
             try:
-                ctx.ledger.save(wlog)
+                await save_log(ctx, wlog)
             except Exception as e:
                 log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
         if mode != "schema" or not known:  # the hourly look reports it once
@@ -526,14 +534,14 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         if completing:
             wlog.completion_tried = False  # not a real try
             try:
-                ctx.ledger.save(wlog)
+                await save_log(ctx, wlog)
             except Exception as e:
                 log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
     # before the message, which names the count; bounded so the message is never late.
     # A held completion skips it: the hourly retry would read the history every hour.
     if not (held and completing):
         await refresh_staples(ctx, wlog, plan, start, now)
-    recount_extras(ctx, wlog)  # apply may have settled a staple write
+    await recount_extras(ctx, wlog)  # apply may have settled a staple write
     await guard(ctx.hass.publish(plan_view(plan, start, result.target,
                                           away_dates(start, raw.away),
                                           new_folder=new_folder_available(wlog)),
@@ -553,25 +561,25 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         if await guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding"):
             wlog.notified = True  # saved at once: a crash now must not repeat the message
             try:
-                ctx.ledger.save(wlog)
+                await save_log(ctx, wlog)
             except Exception as e:
                 log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
     if not wlog.round_done and not held:
         wlog.round_done = True
         try:
-            ctx.ledger.save(wlog)
+            await save_log(ctx, wlog)
         except Exception as e:
             log.warning("Logboek %s niet bijgewerkt (%s)", wlog.week, type(e).__name__)
     return RoundOutcome("done", start, warning=warning, plan=plan, result=result)
 
 
-def recount_extras(ctx: Context, wlog: WeekLog) -> None:
+async def recount_extras(ctx: Context, wlog: WeekLog) -> None:
     """extras_savings from the staples in extras_added (a settle can add one)."""
     new = staples.extras_savings(wlog)
     if new != wlog.extras_savings:
         wlog.extras_savings = new
         try:
-            ctx.ledger.save(wlog)
+            await save_log(ctx, wlog)
         except Exception as e:
             log.warning("Logboek %s niet bijgewerkt (%s)", wlog.week, type(e).__name__)
 
@@ -608,7 +616,7 @@ async def refresh_staples(ctx: Context, wlog: WeekLog, plan: Plan, start: date,
         staples.merge(wlog, [])
         wlog.staples_error = f"Vaste boodschappen niet op te halen ({msg})"
     try:
-        ctx.ledger.save(wlog)
+        await save_log(ctx, wlog)
     except Exception as e:
         log.warning("Logboek %s niet bijgewerkt (%s)", wlog.week, type(e).__name__)
 
@@ -662,7 +670,7 @@ async def update_total(ctx: Context, today: date) -> None:
             if not w.counted:
                 w.counted = True
                 try:
-                    ctx.ledger.save(w)
+                    await save_log(ctx, w)
                 except Exception as e:
                     log.warning("Logboek %s niet bijgewerkt (%s)", w.week, type(e).__name__)
 
@@ -691,7 +699,7 @@ async def check_new_folder(ctx: Context, start: date) -> None:
                 return
             wlog.new_folder = period.start
             try:
-                ctx.ledger.save(wlog)
+                await save_log(ctx, wlog)
             except Exception as e:  # not noted: no push either, the next hour tries again
                 log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
                 return
@@ -702,7 +710,7 @@ async def check_new_folder(ctx: Context, start: date) -> None:
         if await guard(ctx.hass.notify("Weekmenu", NEW_FOLDER, ctx.ingress_url), "melding"):
             wlog.new_folder_notified = True
             try:
-                ctx.ledger.save(wlog)
+                await save_log(ctx, wlog)
             except Exception as e:
                 log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
 
@@ -729,7 +737,7 @@ async def notify_stale_held(ctx: Context, start: date) -> None:
             wlog.held_notified = True
             wlog.held_notified_items = sorted(todo)
             try:
-                ctx.ledger.save(wlog)
+                await save_log(ctx, wlog)
             except Exception as e:
                 log.warning("Logboek %s niet bijgewerkt (%s)", prev, type(e).__name__)
 
@@ -744,7 +752,7 @@ async def close_stale_new_folder(ctx: Context, start: date) -> None:
             return
         old.new_folder = None
         try:
-            ctx.ledger.save(old)
+            await save_log(ctx, old)
         except Exception as e:
             log.warning("Logboek %s niet bijgewerkt (%s)", old.week, type(e).__name__)
             return

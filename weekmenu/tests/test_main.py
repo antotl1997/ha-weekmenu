@@ -1429,3 +1429,33 @@ async def test_startup_scan_notes_newer_files_and_the_first_look_says_so(tmp_pat
     await main.notify_too_new(ctx)
     await main.notify_too_new(ctx)
     assert len(_update_notes(ctx)) == 1
+
+
+# --- v0.6: the planner and the log saves off the event loop ---------------------------
+
+
+async def test_round_keeps_planner_seconds_and_saves_the_log_in_a_worker_thread(
+        tmp_path, monkeypatch):
+    import threading
+
+    async def fake_build(client, bonus, s):
+        p = plan_a()
+        p.search_seconds = 0.75
+        return p
+
+    monkeypatch.setattr(main, "build_plan", fake_build)
+    ctx = make_ctx(tmp_path)
+    threads = []
+    real = ctx.ledger.save
+
+    def spy(wlog):
+        threads.append(threading.current_thread() is threading.main_thread())
+        real(wlog)
+
+    monkeypatch.setattr(ctx.ledger, "save", spy)
+    out = await run_round(ctx, SUNDAY, "nu_maken")
+    assert out.status == "done" and ctx.planner_seconds == 0.75
+    # writer saves (write-ahead, inside the AH-call callbacks) stay on the loop thread;
+    # the round's own saves (round_done, notified, staples, counted) go to a thread
+    assert False in threads and True in threads
+    assert ctx.ledger.load(W).round_done and ctx.ledger.load(W).notified

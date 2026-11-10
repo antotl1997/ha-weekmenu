@@ -451,7 +451,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             settled = extras_savings(wlog)  # apply may have settled a staple write
             if settled != wlog.extras_savings:
                 wlog.extras_savings = settled
-                ctx.ledger.save(wlog)
+                await main.save_log(ctx, wlog)
         nd = next((x for x in new.dishes if x.date == day), None)
         await publish(wlog.week, new, wlog.target or "list", wlog.extras_total)
         # removed: how many products went off the list or out of the order (opschonen)
@@ -584,7 +584,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                     return _err(409, res.held, items=staples_view(wlog))
                 target = res.target
                 wlog.extras_savings = extras_savings(wlog)
-                ctx.ledger.save(wlog)
+                await main.save_log(ctx, wlog)
                 if pid not in wlog.extras_added:  # outcome unsure, or unknown: never blind
                     return _err(409, "Onzeker of gelukt, controleer in de AH-app",
                                 items=staples_view(wlog))
