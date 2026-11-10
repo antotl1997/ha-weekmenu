@@ -325,3 +325,12 @@ def test_message_names_what_was_cleaned_up():
     assert "1 product van je lijst gehaald" in text
     _, text = format_message(_plan(), WriteResult("list"), None)
     assert "gehaald" not in text
+
+
+def test_removed_day_that_is_also_away_is_named_once():
+    plan = _plan([_dish(date(2026, 11, 4))], removed_days=[date(2026, 11, 5)])
+    away = [date(2026, 11, 5)]
+    view = plan_view(plan, date(2026, 11, 4), "order", away=away)
+    assert view["geen_gerecht"] == ["2026-11-05"] and view["niet_thuis"] == []
+    _, text = format_message(plan, WriteResult("order"), None, away=away)
+    assert "do geen gerecht" in text and "do niet thuis" not in text

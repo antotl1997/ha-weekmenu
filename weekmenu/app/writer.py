@@ -15,7 +15,9 @@ AH gets max(0, current - that), so what the user put there besides the add-on st
 Staples (`extras_added`) are never lowered. A lowering has the same write-ahead
 record with "kind": "reduce", a delta <= 0 and "remove" (what leaves `log.added`):
 current <= before+delta means it arrived, current >= before that it did not (the
-entry is dropped), anything else moves it to `log.unknown`. Never repeated blind.
+entry is dropped), anything else moves it to `log.unknown` (with the negative delta).
+Never repeated blind. A product crossed off on the list is never lowered; it stays
+a leftover.
 
 Write-ahead record: right before each PUT/PATCH the quantity AH holds
 (`before`) and the amount we are about to add (`delta`) go into `log.pending`
@@ -180,7 +182,11 @@ async def _reduce_each(
             if order is not None:
                 await client.reduce_in_order(order, {pid: r}, on_before=before_write)
             else:
-                await client.reduce_on_shopping_list({pid: r}, on_before=before_write)
+                skipped = await client.reduce_on_shopping_list({pid: r}, on_before=before_write)
+                if pid in (skipped or set()):  # crossed off on the list: left alone, a leftover
+                    log.pending.pop(pid, None)
+                    ledger.save(log)
+                    continue
             _take(log.added, pid, r)
             log.pending.pop(pid, None)
             if change and change[0] < 0:

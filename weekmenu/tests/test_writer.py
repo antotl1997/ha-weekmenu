@@ -34,6 +34,7 @@ class FakeAh:
     def __init__(self, order=None, fail_on_call=None, exc=None, fail_after=False, listed=None):
         self.order = order
         self.listed = dict(listed or {})
+        self.struck: set[int] = set()  # crossed off on the list
         self.calls = []  # ("order"|"list", adds)
         self.fail_on_call = fail_on_call
         self.fail_after = fail_after
@@ -87,7 +88,11 @@ class FakeAh:
         self._reduce("order", self.order.items, cuts, on_before)
 
     async def reduce_on_shopping_list(self, cuts, on_before=None):
+        skipped = {p for p in cuts if p in self.struck}
+        if skipped:
+            return skipped  # like AH client: a crossed-off line is never touched
         self._reduce("list", self.listed, cuts, on_before)
+        return set()
 
     async def add_to_shopping_list(self, adds, on_before=None):
         failing = self.fail_on_call is not None and len(self.calls) == self.fail_on_call
@@ -583,7 +588,8 @@ async def test_lowering_with_unclear_outcome_goes_to_unknown_and_is_left_alone(l
     assert ah.calls == [] and ah.listed == {1: 4}
     saved = led.load(W)
     assert saved.unknown == {1: -3} and saved.pending == {} and saved.added == {1: 3}
-    assert res.unknown == [("Product 1", -3)] and res.leftovers == [("Product 1", 3)]
+    # shown once: under "check in the AH app", not also as a leftover
+    assert res.unknown == [("Product 1", -3)] and res.leftovers == []
 
 
 async def test_lowering_whose_order_is_gone_goes_to_unknown(led):
@@ -593,3 +599,28 @@ async def test_lowering_whose_order_is_gone_goes_to_unknown(led):
     ah = FakeAh()
     await apply(ah, led, log, plan({}), replaced=plan({1: 1}), today=BEFORE)
     assert ah.calls == [] and led.load(W).unknown == {1: -1}
+
+
+async def test_second_cut_fails_first_is_done_second_stays_pending(led):
+    ah = FakeAh()
+    old = plan({1: 1, 2: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.fail_on_call = len(ah.calls) + 1  # the second lowering fails before AH applies it
+    with pytest.raises(AhApiError):
+        await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    saved = led.load(W)
+    assert saved.added == {2: 1}  # 1 is lowered and gone from the log
+    assert list(saved.pending) == [2] and saved.pending[2]["kind"] == "reduce"
+    assert ah.listed == {2: 1}
+
+
+async def test_struck_through_line_is_not_lowered_and_stays_a_leftover(led):
+    ah = FakeAh()
+    old = plan({1: 1, 2: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.struck = {1}  # already crossed off in the shop
+    res = await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    assert ah.listed == {1: 1} and res.removed == {2: 1}
+    saved = led.load(W)
+    assert saved.added == {1: 1} and saved.pending == {}
+    assert res.leftovers == [("Product 1", 1)]

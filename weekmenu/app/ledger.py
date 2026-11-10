@@ -39,7 +39,9 @@ class WeekLog:
     # or "kind": "reduce" with a negative (or 0) delta and "remove", the amount that
     # leaves `added` once the lowering arrived
     pending: dict[int, dict] = field(default_factory=dict)
-    # pid -> delta of writes whose outcome can never be known (their order is gone): never written again
+    # pid -> delta of writes whose outcome can never be known (their order is gone, or a
+    # lowering landed halfway): never written again that week. The sign tells which:
+    # > 0 an addition, < 0 a lowering ("kind": "reduce").
     unknown: dict[int, int] = field(default_factory=dict)
     # set when the menu was made from the current folder because next week's was missing
     period_warning: str | None = None
@@ -104,9 +106,14 @@ class WeekLog:
 
 
 def leftovers(log: WeekLog, plan: Plan) -> dict[int, int]:
-    """Added by the add-on according to the log, but not (any more) needed by `plan`."""
+    """Added by the add-on according to the log, but not (any more) needed by `plan`.
+
+    A product in `log.unknown` is left out: it is already reported as "check in the AH app".
+    """
     out = {}
     for p, n in log.added.items():
+        if p in log.unknown:
+            continue
         extra = n - plan.basket.get(p, 0)
         if extra > 0:
             out[p] = extra

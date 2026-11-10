@@ -690,6 +690,10 @@ class AhClient:
     # --- shopping list ---
 
     async def shopping_list(self) -> dict[int, int]:
+        return (await self._list_state())[0]
+
+    async def _list_state(self) -> tuple[dict[int, int], set[int]]:
+        """Quantities per product, and the products with a struck-through (crossed off) line."""
         path = "/mobile-services/shoppinglist/v2/items"
         r = await self.request_raw("GET", path)
         if ORDER_MODE_TEXT in r.text:
@@ -699,11 +703,14 @@ class AhClient:
         if not r.is_json or not isinstance(r.body, dict):
             raise AhNotJson(f"GET {path}: response is not JSON", r.status)
         out: dict[int, int] = {}
+        struck: set[int] = set()
         for it in r.body.get("items") or []:
             pid = ((it.get("productDetails") or {}).get("product") or {}).get("webshopId")
             if pid:
                 out[int(pid)] = out.get(int(pid), 0) + int(it.get("quantity") or 0)
-        return out
+                if it.get("strikedthrough") or it.get("strikeThrough"):
+                    struck.add(int(pid))
+        return out, struck
 
     async def add_to_shopping_list(
         self, adds: dict[int, int], on_before: Callable[[dict[int, int]], None] | None = None
@@ -730,27 +737,35 @@ class AhClient:
     async def reduce_on_shopping_list(
         self, reductions: dict[int, int],
         on_before: Callable[[dict[int, int]], None] | None = None,
-    ) -> None:
+    ) -> set[int]:
         """Never retried. Lower each product by its reduction, never below 0 (0 takes
         it off the list) and never higher: the PATCH sets max(0, current - reduction).
 
-        `on_before` gets the fresh current quantities right before the PATCH. A product
-        that is already at 0 is not sent; with nothing to lower there is no PATCH.
+        A product with a struck-through (crossed off) line is never touched: it is
+        skipped and returned, so a crossed-off line is never un-crossed. `on_before`
+        gets the fresh current quantities of the other products right before the
+        PATCH (not called when every product is skipped). A product already at 0 is
+        not sent; with nothing to lower there is no PATCH.
         """
         _check_reductions(reductions)
         if not reductions:
-            return
-        current = await self.shopping_list()
+            return set()
+        current, struck = await self._list_state()
+        skipped = {pid for pid in reductions if pid in struck}
+        todo = {pid: r for pid, r in reductions.items() if pid not in skipped}
+        if not todo:
+            return skipped
         items = [
             _list_item(pid, max(0, current.get(pid, 0) - r))
-            for pid, r in reductions.items() if current.get(pid, 0) > 0
+            for pid, r in todo.items() if current.get(pid, 0) > 0
         ]
         if on_before is not None:
-            on_before({pid: current.get(pid, 0) for pid in reductions})
+            on_before({pid: current.get(pid, 0) for pid in todo})
         if items:
             await self.request(
                 "PATCH", "/mobile-services/shoppinglist/v2/items", json={"items": items}
             )
+        return skipped
 
     # --- order ---
 

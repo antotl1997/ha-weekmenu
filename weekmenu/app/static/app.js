@@ -606,7 +606,7 @@ async function setSetting(entity, value) {
 async function startRound(btn, mode) {
   if (mode === "nieuw_menu") {
     const ok = await confirmSheet("Een nieuw menu kiezen?",
-      "Wat alleen voor het oude menu was, gaat eruit. Wat je zelf hebt toegevoegd, blijft staan.",
+      "Wat alleen voor het oude menu was, gaat eruit als dat nog kan. Wat je zelf hebt toegevoegd, blijft staan.",
       "Nieuw menu");
     if (!ok) return;
   }
@@ -682,7 +682,7 @@ app.addEventListener("click", async (ev) => {
     if ("swap" in t.dataset) {
       const where = state.week && state.week.target === "list" ? "op je lijst" : "in je bestelling";
       const ok = await confirmSheet("Een ander gerecht voor deze avond?",
-        `De producten voor het nieuwe gerecht komen direct ${where}. Wat alleen voor dit gerecht was, gaat eruit. Wat je zelf hebt toegevoegd, blijft staan.`,
+        `De producten voor het nieuwe gerecht komen direct ${where}. Wat alleen voor dit gerecht was, gaat eruit als dat nog kan. Wat je zelf hebt toegevoegd, blijft staan.`,
         "Ander gerecht");
       if (!ok) return;
       await busy(t, async () => {
@@ -705,7 +705,7 @@ app.addEventListener("click", async (ev) => {
     if ("remove" in t.dataset) {
       const where = state.week && state.week.target === "list" ? "gaan van je lijst" : "gaan uit je bestelling";
       const ok = await confirmSheet("Dit gerecht weghalen?",
-        `De producten die alleen hiervoor waren, ${where}.`, "Weghalen");
+        `De producten die alleen hiervoor waren, ${where} als dat nog kan.`, "Weghalen");
       if (!ok) return;
       await busy(t, async () => {
         const data = await api(`api/dish/${encodeURIComponent(day)}/remove`, {});

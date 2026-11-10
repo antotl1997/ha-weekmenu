@@ -552,3 +552,14 @@ async def test_api_swap_once_the_week_started_cleans_nothing(aiohttp_client, tmp
     body = await r.json()
     assert body["removed"] == 0 and ctx.client.held()[2] == 2
     assert {"product": "Product 2", "qty": 1} in body["leftovers"]
+
+
+async def test_api_week_removed_day_that_is_also_away_shows_once(aiohttp_client, ctx):
+    await planned_ctx(ctx)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await client.post(f"api/dish/{WO.isoformat()}/remove")).status == 200
+    ctx.hass.states[helper_persons()["woensdag"]] = "0"
+    body = await (await client.get("api/week")).json()
+    wo = [d for d in body["days"] if d["date"] == WO.isoformat()]
+    assert len(wo) == 1 and wo[0]["geen_gerecht"] is True and wo[0]["niet_thuis"] is False
+    assert WO.isoformat() not in body["niet_thuis"]

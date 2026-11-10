@@ -176,6 +176,7 @@ class FakeAh:
 
     async def reduce_on_shopping_list(self, cuts, on_before=None):
         await self._reduce("list", self.listed, cuts, on_before)
+        return set()  # nothing crossed off in this fake
 
     def held(self) -> dict[int, int]:
         """What AH holds now, list and order together."""

@@ -148,7 +148,8 @@ def plan_view(plan: Plan, week_start: date, target: str,
         "bestelling": bestelling_zin(week_start),
         "doel": "bestelling" if target == "order" else "lijst",
         "niet_gevonden": list(plan.not_found),
-        "niet_thuis": [d.isoformat() for d in sorted(away) if d not in eaten],
+        "niet_thuis": [d.isoformat() for d in sorted(away)
+                       if d not in eaten and d not in plan.removed_days],
         "geen_gerecht": [d.isoformat() for d in plan.removed_days],  # "Gerecht weghalen"
         "dishes": dishes,
     }
@@ -326,7 +327,7 @@ def format_message(
         lines.append(f"{_ABBR[WEEKDAGEN[d.date.weekday()]]} {d.recipe.title} ({format_eur(d.savings)})")
     eaten = {d.date for d in plan.dishes}
     for d in sorted(away):
-        if d in eaten:
+        if d in eaten or d in plan.removed_days:  # a removed dish: "geen gerecht" below
             continue
         lines.append(f"{_ABBR[WEEKDAGEN[d.weekday()]]} niet thuis")
     for d in plan.removed_days:

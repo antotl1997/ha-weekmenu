@@ -589,3 +589,30 @@ async def test_reduce_in_order_failure_not_retried(respx_mock, tmp_path):
         await client.reduce_in_order(ActiveOrder(1, {}), {5: 1})
     assert put.call_count == 1
     await http.aclose()
+
+
+async def test_reduce_on_list_never_touches_a_struck_through_line(respx_mock, tmp_path):
+    respx_mock.get(LIST_URL).respond(json={"items": [
+        {"quantity": 2, "strikedthrough": True,
+         "productDetails": {"product": {"webshopId": 5}}},
+        {"quantity": 3, "productDetails": {"product": {"webshopId": 6}}}]})
+    patch = respx_mock.patch(LIST_URL).respond(200)
+    client, http = make(tmp_path)
+    seen = []
+    skipped = await client.reduce_on_shopping_list({5: 1, 6: 1}, on_before=seen.append)
+    assert skipped == {5} and seen == [{6: 3}]
+    items = json.loads(patch.calls[0].request.content)["items"]
+    assert [(i["productId"], i["quantity"]) for i in items] == [(6, 2)]
+    await http.aclose()
+
+
+async def test_reduce_on_list_only_struck_lines_writes_nothing(respx_mock, tmp_path):
+    respx_mock.get(LIST_URL).respond(json={"items": [
+        {"quantity": 1, "strikedthrough": True,
+         "productDetails": {"product": {"webshopId": 5}}}]})
+    patch = respx_mock.patch(LIST_URL).respond(200)
+    client, http = make(tmp_path)
+    seen = []
+    assert await client.reduce_on_shopping_list({5: 1}, on_before=seen.append) == {5}
+    assert seen == [] and patch.call_count == 0
+    await http.aclose()
