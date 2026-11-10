@@ -249,6 +249,35 @@ def _minutes(v: Any) -> int | None:
     return v if isinstance(v, int) and not isinstance(v, bool) else None
 
 
+def _list_item(pid: int, quantity: int) -> dict:
+    """One shopping list PATCH item; the PATCH sets this quantity (0 removes it)."""
+    return {
+        "description": "",
+        "productId": pid,
+        "quantity": quantity,
+        "type": "SHOPPABLE",
+        "originCode": "PRD",
+        "strikeThrough": False,
+    }
+
+
+def _order_item(pid: int, quantity: int) -> dict:
+    """One order PUT item; the PUT sets this quantity (0 removes it)."""
+    return {
+        "productId": pid,
+        "quantity": quantity,
+        "originCode": "PRD",
+        "description": "",
+        "strikethrough": False,
+    }
+
+
+def _check_reductions(reductions: dict[int, int]) -> None:
+    for r in reductions.values():
+        if r <= 0:
+            raise ValueError("reductions must be positive")
+
+
 class AhClient:
     def __init__(self, store: TokenStore, http: httpx.AsyncClient):
         self.store = store
@@ -691,21 +720,37 @@ class AhClient:
         for pid, qty in adds.items():
             if qty <= 0:
                 raise ValueError("adds must be positive")
-            items.append(
-                {
-                    "description": "",
-                    "productId": pid,
-                    "quantity": current.get(pid, 0) + qty,
-                    "type": "SHOPPABLE",
-                    "originCode": "PRD",
-                    "strikeThrough": False,
-                }
-            )
+            items.append(_list_item(pid, current.get(pid, 0) + qty))
         if on_before is not None:
             on_before({pid: current.get(pid, 0) for pid in adds})
         await self.request(
             "PATCH", "/mobile-services/shoppinglist/v2/items", json={"items": items}
         )
+
+    async def reduce_on_shopping_list(
+        self, reductions: dict[int, int],
+        on_before: Callable[[dict[int, int]], None] | None = None,
+    ) -> None:
+        """Never retried. Lower each product by its reduction, never below 0 (0 takes
+        it off the list) and never higher: the PATCH sets max(0, current - reduction).
+
+        `on_before` gets the fresh current quantities right before the PATCH. A product
+        that is already at 0 is not sent; with nothing to lower there is no PATCH.
+        """
+        _check_reductions(reductions)
+        if not reductions:
+            return
+        current = await self.shopping_list()
+        items = [
+            _list_item(pid, max(0, current.get(pid, 0) - r))
+            for pid, r in reductions.items() if current.get(pid, 0) > 0
+        ]
+        if on_before is not None:
+            on_before({pid: current.get(pid, 0) for pid in reductions})
+        if items:
+            await self.request(
+                "PATCH", "/mobile-services/shoppinglist/v2/items", json={"items": items}
+            )
 
     # --- order ---
 
@@ -747,15 +792,7 @@ class AhClient:
             raise AhApiError("bestelling is niet meer actief", 404)
         items = []
         for pid, qty in adds.items():
-            items.append(
-                {
-                    "productId": pid,
-                    "quantity": fresh.items.get(pid, 0) + qty,
-                    "originCode": "PRD",
-                    "description": "",
-                    "strikethrough": False,
-                }
-            )
+            items.append(_order_item(pid, fresh.items.get(pid, 0) + qty))
         if on_before is not None:
             on_before({pid: fresh.items.get(pid, 0) for pid in adds})
         await self.request(
@@ -764,3 +801,36 @@ class AhClient:
             json={"items": items},
             order_id=order.id,
         )
+
+    async def reduce_in_order(
+        self,
+        order: ActiveOrder,
+        reductions: dict[int, int],
+        on_before: Callable[[dict[int, int]], None] | None = None,
+    ) -> None:
+        """Never retried. Lower each product by its reduction, never below 0 (0 takes
+        it out of the order) and never higher: the PUT sets max(0, current - reduction).
+
+        The order is re-read right before the PUT; another order id writes nothing.
+        `on_before` gets those fresh quantities. A product already at 0 is not sent;
+        with nothing to lower there is no PUT.
+        """
+        _check_reductions(reductions)
+        if not reductions:
+            return
+        fresh = await self.active_order()
+        if fresh is None or fresh.id != order.id:
+            raise AhApiError("bestelling is niet meer actief", 404)
+        items = [
+            _order_item(pid, max(0, fresh.items.get(pid, 0) - r))
+            for pid, r in reductions.items() if fresh.items.get(pid, 0) > 0
+        ]
+        if on_before is not None:
+            on_before({pid: fresh.items.get(pid, 0) for pid in reductions})
+        if items:
+            await self.request(
+                "PUT",
+                "/mobile-services/order/v1/items?sortBy=DEFAULT",
+                json={"items": items},
+                order_id=order.id,
+            )

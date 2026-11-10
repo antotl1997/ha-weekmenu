@@ -503,3 +503,89 @@ async def test_add_to_shopping_list_on_before_gets_current_before_patch(respx_mo
         {7: 1}, on_before=lambda cur: seen.append((dict(cur), patch.call_count)))
     assert seen == [({7: 2}, 0)]
     await http.aclose()
+
+
+# --- lowering: only what the add-on itself added, never higher, never below 0 ---------
+
+
+async def test_reduce_on_list_sends_current_minus_reduction(respx_mock, tmp_path):
+    respx_mock.get(LIST_URL).respond(json={"items": [
+        {"quantity": 3, "productDetails": {"product": {"webshopId": 1235}}},
+        {"quantity": 1, "productDetails": {"product": {"webshopId": 99}}}]})
+    patch = respx_mock.patch(LIST_URL).respond(200)
+    client, http = make(tmp_path)
+    seen = []
+    await client.reduce_on_shopping_list({1235: 1, 99: 2}, on_before=seen.append)
+    assert seen == [{1235: 3, 99: 1}]
+    by = {i["productId"]: i for i in json.loads(patch.calls[0].request.content)["items"]}
+    assert by[1235]["quantity"] == 2  # the user's own 2 stay
+    assert by[99] == {  # never below 0; 0 takes it off, same shape as adding
+        "description": "", "productId": 99, "quantity": 0, "type": "SHOPPABLE",
+        "originCode": "PRD", "strikeThrough": False,
+    }
+    await http.aclose()
+
+
+async def test_reduce_on_list_product_already_gone_writes_nothing(respx_mock, tmp_path):
+    respx_mock.get(LIST_URL).respond(json={"items": []})
+    patch = respx_mock.patch(LIST_URL).respond(200)
+    client, http = make(tmp_path)
+    seen = []
+    await client.reduce_on_shopping_list({5: 1}, on_before=seen.append)
+    assert seen == [{5: 0}] and patch.call_count == 0
+    await http.aclose()
+
+
+@pytest.mark.parametrize("bad", [0, -1])
+async def test_reduce_rejects_zero_or_negative(respx_mock, tmp_path, bad):
+    patch = respx_mock.patch(LIST_URL).respond(200)
+    put = respx_mock.put(ORDER_PUT).respond(200)
+    client, http = make(tmp_path)
+    with pytest.raises(ValueError):
+        await client.reduce_on_shopping_list({5: bad})
+    with pytest.raises(ValueError):
+        await client.reduce_in_order(ActiveOrder(1, {5: 4}), {5: bad})
+    assert patch.call_count == 0 and put.call_count == 0
+    await http.aclose()
+
+
+async def test_reduce_in_order_uses_fresh_read_and_order_header(respx_mock, tmp_path):
+    respx_mock.get(ORDER_GET).respond(json={"id": 123456, "orderedProducts": [
+        {"quantity": 3, "product": {"webshopId": 1235}},
+        {"quantity": 1, "product": {"webshopId": 99}}]})
+    put = respx_mock.put(ORDER_PUT).respond(200)
+    client, http = make(tmp_path)
+    seen = []
+    # the order as read earlier said 1; the fresh read (3) counts
+    await client.reduce_in_order(ActiveOrder(123456, {1235: 1}), {1235: 1, 99: 4},
+                                 on_before=seen.append)
+    assert seen == [{1235: 3, 99: 1}]
+    req = put.calls[0].request
+    assert req.headers["Appie-Current-Order-Id"] == "123456"
+    assert req.url.params["sortBy"] == "DEFAULT"
+    by = {i["productId"]: i for i in json.loads(req.content)["items"]}
+    assert by[1235]["quantity"] == 2
+    assert by[99] == {"productId": 99, "quantity": 0, "originCode": "PRD",
+                      "description": "", "strikethrough": False}
+    await http.aclose()
+
+
+async def test_reduce_in_order_order_gone_writes_nothing(respx_mock, tmp_path):
+    respx_mock.get(ORDER_GET).respond(json={"id": 7, "orderedProducts": []})
+    put = respx_mock.put(ORDER_PUT).respond(200)
+    client, http = make(tmp_path)
+    with pytest.raises(AhApiError):
+        await client.reduce_in_order(ActiveOrder(123456, {1: 1}), {1: 1})
+    assert put.call_count == 0
+    await http.aclose()
+
+
+async def test_reduce_in_order_failure_not_retried(respx_mock, tmp_path):
+    respx_mock.get(ORDER_GET).respond(json={"id": 1, "orderedProducts": [
+        {"quantity": 2, "product": {"webshopId": 5}}]})
+    put = respx_mock.put(ORDER_PUT).respond(502)
+    client, http = make(tmp_path)
+    with pytest.raises(AhApiError):
+        await client.reduce_in_order(ActiveOrder(1, {}), {5: 1})
+    assert put.call_count == 1
+    await http.aclose()
