@@ -140,7 +140,7 @@ def test_tokens_and_total_fsync_their_directory(tmp_path, monkeypatch):
     from app.hass import _save_total, load_total
     from app.tokens import Tokens, TokenStore
     dirs = []
-    monkeypatch.setattr("app.tokens.fsync_dir", lambda d: dirs.append(str(d)))
+    monkeypatch.setattr("app.durable.fsync_dir", lambda d: dirs.append(str(d)))
     monkeypatch.setattr("app.hass.fsync_dir", lambda d: dirs.append(str(d)))
     TokenStore(tmp_path / "t" / "tokens.json").save(Tokens("a", "r", 1.0))
     _save_total(tmp_path / "s" / "totaal.json", 3.5, {})

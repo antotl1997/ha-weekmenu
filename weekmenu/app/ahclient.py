@@ -405,6 +405,8 @@ class AhClient:
         """Send a request; returns status and body for every status except 401."""
         await self.ensure_fresh()
         t = self.store.load()
+        if t is None:  # gone (or unreadable) since ensure_fresh: log in again
+            raise AhLoginExpired(f"{method} {path}: not logged in", 401)
         headers = self._headers(order_id)
         headers["Authorization"] = f"Bearer {t.access_token}"
         try:

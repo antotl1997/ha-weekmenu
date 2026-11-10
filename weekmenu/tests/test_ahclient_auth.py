@@ -245,3 +245,16 @@ async def test_graphql_null_data_is_empty(respx_mock, tmp_path):
     client, _, http = make(tmp_path, Tokens("a", "r", time.time() + 3600))
     assert await client.graphql("query { x }", {}) == {}
     await http.aclose()
+
+
+async def test_request_raises_login_expired_when_tokens_vanish_after_ensure_fresh(
+        respx_mock, tmp_path, monkeypatch):
+    client, store, http = make(tmp_path, Tokens("a", "r", time.time() + 3600))
+
+    async def fresh_then_gone():
+        (tmp_path / "tokens.json").unlink()  # e.g. a logout between the two loads
+
+    monkeypatch.setattr(client, "ensure_fresh", fresh_then_gone)
+    with pytest.raises(AhLoginExpired):
+        await client.request("GET", "/x")
+    await http.aclose()
