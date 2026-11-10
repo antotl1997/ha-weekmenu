@@ -125,3 +125,45 @@ def test_migrate_runs_each_step_and_leaves_newer_alone():
     assert migrate({"a": 1}, 2, steps) == {"a": 1, "schema": 2, "m0": True, "m1": True}
     assert migrate({"schema": 1}, 2, steps) == {"schema": 2, "m1": True}
     assert migrate({"schema": 5}, 2, steps) == {"schema": 5}
+
+
+# --- v0.7 (Ruling 47): a left-over tmp file never decides the mode -------------------
+
+
+def test_a_left_over_tmp_file_is_removed_before_the_new_one_is_opened(tmp_path, monkeypatch):
+    """O_CREAT's mode only applies to a new file: an old 0644 tmp would keep 0644."""
+    path = tmp_path / "tokens.json"
+    tmp = tmp_path / "tokens.json.tmp"
+    tmp.write_bytes(b"old half write")
+    seen = []
+    real_open = os.open
+
+    def spy(p, flags, mode=0o777, *a, **kw):
+        if str(p).endswith(".tmp"):
+            seen.append((tmp.exists(), bool(flags & os.O_EXCL)))
+        return real_open(p, flags, mode, *a, **kw)
+
+    monkeypatch.setattr(durable.os, "open", spy)
+    replace_durably(path, b"{}")
+    assert seen == [(False, True)]  # gone first, then created fresh (never reused)
+    assert path.read_bytes() == b"{}" and not tmp.exists()
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX file modes")
+def test_a_left_over_0644_tmp_file_never_makes_the_target_0644(tmp_path):
+    path = tmp_path / "tokens.json"
+    tmp = tmp_path / "tokens.json.tmp"
+    tmp.write_bytes(b"x")
+    os.chmod(tmp, 0o644)
+    replace_durably(path, b"{}")
+    assert stat.S_IMODE(os.stat(path).st_mode) == 0o600
+
+
+def test_remove_durably_removes_and_fsyncs_the_directory(tmp_path, monkeypatch):
+    dirs = []
+    monkeypatch.setattr(durable, "fsync_dir", lambda d: dirs.append(d))
+    path = tmp_path / "tokens.json"
+    path.write_bytes(b"{}")
+    durable.remove_durably(path)
+    assert not path.exists() and dirs == [tmp_path]
+    durable.remove_durably(path)  # already gone: no error

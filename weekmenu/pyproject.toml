@@ -13,5 +13,5 @@ asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
 pythonpath = ["."]
 markers = [
-    "slow: drives a real headless Chrome (runs by default; deselect with -m \"not slow\")",
+    "slow: a real headless Chrome or wall-clock timing (runs by default; deselect with -m \"not slow\")",
 ]

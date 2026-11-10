@@ -922,6 +922,7 @@ async def _heavy_cands():
                   for k, cu in enumerate("abcde") for j, c in enumerate(cands)]
 
 
+@pytest.mark.slow
 async def test_event_loop_stays_responsive_during_a_heavy_menu_search(monkeypatch, caplog):
     """While _choose_menu searches for at least a second, sleep(0.01) tasks on the loop
     keep coming back within 0.2 s. A probe only counts when it came back while the search
@@ -978,6 +979,29 @@ async def test_event_loop_stays_responsive_during_a_heavy_menu_search(monkeypatc
     assert len(probes) >= 5, probes  # the loop answered all along
     assert statistics.median(probes) < 0.2, probes
     assert "Planner: menu in" in caplog.text
+
+
+async def test_menu_search_never_runs_on_the_event_loop_thread(monkeypatch):
+    """Deterministic: _choose_menu runs in a worker thread, never on the main thread."""
+    import threading
+    week, many = await _heavy_cands()
+    threads = []
+    real = planner._choose_menu
+
+    def watched(*a, **k):
+        threads.append(threading.current_thread() is threading.main_thread())
+        return real(*a, **k)
+
+    async def gather(*a, **k):
+        return many, 6
+
+    monkeypatch.setattr(planner, "_SEARCH_BUDGET", 2_000)
+    monkeypatch.setattr(planner, "_gather", gather)
+    monkeypatch.setattr(planner, "_choose_menu", watched)
+    client = FakeClient([R(400 + i, f"Stamppot {i}", [(500, "g", "rundergehakt")])
+                         for i in range(6)])
+    await build_plan(client, [GEHAKT], settings(week))
+    assert threads == [False]
 
 
 def test_search_seconds_is_not_stored():

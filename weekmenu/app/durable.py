@@ -55,13 +55,16 @@ def replace_durably(path: Path, data: bytes) -> None:
 
     The tmp file is created with mode 0600 (it may hold tokens), its content is
     fsynced before the replace, and the directory after it. On any error the tmp
-    file is removed and the original is left as it was.
+    file is removed and the original is left as it was. A tmp file left over from a
+    crash is removed first: O_CREAT only sets the mode of a new file, so reusing an
+    old 0644 one would make the target 0644 too.
     """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = Path(str(path) + ".tmp")
-    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | getattr(os, "O_BINARY", 0)
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0)
     try:
+        tmp.unlink(missing_ok=True)
         fd = os.open(str(tmp), flags, 0o600)
         with os.fdopen(fd, "wb") as f:
             f.write(data)
@@ -78,6 +81,16 @@ def replace_durably(path: Path, data: bytes) -> None:
     except BaseException:
         tmp.unlink(missing_ok=True)
         raise
+    fsync_dir(path.parent)
+
+
+def remove_durably(path: Path) -> None:
+    """Remove `path` (if there) so that the removal survives a power cut."""
+    path = Path(path)
+    try:
+        path.unlink()
+    except FileNotFoundError:
+        return
     fsync_dir(path.parent)
 
 

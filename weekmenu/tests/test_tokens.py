@@ -93,3 +93,15 @@ def test_newer_token_file_is_not_used_and_never_written(tmp_path, caplog):
     with pytest.raises(SchemaTooNew):
         store.save(Tokens("x", "y", 1.0))
     assert path.read_bytes() == before
+
+
+def test_clear_removes_the_tokens_the_backup_and_a_left_over_tmp(tmp_path):
+    from app.tokens import Tokens, TokenStore
+    store = TokenStore(tmp_path / "tokens.json")
+    store.save(Tokens("a", "r", 1.0))
+    (tmp_path / "tokens.json.bak").write_text("{}")
+    (tmp_path / "tokens.json.tmp").write_text("{}")
+    store.clear()
+    assert store.load() is None
+    assert not list(tmp_path.iterdir())
+    store.clear()  # nothing there: fine

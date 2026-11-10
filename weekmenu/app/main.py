@@ -238,7 +238,11 @@ def scan_too_new(ctx: Context) -> None:
 
 async def save_log(ctx: Context, wlog: WeekLog) -> None:
     """Ledger.save in a worker thread (it fsyncs). Only called with ctx.lock held, so no
-    other writer can run meanwhile; the awaited save still ends before the next step."""
+    other writer can run meanwhile; the awaited save still ends before the next step.
+
+    Never cancel it and never put it in asyncio.wait_for: a cancelled await leaves the
+    thread writing on while the caller goes on (and may release the lock), so a second
+    save could overlap it."""
     await asyncio.to_thread(ctx.ledger.save, wlog)
 
 

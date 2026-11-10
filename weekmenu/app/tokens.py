@@ -3,7 +3,7 @@ import logging
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from app.durable import migrate, schema_of, too_new, write_json
+from app.durable import migrate, remove_durably, schema_of, too_new, write_json
 
 log = logging.getLogger(__name__)
 
@@ -67,3 +67,10 @@ class TokenStore:
     def save(self, t: Tokens) -> None:
         """Durably, the tmp file created 0600; never over a newer file (SchemaTooNew)."""
         write_json(self.path, asdict(t), TOKENS_SCHEMA)
+
+    def clear(self) -> None:
+        """Log out: remove tokens.json, its pre-0.6 copy (.bak) and a left-over tmp file,
+        each durably."""
+        for name in (self.path.name, self.path.name + ".bak", self.path.name + ".tmp"):
+            remove_durably(self.path.with_name(name))
+        self._warned_new = False
