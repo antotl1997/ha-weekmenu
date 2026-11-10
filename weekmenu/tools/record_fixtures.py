@@ -2,8 +2,16 @@
 
 Read-only: GET requests and GraphQL queries only. Writes to
 %APPDATA%\\weekmenu-test\\raw\\. Request headers are never written.
+
+Contract check (v0.7, local only, never in CI: CI has no AH login and no AH data):
+python -m tools.record_fixtures --check <path to tokens.json> makes a fresh read-only
+recording of the critical endpoints, keeps it in memory, and compares its shape (keys and
+types, recursively, lists on their first element) with the stored fixtures. It prints
+the differences, never a value, and exits 1 when there are any.
 """
+import argparse
 import asyncio
+import sys
 import json
 import os
 import re
@@ -15,7 +23,8 @@ import httpx
 from app.ahclient import BASE_URL, AhClient
 from app.tokens import TokenStore
 
-ROOT = Path(os.environ["APPDATA"]) / "weekmenu-test"
+ROOT = Path(os.environ.get("APPDATA", ".")) / "weekmenu-test"
+FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
 RAW = ROOT / "raw"
 DELAY = 0.3
 SEARCHES = ["kip", "gehakt", "zalm", "pasta", "stamppot", "curry", "wraps", "ovenschotel"]
@@ -204,5 +213,122 @@ async def main():
         print("total calls:", rec.calls)
 
 
+# --- contract check ----------------------------------------------------------------------
+
+
+def _kind(v) -> str:
+    if v is None:
+        return "null"
+    if isinstance(v, bool):
+        return "bool"
+    if isinstance(v, (int, float)):
+        return "number"
+    if isinstance(v, str):
+        return "str"
+    if isinstance(v, list):
+        return "list"
+    if isinstance(v, dict):
+        return "object"
+    return type(v).__name__
+
+
+def compare_shapes(stored, fresh, path: str = "$") -> list[str]:
+    """The shape differences between a stored fixture and a fresh answer.
+
+    Keys and types, recursively; a list is compared on its first element (only when
+    both have one). null on either side matches anything: AH leaves optional fields
+    empty. Int and float are both "number". Never returns a value, only paths and types.
+    """
+    a, b = _kind(stored), _kind(fresh)
+    if a == "null" or b == "null":
+        return []
+    if a != b:
+        return [f"{path}: type {a} -> {b}"]
+    out: list[str] = []
+    if a == "object":
+        for k in stored:
+            if k not in fresh:
+                out.append(f"{path}.{k}: ontbreekt")
+        for k in fresh:
+            if k not in stored:
+                out.append(f"{path}.{k}: nieuw")
+        for k in stored:
+            if k in fresh:
+                out.extend(compare_shapes(stored[k], fresh[k], f"{path}.{k}"))
+    elif a == "list" and stored and fresh:
+        out.extend(compare_shapes(stored[0], fresh[0], f"{path}[0]"))
+    return out
+
+
+def _fixture(name: str):
+    data = json.loads((FIXTURES / name).read_text(encoding="utf-8"))
+    if isinstance(data, dict) and set(data) == {"status", "body"}:
+        return data["status"], data["body"]
+    return 200, data
+
+
+def check_one(name: str, status: int, body, stored_status: int, stored) -> list[str]:
+    """Differences for one endpoint, each line starting with the fixture name."""
+    if status != stored_status:
+        return [f"{name}: HTTP {stored_status} -> {status} (vorm niet vergeleken)"]
+    return [f"{name}: {d}" for d in compare_shapes(stored, body)]
+
+
+async def check(tokens_path: Path) -> int:
+    store = TokenStore(Path(tokens_path))
+    if store.load() is None:
+        print("Geen bruikbare tokens in", Path(tokens_path).name)
+        return 2
+    diffs: list[str] = []
+    async with httpx.AsyncClient(timeout=30) as http:
+        rec = Recorder(AhClient(store, http))
+
+        async def rest(name, path):
+            status, body = await rec.fetch("GET", path)
+            diffs.extend(check_one(name, status, body, *_fixture(name)))
+            return status, body
+
+        async def gql(name, query, variables):
+            status, body = await rec.fetch("POST", "/graphql",
+                                           {"query": query, "variables": variables})
+            diffs.extend(check_one(name, status, body, *_fixture(name)))
+
+        status, meta = await rest("bonus-metadata__v3.json",
+                                  "/mobile-services/bonuspage/v3/metadata")
+        periods = (meta.get("periods") or []) if isinstance(meta, dict) else []
+        if status == 200 and periods and periods[0].get("bonusStartDate"):
+            q = urlencode({"application": "AHWEBSHOP", "date": periods[0]["bonusStartDate"],
+                           "promotionType": "NATIONAL", "category": "Vlees"},
+                          quote_via=quote)
+            await rest("bonus-section__p0-vlees.json",
+                       f"/mobile-services/bonuspage/v2/section?{q}")
+        await gql("graphql-recipesearch__kip.json", Q_SEARCH % IMAGES,
+                  {"query": {"searchText": "kip", "size": 30}})
+        recipe = sorted(FIXTURES.glob("graphql-recipe__*-s2.json"))[0]
+        rid = int(recipe.name.split("__")[1].split("-")[0])
+        await gql(recipe.name, Q_RECIPE, {"id": rid, "servings": 2})
+        q = urlencode({"query": "biologische citroen", "page": 0, "size": 20,
+                       "sortOn": "RELEVANCE"}, quote_via=quote)
+        await rest("product-search__biologische-citroen.json",
+                   f"/mobile-services/product/search/v2?{q}")
+        await rest("shoppinglist__items.json", "/mobile-services/shoppinglist/v2/items")
+        status, body = await rec.fetch(
+            "GET", "/mobile-services/order/v1/summaries/active?sortBy=DEFAULT")
+        name = ("order-active__default.json" if status == 404
+                else "handmade-order-active__items.json")
+        diffs.extend(check_one(name, status, body, *_fixture(name)))
+        print("AH-calls:", rec.calls)
+    for d in diffs:
+        print(d)
+    print("Geen verschillen" if not diffs else f"{len(diffs)} verschil(len)")
+    return 1 if diffs else 0
+
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--check", metavar="TOKENS", type=Path,
+                        help="vergelijk een verse opname met de opgeslagen fixtures")
+    args = parser.parse_args()
+    if args.check is not None:
+        sys.exit(asyncio.run(check(args.check)))
     asyncio.run(main())
