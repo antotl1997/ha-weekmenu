@@ -5,15 +5,24 @@ The log, not the AH list, is the source of truth for "already added", so
 things the user removed again are never re-added.
 """
 import json
-import os
-import time
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Literal
 
-from app.durable import fsync_dir
+from app.durable import SchemaTooNew, migrate, schema_of, write_json
 from app.planner import Plan
+
+# schema of a week log file; 0 is every log from before 0.6 (no "schema" field)
+LEDGER_SCHEMA = 1
+
+
+def migrate_weeklog_v0_to_v1(data: dict) -> dict:
+    """0 -> 1: only the version field; from_dict already reads every older form."""
+    return {**data, "schema": 1}
+
+
+_LEDGER_STEPS = {0: migrate_weeklog_v0_to_v1}
 
 
 @dataclass
@@ -75,6 +84,8 @@ class WeekLog:
     # AH app). Never added again that week: Terug, a swap, Nieuw menu or bijwerken
     # count it as if the add-on still had it out there.
     removed_by_user: dict[int, int] = field(default_factory=dict)
+    # not stored: the file was written by a newer add-on. Shown, never written (v0.6).
+    too_new: bool = field(default=False, compare=False, repr=False)
 
     @property
     def extras_total(self) -> float:
@@ -192,29 +203,24 @@ class Ledger:
             data = json.loads(self._path(week).read_text(encoding="utf-8"))
         except FileNotFoundError:
             return WeekLog(week=week)
-        return WeekLog.from_dict(data)
+        if schema_of(data) > LEDGER_SCHEMA:
+            # from a newer add-on: read what this code understands, for display only
+            try:
+                wlog = WeekLog.from_dict(data)
+                if wlog.week != week:
+                    raise ValueError("week")
+            except Exception:
+                wlog = WeekLog(week=week)
+            wlog.too_new = True
+            return wlog
+        return WeekLog.from_dict(migrate(data, LEDGER_SCHEMA, _LEDGER_STEPS, "weeklog"))
 
     def save(self, log: WeekLog) -> None:
+        """Durably, and never over a log from a newer add-on (SchemaTooNew)."""
         path = self._path(log.week)
-        self.root.mkdir(parents=True, exist_ok=True)
-        tmp = Path(str(path) + ".tmp")
-        try:
-            with open(tmp, "w", encoding="utf-8") as f:
-                f.write(json.dumps(log.to_dict()))
-                f.flush()
-                os.fsync(f.fileno())
-            for attempt in range(6):
-                try:
-                    os.replace(tmp, path)
-                    break
-                except PermissionError:  # Windows: a scanner may hold the file for a moment
-                    if attempt == 5:
-                        raise
-                    time.sleep(0.05)
-        except BaseException:
-            tmp.unlink(missing_ok=True)
-            raise
-        fsync_dir(self.root)
+        if log.too_new:
+            raise SchemaTooNew(path)
+        write_json(path, log.to_dict(), LEDGER_SCHEMA)
 
     def _all(self) -> list[WeekLog]:
         logs = []

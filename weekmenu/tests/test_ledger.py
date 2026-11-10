@@ -123,8 +123,12 @@ def test_save_works_when_the_directory_cannot_be_opened(tmp_path, monkeypatch):
     """Windows cannot open a directory: the save still succeeds."""
     from app import durable
 
+    real_open = durable.os.open
+
     def refuse(path, flags, *a, **kw):
-        raise PermissionError(13, "Permission denied")
+        if path == str(tmp_path / "weeks"):  # only the directory (the tmp file opens)
+            raise PermissionError(13, "Permission denied")
+        return real_open(path, flags, *a, **kw)
 
     led = Ledger(tmp_path / "weeks")
     monkeypatch.setattr(durable.os, "open", refuse)
@@ -180,3 +184,57 @@ def test_removed_by_user_round_trips_and_old_logs_load(tmp_path):
     old = log.to_dict()
     del old["removed_by_user"]  # a log from before 0.4.0's fix
     assert _WeekLog.from_dict(old).removed_by_user == {}
+
+
+# --- v0.6: schema versions and durable writes ------------------------------------------
+
+
+def test_weeklog_migration_v0_to_v1_keeps_every_field():
+    from app.ledger import migrate_weeklog_v0_to_v1
+    old = {"week": "2026-11-04", "added": {"5": 1}, "target": "order"}
+    new = migrate_weeklog_v0_to_v1(old)
+    assert new == {**old, "schema": 1}
+    assert WeekLog.from_dict(new) == WeekLog.from_dict(old)
+
+
+def test_saved_log_has_schema_and_old_log_is_kept_once_as_bak(tmp_path):
+    led = Ledger(tmp_path)
+    old = {"week": "2026-11-04", "plan": None, "added": {"5": 1}, "target": "order"}
+    (tmp_path / "2026-11-04.json").write_text(json.dumps(old), encoding="utf-8")
+    log = led.load(W)
+    assert log.added == {5: 1} and not log.too_new
+    log.added[6] = 2
+    led.save(log)
+    data = json.loads((tmp_path / "2026-11-04.json").read_text(encoding="utf-8"))
+    assert data["schema"] == 1 and data["added"] == {"5": 1, "6": 2}
+    assert json.loads((tmp_path / "2026-11-04.json.bak").read_text(encoding="utf-8")) == old
+    led.save(log)  # once
+    assert json.loads((tmp_path / "2026-11-04.json.bak").read_text(encoding="utf-8")) == old
+    # the backup is not a week log
+    assert [w.week for w in led.weeks()] == [W]
+
+
+def test_too_new_log_loads_for_display_and_is_never_written(tmp_path):
+    from app.durable import SchemaTooNew
+    led = Ledger(tmp_path)
+    newer = {"schema": 99, "week": "2026-11-04", "plan": None, "added": {"5": 1},
+             "iets_nieuws": True}
+    path = tmp_path / "2026-11-04.json"
+    path.write_text(json.dumps(newer), encoding="utf-8")
+    before = path.read_bytes()
+    log = led.load(W)
+    assert log.too_new and log.added == {5: 1}  # reading for display is fine
+    log.added[6] = 1
+    with pytest.raises(SchemaTooNew):
+        led.save(log)
+    with pytest.raises(SchemaTooNew):  # a fresh WeekLog over it is refused too
+        led.save(WeekLog(W))
+    assert path.read_bytes() == before
+    assert not list(tmp_path.glob("*.bak")) and not list(tmp_path.glob("*.tmp"))
+
+
+def test_too_new_log_that_does_not_parse_loads_empty(tmp_path):
+    (tmp_path / "2026-11-04.json").write_text(
+        json.dumps({"schema": 7, "week": "anders", "added": "x"}), encoding="utf-8")
+    log = Ledger(tmp_path).load(W)
+    assert log.too_new and log.week == W and log.added == {}
