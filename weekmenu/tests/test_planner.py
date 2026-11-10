@@ -935,12 +935,15 @@ async def test_event_loop_stays_responsive_during_a_heavy_menu_search(monkeypatc
     import threading
     import time
     week, many = await _heavy_cands()
-    # a fake search budget big enough for about 1.5 s of searching on this machine
+    # a fake search budget for about 2.5 s of searching at this machine's fastest (the
+    # quickest of three calibrations: a slow moment only makes the real search longer)
     monkeypatch.setattr(planner, "_SEARCH_BUDGET", 20_000)
-    t = time.perf_counter()
-    planner._choose_menu(many, week)
-    per_node = (time.perf_counter() - t) / 20_000
-    monkeypatch.setattr(planner, "_SEARCH_BUDGET", max(200_000, int(1.5 / per_node)))
+    per_node = float("inf")
+    for _ in range(3):
+        t = time.perf_counter()
+        planner._choose_menu(many, week)
+        per_node = min(per_node, (time.perf_counter() - t) / 20_000)
+    monkeypatch.setattr(planner, "_SEARCH_BUDGET", max(400_000, int(2.5 / per_node)))
 
     async def gather(*a, **k):
         return many, 6
