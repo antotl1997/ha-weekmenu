@@ -258,6 +258,7 @@ def test_app_screens_in_chrome(tmp_path):
         assert "in huis" in dom and "2e halve prijs" in dom and "€ 3,40" in dom
         assert "Recept op Allerhande" in dom  # https link: shown
         assert "Bereiding" in dom and "Ander gerecht" in dom
+        assert "Gerecht weghalen" in dom and "data-remove" in dom
 
         dom = render(base, "#gerecht/2026-11-05", tmp_path, "gerecht-niet-gevonden")
         assert "niet gevonden" in dom and "snufje nootmuskaat" in dom
@@ -293,6 +294,9 @@ def test_app_screens_in_chrome(tmp_path):
         log.unknown = {7: 1}
         log.plan["budget_exhausted"] = True
         log.period_warning = PERIOD_WARNING
+        # "Gerecht weghalen" on maandag: the evening stays on the week as "geen gerecht"
+        log.plan["dishes"] = [x for x in log.plan["dishes"] if x["date"] != "2026-11-09"]
+        log.plan["removed_days"] = ["2026-11-09"]
         # history failed this week: only the staple already added stays, with the reason
         added = fake_staples()[1]
         added.product.title = "Lurpak <i>ongezouten</i>"  # titles are escaped
@@ -310,6 +314,7 @@ def test_app_screens_in_chrome(tmp_path):
         assert "Onzeker of gelukt" in dom and "AH Gehaktballetjes" in dom
         assert "Status onbekend" in dom and "De Cecco Penne rigate" in dom
         assert "Snel gekozen" in dom
+        assert "Maandag</b> · geen gerecht" in dom and TITLES[4] not in dom
         assert "De folder van volgende week was er nog niet" in dom
 
         ctx.login_expired = True

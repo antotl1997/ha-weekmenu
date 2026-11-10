@@ -102,6 +102,12 @@ function cookMeta(r) {
 }
 
 function plural(n, one, many) { return `${n} ${n === 1 ? one : many}`; }
+/* After opschonen: "2 producten uit je bestelling gehaald" ("" when nothing went). */
+function removedText(data) {
+  const n = data && Number(data.removed);
+  if (!n) return "";
+  return `${plural(n, "product", "producten")} ${data.target === "order" ? "uit je bestelling" : "van je lijst"} gehaald`;
+}
 
 const ICON = {
   plate: '<svg class="fallback" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.5"/><path d="M3 3.5v5a2 2 0 0 0 2 2v10M5 3.5v4M7 3.5v5a2 2 0 0 1-2 2M21 3.5c-1.7.6-2.5 2.6-2.5 5.5v3.5H21v8"/></svg>',
@@ -294,6 +300,10 @@ function dayCard(d) {
     return `<div class="card skip"><div class="ic">${ICON.moon}</div>
       <div><b>${esc(cap(d.dag))}</b> · niet thuis</div></div>`;
   }
+  if (d.geen_gerecht) {
+    return `<div class="card skip"><div class="ic">${ICON.moon}</div>
+      <div><b>${esc(cap(d.dag))}</b> · geen gerecht</div></div>`;
+  }
   const r = d.recipe;
   const label = esc(cap(d.dag)) + (tonight ? ' · <span class="now">vanavond</span>'
     : weekend ? " · weekend" : "");
@@ -432,6 +442,7 @@ function dishScreen(day) {
       <button class="btn pri" data-swap>${ICON.swap} Ander gerecht</button></div>
     ${open ? `<div class="sec">Bereiding</div><div class="card steps">${steps}</div>` : ""}
     ${d.can_back ? `<button class="btn sec2 full" data-undo>${ICON.undo} Terug naar het vorige gerecht</button>` : ""}
+    <button class="btn sec2 full" data-remove>Gerecht weghalen</button>
     ${safeUrl(r.url) ? `<a class="src" href="${esc(safeUrl(r.url))}" target="_blank" rel="noopener">Recept op Allerhande</a>` : ""}
     </div>`;
 }
@@ -594,8 +605,9 @@ async function setSetting(entity, value) {
 
 async function startRound(btn, mode) {
   if (mode === "nieuw_menu") {
-    const ok = await confirmSheet("Een nieuw menu kiezen? Wat al in je bestelling staat blijft staan.",
-      "", "Nieuw menu");
+    const ok = await confirmSheet("Een nieuw menu kiezen?",
+      "Wat alleen voor het oude menu was, gaat eruit. Wat je zelf hebt toegevoegd, blijft staan.",
+      "Nieuw menu");
     if (!ok) return;
   }
   await busy(btn, async () => {
@@ -662,20 +674,22 @@ app.addEventListener("click", async (ev) => {
       await busy(t, async () => {
         const data = await api(`api/dish/${encodeURIComponent(day)}/persons`, { persons: n });
         await afterDishWrite(day, data);
-        if (fewer) toast("Minder personen haalt niets weg uit je bestelling. Wat over is, staat bij het gerecht.");
+        if (removedText(data)) toast(removedText(data));
+        else if (fewer && data.leftovers && data.leftovers.length) toast("Wat over is, staat bij het gerecht.");
       });
       return;
     }
     if ("swap" in t.dataset) {
       const where = state.week && state.week.target === "list" ? "op je lijst" : "in je bestelling";
       const ok = await confirmSheet("Een ander gerecht voor deze avond?",
-        `De producten voor het nieuwe gerecht komen direct ${where}. Wat er al ligt, blijft staan.`,
+        `De producten voor het nieuwe gerecht komen direct ${where}. Wat alleen voor dit gerecht was, gaat eruit. Wat je zelf hebt toegevoegd, blijft staan.`,
         "Ander gerecht");
       if (!ok) return;
       await busy(t, async () => {
         const data = await api(`api/dish/${encodeURIComponent(day)}/swap`, {});
         await afterDishWrite(day, data);
-        toast("Nieuw gerecht: " + data.recipe.title);
+        const gone = removedText(data);
+        toast("Nieuw gerecht: " + data.recipe.title + (gone ? ". " + gone : ""));
       });
       return;
     }
@@ -683,7 +697,23 @@ app.addEventListener("click", async (ev) => {
       await busy(t, async () => {
         const data = await api(`api/dish/${encodeURIComponent(day)}/back`, {});
         await afterDishWrite(day, data);
-        toast("Het vorige gerecht staat er weer");
+        const gone = removedText(data);
+        toast("Het vorige gerecht staat er weer" + (gone ? ". " + gone : ""));
+      });
+      return;
+    }
+    if ("remove" in t.dataset) {
+      const where = state.week && state.week.target === "list" ? "gaan van je lijst" : "gaan uit je bestelling";
+      const ok = await confirmSheet("Dit gerecht weghalen?",
+        `De producten die alleen hiervoor waren, ${where}.`, "Weghalen");
+      if (!ok) return;
+      await busy(t, async () => {
+        const data = await api(`api/dish/${encodeURIComponent(day)}/remove`, {});
+        delete state.dishes[day];
+        state.savings = null;
+        try { await loadWeek(); } catch (e) { /* week refreshes on the next visit */ }
+        location.hash = "#week";
+        toast(removedText(data) || "Gerecht weggehaald");
       });
       return;
     }
