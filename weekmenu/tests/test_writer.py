@@ -63,6 +63,32 @@ class FakeAh:
     async def add_to_order(self, order, adds, on_before=None):
         self._write("order", self.order.items, adds, on_before)
 
+    def _reduce(self, kind, store, cuts, on_before):
+        """Like AH: max(0, current - r); recorded in `calls` as a negative quantity."""
+        assert len(cuts) == 1
+        (pid, r), = cuts.items()
+        assert r > 0
+        if on_before:
+            on_before({pid: store.get(pid, 0)})
+        failing = self.fail_on_call is not None and len(self.calls) == self.fail_on_call
+        self.calls.append((kind, {pid: -r}))
+        if failing and not self.fail_after:
+            raise self.exc
+        left = max(0, store.get(pid, 0) - r)
+        if left:
+            store[pid] = left
+        else:
+            store.pop(pid, None)
+        if failing:
+            raise self.exc
+
+    async def reduce_in_order(self, order, cuts, on_before=None):
+        assert order.id == self.order.id
+        self._reduce("order", self.order.items, cuts, on_before)
+
+    async def reduce_on_shopping_list(self, cuts, on_before=None):
+        self._reduce("list", self.listed, cuts, on_before)
+
     async def add_to_shopping_list(self, adds, on_before=None):
         failing = self.fail_on_call is not None and len(self.calls) == self.fail_on_call
         if failing and isinstance(self.exc, AhOrderMode):
@@ -377,3 +403,193 @@ async def test_apply_extras_logs_target(led, caplog):
     assert any("vaste boodschappen" in m.lower() and "geen actieve bestelling -> lijst" in m
                for m in lines)
     assert not any("Bearer" in m or "token" in m.lower() for m in lines)
+
+
+# --- opschonen: lowering what the add-on added and the new plan no longer needs ------
+
+BEFORE = date(2026, 11, 1)  # the Sunday before the menu week W
+
+
+async def test_swap_removes_only_own_products_no_longer_needed(led):
+    ah = FakeAh(listed={4: 1})  # 4: the user's own
+    old = plan({1: 2, 2: 1, 3: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.calls.clear()
+    res = await apply(ah, led, led.load(W), plan({1: 2, 5: 1}), replaced=old, today=BEFORE)
+    assert ah.calls == [("list", {5: 1}), ("list", {2: -1}), ("list", {3: -1})]
+    assert ah.listed == {1: 2, 4: 1, 5: 1}
+    assert res.added == {5: 1} and res.removed == {2: 1, 3: 1} and res.leftovers == []
+    saved = led.load(W)
+    assert saved.added == {1: 2, 5: 1} and saved.pending == {}
+
+
+async def test_users_own_part_stays_current_3_added_1_goes_to_2(led):
+    ah = FakeAh(listed={1: 2})
+    old = plan({1: 1})
+    await apply(ah, led, WeekLog(W), old)
+    assert ah.listed == {1: 3}
+    res = await apply(ah, led, led.load(W), plan({2: 1}), replaced=old, today=BEFORE)
+    assert ah.listed == {1: 2, 2: 1} and res.removed == {1: 1}
+    assert led.load(W).added == {2: 1}
+
+
+async def test_lowers_only_the_part_no_longer_needed(led):
+    ah = FakeAh(order=ActiveOrder(5, {}))
+    old = plan({1: 3})
+    await apply(ah, led, WeekLog(W), old)
+    res = await apply(ah, led, led.load(W), plan({1: 1}), replaced=old, today=BEFORE)
+    assert ah.order.items == {1: 1} and res.removed == {1: 2}
+    assert led.load(W).added == {1: 1}
+
+
+async def test_user_removed_it_already_nothing_lower_than_zero(led):
+    ah = FakeAh()
+    old = plan({1: 2})
+    await apply(ah, led, WeekLog(W), old)
+    ah.listed[1] = 1  # the user took one off in the AH app
+    res = await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    assert ah.listed == {} and res.removed == {1: 1} and led.load(W).added == {}
+
+
+async def test_extras_are_never_lowered(led):
+    ah = FakeAh()
+    log = WeekLog(W)
+    await apply_extras(ah, led, log, {7: 1, 1: 1})
+    old = plan({1: 1})
+    await apply(ah, led, led.load(W), old)
+    assert ah.listed == {7: 1, 1: 2}
+    ah.calls.clear()
+    res = await apply(ah, led, led.load(W), plan({2: 1}), replaced=old, today=BEFORE)
+    assert ah.calls == [("list", {2: 1}), ("list", {1: -1})]  # never a call on 7
+    assert ah.listed == {7: 1, 1: 1, 2: 1} and res.removed == {1: 1}
+    assert led.load(W).extras_added == {7: 1, 1: 1}
+
+
+async def test_no_lowering_without_today_or_once_the_week_started(led):
+    for today in (None, W, date(2026, 11, 6)):
+        ah = FakeAh()
+        old = plan({1: 1, 2: 1})
+        await apply(ah, led, WeekLog(W), old)
+        res = await apply(ah, led, led.load(W), plan({1: 1}), replaced=old, today=today)
+        assert ah.listed == {1: 1, 2: 1} and res.removed == {}
+        assert res.leftovers == [("Product 2", 1)]
+
+
+async def test_no_lowering_without_a_replaced_plan(led):
+    ah = FakeAh()
+    await apply(ah, led, WeekLog(W), plan({1: 2}))
+    res = await apply(ah, led, led.load(W), plan({1: 1}), today=BEFORE)
+    assert ah.listed == {1: 2} and res.removed == {}
+
+
+async def test_no_lowering_on_another_destination(led):
+    # added to the list, now there is an order: the order holds other things
+    ah = FakeAh()
+    old = plan({1: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.order = ActiveOrder(5, {1: 1})
+    res = await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    assert ah.order.items == {1: 1} and ah.listed == {1: 1} and res.removed == {}
+    # added to order 5, now order 6 is the active one
+    ah = FakeAh(order=ActiveOrder(5, {}))
+    log = WeekLog(date(2026, 11, 11))
+    await apply(ah, led, log, old)
+    ah.order = ActiveOrder(6, {1: 1})
+    res = await apply(ah, led, led.load(log.week), plan({}), replaced=old, today=BEFORE)
+    assert ah.order.items == {1: 1} and res.removed == {}
+
+
+async def test_adds_on_two_destinations_are_never_lowered(led):
+    ah = FakeAh()
+    old = plan({1: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.order = ActiveOrder(5, {})
+    both = plan({1: 1, 2: 1})
+    await apply(ah, led, led.load(W), both)
+    assert led.load(W).added_to == "mixed"
+    res = await apply(ah, led, led.load(W), plan({}), replaced=both, today=BEFORE)
+    assert ah.order.items == {2: 1} and ah.listed == {1: 1} and res.removed == {}
+
+
+async def test_old_log_without_destination_is_never_lowered(led):
+    ah = FakeAh(listed={1: 1})
+    log = WeekLog(W, added={1: 1}, target="list")  # written by version 0.3
+    res = await apply(ah, led, log, plan({}), replaced=plan({1: 1}), today=BEFORE)
+    assert ah.listed == {1: 1} and res.removed == {} and res.leftovers == [("Product 1", 1)]
+
+
+async def test_reduce_write_ahead_entry(led):
+    ah = FakeAh(listed={1: 2})
+    old = plan({1: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.fail_on_call = len(ah.calls)  # the lowering fails before AH applies it
+    with pytest.raises(AhApiError):
+        await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    assert led.load(W).pending == {1: {"before": 3, "delta": -1, "remove": 1, "target": "list",
+                                       "order_id": None, "kind": "reduce"}}
+
+
+async def test_crash_after_lowering_is_not_lowered_twice(led):
+    ah = FakeAh(order=ActiveOrder(5, {1: 2}))  # 2 of the user's own
+    old = plan({1: 1, 2: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.fail_on_call, ah.fail_after = len(ah.calls), True  # AH lowered, then the call raised
+    new = plan({2: 1})
+    with pytest.raises(AhApiError):
+        await apply(ah, led, led.load(W), new, replaced=old, today=BEFORE)
+    assert ah.order.items == {1: 2, 2: 1} and 1 in led.load(W).pending
+    ah.fail_on_call = None
+    n = len(ah.calls)
+    res = await apply(ah, led, led.load(W), new, replaced=old, today=BEFORE)
+    assert len(ah.calls) == n and ah.order.items == {1: 2, 2: 1}  # never twice
+    saved = led.load(W)
+    assert saved.added == {2: 1} and saved.pending == {} and saved.unknown == {}
+    assert res.leftovers == []
+
+
+async def test_crash_after_lowering_completed_by_a_round_without_replaced(led):
+    ah = FakeAh()
+    old = plan({1: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.fail_on_call, ah.fail_after = len(ah.calls), True
+    with pytest.raises(AhApiError):
+        await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    ah.fail_on_call = None
+    n = len(ah.calls)
+    await apply(ah, led, led.load(W), plan({}))  # the automatic completion round
+    assert len(ah.calls) == n and ah.listed == {} and led.load(W).added == {}
+
+
+async def test_lowering_that_did_not_arrive_is_dropped_and_done_once_next_time(led):
+    ah = FakeAh(listed={1: 2})
+    old = plan({1: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.fail_on_call = len(ah.calls)  # failed before AH applied it
+    with pytest.raises(AhApiError):
+        await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    ah.fail_on_call = None
+    res = await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    assert ah.listed == {1: 2} and res.removed == {1: 1}
+    assert led.load(W).added == {} and led.load(W).pending == {}
+
+
+async def test_lowering_with_unclear_outcome_goes_to_unknown_and_is_left_alone(led):
+    log = WeekLog(W, added={1: 3}, added_to="list", pending={1: {
+        "before": 5, "delta": -3, "remove": 3, "target": "list", "order_id": None,
+        "kind": "reduce"}})
+    ah = FakeAh(listed={1: 4})  # between 2 and 5
+    old = plan({1: 3})
+    res = await apply(ah, led, log, plan({}), replaced=old, today=BEFORE)
+    assert ah.calls == [] and ah.listed == {1: 4}
+    saved = led.load(W)
+    assert saved.unknown == {1: -3} and saved.pending == {} and saved.added == {1: 3}
+    assert res.unknown == [("Product 1", -3)] and res.leftovers == [("Product 1", 3)]
+
+
+async def test_lowering_whose_order_is_gone_goes_to_unknown(led):
+    log = WeekLog(W, added={1: 1}, added_to="order:5", pending={1: {
+        "before": 1, "delta": -1, "remove": 1, "target": "order", "order_id": 5,
+        "kind": "reduce"}})
+    ah = FakeAh()
+    await apply(ah, led, log, plan({}), replaced=plan({1: 1}), today=BEFORE)
+    assert ah.calls == [] and led.load(W).unknown == {1: -1}

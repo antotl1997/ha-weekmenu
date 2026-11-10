@@ -35,7 +35,9 @@ class WeekLog:
     staples: list[dict] = field(default_factory=list)
     staples_error: str | None = None
     # Write-ahead record of a write in flight: pid -> {"before", "delta", "target", "order_id"}
-    # plus "kind": "extra" for a staple (it settles into extras_added instead of added)
+    # plus "kind": "extra" for a staple (it settles into extras_added instead of added),
+    # or "kind": "reduce" with a negative (or 0) delta and "remove", the amount that
+    # leaves `added` once the lowering arrived
     pending: dict[int, dict] = field(default_factory=dict)
     # pid -> delta of writes whose outcome can never be known (their order is gone): never written again
     unknown: dict[int, int] = field(default_factory=dict)
@@ -46,6 +48,9 @@ class WeekLog:
     round_done: bool = False
     completion_tried: bool = False
     notified: bool = False  # the "klaar" message for this menu went out
+    # where everything in `added` went: "list", "order:<id>", or "mixed" once a later
+    # write went elsewhere. Only an unmixed, known destination is ever lowered.
+    added_to: str | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -68,6 +73,7 @@ class WeekLog:
             "round_done": self.round_done,
             "completion_tried": self.completion_tried,
             "notified": self.notified,
+            "added_to": self.added_to,
         }
 
     @classmethod
@@ -93,6 +99,7 @@ class WeekLog:
             round_done=bool(d.get("round_done", d.get("plan") is not None)),
             completion_tried=bool(d.get("completion_tried", False)),
             notified=bool(d.get("notified", False)),
+            added_to=d.get("added_to"),
         )
 
 

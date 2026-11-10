@@ -5,7 +5,17 @@ write): two concurrent rounds could add
 products twice.
 
 Rules: one AH call per product, any error stops the round (progress kept,
-error re-raised) and nothing is retried. Nothing is ever removed or lowered.
+error re-raised) and nothing is retried.
+
+Lowering (opschonen): only when `apply` gets a replacing plan and `today` before
+the menu week starts, and only on the destination everything in `log.added` went
+to (`log.added_to`: the list, or that one order). Per product the add-on lowers
+what it added itself and the new plan no longer needs: max(0, log.added - basket).
+AH gets max(0, current - that), so what the user put there besides the add-on stays.
+Staples (`extras_added`) are never lowered. A lowering has the same write-ahead
+record with "kind": "reduce", a delta <= 0 and "remove" (what leaves `log.added`):
+current <= before+delta means it arrived, current >= before that it did not (the
+entry is dropped), anything else moves it to `log.unknown`. Never repeated blind.
 
 Write-ahead record: right before each PUT/PATCH the quantity AH holds
 (`before`) and the amount we are about to add (`delta`) go into `log.pending`
@@ -31,6 +41,7 @@ before the next round, current <= before, so it is written once more.
 """
 import logging
 from dataclasses import dataclass, field
+from datetime import date
 from typing import Literal
 
 from app.ledger import Ledger, WeekLog, leftovers
@@ -41,12 +52,14 @@ from app.planner import Plan
 class WriteResult:
     target: Literal["order", "list"]
     added: dict[int, int] = field(default_factory=dict)
+    removed: dict[int, int] = field(default_factory=dict)  # pid -> how many fewer at AH
     leftovers: list[tuple[str, int]] = field(default_factory=list)  # (product title, quantity)
     pending: list[tuple[str, int]] = field(default_factory=list)  # outcome still unsure
     unknown: list[tuple[str, int]] = field(default_factory=list)  # status unknown, check in the AH app
 
 
 EXTRA = "extra"  # pending "kind" of a staple write
+REDUCE = "reduce"  # pending "kind" of a lowering
 
 log_ = logging.getLogger("weekmenu.writer")
 
@@ -109,6 +122,13 @@ async def _settle(client, ledger: Ledger, log: WeekLog) -> None:
             del log.pending[pid]
             continue
         before, delta = int(entry["before"]), int(entry["delta"])
+        if entry.get("kind") == REDUCE:
+            if cur <= before + delta:  # arrived
+                _take(log.added, pid, int(entry.get("remove", -delta)))
+            elif cur < before:  # partly lower: nobody can tell what happened
+                log.unknown[pid] = delta
+            del log.pending[pid]
+            continue
         if cur >= before + delta:
             into = log.extras_added if entry.get("kind") == EXTRA else log.added
             into[pid] = into.get(pid, 0) + delta
@@ -116,6 +136,59 @@ async def _settle(client, ledger: Ledger, log: WeekLog) -> None:
         elif cur <= before:
             del log.pending[pid]
     ledger.save(log)
+
+
+def _take(into: dict[int, int], pid: int, n: int) -> None:
+    left = into.get(pid, 0) - n
+    if left > 0:
+        into[pid] = left
+    else:
+        into.pop(pid, None)
+
+
+def _dest(target: str, order) -> str:
+    return f"order:{order.id}" if order is not None else target
+
+
+async def _reduce_each(
+    client, ledger: Ledger, log: WeekLog, order, cuts: dict[int, int], result: WriteResult,
+) -> None:
+    """One AH call per product, write-ahead `pending` (kind "reduce") before each.
+
+    Any error stops the loop: progress is saved and the error re-raised, never retried.
+    """
+    target = result.target
+    order_id = order.id if order is not None else None
+    try:
+        for pid, r in cuts.items():
+            change: list[int] = []
+
+            def before_write(current: dict[int, int], pid=pid, r=r, change=change) -> None:
+                before = int(current.get(pid, 0))
+                delta = max(0, before - r) - before
+                change.append(delta)
+                log.pending[pid] = {
+                    "before": before,
+                    "delta": delta,
+                    "remove": r,
+                    "target": target,
+                    "order_id": order_id,
+                    "kind": REDUCE,
+                }
+                ledger.save(log)
+
+            if order is not None:
+                await client.reduce_in_order(order, {pid: r}, on_before=before_write)
+            else:
+                await client.reduce_on_shopping_list({pid: r}, on_before=before_write)
+            _take(log.added, pid, r)
+            log.pending.pop(pid, None)
+            if change and change[0] < 0:
+                result.removed[pid] = -change[0]
+            ledger.save(log)
+    except BaseException:
+        _safe_save(ledger, log)
+        raise
 
 
 async def _write_each(
@@ -157,8 +230,15 @@ async def _write_each(
 
 
 async def apply(
-    client, ledger: Ledger, log: WeekLog, plan: Plan, replaced: Plan | None = None
+    client, ledger: Ledger, log: WeekLog, plan: Plan, replaced: Plan | None = None,
+    today: date | None = None,
 ) -> WriteResult:
+    """Write what `plan` needs and the log has not added yet.
+
+    With a replacing plan (`replaced`) and `today` before the menu week, also lower
+    what the add-on added for the old plan and `plan` no longer needs (see the
+    module docstring for when that is safe).
+    """
     await _settle(client, ledger, log)
     delta = {
         p: n - log.added.get(p, 0)
@@ -167,14 +247,31 @@ async def apply(
     }
     order = await client.active_order()
     target: Literal["order", "list"] = "order" if order is not None else "list"
+    dest = _dest(target, order)
+    cuts: dict[int, int] = {}
+    if (replaced is not None and today is not None and today < log.week
+            and log.added_to == dest):
+        cuts = {
+            p: n - plan.basket.get(p, 0)
+            for p, n in log.added.items()
+            if n - plan.basket.get(p, 0) > 0 and p not in log.pending and p not in log.unknown
+        }
     log.plan = plan.to_dict()
     log.savings = plan.savings
     log.target = target
+    if delta:
+        if not log.added:
+            log.added_to = dest
+        elif log.added_to != dest:
+            log.added_to = "mixed"  # never lowered again: the adds are on two places
     ledger.save(log)
     _log_target("Menu", order, len(delta))
 
     result = WriteResult(target=target)
     await _write_each(client, ledger, log, order, delta, log.added, result)
+    if cuts:
+        _log_target("Opschonen", order, len(cuts))
+        await _reduce_each(client, ledger, log, order, cuts, result)
 
     left = leftovers(log, plan)
     if replaced is not None:
