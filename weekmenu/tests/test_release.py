@@ -14,7 +14,7 @@ REPO = ROOT.parent
 def test_versions_in_sync():
     config = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    assert config["version"] == project["project"]["version"] == "0.5.0"
+    assert config["version"] == project["project"]["version"] == "0.6.0"
 
 
 def test_changelog_has_current_version():

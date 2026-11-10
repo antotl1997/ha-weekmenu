@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0
+
+- **Geen half bestand meer na een stroomstoring.** Elk bestand dat de add-on bijhoudt (de weeklogboeken, `totaal.json`, `niet_thuis.json`, `state.json` en de AH-login in `tokens.json`) wordt eerst volledig naar een tijdelijk bestand geschreven en pas daarna verwisseld. Valt de stroom halverwege weg, dan staat de vorige versie er nog heel.
+- **Versienummer in de bestanden.** Elk van die bestanden krijgt een schemaversie. Zet je een oudere add-on terug op gegevens van een nieuwere, dan schrijft hij niets in die bestanden en niets in je AH-lijst of bestelling voor die week, en krijg je één melding: "Deze versie van de add-on is ouder dan je gegevens; werk de add-on bij". De eerste keer dat een bestand uit een eerdere versie wordt bijgewerkt, blijft de oude versie één keer bewaard als `<naam>.bak` ernaast.
+- **De AH-login raakt minder snel kwijt.** Een beschadigd of onleesbaar `tokens.json` geeft nu "opnieuw inloggen" in plaats van een fout, en het tijdelijke bestand van de login is vanaf het begin alleen voor de add-on leesbaar.
+- **De app blijft bereikbaar terwijl het menu wordt gekozen.** Het rekenwerk van de planner draait naast de rest, en hoe lang het duurde staat in het logboek en als `planner_seconds` in de status.
+
 ## 0.5.0
 
 - **Winkelklaar.** Er is nu een volledige handleiding (`DOCS.md`, zichtbaar in het tabblad Documentatie van de add-on), een icoon en logo, en Nederlandse en Engelse namen en uitleg bij de instellingen. De handleiding legt ook uit dat de AH-login in je Home Assistant-backups zit en wat je doet bij een lek.

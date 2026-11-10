@@ -60,7 +60,7 @@ De AH-login staat in het bestand `tokens.json` in de datamap van de add-on. Die 
 Is er een backup of de login gelekt:
 
 1. Wijzig je AH-wachtwoord. Dat maakt de oude login ongeldig.
-2. Verwijder `tokens.json` bij de add-on, via uitloggen in de app. De uitlogknop komt in versie 0.7. Tot die tijd kun je de add-on verwijderen en opnieuw installeren (dat wist zijn data), of het bestand in de datamap van de add-on weghalen.
+2. Verwijder `tokens.json` bij de add-on, via uitloggen in de app. De uitlogknop komt in versie 0.7. Tot die tijd kun je de add-on verwijderen en opnieuw installeren (dat wist zijn data), of het bestand in de datamap van de add-on weghalen. Haal dan ook `tokens.json.bak` weg als die er staat: dat is de kopie van vóór versie 0.6.
 3. Log daarna opnieuw in, zoals hierboven.
 
 ## Problemen oplossen
