@@ -781,3 +781,32 @@ async def test_restore_dish_brings_back_the_previous_recipe():
     assert dish_on(back, DO).recipe.id == dish_on(plan, DO).recipe.id
     assert back.basket == plan.basket and back.savings == plan.savings
     assert d.cuisine == wo.cuisine and d.is_fish == wo.is_fish
+
+
+# --- Gerecht weghalen -------------------------------------------------------------------
+
+
+async def test_remove_dish_leaves_no_dish_and_keeps_the_rest():
+    from app.planner import put_dish, remove_dish
+    client = FakeClient([
+        R(120, "Curry met kip", [(1000, "g", "scharrelkipfilet")]),
+        R(122, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
+    ])
+    plan = await build_plan(client, [GEHAKT, KIP], settings([WO, DO]))
+    gone = dish_on(plan, WO)
+    new = remove_dish(plan, WO)
+    assert [d.date for d in new.dishes] == [DO]
+    assert new.removed_days == [WO] and new.short_by == plan.short_by
+    assert all(ln.product.id not in new.basket for ln in gone.lines
+               if all(ln.product.id not in [x.product.id for x in d.lines]
+                      for d in new.dishes))
+    assert new.savings == round(sum(d.savings for d in new.dishes), 2)
+    assert remove_dish(new, ZA) is new  # no dish there: nothing changes
+    back = Plan.from_dict(json.loads(json.dumps(new.to_dict())))
+    assert back.removed_days == [WO]
+    # changing another evening keeps the removed one removed
+    assert put_dish(new, dish_on(new, DO)).removed_days == [WO]
+    assert (await rescale_dish(client, new, DO, 4)).removed_days == [WO]
+    assert Plan.from_dict({**new.to_dict(), "removed_days": None}).removed_days == []
+    # a dish put back on the removed evening makes it an evening with a dish again
+    assert put_dish(new, gone).removed_days == []

@@ -132,6 +132,7 @@ class Plan:
     short_by: int
     pantry: list[str] = field(default_factory=list)  # the pantry list the plan was made with
     budget_exhausted: bool = False  # the menu search ran out of budget: maybe not the best
+    removed_days: list[date] = field(default_factory=list)  # "Gerecht weghalen": no dish
 
     def to_dict(self) -> dict:
         return {
@@ -143,6 +144,7 @@ class Plan:
             "short_by": self.short_by,
             "pantry": list(self.pantry),
             "budget_exhausted": self.budget_exhausted,
+            "removed_days": [d.isoformat() for d in self.removed_days],
         }
 
     @classmethod
@@ -156,6 +158,7 @@ class Plan:
             short_by=int(d["short_by"]),
             pantry=list(d.get("pantry") or []),
             budget_exhausted=bool(d.get("budget_exhausted", False)),
+            removed_days=[date.fromisoformat(x) for x in d.get("removed_days") or []],
         )
 
 
@@ -622,7 +625,8 @@ async def _make_dish(
 
 
 def _finish(
-    dishes: list[Dish], short_by: int, pantry: list[str], budget_exhausted: bool = False
+    dishes: list[Dish], short_by: int, pantry: list[str], budget_exhausted: bool = False,
+    removed_days=(),
 ) -> Plan:
     """Merge quantities per product, top up deals only for shared products, split savings."""
     dishes = sorted(dishes, key=lambda d: d.date)
@@ -669,6 +673,7 @@ def _finish(
         short_by=short_by,
         pantry=list(pantry),
         budget_exhausted=budget_exhausted,
+        removed_days=sorted(removed_days),
     )
 
 
@@ -736,7 +741,8 @@ async def swap_dish(
     dishes = others + [dish]
     filled = {d.date for d in dishes}
     return _finish(
-        dishes, sum(1 for e in s.evenings if e not in filled), s.pantry, plan.budget_exhausted
+        dishes, sum(1 for e in s.evenings if e not in filled), s.pantry, plan.budget_exhausted,
+        plan.removed_days,
     )
 
 
@@ -772,7 +778,8 @@ async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
         old, recipe=recipe, persons=persons, lines=lines, pantry=pantry, not_found=not_found
     )
     dishes = [dish if d.date == day else d for d in plan.dishes]
-    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted)
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
+                   plan.removed_days)
 
 
 def dish_to_dict(d: Dish) -> dict:
@@ -789,7 +796,21 @@ def put_dish(plan: Plan, dish: Dish) -> Plan:
     Same recipe, products, quantities, times; basket and savings are recomputed.
     """
     dishes = [d for d in plan.dishes if d.date != dish.date] + [dish]
-    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted)
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
+                   [x for x in plan.removed_days if x != dish.date])
+
+
+def remove_dish(plan: Plan, day: date) -> Plan:
+    """"Gerecht weghalen": `day` gets no dish and nothing in its place; no AH calls.
+
+    Basket and savings are recomputed without it. Without a dish on `day` the plan
+    is returned as it is.
+    """
+    if not any(d.date == day for d in plan.dishes):
+        return plan
+    dishes = [d for d in plan.dishes if d.date != day]
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
+                   set(plan.removed_days) | {day})
 
 
 async def restore_dish(
@@ -816,4 +837,5 @@ async def restore_dish(
         pantry=pantry, not_found=not_found,
     )
     dishes = [d for d in plan.dishes if d.date != day] + [dish]
-    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted)
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
+                   [x for x in plan.removed_days if x != day])
