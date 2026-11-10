@@ -120,6 +120,7 @@ const ICON = {
   refresh: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>',
   plus: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  bowl: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11h17a8.5 8.5 0 0 1-17 0z"/><path d="M9 7.5c0-1.2 1-1.5 1-2.7M13 7.5c0-1.2 1-1.5 1-2.7"/></svg>',
 };
 
 function photo(recipe, cls) {
@@ -300,6 +301,11 @@ function dayCard(d) {
     return `<div class="card skip"><div class="ic">${ICON.moon}</div>
       <div><b>${esc(cap(d.dag))}</b> · niet thuis</div></div>`;
   }
+  if (d.restjes && d.restjes_van) {
+    // quiet like "niet thuis"; a tap opens the dish the leftovers come from
+    return `<button class="card skip rest" data-dish="${esc(d.restjes_van.date)}"><div class="ic">${ICON.bowl}</div>
+      <div><b>${esc(cap(d.dag))}</b> · restjes van ${esc(d.restjes_van.title)}</div></button>`;
+  }
   if (d.geen_gerecht) {
     return `<div class="card skip"><div class="ic">${ICON.moon}</div>
       <div><b>${esc(cap(d.dag))}</b> · geen gerecht</div></div>`;
@@ -434,6 +440,7 @@ function dishScreen(day) {
       <button data-persons="${d.persons - 1}" aria-label="Minder personen" ${d.persons <= 1 ? "disabled" : ""}>−</button>
       <b>${d.persons}</b>
       <button data-persons="${d.persons + 1}" aria-label="Meer personen" ${d.persons >= 8 ? "disabled" : ""}>+</button></div></div>
+    ${d.restjes ? `<p class="foot rest-note">Ook voor de restjes op ${esc(longDate(d.restjes))}: de personen van die avond zijn meegeteld.</p>` : ""}
     ${left}
     <div class="sec">Ingrediënten</div>
     <div class="card ing">${ingredientRows(d)}</div>
@@ -474,9 +481,29 @@ function savingsScreen() {
 
 // --- screens: settings -----------------------------------------------------------------
 
+/* Eat days, cooking moments and leftover nights, the way the add-on plans them:
+ * the earliest cooking days get the next eat day as leftover night, one each. */
+function cookingPlan(eat, k) {
+  k = Math.min(Math.max(1, k), Math.max(1, eat));
+  const rest = eat ? Math.min(eat - k, k) : 0;
+  return { k, rest, none: Math.max(0, eat - k - rest) };
+}
+
+function cookingText(eat, k) {
+  const p = cookingPlan(eat, k);
+  let t = `${plural(eat, "eetdag", "eetdagen")}, ${plural(p.k, "kookmoment", "kookmomenten")}, ${p.rest} keer restjes`;
+  if (eat && p.none) t += `. ${plural(p.none, "avond", "avonden")} zonder gerecht`;
+  return t;
+}
+
+function eatDays(s) { return WEEK_ORDER.filter((dag) => Number(s.persons[dag]) !== 0).length; }
+
 function settingsScreen() {
   const s = state.settings;
   const isAway = (dag) => Number(s.persons[dag]) === 0;  // also when set in Home Assistant
+  const eat = eatDays(s);
+  const maxK = Math.max(1, eat);
+  const k = Math.min(Math.max(1, Number(s.avonden) || 1), maxK);
   const chips = WEEK_ORDER.map((dag) => `<button class="chip${isAway(dag) ? " x" : ""}" data-away="${dag}" aria-pressed="${isAway(dag)}" aria-label="Niet thuis eten op ${dag}">${esc(DAGEN_KORT[dag])}</button>`).join("");
   const boxes = WEEK_ORDER.map((dag) => {
     const away = isAway(dag);
@@ -490,10 +517,11 @@ function settingsScreen() {
     <div class="card set">
       <div class="srow">Elke week vanzelf een menu maken
         <button class="toggle ${s.enabled ? "on" : "off"}" data-toggle>${s.enabled ? "● aan" : "○ uit"}</button></div>
-      <div class="srow">Kookavonden <div class="stp">
-        <button data-avonden="${s.avonden - 1}" aria-label="Minder kookavonden" ${s.avonden <= 1 ? "disabled" : ""}>−</button>
-        <b>${esc(s.avonden)}</b>
-        <button data-avonden="${s.avonden + 1}" aria-label="Meer kookavonden" ${s.avonden >= 7 ? "disabled" : ""}>+</button></div></div>
+      <div class="srow k">Kookmomenten <div class="stp">
+        <button data-avonden="${k - 1}" aria-label="Minder kookmomenten" ${k <= 1 ? "disabled" : ""}>−</button>
+        <b>${esc(k)}</b>
+        <button data-avonden="${k + 1}" aria-label="Meer kookmomenten" ${k >= maxK ? "disabled" : ""}>+</button></div></div>
+      <p class="expl">${esc(cookingText(eat, k))}</p>
       <div class="lbl2">Niet thuis eten <span class="hint">· tik de dagen aan</span></div>
       <div class="tw">${chips}</div>
       <div class="lbl2">Personen per avond <span class="hint">· tik om te wijzigen</span></div>
@@ -600,7 +628,7 @@ async function afterDishWrite(day, data) {
 }
 
 async function setSetting(entity, value) {
-  await api("api/settings", { entity_id: entity, value });
+  return api("api/settings", { entity_id: entity, value });
 }
 
 async function startRound(btn, mode) {
@@ -732,7 +760,10 @@ app.addEventListener("click", async (ev) => {
   }
   if (t.dataset.avonden) {
     const n = Number(t.dataset.avonden);
-    await busy(t, async () => { await setSetting(s.entities.avonden, n); s.avonden = n; });
+    await busy(t, async () => {
+      const r = await setSetting(s.entities.avonden, n);  // bounded to the eat days
+      s.avonden = r && typeof r.value === "number" ? r.value : n;
+    });
     render();
     return;
   }
@@ -742,6 +773,8 @@ app.addEventListener("click", async (ev) => {
     await busy(t, async () => {
       const r = await api("api/settings", { entity_id: s.entities.persons[dag], away });
       s.persons[dag] = r && typeof r.value === "number" ? r.value : (away ? 0 : 2);
+      // fewer eat days: the add-on bounds the cooking moments when it reads them
+      s.avonden = Math.min(Number(s.avonden) || 1, Math.max(1, eatDays(s)));
     });
     render();
     return;

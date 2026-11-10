@@ -73,7 +73,9 @@ def _dish(day, rid, title, cuisine, cook, savings, lines, *, oven=None, wait=Non
 
 
 def fake_plan() -> Plan:
-    wo, do, za, zo, ma = (date(2026, 11, d) for d in (4, 5, 7, 8, 9))
+    # 6 eat days (dinsdag niet thuis), 5 cooking moments: donderdag is the leftover
+    # night of woensdag, which cooks for both days
+    wo, do, vr, za, zo, ma = (date(2026, 11, d) for d in (4, 5, 6, 7, 8, 9))
     kip = _p(1, "AH Kipdijfilet", "2e halve prijs")
     wok = _p(2, "AH Wokgroente oosters", "25% korting")
     teri = _p(3, "Kikkoman teriyakisaus", "1+1 gratis")
@@ -102,8 +104,9 @@ def fake_plan() -> Plan:
                 "Kook de rijst volgens de aanwijzingen op de verpakking.",
                 "Snijd de kipdijfilet in reepjes en bak 6 min in de wok.",
                 "Voeg de wokgroente toe en roerbak 4 min.",
-                "Schenk de teriyakisaus erbij en verwarm 1 min. Bestrooi met lente-ui."]),
-        _dish(do, 1002, TITLES[1], "pasta en Italiaans", 35, 4.10, [
+                "Schenk de teriyakisaus erbij en verwarm 1 min. Bestrooi met lente-ui."],
+            persons=4),
+        _dish(vr, 1002, TITLES[1], "pasta en Italiaans", 35, 4.10, [
             (gehakt, 1, "300 g gehaktballetjes"), (pasta, 1, "300 g penne"),
             (tomaat, 2, "700 g passata"), (kaas, 1, "40 g Parmezaanse kaas")],
             pantry=["1 el olijfolie", "peper en zout"], not_found=["snufje nootmuskaat"]),
@@ -119,6 +122,7 @@ def fake_plan() -> Plan:
             (zalm, 1, "2 zalmfilets"), (kriel, 1, "500 g krieltjes"),
             (bonen, 1, "300 g sperziebonen")], fish=True),
     ]
+    dishes[0].leftover_date = do
     # links that are not https never reach the page
     dishes[-1].recipe.url = "javascript:alert(1)"
     dishes[-1].recipe.image = "http://example.invalid/zalm.jpg"
@@ -146,7 +150,6 @@ def fake_staples() -> list[Staple]:
 def build_ctx(tmp_path):
     ctx = make_ctx(tmp_path, now=NOW)
     ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
-    ctx.hass.states[helper_persons()["vrijdag"]] = "0"  # niet thuis
     ctx.hass.states[helper_persons()["zaterdag"]] = "4"
     ctx.hass.states[helper_persons()["dinsdag"]] = "0"  # niet thuis
     plan = fake_plan()
@@ -241,7 +244,10 @@ def test_app_screens_in_chrome(tmp_path):
         assert dom.index("in bestelling") < dom.index(order)
         for title in TITLES:
             assert title.replace("'", "&#39;") in dom or title in dom, title
-        assert "Vrijdag</b> · niet thuis" in dom and "ouders" not in dom
+        assert "ouders" not in dom and "Vrijdag</b> · niet thuis" not in dom
+        # the leftover night: a quiet card that opens the dish it comes from
+        assert ('<button class="card skip rest" data-dish="2026-11-04">' in dom
+                and f"Donderdag</b> · restjes van {TITLES[0]}" in dom)
         assert "Dinsdag</b> · niet thuis" in dom
         assert "€ 14,85" in dom
         assert "geschat" in dom
@@ -259,8 +265,9 @@ def test_app_screens_in_chrome(tmp_path):
         assert "Recept op Allerhande" in dom  # https link: shown
         assert "Bereiding" in dom and "Ander gerecht" in dom
         assert "Gerecht weghalen" in dom and "data-remove" in dom
+        assert "Ook voor de restjes op donderdag 5 november" in dom and "<b>4</b>" in dom
 
-        dom = render(base, "#gerecht/2026-11-05", tmp_path, "gerecht-niet-gevonden")
+        dom = render(base, "#gerecht/2026-11-06", tmp_path, "gerecht-niet-gevonden")
         assert "niet gevonden" in dom and "snufje nootmuskaat" in dom
 
         dom = chrome(base + "#gerecht/2026-11-09", tmp_path / "profile-unsafe")
@@ -272,14 +279,16 @@ def test_app_screens_in_chrome(tmp_path):
         assert "€ 57,15" in dom and "€ 14,85" in dom and "wk 45" in dom
 
         dom = render(base, "#instellingen", tmp_path, "instellingen")
-        assert "Kookavonden" in dom and "Niet thuis eten" in dom and "ouders" not in dom and "Nieuw menu" in dom
+        assert "Kookmomenten" in dom and "Kookavonden" not in dom and "Niet thuis eten" in dom and "ouders" not in dom and "Nieuw menu" in dom
         assert "Nu maken" in dom
         assert 'class="box away"' in dom and "Personen op dinsdag: niet thuis" in dom
-        # chips wo..di: vr and di are pressed (di and vr are at 0 in Home Assistant)
-        assert dom.count('class="chip x"') == 2
-        assert 'class="chip x" data-away="vrijdag"' in dom and 'class="chip x" data-away="dinsdag"' in dom
-        assert 'class="chip" data-away="woensdag"' in dom
-        assert dom.count("disabled") >= 2 and "<b>–</b>" in dom
+        assert "6 eetdagen, 5 kookmomenten, 1 keer restjes" in dom
+        assert 'aria-label="Meer kookmomenten" disabled' not in dom  # 5 of 6: + still works
+        # chips wo..di: only di is pressed (at 0 in Home Assistant)
+        assert dom.count('class="chip x"') == 1
+        assert 'class="chip x" data-away="dinsdag"' in dom
+        assert 'class="chip" data-away="woensdag"' in dom and 'class="chip" data-away="vrijdag"' in dom
+        assert dom.count("disabled") >= 1 and "<b>–</b>" in dom
         assert 'href="#inloggen"' in dom and "Opnieuw inloggen" in dom
 
         dom = render(base, "#inloggen", tmp_path, "opnieuw-inloggen")

@@ -46,6 +46,10 @@ a{color:inherit}
 .skip .ic{width:40px;height:40px;border-radius:12px;background:#f1ede6;display:flex;align-items:center;justify-content:center;flex:none}
 .skip .ic svg{width:20px;height:20px;stroke:#9a9388;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .skip b{color:#22201c}
+.skip.rest{width:calc(100% - 32px);text-align:left}
+.srow.k{border-bottom:0;padding-bottom:2px}
+.expl{font-size:12.5px;color:#7a746b;padding:0 0 12px;border-bottom:1px solid #f1ede6}
+.rest-note{margin:0 22px 10px}
 .sec{font-size:13px;font-weight:700;color:#7a746b;margin:16px 22px 8px;text-transform:uppercase;letter-spacing:.6px}
 
 /* notes (warnings, leftovers) */
