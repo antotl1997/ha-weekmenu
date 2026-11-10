@@ -152,6 +152,9 @@ class Context:
     total_day: date | None = None
     # bonus offers per period start: the folder is the same all week
     bonus_cache: dict[date, list[Product]] = field(default_factory=dict)
+    # menu week -> (start of the current period used instead of its own folder, when):
+    # lets the Aanbiedingen tab use a filled cache without asking AH for the periods
+    offers_fallback: dict[date, tuple[date, datetime]] = field(default_factory=dict)
     tasks: set = field(default_factory=set)
 
 

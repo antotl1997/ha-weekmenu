@@ -189,12 +189,14 @@ def staples_view(wlog) -> list[dict]:
     return [
         {"product": s.product.title, "product_id": s.product.id, "times": s.times,
          "qty": s.qty, "mechanism": s.product.mechanism, "savings": s.savings,
-         "added": s.product.id in wlog.extras_added}
+         "added": s.product.id in wlog.extras_added or s.product.id in wlog.offers_added}
         for s in staple_list(wlog)
     ]
 
 
 OTHER_CATEGORY = "Overig"
+OFFERS_FALLBACK_NOTE = ("Dit is de huidige folder; de folder van je bezorgweek "
+                        "is er nog niet.")
 
 
 def offer_item(p: Product, wlog) -> dict:
@@ -557,7 +559,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             if staple is None:
                 return _err(404, "geen voorstel voor dit product")
             target = wlog.target
-            if pid not in wlog.extras_added:
+            if pid not in wlog.extras_added and pid not in wlog.offers_added:
                 res = await apply_extras(ctx.client, ctx.ledger, wlog, {pid: staple.qty},
                                          {pid: staple.product.title})
                 target = res.target
@@ -581,35 +583,50 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 text='{"error": "Alleen voor deze of de volgende menuweek"}',
                 content_type="application/json")
 
-    def cached_folder(start: date) -> list[Product] | None:
-        """The folder of the period holding the menu Wednesday, if it is in memory."""
+    def cached_folder(start: date) -> tuple[list[Product], bool] | None:
+        """The folder of the period holding the menu Wednesday, if it is in memory, and
+        whether it is the current folder standing in for one that is not out yet."""
         for first, items in ctx.bonus_cache.items():
             if first <= start <= first + timedelta(days=6):
-                return items
+                return items, False
+        known = ctx.offers_fallback.get(start)
+        if known is not None and known[0] in ctx.bonus_cache:
+            # valid for an hour, and until the hourly look has seen the real folder
+            fresh = ctx.clock() - known[1] < timedelta(hours=1)
+            if fresh and ctx.ledger.load(start).new_folder is None:
+                return ctx.bonus_cache[known[0]], True
         return None
 
-    async def folder(start: date, locked: bool = False) -> list[Product]:
+    async def fetch_folder(start: date) -> tuple[list[Product], bool]:
+        got = await main.folder_for_week(ctx, start, ctx.clock(), fallback=True)
+        items, warning, period_start = got  # fallback=True never gives Waiting
+        if warning:
+            ctx.offers_fallback[start] = (period_start, ctx.clock())
+        else:
+            ctx.offers_fallback.pop(start, None)
+        return items, bool(warning)
+
+    async def folder(start: date, locked: bool = False) -> tuple[list[Product], bool]:
         """From the cache; when empty fetched once, under the lock (like a menu round)."""
         got = cached_folder(start)
         if got is not None:
             return got
         if locked:
-            res = await main.bonus_for_week(ctx, start, ctx.clock(), fallback=True)
-            return res[0]
+            return await fetch_folder(start)
         async with ctx.lock:
             got = cached_folder(start)  # another request may have filled it meanwhile
             if got is not None:
                 return got
-            res = await main.bonus_for_week(ctx, start, ctx.clock(), fallback=True)
-            return res[0]
+            return await fetch_folder(start)
 
     async def get_offers(request):
         start = shown_week(request)
         check_offer_week(start)
-        products = await folder(start)
-        return web.json_response(offers_view(
-            products, ctx.ledger.load(start), request.query.get("q", ""),
-            request.query.get("category", "")))
+        products, fallback = await folder(start)
+        out = offers_view(products, ctx.ledger.load(start), request.query.get("q", ""),
+                          request.query.get("category", ""))
+        out["period_warning"] = OFFERS_FALLBACK_NOTE if fallback else None
+        return web.json_response(out)
 
     async def add_offer(request):
         """One tap: the deal's quantity goes in once, through the same write path as staples."""
@@ -620,7 +637,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         start = shown_week(request)
         check_offer_week(start)
         async with ctx.lock:
-            product = next((p for p in await folder(start, locked=True) if p.id == pid), None)
+            product = next((p for p in (await folder(start, locked=True))[0] if p.id == pid), None)
             if product is None:
                 return _err(404, "dit product zit niet in de folder")
             if not product.orderable:

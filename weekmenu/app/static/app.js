@@ -17,7 +17,7 @@ const MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli",
 const BUSY_TEXT = "Er loopt al een ronde";
 
 const state = { status: null, week: null, weekParam: null, savings: null, settings: null,
-  staples: [], dishes: {}, open: {}, polling: false, offers: null, offerQ: "" };
+  staples: [], dishes: {}, open: {}, polling: false, offers: null, offersNote: "", offerQ: "" };
 
 // --- helpers ---------------------------------------------------------------------------
 
@@ -221,7 +221,9 @@ async function loadStaples() {
 /* The whole bonus folder of the shown week, per category; searched on this side. */
 async function loadOffers() {
   const w = state.week ? `?week=${encodeURIComponent(state.week.week)}` : "";
-  state.offers = (await api(`api/offers${w}`)).categories;
+  const res = await api(`api/offers${w}`);
+  state.offers = res.categories;
+  state.offersNote = res.period_warning || "";
 }
 
 async function loadDish(day) {
@@ -507,6 +509,7 @@ function offersScreen() {
   const n = (state.offers || []).reduce((a, c) => a + c.items.length, 0);
   const sub = w ? `${plural(n, "aanbieding", "aanbiedingen")} voor de week van ${shortDate(parseDate(w.week))}` : "";
   return `<header class="top"><div><h1>Aanbiedingen</h1><div class="sub">${esc(sub)}</div></div></header>
+    ${state.offersNote ? `<div class="card note soft"><span class="dot"></span><div>${esc(state.offersNote)}</div></div>` : ""}
     <div class="search"><input id="offerq" type="search" placeholder="Zoek in de folder" value="${esc(state.offerQ)}" autocomplete="off" aria-label="Zoek in de folder"></div>
     <div id="offerlist">${offersList()}</div>`;
 }

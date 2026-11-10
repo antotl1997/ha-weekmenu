@@ -237,3 +237,59 @@ def test_old_log_without_offer_fields_loads():
     assert log.offers_added == {} and log.offers_savings == 0.0
     back = WeekLog.from_dict(WeekLog(W, offers_added={5: 2}, offers_savings=1.25).to_dict())
     assert back.offers_added == {5: 2} and back.offers_savings == 1.25
+
+
+# --- staples and offers never both buy it (Ruling 41) -------------------------------------
+
+
+async def test_staple_route_skips_a_product_already_added_as_offer(aiohttp_client, tmp_path):
+    from app.staples import Staple
+    ctx = ctx_with_cache(tmp_path)
+    ctx.ledger.save(WeekLog(W, offers_added={50: 2}, offers_savings=3.0,
+                            staples=[Staple(KAAS, 3, 1, 2, 3.0).to_dict()]))
+    client = await aiohttp_client(make_app(ctx))
+    items = await (await client.get("api/staples")).json()
+    assert items[0]["added"] is True  # counted as added
+    r = await client.post("api/staples/50")
+    assert r.status == 200 and ctx.client.writes == []
+    assert ctx.ledger.load(W).extras_added == {}
+
+
+async def test_offer_then_staple_and_staple_then_offer_buy_once(aiohttp_client, tmp_path):
+    from app.staples import Staple
+    ctx = ctx_with_cache(tmp_path)
+    ctx.ledger.save(WeekLog(W, staples=[Staple(KAAS, 3, 1, 2, 3.0).to_dict()]))
+    client = await aiohttp_client(make_app(ctx))
+    assert (await client.post("api/offers/50")).status == 200
+    assert (await client.post("api/staples/50")).status == 200
+    assert ctx.client.writes == [("list", {50: 2})]
+    ctx.ledger.save(WeekLog(W, extras_added={51: 2}))
+    assert (await client.post("api/offers/51")).status == 200
+    assert ctx.client.writes == [("list", {50: 2})]
+
+
+# --- the current folder standing in for the week's own ----------------------------------
+
+
+async def test_fallback_folder_is_remembered_and_flagged(aiohttp_client, tmp_path):
+    from tests.fakes import CURRENT
+    ah = OfferAh(tmp_path, periods=(CURRENT,))  # the folder of the menu week is not out
+    ctx = make_ctx(tmp_path, ah=ah)
+    client = await aiohttp_client(make_app(ctx))
+    bodies = [await (await client.get("api/offers")).json() for _ in range(3)]
+    assert all(b["categories"] for b in bodies)
+    assert bodies[0]["period_warning"] == (
+        "Dit is de huidige folder; de folder van je bezorgweek is er nog niet.")
+    assert ah.calls.count("bonus_periods") == 1 and ah.calls.count("bonus_offers") == 1
+    # once the real folder is seen (hourly look), the mapping is dropped
+    ctx.ledger.save(WeekLog(W, new_folder=date(2026, 11, 2)))
+    ah.periods = [CURRENT, ah.periods[0].__class__(date(2026, 11, 2), date(2026, 11, 8), None,
+                                                   ["Vlees"])]
+    body = await (await client.get("api/offers")).json()
+    assert body["period_warning"] is None and ah.calls.count("bonus_offers") == 2
+
+
+async def test_own_folder_has_no_warning(aiohttp_client, tmp_path):
+    ctx = ctx_with_cache(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await (await client.get("api/offers")).json())["period_warning"] is None
