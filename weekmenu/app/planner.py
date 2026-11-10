@@ -95,6 +95,8 @@ class Settings:
     persons: dict[date, int]
     pantry: list[str]
     recent_recipe_ids: set[int]
+    # cook day -> its leftover night; persons of a cook day already include that night
+    leftovers: dict[date, date] = field(default_factory=dict)
 
 
 @dataclass
@@ -120,6 +122,7 @@ class Dish:
     pantry: list[str] = field(default_factory=list)  # skipped pantry texts ("in huis")
     not_found: list[str] = field(default_factory=list)
     search_term: str = ""
+    leftover_date: date | None = None  # the leftover night eaten from this dish
 
 
 @dataclass
@@ -165,6 +168,7 @@ class Plan:
 def _dish_to_dict(d: Dish) -> dict:
     out = {f.name: getattr(d, f.name) for f in dataclasses.fields(d)}
     out["date"] = d.date.isoformat()
+    out["leftover_date"] = d.leftover_date.isoformat() if d.leftover_date else None
     out["recipe"] = dataclasses.asdict(d.recipe)
     out["recipe"]["ingredients"] = [list(i) for i in d.recipe.ingredients]
     out["lines"] = [
@@ -198,6 +202,7 @@ def _dish_from_dict(x: dict) -> Dish:
         pantry=list(x.get("pantry") or []),
         not_found=list(x.get("not_found") or []),
         search_term=x.get("search_term") or "",
+        leftover_date=date.fromisoformat(x["leftover_date"]) if x.get("leftover_date") else None,
     )
 
 
@@ -459,18 +464,26 @@ def _rank(day: date):
     return lambda c: (-c.score, c.order)
 
 
+def _allowed(day: date, c: _Cand, no_fish) -> bool:
+    """Cooking time fits, and no fish on a cook day with a leftover night."""
+    return _fits(day, c.cook) and not (c.is_fish and day in no_fish)
+
+
 def _pick(
-    cands: list[_Cand], days: list[date], budget: list[int], best: list
+    cands: list[_Cand], days: list[date], budget: list[int], best: list,
+    no_fish=frozenset(),
 ) -> list[_Cand] | None:
     """Greedy in date order with backtracking; the first full menu found.
 
     `budget` is shared over all attempts; when it runs out _OutOfBudget is raised.
     `best[0]` keeps the longest valid partial menu seen, as (days, chosen).
+    `no_fish`: cook days with a leftover night, where fish is not allowed.
     """
     need = min(MIN_CUISINES, len(days))
     if len({c.cuisine for c in cands}) < need:
         return None
-    per_day = [sorted((c for c in cands if _fits(d, c.cook)), key=_rank(d)) for d in days]
+    per_day = [sorted((c for c in cands if _allowed(d, c, no_fish)), key=_rank(d))
+               for d in days]
     # cuisines still on offer from evening i on, from non-fish and from fish recipes
     plain: list[set] = [set() for _ in range(len(days) + 1)]
     fishy: list[set] = [set() for _ in range(len(days) + 1)]
@@ -512,7 +525,8 @@ def _pick(
     return rec(0, [], 0)
 
 
-def _arrange(chosen: list[_Cand], days: list[date], evenings: list[date]) -> list[_Cand]:
+def _arrange(chosen: list[_Cand], days: list[date], evenings: list[date],
+             no_fish=frozenset()) -> list[_Cand]:
     """Fish and chicken on the first two evenings, Monday and Tuesday the least fresh
     recipes, the longest recipes in the weekend. Weekday cooking time stays <= 45."""
     first_two = set(evenings[:2])
@@ -527,7 +541,7 @@ def _arrange(chosen: list[_Cand], days: list[date], evenings: list[date]) -> lis
 
     best, best_key = chosen, key(chosen)
     for perm in itertools.permutations(chosen):
-        if not all(_fits(d, c.cook) for d, c in zip(days, perm)):
+        if not all(_allowed(d, c, no_fish) for d, c in zip(days, perm)):
             continue
         k = key(perm)
         if k > best_key:
@@ -535,7 +549,9 @@ def _arrange(chosen: list[_Cand], days: list[date], evenings: list[date]) -> lis
     return best
 
 
-def _choose_menu(cands: list[_Cand], evenings: list[date]) -> tuple[dict[date, _Cand], bool]:
+def _choose_menu(
+    cands: list[_Cand], evenings: list[date], no_fish=frozenset()
+) -> tuple[dict[date, _Cand], bool]:
     """Fill as many evenings as the rules allow; drop the latest evenings first.
 
     Returns the menu and whether the search budget ran out. Then the longest valid
@@ -546,9 +562,10 @@ def _choose_menu(cands: list[_Cand], evenings: list[date]) -> tuple[dict[date, _
     try:
         for k in range(len(evenings), 0, -1):
             for days in itertools.combinations(evenings, k):
-                chosen = _pick(cands, list(days), budget, best)
+                chosen = _pick(cands, list(days), budget, best, no_fish)
                 if chosen:
-                    return dict(zip(days, _arrange(chosen, list(days), evenings))), False
+                    return dict(zip(days, _arrange(chosen, list(days), evenings,
+                                                   no_fish))), False
     except _OutOfBudget:
         days, chosen = best[0]
         log.warning(
@@ -557,7 +574,7 @@ def _choose_menu(cands: list[_Cand], evenings: list[date]) -> tuple[dict[date, _
         )
         if not chosen:
             return {}, True
-        return dict(zip(days, _arrange(chosen, list(days), evenings))), True
+        return dict(zip(days, _arrange(chosen, list(days), evenings, no_fish))), True
     return {}, False
 
 
@@ -602,7 +619,8 @@ def _resolver(client, bonus: list[Product], pantry: list[str], cache: dict):
 
 
 async def _make_dish(
-    client, c: _Cand, day: date, persons: int, resolve, budget: list[int] | None = None
+    client, c: _Cand, day: date, persons: int, resolve, budget: list[int] | None = None,
+    leftover_date: date | None = None,
 ) -> Dish:
     recipe = c.recipe
     if persons != recipe.servings:
@@ -620,7 +638,7 @@ async def _make_dish(
     return Dish(
         date=day, recipe=recipe, cuisine=c.cuisine, is_fish=c.is_fish, lines=lines,
         savings=0.0, persons=persons, cook=c.cook, oven=c.summary.oven, wait=c.summary.wait,
-        pantry=pantry, not_found=not_found, search_term=c.term,
+        pantry=pantry, not_found=not_found, search_term=c.term, leftover_date=leftover_date,
     )
 
 
@@ -705,11 +723,12 @@ async def build_plan(client, bonus: list[Product], s: Settings) -> Plan:
     cands, used = await _gather(
         client, bonus, s, set(), evenings, detail_budget, score_servings(s, evenings)
     )
-    menu, exhausted = _choose_menu(cands, evenings)
+    menu, exhausted = _choose_menu(cands, evenings, frozenset(s.leftovers))
     budget = [MAX_RECIPE_DETAILS - used]  # what is left for scaling to the persons
     resolve = _resolver(client, bonus, s.pantry, {})
     dishes = [
-        await _make_dish(client, c, day, s.persons.get(day, SCORE_SERVINGS), resolve, budget)
+        await _make_dish(client, c, day, s.persons.get(day, SCORE_SERVINGS), resolve, budget,
+                         s.leftovers.get(day))
         for day, c in sorted(menu.items())
     ]
     return _finish(dishes, len(evenings) - len(dishes), s.pantry, exhausted)
@@ -723,13 +742,16 @@ async def swap_dish(
     others = [d for d in plan.dishes if d.date != day]
     skip = set(exclude) | {d.recipe.id for d in others} | ({old.recipe.id} if old else set())
     persons = old.persons if old else s.persons.get(day, SCORE_SERVINGS)
+    # the leftover night and the persons stay: the new dish feeds the same evenings
+    leftover = old.leftover_date if old else s.leftovers.get(day)
+    no_fish = {day} if leftover else set()
     cands, _ = await _gather(client, bonus, s, skip, [day], MAX_RECIPE_DETAILS - 1, persons)
     need = min(MIN_CUISINES, len(others) + 1)
     other_cuisines = {d.cuisine for d in others}
     other_fish = sum(d.is_fish for d in others)
     ok = [
         c for c in cands
-        if _fits(day, c.cook)
+        if _allowed(day, c, no_fish)
         and not (c.is_fish and other_fish >= MAX_FISH)
         and len(other_cuisines | {c.cuisine}) >= need
     ]
@@ -737,7 +759,7 @@ async def swap_dish(
         return dataclasses.replace(plan, short_by=1)
     best = min(ok, key=_rank(day))
     resolve = _resolver(client, bonus, s.pantry, {})
-    dish = await _make_dish(client, best, day, persons, resolve)
+    dish = await _make_dish(client, best, day, persons, resolve, leftover_date=leftover)
     dishes = others + [dish]
     filled = {d.date for d in dishes}
     return _finish(
@@ -796,21 +818,25 @@ def put_dish(plan: Plan, dish: Dish) -> Plan:
     Same recipe, products, quantities, times; basket and savings are recomputed.
     """
     dishes = [d for d in plan.dishes if d.date != dish.date] + [dish]
+    back = {dish.date, dish.leftover_date}
     return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
-                   [x for x in plan.removed_days if x != dish.date])
+                   [x for x in plan.removed_days if x not in back])
 
 
 def remove_dish(plan: Plan, day: date) -> Plan:
     """"Gerecht weghalen": `day` gets no dish and nothing in its place; no AH calls.
 
-    Basket and savings are recomputed without it. Without a dish on `day` the plan
-    is returned as it is.
+    Its leftover night lapses with it: both evenings become "geen gerecht". Basket
+    and savings are recomputed without it. Without a dish on `day` the plan is
+    returned as it is.
     """
-    if not any(d.date == day for d in plan.dishes):
+    old = next((d for d in plan.dishes if d.date == day), None)
+    if old is None:
         return plan
     dishes = [d for d in plan.dishes if d.date != day]
+    gone = {day} | ({old.leftover_date} if old.leftover_date else set())
     return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
-                   set(plan.removed_days) | {day})
+                   set(plan.removed_days) | gone)
 
 
 async def restore_dish(
@@ -834,8 +860,9 @@ async def restore_dish(
     dish = Dish(
         date=day, recipe=recipe, cuisine=cuisine_of(recipe) or (old.cuisine if old else ""),
         is_fish=fish, lines=lines, savings=0.0, persons=persons, cook=recipe.cook,
-        pantry=pantry, not_found=not_found,
+        pantry=pantry, not_found=not_found, leftover_date=old.leftover_date if old else None,
     )
     dishes = [d for d in plan.dishes if d.date != day] + [dish]
+    back = {day, dish.leftover_date}
     return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
-                   [x for x in plan.removed_days if x != day])
+                   [x for x in plan.removed_days if x not in back])

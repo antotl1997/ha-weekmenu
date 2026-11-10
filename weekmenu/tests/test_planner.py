@@ -810,3 +810,88 @@ async def test_remove_dish_leaves_no_dish_and_keeps_the_rest():
     assert Plan.from_dict({**new.to_dict(), "removed_days": None}).removed_days == []
     # a dish put back on the removed evening makes it an evening with a dish again
     assert put_dish(new, gone).removed_days == []
+
+
+# --- restjes (v0.4) ----------------------------------------------------------------
+
+
+def leftover_settings(cook_days, leftovers, persons=None):
+    """Settings like make_settings builds them: a cook day with a leftover night
+    cooks for the persons of both days."""
+    persons = persons or {}
+    per = {d: persons.get(d, 2) + (persons.get(leftovers[d], 2) if d in leftovers else 0)
+           for d in cook_days}
+    return Settings(evenings=list(cook_days), persons=per, pantry=PANTRY,
+                    recent_recipe_ids=set(), leftovers=dict(leftovers))
+
+
+async def test_cook_day_with_leftovers_cooks_for_both_days():
+    client = FakeClient([
+        R(200, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
+        R(201, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
+    ])
+    s = leftover_settings([WO, VR], {WO: DO}, persons={WO: 2, DO: 3})
+    plan = await build_plan(client, [GEHAKT, KIP], s)
+    assert [d.date for d in plan.dishes] == [WO, VR]
+    wo = dish_on(plan, WO)
+    assert wo.leftover_date == DO and wo.persons == 5
+    assert dish_on(plan, VR).leftover_date is None and dish_on(plan, VR).persons == 2
+    assert plan.short_by == 0
+    back = Plan.from_dict(json.loads(json.dumps(plan.to_dict())))
+    assert dish_on(back, WO).leftover_date == DO
+    # a log from before v0.4 has no leftover_date
+    old = plan.to_dict()
+    for x in old["dishes"]:
+        del x["leftover_date"]
+    assert all(d.leftover_date is None for d in Plan.from_dict(old).dishes)
+
+
+async def test_fish_never_on_a_cook_day_with_leftovers():
+    client = FakeClient([
+        R(210, "Pasta met zalm", [(400, "g", "zalmfilet")]),  # best saving, fish
+        R(211, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
+        R(212, "Stamppot met worst", [(1, "stuks", "rookworst")]),
+    ])
+    s = leftover_settings([WO, VR, ZA], {WO: DO})
+    plan = await build_plan(client, [ZALM, KIP, WORST], s)
+    assert len(plan.dishes) == 3
+    assert not dish_on(plan, WO).is_fish
+    assert sum(d.is_fish for d in plan.dishes) == 1  # the fish moved to another day
+    # only fish left for the leftover day: it stays without a dish
+    client2 = FakeClient([R(220, "Curry met zalm", [(400, "g", "zalmfilet")])])
+    plan2 = await build_plan(client2, [ZALM], leftover_settings([WO], {WO: DO}))
+    assert plan2.dishes == [] and plan2.short_by == 1
+
+
+async def test_swap_keeps_the_leftover_night_and_persons():
+    client = FakeClient([
+        R(230, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
+        R(231, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
+        R(232, "Pasta met worst", [(1, "stuks", "rookworst")]),
+    ])
+    s = leftover_settings([WO, VR, ZA], {WO: DO}, persons={WO: 2, DO: 3})
+    plan = await build_plan(client, [GEHAKT, KIP, WORST], s)
+    old = dish_on(plan, WO)
+    client.add(
+        R(240, "Curry met zalm", [(400, "g", "zalmfilet")], cook=20),  # fish: not here
+        R(241, "Wraps met kip", [(500, "g", "scharrelkipfilet")], cook=30),
+    )
+    new = await swap_dish(client, plan, WO, [GEHAKT, KIP, WORST, ZALM], s,
+                          exclude={old.recipe.id})
+    nd = dish_on(new, WO)
+    assert nd.recipe.id != old.recipe.id and not nd.is_fish
+    assert nd.leftover_date == DO and nd.persons == 5
+
+
+async def test_remove_dish_drops_its_leftover_night_too():
+    from app.planner import put_dish, remove_dish
+    client = FakeClient([
+        R(250, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
+        R(251, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
+    ])
+    plan = await build_plan(client, [GEHAKT, KIP], leftover_settings([WO, VR], {WO: DO}))
+    gone = dish_on(plan, WO)
+    new = remove_dish(plan, WO)
+    assert [d.date for d in new.dishes] == [VR]
+    assert new.removed_days == [WO, DO]
+    assert put_dish(new, gone).removed_days == []
