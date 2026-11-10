@@ -466,3 +466,78 @@ async def test_publish_carries_the_new_folder_flag(respx_mock):
                                            new_folder=True), 1.0)
     first, second = (json.loads(c.request.content)["attributes"] for c in r1.calls)
     assert first["new_folder_available"] is False and second["new_folder_available"] is True
+
+
+# --- v0.6: schema versions in totaal.json and niet_thuis.json --------------------------
+
+
+def test_total_migration_v0_to_v1_every_old_form():
+    from app.hass import migrate_total_v0_to_v1
+    assert migrate_total_v0_to_v1(12.5) == {"schema": 1, "total": 12.5}
+    assert migrate_total_v0_to_v1({"total": 3.0, "counted": ["2026-10-21"]}) == {
+        "schema": 1, "total": 3.0, "counted": ["2026-10-21"]}
+    assert migrate_total_v0_to_v1([1, 2]) == {"schema": 1}
+    assert migrate_total_v0_to_v1(True) == {"schema": 1}
+
+
+def test_old_total_files_load_as_before_and_new_ones_carry_the_schema(tmp_path):
+    from app.hass import _save_total, load_total_state
+    path = tmp_path / "totaal.json"
+    path.write_text("7.5", encoding="utf-8")
+    assert load_total_state(path) == (7.5, None)
+    path.write_text('{"total": 3.0, "counted": ["2026-10-21"]}', encoding="utf-8")
+    assert load_total_state(path) == (3.0, {"2026-10-21"})
+    _save_total(path, 4.0, {"2026-10-21": 1.0})
+    assert json.loads(path.read_text(encoding="utf-8")) == {
+        "schema": 1, "total": 4.0, "counted": {"2026-10-21": 1.0}}
+    assert json.loads((tmp_path / "totaal.json.bak").read_text(encoding="utf-8")) == {
+        "total": 3.0, "counted": ["2026-10-21"]}
+    assert load_total_state(path) == (4.0, {"2026-10-21": 1.0})
+
+
+def test_newer_total_file_is_read_but_never_written(tmp_path):
+    from app.durable import SchemaTooNew
+    from app.hass import _save_total, load_total_state
+    path = tmp_path / "totaal.json"
+    path.write_text('{"schema": 4, "total": 9.0, "counted": {"2026-10-21": 9.0}}',
+                    encoding="utf-8")
+    before = path.read_bytes()
+    assert load_total_state(path) == (9.0, {"2026-10-21": 9.0})
+    with pytest.raises(SchemaTooNew):
+        _save_total(path, 10.0, {})
+    assert path.read_bytes() == before
+
+
+def test_away_migration_v0_to_v1():
+    from app.hass import migrate_away_v0_to_v1
+    assert migrate_away_v0_to_v1({"vrijdag": 3}) == {"schema": 1, "vrijdag": 3}
+    assert migrate_away_v0_to_v1([1]) == {"schema": 1}
+
+
+async def test_away_memory_carries_the_schema_and_old_file_still_restores(tmp_path):
+    hass = _fake(tmp_path)
+    path = tmp_path / "niet_thuis.json"
+    path.write_text('{"zaterdag": 3}', encoding="utf-8")  # from before 0.6
+    eid = helper_persons()["vrijdag"]
+    hass.states[eid] = "4"
+    await hass.set_away("vrijdag", True)
+    assert json.loads(path.read_text(encoding="utf-8")) == {
+        "schema": 1, "zaterdag": 3, "vrijdag": 4}
+    assert (tmp_path / "niet_thuis.json.bak").read_text(encoding="utf-8") == '{"zaterdag": 3}'
+    hass.states[helper_persons()["zaterdag"]] = "0"
+    assert await hass.set_away("zaterdag", False) == 3
+
+
+async def test_newer_away_file_changes_nothing(tmp_path):
+    from app.durable import SchemaTooNew
+    hass = _fake(tmp_path)
+    path = tmp_path / "niet_thuis.json"
+    path.write_text('{"schema": 3, "zaterdag": 3}', encoding="utf-8")
+    before = path.read_bytes()
+    hass.states[helper_persons()["vrijdag"]] = "4"
+    hass.states[helper_persons()["zaterdag"]] = "0"
+    for dag, away in (("vrijdag", True), ("zaterdag", False)):
+        with pytest.raises(SchemaTooNew):
+            await hass.set_away(dag, away)
+    assert hass.posts == []  # not a helper touched
+    assert path.read_bytes() == before

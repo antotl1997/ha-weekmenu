@@ -226,7 +226,7 @@ async def test_total_not_counted_twice_after_crash_between_file_and_flags(
     with pytest.raises(SystemExit):
         await update_total(ctx, SUNDAY.date())
     data = json.loads((tmp_path / "totaal.json").read_text())
-    assert data == {"total": 14.0, "counted": {"2026-10-28": 4.0}}
+    assert data == {"schema": 1, "total": 14.0, "counted": {"2026-10-28": 4.0}}
     assert not Ledger(tmp_path / "weeks").load(date(2026, 10, 28)).counted  # flag lost
 
     monkeypatch.setattr(ctx.ledger, "save", real_save)
@@ -244,7 +244,7 @@ async def test_old_total_file_is_migrated_from_ledger_flags(tmp_path, planned, o
     ctx.ledger.save(WeekLog(date(2026, 10, 28), plan=plan_b().to_dict(), savings=4.0))
     await update_total(ctx, SUNDAY.date())
     data = json.loads((tmp_path / "totaal.json").read_text())
-    assert data == {"total": 16.5, "counted": {"2026-10-21": 3.0, "2026-10-28": 4.0}}
+    assert data == {"schema": 1, "total": 16.5, "counted": {"2026-10-21": 3.0, "2026-10-28": 4.0}}
 
 
 async def test_reused_plan_adding_nothing_sends_no_second_message(tmp_path, planned):
@@ -294,7 +294,7 @@ async def test_old_counted_list_is_migrated_with_ledger_values(tmp_path, planned
     await update_total(ctx, SUNDAY.date())
     data = json.loads((tmp_path / "totaal.json").read_text())
     # the list had no amounts: the ledger value at migration time counts as counted
-    assert data == {"total": 3.0, "counted": {"2026-10-21": 3.5}}
+    assert data == {"schema": 1, "total": 3.0, "counted": {"2026-10-21": 3.5}}
 
 
 async def test_staple_added_after_week_was_counted_reaches_total_once(tmp_path, planned):
@@ -313,7 +313,7 @@ async def test_staple_added_after_week_was_counted_reaches_total_once(tmp_path, 
     await update_total(ctx, SUNDAY.date())
     assert ctx.hass.totals()[-1] == 5.25
     data = json.loads((tmp_path / "totaal.json").read_text())
-    assert data == {"total": 5.25, "counted": {"2026-10-28": 5.25}}
+    assert data == {"schema": 1, "total": 5.25, "counted": {"2026-10-28": 5.25}}
 
 
 async def test_total_never_goes_down(tmp_path, planned):
@@ -955,10 +955,13 @@ async def test_old_state_and_log_with_parents_fields_still_load(tmp_path):
 
 def test_no_parents_text_anywhere_in_the_app():
     from pathlib import Path
+    from app.durable import UPDATE_MESSAGE
     root = Path(main.__file__).parent
     for path in [*root.glob("*.py"), *(root / "static").glob("*")]:
         if path.suffix in {".py", ".js", ".html", ".css"}:
-            assert "ouder" not in path.read_text(encoding="utf-8").lower(), path.name
+            # the one allowed "ouder": the add-on is older than its data (v0.6)
+            text = path.read_text(encoding="utf-8").replace(UPDATE_MESSAGE, "").lower()
+            assert "ouder" not in text, path.name
 
 
 # --- kookmomenten en restjes (v0.4) ----------------------------------------------------

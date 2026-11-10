@@ -11,7 +11,7 @@ from pathlib import Path
 
 import httpx
 
-from app.durable import fsync_dir
+from app.durable import SchemaTooNew, migrate, schema_of, too_new, write_json
 from app.planner import Plan
 from app.week import WEEKDAGEN, bestelling_zin
 from app.writer import WriteResult
@@ -21,6 +21,31 @@ log = logging.getLogger(__name__)
 BASE_URL = "http://supervisor/core/api"
 TOTAL_PATH = Path("/data/totaal.json")
 AWAY_PATH = Path("/data/niet_thuis.json")  # {weekday: persons before "niet thuis"}
+# schema of totaal.json and niet_thuis.json; 0 is a file from before 0.6
+TOTAL_SCHEMA = 1
+AWAY_SCHEMA = 1
+
+
+def migrate_total_v0_to_v1(data) -> dict:
+    """0 -> 1: a bare number becomes {"total": x}; a dict keeps total and counted
+    (a list of weeks stays a list: update_total migrates that from the ledger).
+    Anything else was read as 0 and stays that way."""
+    if isinstance(data, (int, float)) and not isinstance(data, bool):
+        return {"schema": 1, "total": float(data)}
+    if isinstance(data, dict):
+        return {"schema": 1, **{k: v for k, v in data.items() if k != "schema"}}
+    return {"schema": 1}
+
+
+def migrate_away_v0_to_v1(data) -> dict:
+    """0 -> 1: the same {weekday: persons}, with the version field."""
+    if isinstance(data, dict):
+        return {"schema": 1, **{k: v for k, v in data.items() if k != "schema"}}
+    return {"schema": 1}
+
+
+_TOTAL_STEPS = {0: migrate_total_v0_to_v1}
+_AWAY_STEPS = {0: migrate_away_v0_to_v1}
 
 # All helper entity IDs live here, and nowhere else.
 HELPER_AAN = "input_boolean.weekmenu_aan"
@@ -88,8 +113,9 @@ def load_total_state(
         data = json.loads(Path(path).read_text(encoding="utf-8"))
     except (FileNotFoundError, ValueError):
         return 0.0, None
-    if isinstance(data, (int, float)) and not isinstance(data, bool):
-        return float(data), None
+    # a file from a newer add-on is read as it is (display only: writing it refuses)
+    if schema_of(data) <= TOTAL_SCHEMA:
+        data = migrate(data, TOTAL_SCHEMA, _TOTAL_STEPS, "totaal")
     if not isinstance(data, dict):
         return 0.0, None
     try:
@@ -125,15 +151,7 @@ def _save_total(path: Path, total: float,
         data["counted"] = {k: counted[k] for k in sorted(counted)}
     elif counted is not None:
         data["counted"] = list(counted)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = Path(str(path) + ".tmp")
-    try:
-        tmp.write_text(json.dumps(data), encoding="utf-8")
-        os.replace(tmp, path)
-    except BaseException:
-        tmp.unlink(missing_ok=True)
-        raise
-    fsync_dir(path.parent)
+    write_json(path, data, TOTAL_SCHEMA)  # SchemaTooNew over a newer file
 
 
 def no_cooking_moment(plan: Plan, start: date, away: Iterable[date]) -> list[date]:
@@ -333,6 +351,8 @@ class Hass:
             data = json.loads(self._away_path.read_text(encoding="utf-8"))
         except (FileNotFoundError, ValueError):
             return {}
+        if schema_of(data) <= AWAY_SCHEMA:
+            data = migrate(data, AWAY_SCHEMA, _AWAY_STEPS, "niet_thuis")
         if not isinstance(data, dict):
             return {}
         out: dict[str, int] = {}
@@ -342,16 +362,7 @@ class Hass:
         return out
 
     def _save_away_memory(self, memory: dict[str, int]) -> None:
-        path = self._away_path
-        path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = Path(str(path) + ".tmp")
-        try:
-            tmp.write_text(json.dumps(memory), encoding="utf-8")
-            os.replace(tmp, path)
-        except BaseException:
-            tmp.unlink(missing_ok=True)
-            raise
-        fsync_dir(path.parent)
+        write_json(self._away_path, memory, AWAY_SCHEMA)  # SchemaTooNew over a newer file
 
     async def set_away(self, dag: str, away: bool) -> int:
         """Not eating at home on `dag`: persons go to 0 and the old number is
@@ -361,6 +372,8 @@ class Hass:
             raise ValueError(f"geen weekdag: {dag!r}")
         entity = helper_persons()[dag]
         async with self._away_lock:
+            if too_new(self._away_path, AWAY_SCHEMA):  # before any helper changes
+                raise SchemaTooNew(self._away_path)
             memory = self._load_away_memory()
             if away:
                 current = await self._int(entity, DEFAULT_PERSONEN, [])
