@@ -144,7 +144,7 @@ def write_json(path: Path, data: dict, version: int) -> None:
     replace_durably(path, json.dumps(body).encode("utf-8"))
 
 
-def migrate(data, version: int, steps: dict, name: str):
+def migrate(data, version: int, steps: dict):
     """Bring parsed JSON of schema `schema_of(data)` up to `version`.
 
     `steps[n]` turns version n into n + 1. A file newer than `version` is returned

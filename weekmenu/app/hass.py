@@ -115,7 +115,7 @@ def load_total_state(
         return 0.0, None
     # a file from a newer add-on is read as it is (display only: writing it refuses)
     if schema_of(data) <= TOTAL_SCHEMA:
-        data = migrate(data, TOTAL_SCHEMA, _TOTAL_STEPS, "totaal")
+        data = migrate(data, TOTAL_SCHEMA, _TOTAL_STEPS)
     if not isinstance(data, dict):
         return 0.0, None
     try:
@@ -352,7 +352,7 @@ class Hass:
         except (FileNotFoundError, ValueError):
             return {}
         if schema_of(data) <= AWAY_SCHEMA:
-            data = migrate(data, AWAY_SCHEMA, _AWAY_STEPS, "niet_thuis")
+            data = migrate(data, AWAY_SCHEMA, _AWAY_STEPS)
         if not isinstance(data, dict):
             return {}
         out: dict[str, int] = {}

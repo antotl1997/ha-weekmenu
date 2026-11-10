@@ -122,6 +122,6 @@ def test_write_json_new_file_has_no_bak(tmp_path):
 def test_migrate_runs_each_step_and_leaves_newer_alone():
     steps = {0: lambda d: {**d, "schema": 1, "m0": True},
              1: lambda d: {**d, "schema": 2, "m1": True}}
-    assert migrate({"a": 1}, 2, steps, "x") == {"a": 1, "schema": 2, "m0": True, "m1": True}
-    assert migrate({"schema": 1}, 2, steps, "x") == {"schema": 2, "m1": True}
-    assert migrate({"schema": 5}, 2, steps, "x") == {"schema": 5}
+    assert migrate({"a": 1}, 2, steps) == {"a": 1, "schema": 2, "m0": True, "m1": True}
+    assert migrate({"schema": 1}, 2, steps) == {"schema": 2, "m1": True}
+    assert migrate({"schema": 5}, 2, steps) == {"schema": 5}

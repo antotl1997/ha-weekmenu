@@ -107,6 +107,7 @@ ALL_AWAY = ("Alle avonden van deze week staan op niet thuis (0 personen). "
 WRITE_FAILED_HINT = "Tik op Nu maken in de Weekmenu-app om de rest toe te voegen."
 STAPLES_TIMEOUT = 60  # seconds for the whole purchase-history step before the message
 PORT = 8099
+INGRESS_PROXY = "172.30.32.2"
 # schema of state.json; 0 is a file from before 0.6
 STATE_SCHEMA = 1
 
@@ -117,7 +118,6 @@ def migrate_state_v0_to_v1(data: dict) -> dict:
 
 
 _STATE_STEPS = {0: migrate_state_v0_to_v1}
-INGRESS_PROXY = "172.30.32.2"
 
 
 def local_now() -> datetime:
@@ -789,7 +789,7 @@ def load_state(ctx: Context) -> None:
     try:
         data = json.loads(Path(ctx.state_path).read_text(encoding="utf-8"))
         if schema_of(data) <= STATE_SCHEMA:  # a newer file is read as it is
-            data = migrate(data, STATE_SCHEMA, _STATE_STEPS, "state")
+            data = migrate(data, STATE_SCHEMA, _STATE_STEPS)
         checked = data.get("checked")
         waiting = data.get("waiting")
         ctx.checked = datetime.fromisoformat(checked) if checked else None

@@ -213,7 +213,7 @@ class Ledger:
                 wlog = WeekLog(week=week)
             wlog.too_new = True
             return wlog
-        return WeekLog.from_dict(migrate(data, LEDGER_SCHEMA, _LEDGER_STEPS, "weeklog"))
+        return WeekLog.from_dict(migrate(data, LEDGER_SCHEMA, _LEDGER_STEPS))
 
     def save(self, log: WeekLog) -> None:
         """Durably, and never over a log from a newer add-on (SchemaTooNew)."""

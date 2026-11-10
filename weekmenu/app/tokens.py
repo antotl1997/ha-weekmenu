@@ -29,6 +29,7 @@ class Tokens:
 class TokenStore:
     def __init__(self, path: Path):
         self.path = Path(path)
+        self._warned_new = False
 
     def load(self) -> Tokens | None:
         """The tokens, or None when there are none that this code may use.
@@ -45,11 +46,13 @@ class TokenStore:
             log.warning("%s niet te lezen (%s)", self.path.name, type(e).__name__)
             return None
         if schema_of(data) > TOKENS_SCHEMA:
-            log.warning("%s is van een nieuwere versie van de add-on: niet gebruikt",
-                        self.path.name)
+            if not self._warned_new:  # the status page loads this every few seconds
+                self._warned_new = True
+                log.warning("%s is van een nieuwere versie van de add-on: niet gebruikt",
+                            self.path.name)
             return None
         try:
-            data = migrate(data, TOKENS_SCHEMA, _TOKENS_STEPS, "tokens")
+            data = migrate(data, TOKENS_SCHEMA, _TOKENS_STEPS)
             return Tokens(
                 data["access_token"], data["refresh_token"], float(data["expires_at"])
             )
