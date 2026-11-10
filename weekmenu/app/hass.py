@@ -2,10 +2,11 @@
 
 import asyncio
 import json
+import logging
 import os
 from dataclasses import dataclass, field
 from collections.abc import Iterable
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import httpx
@@ -14,6 +15,8 @@ from app.durable import fsync_dir
 from app.planner import Plan
 from app.week import WEEKDAGEN, bestelling_zin
 from app.writer import WriteResult
+
+log = logging.getLogger(__name__)
 
 BASE_URL = "http://supervisor/core/api"
 TOTAL_PATH = Path("/data/totaal.json")
@@ -133,6 +136,18 @@ def _save_total(path: Path, total: float,
     fsync_dir(path.parent)
 
 
+def no_cooking_moment(plan: Plan, start: date, away: Iterable[date]) -> list[date]:
+    """Eat days of the week (not away) with neither a dish nor leftovers, and not
+    emptied by "Gerecht weghalen": fewer cooking moments than needed, or a cook
+    day the planner could not fill."""
+    away = set(away)
+    taken = ({d.date for d in plan.dishes}
+             | {d.leftover_date for d in plan.dishes if d.leftover_date}
+             | set(plan.removed_days))
+    days = (start + timedelta(days=i) for i in range(7))
+    return [d for d in days if d not in away and d not in taken]
+
+
 def plan_view(plan: Plan, week_start: date, target: str,
               away: Iterable[date] = ()) -> dict:
     """Attributes for sensor.weekmenu. `target` is "order" or "list"; `away`: the
@@ -166,6 +181,7 @@ def plan_view(plan: Plan, week_start: date, target: str,
             "besparing": round(d.savings, 2),
         })
     dishes.sort(key=lambda x: x["datum"])
+    away = set(away)
     return {
         "week": week_start.isoformat(),
         "bestelling": bestelling_zin(week_start),
@@ -174,6 +190,7 @@ def plan_view(plan: Plan, week_start: date, target: str,
         "niet_thuis": [d.isoformat() for d in sorted(away)
                        if d not in eaten and d not in plan.removed_days],
         "geen_gerecht": [d.isoformat() for d in plan.removed_days],  # "Gerecht weghalen"
+        "geen_kookmoment": [d.isoformat() for d in no_cooking_moment(plan, week_start, away)],
         "dishes": dishes,
     }
 
@@ -223,8 +240,34 @@ class Hass:
             for dag, eid in helper_persons().items()
         }
         # cooking moments: never more than eat days, out of bounds is bounded, not refused
-        aantal = clamp_kookmomenten(aantal, eat_count(persons))
-        return RawSettings(aan == "on", aantal, persons, defaulted)
+        bounded = clamp_kookmomenten(aantal, eat_count(persons))
+        if bounded != aantal and HELPER_AVONDEN not in defaulted:
+            await self._write_back_kookmomenten(bounded)
+        return RawSettings(aan == "on", bounded, persons, defaulted)
+
+    async def _write_back_kookmomenten(self, value: int) -> None:
+        """Put the helper back in bounds; best effort, never fails the caller."""
+        try:
+            await self._post("services/input_number/set_value",
+                             {"entity_id": HELPER_AVONDEN, "value": value})
+        except Exception as e:  # noqa: BLE001 - a read must not fail on this write
+            log.warning("Home Assistant: kookmomenten niet teruggezet (%s)", type(e).__name__)
+
+    async def _rebound_kookmomenten(self) -> None:
+        """After a "niet thuis" tap: the cooking moments helper within 1 .. eat days."""
+        try:
+            missing: list[str] = []
+            aantal = await self._int(HELPER_AVONDEN, DEFAULT_AANTAL, missing)
+            if missing:
+                return
+            persons = {dag: await self._int(eid, DEFAULT_PERSONEN, [])
+                       for dag, eid in helper_persons().items()}
+        except Exception as e:  # noqa: BLE001
+            log.warning("Home Assistant: kookmomenten niet gecontroleerd (%s)", type(e).__name__)
+            return
+        bounded = clamp_kookmomenten(aantal, eat_count(persons))
+        if bounded != aantal:
+            await self._write_back_kookmomenten(bounded)
 
     async def publish(self, plan_view: dict, week_savings: float) -> None:
         await self._post("states/sensor.weekmenu", {
@@ -238,6 +281,7 @@ class Hass:
                 "niet_gevonden": plan_view["niet_gevonden"],
                 "niet_thuis": plan_view.get("niet_thuis", []),
                 "geen_gerecht": plan_view.get("geen_gerecht", []),
+                "geen_kookmoment": plan_view.get("geen_kookmoment", []),
                 "dishes": plan_view["dishes"],
             },
         })
@@ -264,7 +308,7 @@ class Hass:
             },
         })
 
-    async def set_setting(self, entity_id: str, value: str | int | bool):
+    async def set_setting(self, entity_id: str, value: str | int | bool) -> str | int | bool:
         """Set a weekmenu helper; returns the value set. Cooking moments are bounded
         to 1 .. the eat days of the week first."""
         if entity_id == HELPER_AAN:
@@ -321,6 +365,7 @@ class Hass:
                     memory[dag] = min(current, MAX_PERSONEN)
                     self._save_away_memory(memory)
                 await self.set_setting(entity, 0)
+                await self._rebound_kookmomenten()
                 return 0
             current = await self._int(entity, 0, [])
             if current >= MIN_PERSONEN:  # not away: never overwrite a number set by hand
@@ -330,6 +375,7 @@ class Hass:
             if dag in memory:
                 del memory[dag]
                 self._save_away_memory(memory)
+            await self._rebound_kookmomenten()
             return value
 
     async def notify(self, title: str, message: str, url: str | None = None) -> None:
@@ -350,6 +396,7 @@ def format_message(
     """The message when the menu is made. `staples`: suggestions in the app not added
     yet; `start`: the menu Wednesday, named in the first line; `away`: evenings
     not at home (0 persons); a day that still has a dish is not named."""
+    away = list(away)
     title = f"Weekmenu klaar · {format_eur(plan.savings)} bespaard"
     lines: list[str] = []
     if start is not None:
@@ -371,6 +418,9 @@ def format_message(
         lines.append(f"{_ABBR[WEEKDAGEN[d.weekday()]]} niet thuis")
     for d in plan.removed_days:
         lines.append(f"{_ABBR[WEEKDAGEN[d.weekday()]]} geen gerecht")
+    if start is not None:
+        for d in no_cooking_moment(plan, start, away):
+            lines.append(f"{_ABBR[WEEKDAGEN[d.weekday()]]} geen kookmoment")
     lines.append("Alles staat in je bestelling" if result.target == "order"
                  else "Alles staat op Mijn lijst")
     if result.removed:

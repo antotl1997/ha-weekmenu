@@ -408,3 +408,41 @@ async def test_set_setting_bounds_cooking_moments(respx_mock):
         assert await h.set_setting(persons["zaterdag"], 3) == 3  # persons: not bounded here
     values = [json.loads(c.request.content)["value"] for c in num.calls]
     assert values == [4, 1, 3]
+
+
+# --- fix round 1 (v0.4 B) ---
+
+
+def test_eat_day_without_dish_or_leftovers_is_geen_kookmoment():
+    start = date(2026, 11, 4)
+    away = [date(2026, 11, d) for d in (8, 9, 10)]  # zo, ma, di niet thuis
+    plan = _leftover_plan()  # wo (do restjes), vr; za gets nothing
+    _, text = format_message(plan, WriteResult("order"), None, start=start, away=away)
+    assert "za geen kookmoment" in text and "geen gerecht" not in text
+    assert "zo niet thuis" in text and "zo geen kookmoment" not in text
+    view = plan_view(plan, start, "order", away)
+    assert view["geen_kookmoment"] == ["2026-11-07"] and view["geen_gerecht"] == []
+    # a removed day stays "geen gerecht", not "geen kookmoment"
+    from app.planner import remove_dish
+    gone = remove_dish(plan, date(2026, 11, 6))
+    assert plan_view(gone, start, "order", away)["geen_kookmoment"] == ["2026-11-07"]
+    _, text = format_message(gone, WriteResult("order"), None, start=start, away=away)
+    assert "vr geen gerecht" in text and "vr geen kookmoment" not in text
+
+
+async def test_read_settings_writes_bounded_cooking_moments_back(respx_mock):
+    persons = helper_persons()
+    values = {HELPER_AAN: "on", HELPER_AVONDEN: "6"}
+    for dag, eid in persons.items():
+        values[eid] = "2" if dag in ("woensdag", "donderdag", "vrijdag") else "0"
+    for eid, st in values.items():
+        respx_mock.get(f"{BASE_URL}/states/{eid}").respond(json=_state(eid, st))
+    num = respx_mock.post(f"{BASE_URL}/services/input_number/set_value").respond(200, json=[])
+    async with httpx.AsyncClient() as http:
+        raw = await Hass(http).read_settings()
+    assert raw.aantal == 3
+    assert json.loads(num.calls[0].request.content) == {"entity_id": HELPER_AVONDEN, "value": 3}
+    # a failing write never fails the read
+    num.respond(500, json={})
+    async with httpx.AsyncClient() as http:
+        assert (await Hass(http).read_settings()).aantal == 3

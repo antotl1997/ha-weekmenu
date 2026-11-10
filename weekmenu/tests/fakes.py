@@ -211,6 +211,8 @@ class FakeHass(Hass):
         self.posts.append((path, payload))
         if self.fail_posts:
             raise httpx.ConnectError("HA is weg")
+        if path == "services/input_number/set_value":  # like HA: the helper changes
+            self.states[payload["entity_id"]] = str(payload["value"])
 
     def notifications(self):
         return [p for path, p in self.posts if path.startswith("services/notify/")]

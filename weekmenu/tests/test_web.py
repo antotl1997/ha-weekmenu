@@ -168,7 +168,9 @@ async def test_api_week_and_dish_shape(aiohttp_client, ctx):
     assert body["week"] == W.isoformat() and body["target"] == "list"
     assert body["savings"] == 5.0 and body["products"] == 3 and body["bonus_products"] == 3
     days = body["days"]
-    assert [d["date"] for d in days] == ["2026-11-04", "2026-11-05", "2026-11-06"]
+    # every day of the week; eat days without a dish are "geen kookmoment"
+    assert [d["date"] for d in days] == [f"2026-11-{n:02d}" for n in range(4, 11)]
+    assert all(d.get("geen_kookmoment") for d in days[3:])
     assert days[0]["dag"] == "woensdag" and days[0]["recipe"]["title"] == "Recept 101"
     assert set(days[0]["recipe"]) == {"id", "title", "image", "cook", "oven", "wait",
                                       "cuisine", "url"}
@@ -579,7 +581,8 @@ async def test_api_week_shows_the_leftover_night(aiohttp_client, ctx):
     await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), leftover_plan())
     client = await aiohttp_client(make_app(ctx))
     body = await (await client.get("api/week")).json()
-    assert [d["date"] for d in body["days"]] == [WO.isoformat(), DO.isoformat(), VR.isoformat()]
+    assert [d["date"] for d in body["days"]][:3] == [WO.isoformat(), DO.isoformat(),
+                                                     VR.isoformat()]
     do = body["days"][1]
     assert do["restjes"] is True and do["recipe"] is None and do["niet_thuis"] is False
     assert do["restjes_van"] == {"date": WO.isoformat(), "title": "Recept 101"}
@@ -615,3 +618,64 @@ async def test_api_settings_bounds_cooking_moments_to_eat_days(aiohttp_client, c
         "services/input_number/set_value", {"entity_id": HELPER_AVONDEN, "value": 3})
     r = await client.post("api/settings", json={"entity_id": HELPER_AVONDEN, "value": "x"})
     assert r.status == 400
+
+
+# --- fix round 1 (v0.4 B) ---------------------------------------------------------------
+
+
+async def test_api_persons_up_to_16_for_a_dish_with_leftovers(aiohttp_client, ctx, monkeypatch):
+    from app.writer import apply
+    await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), leftover_plan())
+    seen = []
+
+    async def fake_rescale(client, plan, day, persons):
+        seen.append((day, persons))
+        out = []
+        for d in plan.dishes:
+            if d.date == day:
+                d = dish(d.date, d.recipe.id, [ln.product.id for ln in d.lines], d.savings,
+                         persons=persons)
+                d.leftover_date = DO if day == WO else None
+            out.append(d)
+        return make_plan(out)
+
+    monkeypatch.setattr(main, "rescale_dish", fake_rescale)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post(f"api/dish/{WO.isoformat()}/persons", json={"persons": 10})
+    assert r.status == 200, await r.text()
+    body = await r.json()
+    assert body["persons"] == 10 and body["restjes"] == DO.isoformat()  # the note stays
+    r = await client.post(f"api/dish/{WO.isoformat()}/persons", json={"persons": 9})
+    assert r.status == 200  # the minus button works from 10
+    assert (await client.post(f"api/dish/{WO.isoformat()}/persons",
+                              json={"persons": 17})).status == 400
+    # a dish without leftovers stays at 8
+    assert (await client.post(f"api/dish/{VR.isoformat()}/persons",
+                              json={"persons": 9})).status == 400
+    assert seen == [(WO, 10), (WO, 9)]
+
+
+async def test_niet_thuis_tap_lowers_the_cooking_moments_helper(aiohttp_client, ctx):
+    for dag in ("zaterdag", "zondag", "maandag"):
+        ctx.hass.states[helper_persons()[dag]] = "0"
+    ctx.hass.states[HELPER_AVONDEN] = "4"  # 4 eat days: in bounds
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post("api/settings", json={"entity_id": helper_persons()["dinsdag"],
+                                                "away": True})
+    assert r.status == 200
+    assert ("services/input_number/set_value",
+            {"entity_id": HELPER_AVONDEN, "value": 3}) in ctx.hass.posts
+
+
+async def test_api_week_shows_eat_days_without_a_cooking_moment(aiohttp_client, ctx):
+    from app.writer import apply
+    await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), leftover_plan())
+    for dag in ("zondag", "maandag", "dinsdag"):
+        ctx.hass.states[helper_persons()[dag]] = "0"
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    za = [d for d in body["days"] if d["date"] == "2026-11-07"]
+    assert za == [{"date": "2026-11-07", "dag": "zaterdag", "niet_thuis": False,
+                   "geen_kookmoment": True, "persons": 0, "recipe": None, "savings": 0.0}]
+    assert [d["date"] for d in body["days"]][-3:] == ["2026-11-08", "2026-11-09", "2026-11-10"]
+    assert all(d["niet_thuis"] for d in body["days"][-3:])

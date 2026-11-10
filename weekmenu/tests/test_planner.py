@@ -895,3 +895,13 @@ async def test_remove_dish_drops_its_leftover_night_too():
     assert [d.date for d in new.dishes] == [VR]
     assert new.removed_days == [WO, DO]
     assert put_dish(new, gone).removed_days == []
+
+
+async def test_rescale_keeps_the_leftover_night():
+    client = FakeClient([
+        R(260, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
+        R(261, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
+    ])
+    plan = await build_plan(client, [GEHAKT, KIP], leftover_settings([WO, VR], {WO: DO}))
+    new = await rescale_dish(client, plan, WO, 10)
+    assert dish_on(new, WO).leftover_date == DO and dish_on(new, WO).persons == 10

@@ -45,6 +45,7 @@ log = logging.getLogger("weekmenu.web")
 STATIC_DIR = Path(__file__).parent / "static"
 _ASSET = r"{name:[A-Za-z0-9_-][A-Za-z0-9_.-]*\.(?:css|js|png|svg|ico|jpg|webp|json|webmanifest)}"
 MIN_PERSONS, MAX_PERSONS = 1, 8
+MAX_PERSONS_LEFTOVERS = 2 * MAX_PERSONS  # a dish that also feeds a leftover night
 
 FALLBACK_HTML = """<!doctype html>
 <html lang="nl"><head><meta charset="utf-8">
@@ -162,6 +163,10 @@ def week_view(wlog, plan: Plan | None, start: date,
         elif dag in away:
             out["days"].append({"date": day.isoformat(), "dag": dag,
                                 "niet_thuis": True, "persons": 0, "recipe": None,
+                                "savings": 0.0})
+        else:  # an eat day with no dish and no leftovers: "geen kookmoment"
+            out["days"].append({"date": day.isoformat(), "dag": dag, "niet_thuis": False,
+                                "geen_kookmoment": True, "persons": 0, "recipe": None,
                                 "savings": 0.0})
     out.update(
         savings=plan.savings,
@@ -449,10 +454,14 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     async def persons(request):
         day = day_of(request)
         n = (await body_of(request)).get("persons")
-        if not isinstance(n, int) or isinstance(n, bool) or not MIN_PERSONS <= n <= MAX_PERSONS:
-            return _err(400, f"personen moet tussen {MIN_PERSONS} en {MAX_PERSONS} liggen")
+        if (not isinstance(n, int) or isinstance(n, bool)
+                or not MIN_PERSONS <= n <= MAX_PERSONS_LEFTOVERS):
+            return _err(400, f"personen moet tussen {MIN_PERSONS} en {MAX_PERSONS_LEFTOVERS} liggen")
 
         async def change(wlog, plan, d):
+            top = MAX_PERSONS_LEFTOVERS if d.leftover_date else MAX_PERSONS
+            if n > top:  # 2 x 8 only when the dish also feeds a leftover night
+                return _err(400, f"personen moet tussen {MIN_PERSONS} en {top} liggen")
             return await main.rescale_dish(ctx.client, plan, day, n)  # only this dish
 
         return await _write(day, change)

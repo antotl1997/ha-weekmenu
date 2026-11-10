@@ -306,6 +306,10 @@ function dayCard(d) {
     return `<button class="card skip rest" data-dish="${esc(d.restjes_van.date)}"><div class="ic">${ICON.bowl}</div>
       <div><b>${esc(cap(d.dag))}</b> · restjes van ${esc(d.restjes_van.title)}</div></button>`;
   }
+  if (d.geen_kookmoment) {  // an eat day with no cooking moment and no leftovers
+    return `<div class="card skip"><div class="ic">${ICON.moon}</div>
+      <div><b>${esc(cap(d.dag))}</b> · geen kookmoment</div></div>`;
+  }
   if (d.geen_gerecht) {
     return `<div class="card skip"><div class="ic">${ICON.moon}</div>
       <div><b>${esc(cap(d.dag))}</b> · geen gerecht</div></div>`;
@@ -416,6 +420,7 @@ function ingredientRows(d) {
 
 function dishScreen(day) {
   const d = state.dishes[day];
+  const maxPersons = d.restjes ? 16 : 8;  // a dish with leftovers feeds two evenings
   const r = d.recipe;
   const dt = parseDate(d.date);
   const tags = [`<span class="pill grey">⏱ ${esc(minutes(r.cook) || "?")}</span>`];
@@ -439,7 +444,7 @@ function dishScreen(day) {
     <div class="card pers">${ICON.people} Personen <div class="stp">
       <button data-persons="${d.persons - 1}" aria-label="Minder personen" ${d.persons <= 1 ? "disabled" : ""}>−</button>
       <b>${d.persons}</b>
-      <button data-persons="${d.persons + 1}" aria-label="Meer personen" ${d.persons >= 8 ? "disabled" : ""}>+</button></div></div>
+      <button data-persons="${d.persons + 1}" aria-label="Meer personen" ${d.persons >= maxPersons ? "disabled" : ""}>+</button></div></div>
     ${d.restjes ? `<p class="foot rest-note">Ook voor de restjes op ${esc(longDate(d.restjes))}: de personen van die avond zijn meegeteld.</p>` : ""}
     ${left}
     <div class="sec">Ingrediënten</div>
@@ -492,7 +497,7 @@ function cookingPlan(eat, k) {
 function cookingText(eat, k) {
   const p = cookingPlan(eat, k);
   let t = `${plural(eat, "eetdag", "eetdagen")}, ${plural(p.k, "kookmoment", "kookmomenten")}, ${p.rest} keer restjes`;
-  if (eat && p.none) t += `. ${plural(p.none, "avond", "avonden")} zonder gerecht`;
+  if (eat && p.none) t += `. ${plural(p.none, "avond", "avonden")} zonder kookmoment`;
   return t;
 }
 

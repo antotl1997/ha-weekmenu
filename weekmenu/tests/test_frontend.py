@@ -288,7 +288,7 @@ def test_app_screens_in_chrome(tmp_path):
         assert dom.count('class="chip x"') == 1
         assert 'class="chip x" data-away="dinsdag"' in dom
         assert 'class="chip" data-away="woensdag"' in dom and 'class="chip" data-away="vrijdag"' in dom
-        assert dom.count("disabled") >= 1 and "<b>–</b>" in dom
+        assert dom.count("disabled") == 1 and "<b>–</b>" in dom  # only the dinsdag box
         assert 'href="#inloggen"' in dom and "Opnieuw inloggen" in dom
 
         dom = render(base, "#inloggen", tmp_path, "opnieuw-inloggen")
@@ -306,6 +306,8 @@ def test_app_screens_in_chrome(tmp_path):
         # "Gerecht weghalen" on maandag: the evening stays on the week as "geen gerecht"
         log.plan["dishes"] = [x for x in log.plan["dishes"] if x["date"] != "2026-11-09"]
         log.plan["removed_days"] = ["2026-11-09"]
+        # zaterdag: a cook day the planner could not fill is "geen kookmoment"
+        log.plan["dishes"] = [x for x in log.plan["dishes"] if x["date"] != "2026-11-07"]
         # history failed this week: only the staple already added stays, with the reason
         added = fake_staples()[1]
         added.product.title = "Lurpak <i>ongezouten</i>"  # titles are escaped
@@ -324,7 +326,16 @@ def test_app_screens_in_chrome(tmp_path):
         assert "Status onbekend" in dom and "De Cecco Penne rigate" in dom
         assert "Snel gekozen" in dom
         assert "Maandag</b> · geen gerecht" in dom and TITLES[4] not in dom
+        assert "Zaterdag</b> · geen kookmoment" in dom and "Maandag</b> · geen kookmoment" not in dom
         assert "De folder van volgende week was er nog niet" in dom
+
+        # a dish with leftovers goes up to 16 persons: + still works at 9, − too
+        for x in log.plan["dishes"]:
+            if x["date"] == "2026-11-04":
+                x["persons"] = 9
+        ctx.ledger.save(log)
+        dom = chrome(base + "#gerecht/2026-11-04", tmp_path / "profile-sixteen")
+        assert "<b>9</b>" in dom and dom.count("disabled") == 0
 
         ctx.login_expired = True
         dom = render(base, "", tmp_path, "login")
