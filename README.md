@@ -46,3 +46,7 @@ The add-on only writes into an open order whose delivery day lies in the menu we
 ## Offers
 
 The Aanbiedingen tab (between Week and Besparing) lists the whole bonus folder of the menu week, per category, with a search field on the title. Each product shows its photo, the action, the price (the old price struck through) and a plus button. A tap puts the quantity the action asks for (one piece, or 2 for "1+1 gratis") in the open order, or on the list when there is none, through the same write route as Vaste boodschappen: one lock, written to the log first, never retried. The button then becomes a check with the quantity, and tapping twice adds nothing twice. An offer you tapped is a loose offer: it has its own line "waarvan losse aanbiedingen" under the savings of the week (next to "waarvan vaste boodschappen"), counts in the total, and is never cleaned up. Only this week and the next menu week can be added to (`GET api/offers?q=&category=`, `POST api/offers/<product id>`).
+
+## License
+
+Apache License 2.0, see [LICENSE](LICENSE). Credits for the parts derived from albert-heijn-mcp are in `weekmenu/NOTICE`.
