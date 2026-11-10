@@ -1,7 +1,8 @@
 ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
-RUN pip install --no-cache-dir "httpx>=0.27,<1" "aiohttp>=3.9,<4" "pyyaml>=6,<7"
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
 COPY app /app
 COPY run.sh /run.sh

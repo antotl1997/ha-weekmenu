@@ -1,0 +1,8 @@
+# Test and tooling dependencies (CI and local development).
+-r requirements.txt
+pytest==9.2.0
+pytest-asyncio==1.4.1
+pytest-aiohttp==1.1.1
+respx==0.23.1
+pip-audit==2.10.1
+Pillow==13.0.0
