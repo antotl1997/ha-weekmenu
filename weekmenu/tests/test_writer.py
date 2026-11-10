@@ -807,3 +807,20 @@ async def test_held_sets_the_target_to_order_not_list(led):
     ah = FakeAh(order=ActiveOrder(5, {}, date(2026, 10, 28)))
     res = await apply(ah, led, WeekLog(W), plan({1: 1}))
     assert res.target == "order" and led.load(W).target == "order"
+
+
+async def test_held_again_with_other_products_resets_the_push_marker(led):
+    ah = FakeAh(order=ActiveOrder(5, {}, date(2026, 10, 28)))
+    log = WeekLog(W, held_notified=True, held_notified_items=[1])
+    await apply(ah, led, log, plan({1: 1}), today=date(2026, 11, 9))
+    assert led.load(W).held_notified is True  # the same product: no second push
+    await apply(ah, led, led.load(W), plan({1: 1, 2: 1}), today=date(2026, 11, 9))
+    assert led.load(W).held_notified is False  # another set: one push again
+
+
+async def test_empty_route_keeps_the_target_of_this_week(led):
+    ah = FakeAh()
+    await apply(ah, led, WeekLog(W), plan({1: 1}))  # on the list
+    ah.order = ActiveOrder(5, {}, date(2026, 11, 11))  # next week's order
+    res = await apply(ah, led, led.load(W), plan({1: 1}), today=date(2026, 11, 5))
+    assert res.target == "list" and led.load(W).target == "list" and res.held is None

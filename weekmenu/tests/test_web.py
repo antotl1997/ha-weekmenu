@@ -823,3 +823,39 @@ async def test_api_swap_in_the_running_week_names_what_to_add_by_hand(aiohttp_cl
     assert body["held"] == manual and ctx.client.order.items == {}
     week = await (await client.get(f"api/week?week={W.isoformat()}")).json()
     assert week["held"] == manual
+
+
+async def test_stale_held_push_never_overwrites_a_web_write(aiohttp_client, tmp_path):
+    """Round 3: the push for a held week holds ctx.lock from load to save, so a
+    "Gerecht weghalen" on that week waits and is kept."""
+    from app.ahclient import ActiveOrder
+    wk = date(2026, 11, 11)
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 9, 10, 0))  # target: the 18th
+    ctx.client.order = ActiveOrder(5, {}, date(2026, 10, 28))
+    held_plan = make_plan([dish(wk, 101, [1, 2], 2.0), dish(date(2026, 11, 12), 102, [3], 1.0)])
+    ctx.ledger.save(WeekLog(wk, plan=held_plan.to_dict(), held="bestelling elders",
+                            target="order"))
+    started, release = asyncio.Event(), asyncio.Event()
+
+    async def slow_notify(title, message, url=None):
+        started.set()
+        await release.wait()
+        return True
+
+    ctx.hass.notify = slow_notify
+    client = await aiohttp_client(make_app(ctx))
+    push = asyncio.create_task(main.notify_stale_held(ctx, date(2026, 11, 18)))
+    await started.wait()
+    remove = asyncio.create_task(client.post(f"api/dish/{wk.isoformat()}/remove"))
+    await asyncio.sleep(0.05)
+    assert not remove.done()  # waits for the lock
+    release.set()
+    await push
+    r = await remove
+    assert r.status == 200, await r.text()
+    log = ctx.ledger.load(wk)
+    assert [d["recipe"]["id"] for d in log.plan["dishes"]] == [102]  # the write is kept
+    # the push was saved first (products 1, 2, 3); the removal then left only 3
+    # missing, another set, so the marker is reset for one new push
+    assert log.held_notified is False and log.held_notified_items == [1, 2, 3]
+    assert ctx.client.writes == []

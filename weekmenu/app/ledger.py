@@ -69,6 +69,8 @@ class WeekLog:
     held: str | None = None
     # Ruling 44: the one push for a held week the schedule has moved past
     held_notified: bool = False
+    # the products that push named; held again with another set resets held_notified
+    held_notified_items: list[int] = field(default_factory=list)
     # Ruling 43: pid -> what a lowering found already gone (the user took it off in the
     # AH app). Never added again that week: Terug, a swap, Nieuw menu or bijwerken
     # count it as if the add-on still had it out there.
@@ -108,6 +110,7 @@ class WeekLog:
             "new_folder_notified": self.new_folder_notified,
             "held": self.held,
             "held_notified": self.held_notified,
+            "held_notified_items": list(self.held_notified_items),
             "removed_by_user": {str(k): v for k, v in self.removed_by_user.items()},
         }
 
@@ -142,6 +145,7 @@ class WeekLog:
             new_folder_notified=bool(d.get("new_folder_notified", False)),
             held=d.get("held"),
             held_notified=bool(d.get("held_notified", False)),
+            held_notified_items=[int(x) for x in d.get("held_notified_items") or []],
             removed_by_user={int(k): int(v)
                              for k, v in (d.get("removed_by_user") or {}).items()},
         )

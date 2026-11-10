@@ -354,6 +354,8 @@ async def apply(
         log.savings = plan.savings
         log.target = target  # where it would have gone: never "list" by mistake
         log.held = why
+        if log.held_notified and sorted(delta) != log.held_notified_items:
+            log.held_notified = False  # other products missing now: push again once
         ledger.save(log)
         log_.info("Menu: niets geschreven, %s", why)
         if delta and retried(log.week, today):
@@ -368,7 +370,10 @@ async def apply(
     log.held = None
     log.plan = plan.to_dict()
     log.savings = plan.savings
-    log.target = target
+    if why is None:  # nothing to write into another week's order: keep the old target
+        log.target = target
+    elif log.target is not None:
+        target = log.target
     if delta:
         if not log.added:
             log.added_to = dest

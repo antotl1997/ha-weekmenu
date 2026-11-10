@@ -658,21 +658,25 @@ async def notify_stale_held(ctx: Context, start: date) -> None:
     Once per week (held_notified, saved): one push with what to add by hand.
     """
     prev = start - timedelta(days=7)
-    wlog = ctx.ledger.load(prev)
-    if not (wlog.plan and wlog.held) or wlog.held_notified:
-        return
-    plan = Plan.from_dict(wlog.plan)
-    todo = writer.missing(wlog, plan)
-    if not todo:
-        return
-    titles = [plan.products[p].title if p in plan.products else str(p) for p in todo]
-    if await guard(ctx.hass.notify("Weekmenu", writer.manual_note(titles), ctx.ingress_url),
-                   "melding"):
-        wlog.held_notified = True
-        try:
-            ctx.ledger.save(wlog)
-        except Exception as e:
-            log.warning("Logboek %s niet bijgewerkt (%s)", prev, type(e).__name__)
+    # load, push and save under the lock: a web write to that week in between would
+    # otherwise be overwritten by this older copy of the log
+    async with ctx.lock:
+        wlog = ctx.ledger.load(prev)
+        if not (wlog.plan and wlog.held) or wlog.held_notified:
+            return
+        plan = Plan.from_dict(wlog.plan)
+        todo = writer.missing(wlog, plan)
+        if not todo:
+            return
+        titles = [plan.products[p].title if p in plan.products else str(p) for p in todo]
+        if await guard(ctx.hass.notify("Weekmenu", writer.manual_note(titles),
+                                       ctx.ingress_url), "melding"):
+            wlog.held_notified = True
+            wlog.held_notified_items = sorted(todo)
+            try:
+                ctx.ledger.save(wlog)
+            except Exception as e:
+                log.warning("Logboek %s niet bijgewerkt (%s)", prev, type(e).__name__)
 
 
 async def close_stale_new_folder(ctx: Context, start: date) -> None:
