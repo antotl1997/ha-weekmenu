@@ -147,6 +147,36 @@ class FakeAh:
     async def add_to_shopping_list(self, adds, on_before=None):
         await self._write("list", self.listed, adds, on_before)
 
+    async def _reduce(self, kind, store, cuts, on_before):
+        """Like AH: max(0, current - r). Recorded in `writes` as a negative quantity."""
+        self.active_writes += 1
+        self.max_active_writes = max(self.max_active_writes, self.active_writes)
+        try:
+            await asyncio.sleep(0.01)
+            (pid, r), = cuts.items()
+            assert r > 0
+            if on_before:
+                on_before({pid: store.get(pid, 0)})
+            failing = self.fail_on_call is not None and len(self.writes) == self.fail_on_call
+            self.writes.append((kind, {pid: -r}))
+            if failing and not self.fail_after:
+                raise self.exc
+            left = max(0, store.get(pid, 0) - r)
+            if left:
+                store[pid] = left
+            else:
+                store.pop(pid, None)
+            if failing:
+                raise self.exc
+        finally:
+            self.active_writes -= 1
+
+    async def reduce_in_order(self, order, cuts, on_before=None):
+        await self._reduce("order", self.order.items, cuts, on_before)
+
+    async def reduce_on_shopping_list(self, cuts, on_before=None):
+        await self._reduce("list", self.listed, cuts, on_before)
+
     def held(self) -> dict[int, int]:
         """What AH holds now, list and order together."""
         out = dict(self.listed)

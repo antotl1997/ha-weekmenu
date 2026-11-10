@@ -49,6 +49,7 @@ from app.planner import (
     dish_from_dict,
     dish_to_dict,
     put_dish,
+    remove_dish,
     rescale_dish,
     restore_dish,
     swap_dish,
@@ -65,9 +66,9 @@ from app.week import (
 )
 from app.writer import WriteResult, apply
 
-# swap_dish, rescale_dish and restore_dish are looked up here by the web API
-__all__ = ["run_round", "swap_dish", "rescale_dish", "restore_dish", "put_dish", "build_plan",
-           "dish_to_dict", "dish_from_dict"]
+# swap_dish, rescale_dish, restore_dish and remove_dish are looked up here by the web API
+__all__ = ["run_round", "swap_dish", "rescale_dish", "restore_dish", "put_dish", "remove_dish",
+           "build_plan", "dish_to_dict", "dish_from_dict"]
 
 log = logging.getLogger("weekmenu")
 
@@ -364,7 +365,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
             # a new menu is a new round: apply saves these with the plan, before writing,
             # so a crash halfway is completed by the next automatic slot
             wlog.round_done = wlog.completion_tried = wlog.notified = False
-        result = await apply(ctx.client, ctx.ledger, wlog, plan, replaced)
+        result = await apply(ctx.client, ctx.ledger, wlog, plan, replaced, today=now.date())
     except AhLoginExpired:
         known = ctx.login_expired
         ctx.login_expired = True
@@ -404,7 +405,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     await guard(ctx.hass.publish(plan_view(plan, start, result.target,
                                           away_dates(start, raw.away)),
                                  plan.savings + wlog.extras_savings), "sensoren")
-    nothing_new = not (result.added or result.pending or result.unknown)
+    nothing_new = not (result.added or result.removed or result.pending or result.unknown)
     if completing:  # the message only if it never went out, or something changed
         send = not (wlog.notified and nothing_new)
     else:

@@ -149,6 +149,7 @@ def plan_view(plan: Plan, week_start: date, target: str,
         "doel": "bestelling" if target == "order" else "lijst",
         "niet_gevonden": list(plan.not_found),
         "niet_thuis": [d.isoformat() for d in sorted(away) if d not in eaten],
+        "geen_gerecht": [d.isoformat() for d in plan.removed_days],  # "Gerecht weghalen"
         "dishes": dishes,
     }
 
@@ -209,6 +210,7 @@ class Hass:
                 "doel": plan_view["doel"],
                 "niet_gevonden": plan_view["niet_gevonden"],
                 "niet_thuis": plan_view.get("niet_thuis", []),
+                "geen_gerecht": plan_view.get("geen_gerecht", []),
                 "dishes": plan_view["dishes"],
             },
         })
@@ -327,8 +329,13 @@ def format_message(
         if d in eaten:
             continue
         lines.append(f"{_ABBR[WEEKDAGEN[d.weekday()]]} niet thuis")
+    for d in plan.removed_days:
+        lines.append(f"{_ABBR[WEEKDAGEN[d.weekday()]]} geen gerecht")
     lines.append("Alles staat in je bestelling" if result.target == "order"
                  else "Alles staat op Mijn lijst")
+    if result.removed:
+        where = "uit je bestelling" if result.target == "order" else "van je lijst"
+        lines.append(f"{_plural(len(result.removed), 'product', 'producten')} {where} gehaald")
     if staples > 0:
         lines.append(f"Ook {_plural(staples, 'vaste boodschap', 'vaste boodschappen')} "
                      "in de bonus, kies in de app")

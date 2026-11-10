@@ -75,9 +75,12 @@ async def test_nieuw_menu_replaces_week_savings_not_adds(tmp_path, planned):
     log = ctx.ledger.load(W)
     assert log.savings == 3.0  # replaced, not 8.0
     assert {101, 102} <= calls[1].recent_recipe_ids  # a different menu, not the same one
-    assert ctx.client.held() == {1: 1, 2: 2, 3: 1, 4: 1, 5: 1}  # product 1 not again
+    # product 1 not again; 2 and 3 only the old menu needed: off the list
+    assert ctx.client.held() == {1: 1, 4: 1, 5: 1}
+    assert log.added == {1: 1, 4: 1, 5: 1}
     note = ctx.hass.notifications()[-1]["message"]
-    assert "Restjes van het oude menu" in note and "Product 2 (2x)" in note
+    assert "2 producten van je lijst gehaald" in note
+    assert "Restjes van het oude menu" not in note
 
 
 async def test_login_expired_notifies_and_writes_nothing(tmp_path, planned):

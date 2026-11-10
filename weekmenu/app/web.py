@@ -133,6 +133,7 @@ def week_view(wlog, plan: Plan | None, start: date,
     if plan is None:
         return out
     by_day = {d.date: d for d in plan.dishes}
+    removed = set(plan.removed_days)
     out["niet_thuis"] = [i for i in out["niet_thuis"] if date.fromisoformat(i) not in by_day]
     for i in range(7):
         day = date.fromordinal(start.toordinal() + i)
@@ -142,6 +143,10 @@ def week_view(wlog, plan: Plan | None, start: date,
             out["days"].append({"date": day.isoformat(), "dag": dag,
                                 "niet_thuis": False, "persons": d.persons, "recipe": _recipe_view(d),
                                 "savings": d.savings})
+        elif day in removed:
+            out["days"].append({"date": day.isoformat(), "dag": dag,
+                                "niet_thuis": False, "geen_gerecht": True, "persons": 0,
+                                "recipe": None, "savings": 0.0})
         elif dag in away:
             out["days"].append({"date": day.isoformat(), "dag": dag,
                                 "niet_thuis": True, "persons": 0, "recipe": None,
@@ -361,14 +366,19 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             new = await change(wlog, plan, d)
             if isinstance(new, web.Response):
                 return new
-            await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan)
+            res = await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan,
+                              today=ctx.clock().date())
             settled = extras_savings(wlog)  # apply may have settled a staple write
             if settled != wlog.extras_savings:
                 wlog.extras_savings = settled
                 ctx.ledger.save(wlog)
-        nd = next(x for x in new.dishes if x.date == day)
+        nd = next((x for x in new.dishes if x.date == day), None)
         await publish(wlog.week, new, wlog.target or "list", wlog.extras_savings)
-        return web.json_response(dish_view(wlog, new, nd, ctx.clock().date()))
+        # removed: how many products went off the list or out of the order (opschonen)
+        done = {"removed": len(res.removed), "target": res.target}
+        if nd is None:  # "Gerecht weghalen": no dish left to show
+            return web.json_response({"date": day.isoformat(), **done})
+        return web.json_response({**dish_view(wlog, new, nd, ctx.clock().date()), **done})
 
     def settings_for(plan: Plan, start: date) -> Settings:
         return Settings(
@@ -430,6 +440,18 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
 
         async def change(wlog, plan, d):
             return await main.rescale_dish(ctx.client, plan, day, n)  # only this dish
+
+        return await _write(day, change)
+
+    async def remove(request):
+        """"Gerecht weghalen": the evening gets no dish, its own products are cleaned up."""
+        day = day_of(request)
+        iso = day.isoformat()
+
+        async def change(wlog, plan, d):
+            wlog.previous.pop(iso, None)
+            wlog.previous_dish.pop(iso, None)
+            return main.remove_dish(plan, day)
 
         return await _write(day, change)
 
@@ -546,6 +568,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     app.router.add_post("/api/dish/{day}/swap", swap)
     app.router.add_post("/api/dish/{day}/back", back)
     app.router.add_post("/api/dish/{day}/persons", persons)
+    app.router.add_post("/api/dish/{day}/remove", remove)
     app.router.add_post("/api/run", run)
     app.router.add_get("/api/staples", get_staples)
     app.router.add_post("/api/staples/{pid}", add_staple)

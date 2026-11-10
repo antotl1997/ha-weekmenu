@@ -91,25 +91,29 @@ async def test_web_never_echoes_code_or_token(aiohttp_client, ctx, caplog):
         assert secret not in blob
 
 
-async def test_api_swap_then_back_adds_nothing_twice(aiohttp_client, ctx, swaps):
+async def test_api_swap_then_back_cleans_up_own_products(aiohttp_client, ctx, swaps):
     await planned_ctx(ctx)
     ah = ctx.client
-    assert ah.held() == {1: 1, 2: 2, 3: 1}
+    ah.listed[4] = 1  # the user's own
+    assert ah.held() == {1: 1, 2: 2, 3: 1, 4: 1}
     client = await aiohttp_client(make_app(ctx))
 
     r = await client.post(f"api/dish/{WO.isoformat()}/swap")
     assert r.status == 200, await r.text()
     body = await r.json()
     assert body["recipe"]["id"] == 301
-    assert ah.held() == {1: 1, 2: 2, 3: 1, 9: 1}
+    # 101 used 1 and 2; 301 uses 1 and 9: the 2 only 101 needed goes off the list
+    assert ah.held() == {1: 1, 2: 1, 3: 1, 4: 1, 9: 1}
+    assert body["removed"] == 1 and body["target"] == "list" and body["leftovers"] == []
     log = ctx.ledger.load(W)
     assert log.swapped_out[WO.isoformat()] == [101] and log.previous[WO.isoformat()] == 101
-    assert {"product": "Product 2", "qty": 1} in body["leftovers"]
 
     r = await client.post(f"api/dish/{WO.isoformat()}/back")
     assert r.status == 200, await r.text()
-    assert (await r.json())["recipe"]["id"] == 101
-    assert ah.held() == {1: 1, 2: 2, 3: 1, 9: 1}  # nothing bought twice
+    body = await r.json()
+    assert body["recipe"]["id"] == 101 and body["removed"] == 1
+    assert ah.held() == {1: 1, 2: 2, 3: 1, 4: 1}  # 9 went off again, 4 never touched
+    assert ctx.ledger.load(W).added == {1: 1, 2: 2, 3: 1}
     log = ctx.ledger.load(W)
     assert WO.isoformat() not in log.previous
     assert 301 in log.swapped_out[WO.isoformat()]
@@ -311,7 +315,8 @@ async def test_api_back_restores_exact_dish_without_ah_reads(aiohttp_client, ctx
         assert after[key] == before[key], key
     assert after["recipe"]["oven"] == 20 and after["recipe"]["wait"] == 60
     assert ah.calls == reads  # no bonus, recipe or product reads
-    assert ah.writes == writes  # everything was already bought
+    # the swap took 2 off and put 9 on; going back undoes exactly that, nothing else
+    assert ah.writes == writes + [("list", {2: 1}), ("list", {9: -1})]
     assert ctx.ledger.load(W).previous_dish == {}
 
 
@@ -492,3 +497,58 @@ async def test_api_settings_away_flag_is_only_for_person_helpers(aiohttp_client,
     client = await aiohttp_client(make_app(ctx))
     r = await client.post("api/settings", json={"entity_id": HELPER_AVONDEN, "away": True})
     assert r.status == 400 and ctx.hass.posts == []
+
+
+# --- opschonen and "Gerecht weghalen" ---------------------------------------------------
+
+
+async def test_api_remove_dish_cleans_up_and_leaves_no_dish(aiohttp_client, ctx):
+    await planned_ctx(ctx)  # WO 101 uses 1 and 2, DO 102 uses 2 and 3
+    ah = ctx.client
+    ah.listed[1] += 2  # two of the user's own on top of the add-on's one
+    log = ctx.ledger.load(W)
+    log.previous[WO.isoformat()] = 99
+    ctx.ledger.save(log)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post(f"api/dish/{WO.isoformat()}/remove")
+    assert r.status == 200, await r.text()
+    assert await r.json() == {"date": WO.isoformat(), "removed": 2, "target": "list"}
+    assert ah.held() == {1: 2, 2: 1, 3: 1}  # the user's own two stay
+    log = ctx.ledger.load(W)
+    assert log.added == {2: 1, 3: 1} and log.previous == {}
+    assert [d["recipe"]["id"] for d in log.plan["dishes"]] == [102]
+
+    body = await (await client.get("api/week")).json()
+    wo = body["days"][0]
+    assert wo["date"] == WO.isoformat() and wo["geen_gerecht"] is True
+    assert wo["recipe"] is None and body["leftovers"] == []
+    assert (await client.get(f"api/dish/{WO.isoformat()}")).status == 404
+    assert (await client.post(f"api/dish/{WO.isoformat()}/remove")).status == 404
+    sensor = [p for path, p in ctx.hass.posts if path == "states/sensor.weekmenu"]
+    assert sensor[-1]["attributes"]["geen_gerecht"] == [WO.isoformat()]
+
+
+async def test_api_persons_4_to_2_lowers(aiohttp_client, ctx, monkeypatch):
+    from app.writer import apply
+    four = make_plan([dish(WO, 101, [1, 2], 2.0, persons=4)])
+    four.basket = {1: 2, 2: 2}  # four persons: two packs each
+    await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), four)
+
+    async def fake_rescale(client, plan, day, persons):
+        return make_plan([dish(WO, 101, [1, 2], 2.0, persons=persons)])
+
+    monkeypatch.setattr(main, "rescale_dish", fake_rescale)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post(f"api/dish/{WO.isoformat()}/persons", json={"persons": 2})
+    assert r.status == 200 and (await r.json())["removed"] == 2
+    assert ctx.client.held() == {1: 1, 2: 1} and ctx.ledger.load(W).added == {1: 1, 2: 1}
+
+
+async def test_api_swap_once_the_week_started_cleans_nothing(aiohttp_client, tmp_path, swaps):
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 5, 9, 0))
+    await planned_ctx(ctx)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post(f"api/dish/{WO.isoformat()}/swap")
+    body = await r.json()
+    assert body["removed"] == 0 and ctx.client.held()[2] == 2
+    assert {"product": "Product 2", "qty": 1} in body["leftovers"]
