@@ -438,7 +438,7 @@ def format_message(
     if plan.not_found:
         lines.append("Niet gevonden: " + ", ".join(plan.not_found))
     if result.leftovers:
-        lines.append("Restjes van het oude menu: "
+        lines.append("Over van het vorige menu: "
                      + ", ".join(f"{t} ({q}x)" for t, q in result.leftovers))
     if result.pending:
         lines.append("Onzeker of gelukt: " + ", ".join(t for t, _ in result.pending))

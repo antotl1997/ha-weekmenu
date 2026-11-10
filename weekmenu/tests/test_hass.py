@@ -165,7 +165,16 @@ def test_message_mentions_target_and_leftovers():
     assert "do Wraps (€ 0,50)" in text
     assert "ouders" not in text and "niet thuis" not in text
     assert "in je bestelling" in text
-    assert "Melk" in text
+    assert "Over van het vorige menu: Melk (1x)" in text
+    assert "Restjes" not in text  # "restjes van" is a leftover night, not this
+
+
+def test_message_says_held_instead_of_where_everything_is():
+    plan = _plan([_dish(date(2026, 11, 4))])
+    note = ("Het menu staat klaar; de producten worden toegevoegd zodra er een "
+            "bestelling of lijst voor woensdag 4 november is")
+    _, text = format_message(plan, WriteResult("order", held=note), None)
+    assert note in text and "Alles staat" not in text
 
 
 def test_message_has_no_parents_text_and_names_away_evenings():

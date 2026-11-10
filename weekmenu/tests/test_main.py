@@ -80,7 +80,7 @@ async def test_nieuw_menu_replaces_week_savings_not_adds(tmp_path, planned):
     assert log.added == {1: 1, 4: 1, 5: 1}
     note = ctx.hass.notifications()[-1]["message"]
     assert "2 producten van je lijst gehaald" in note
-    assert "Restjes van het oude menu" not in note
+    assert "Over van het vorige menu" not in note
 
 
 async def test_login_expired_notifies_and_writes_nothing(tmp_path, planned):
