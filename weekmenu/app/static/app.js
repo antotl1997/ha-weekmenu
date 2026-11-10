@@ -226,10 +226,12 @@ async function loadStatus() {
   state.status = await api("api/status");
 }
 
-/* While a round runs: look again every few seconds, then refresh the week. */
+/* While a round runs: look again every few seconds, then refresh the week. A toast only
+ * when a round really ended (the count in api/status went up). */
 function pollRound() {
   if (state.polling) return;
   state.polling = true;
+  const before = state.status ? state.status.rounds : undefined;
   const tick = async () => {
     try {
       await loadStatus();
@@ -241,8 +243,9 @@ function pollRound() {
     state.polling = false;
     state.dishes = {};
     try { await loadWeek(); } catch (e) { /* shown on the tab */ }
-    if (state.status && state.status.error) toast(state.status.error, true);
-    else toast("Het menu is bijgewerkt");
+    const ended = state.status && state.status.rounds !== before;
+    if (ended && state.status.error) toast(state.status.error, true);
+    else if (ended) toast("Het menu is bijgewerkt");
     render();
   };
   setTimeout(tick, 2500);

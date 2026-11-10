@@ -734,3 +734,26 @@ async def test_api_week_shows_eat_days_without_a_cooking_moment(aiohttp_client, 
                    "geen_kookmoment": True, "persons": 0, "recipe": None, "savings": 0.0}]
     assert [d["date"] for d in body["days"]][-3:] == ["2026-11-08", "2026-11-09", "2026-11-10"]
     assert all(d["niet_thuis"] for d in body["days"][-3:])
+
+
+async def test_api_status_running_is_a_menu_round_not_the_lock(aiohttp_client, ctx,
+                                                               monkeypatch):
+    """The hourly new-folder look holds the lock: no "Er wordt een menu gemaakt" and no
+    "Er loopt al een ronde" for that. `rounds` lets the app see that a round ended."""
+    client = await aiohttp_client(make_app(ctx))
+    async with ctx.lock:  # like check_new_folder
+        status = await (await client.get("api/status")).json()
+        assert status["running"] is False and status["rounds"] == 0
+    ctx.in_round = True
+    assert (await (await client.get("api/status")).json())["running"] is True
+    assert (await client.post("api/run", json={"mode": "nu_maken"})).status == 409
+    ctx.in_round = False
+
+    async def fake_round(c, now, mode):
+        c.rounds += 1
+
+    monkeypatch.setattr(main, "run_round", fake_round)
+    async with ctx.lock:
+        assert (await client.post("api/run", json={"mode": "nu_maken"})).status == 202
+    await asyncio.gather(*ctx.tasks)
+    assert (await (await client.get("api/status")).json())["rounds"] == 1

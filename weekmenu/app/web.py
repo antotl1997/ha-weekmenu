@@ -29,7 +29,7 @@ from app.hass import (
     plan_view,
 )
 from app.ledger import leftovers, new_folder_available
-from app.planner import Dish, Plan, Settings
+from app.planner import Dish, Plan
 from app.staples import extras_savings, staple_list
 from app.week import (
     WEEKDAGEN,
@@ -306,7 +306,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         w = waiting_for()
         return web.json_response({
             "logged_in": logged_in, "last_round": ctx.last_round, "error": ctx.error,
-            "running": ctx.busy or ctx.lock.locked(), "login_url": LOGIN_URL,
+            # a menu round only: the hourly new-folder look also takes the lock
+            "running": ctx.busy or ctx.in_round, "rounds": ctx.rounds,
+            "login_url": LOGIN_URL,
             "waiting_for_folder": None if w is None else {
                 "week": w.week.isoformat(),
                 "expected": w.expected.isoformat() if w.expected else None},
@@ -404,15 +406,6 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             return web.json_response({"date": day.isoformat(), **done})
         return web.json_response({**dish_view(wlog, new, nd, ctx.clock().date()), **done})
 
-    def settings_for(plan: Plan, start: date) -> Settings:
-        return Settings(
-            evenings=sorted(x.date for x in plan.dishes),
-            persons={x.date: x.persons for x in plan.dishes},
-            leftovers={x.date: x.leftover_date for x in plan.dishes if x.leftover_date},
-            pantry=list(plan.pantry or ctx.pantry),
-            recent_recipe_ids=ctx.ledger.recent_recipe_ids(start),
-        )
-
     async def swap(request):
         day = day_of(request)
         iso = day.isoformat()
@@ -421,7 +414,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(), fallback=True)
             exclude = set(wlog.swapped_out.get(iso, [])) | {d.recipe.id}
             new = await main.swap_dish(ctx.client, plan, day, bonus,
-                                       settings_for(plan, wlog.week), exclude)
+                                       main.settings_from_plan(ctx, plan, wlog.week),
+                                       exclude)
             nd = next((x for x in new.dishes if x.date == day), None)
             if nd is None or nd.recipe.id == d.recipe.id:
                 return _err(409, "Geen ander gerecht gevonden dat in de regels past")
@@ -488,7 +482,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         mode = (await body_of(request)).get("mode")
         if mode not in main.BUTTONS:
             return _err(400, "mode moet nu_maken, nieuw_menu of bijwerken zijn")
-        if ctx.busy or ctx.lock.locked():
+        if ctx.busy or ctx.in_round:
             return _err(409, "Er loopt al een ronde")
         if mode == "bijwerken" and not new_folder_available(
                 ctx.ledger.load(menu_week_start(ctx.clock()))):

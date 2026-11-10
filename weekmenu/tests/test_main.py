@@ -1094,9 +1094,9 @@ async def test_bijwerken_makes_a_new_plan_with_the_new_folder(tmp_path, planned)
     out = await run_round(ctx, at(FRI, 10, 0), "bijwerken")
     assert out.status == "done" and out.warning is None
     assert len(calls) == 2 and ah.offers_for == [CUR, NXT]
-    # the same eat days, persons and leftover nights as the first menu
-    assert calls[1].evenings == calls[0].evenings and calls[1].persons == calls[0].persons
-    assert calls[1].leftovers == calls[0].leftovers
+    # the evenings and persons of the menu it replaces (plan_a), not of the helpers
+    assert calls[1].evenings == [WO, DO] and calls[1].persons == {WO: 2, DO: 2}
+    assert calls[1].leftovers == {}
     log = ctx.ledger.load(W)
     assert Plan.from_dict(log.plan).basket == plan_b().basket
     assert log.folder_period_start == NXT.start and log.period_warning is None
@@ -1138,3 +1138,90 @@ async def test_old_state_file_with_button_notified_loads(tmp_path):
         encoding="utf-8")
     main.load_state(ctx)
     assert ctx.checked == datetime(2026, 11, 1, 8, 0)
+
+
+# --- v0.4 C fix round 1 -------------------------------------------------------------------
+
+
+async def test_bijwerken_keeps_evenings_persons_leftovers_and_removed_days(tmp_path, planned,
+                                                                           monkeypatch):
+    """Ruling 40: Menu bijwerken takes the week from the menu it replaces, not from the
+    helpers: a removed day stays "geen gerecht", rescaled persons stay."""
+    from app.writer import apply
+    za = date(2026, 11, 7)
+    first = dish(WO, 101, [1, 2], persons=4)
+    first.leftover_date = DO  # woensdag cooks for donderdag too
+    calls, queue = planned
+    queue[:] = [make_plan([first, dish(VR, 102, [2, 3]), dish(za, 103, [6])])]
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await run_round(ctx, at(date(2026, 10, 29), 10, 0), "nu_maken")
+    # in the app: zaterdag "Gerecht weghalen", vrijdag set to 3 persons
+    wlog = ctx.ledger.load(W)
+    old = Plan.from_dict(wlog.plan)
+    await apply(ah, ctx.ledger, wlog, main.remove_dish(old, za), replaced=old,
+                today=date(2026, 10, 29))
+    wlog = ctx.ledger.load(W)
+    for x in wlog.plan["dishes"]:
+        if x["date"] == VR.isoformat():
+            x["persons"] = 3
+    ctx.ledger.save(wlog)
+    assert 6 not in ah.held()
+    # helpers say something else: they must not count for bijwerken
+    for eid in helper_persons().values():
+        ctx.hass.states[eid] = "1"
+
+    async def by_settings(client, bonus, s):
+        calls.append(s)
+        return make_plan([dish(d, 300 + i, [10 + i], persons=s.persons[d])
+                          for i, d in enumerate(s.evenings)])
+
+    monkeypatch.setattr(main, "build_plan", by_settings)
+    ah.periods = [CUR, NXT]
+    await tick(ctx, at(FRI, 9, 0))
+    out = await run_round(ctx, at(FRI, 10, 0), "bijwerken")
+    assert out.status == "done"
+    s = calls[-1]
+    assert s.evenings == [WO, VR] and s.persons == {WO: 4, VR: 3} and s.leftovers == {WO: DO}
+    log = ctx.ledger.load(W)
+    new = Plan.from_dict(log.plan)
+    assert new.removed_days == [za] and za not in {d.date for d in new.dishes}
+    assert {d.date: d.persons for d in new.dishes} == {WO: 4, VR: 3}
+    assert ah.held() == {10: 1, 11: 1}  # nothing for zaterdag, the old products off
+    view = weekmenu_posts(ctx)[-1]["attributes"]
+    assert view["geen_gerecht"] == [za.isoformat()]
+    assert view["new_folder_available"] is False
+
+
+async def test_monday_clears_a_stale_new_folder_flag_once(tmp_path, planned):
+    ctx, ah = await early_menu(tmp_path, planned)
+    ah.periods = [CUR, NXT]
+    await tick(ctx, at(FRI, 9, 0))
+    assert weekmenu_posts(ctx)[-1]["attributes"]["new_folder_available"] is True
+    n_notes, n_posts = len(ctx.hass.notifications()), len(weekmenu_posts(ctx))
+    await tick(ctx, at(MON, 8, 0))  # the target is the week of 11 November now
+    posts = weekmenu_posts(ctx)[n_posts:]
+    assert len(posts) == 1 and posts[0]["attributes"]["week"] == W.isoformat()
+    assert posts[0]["attributes"]["new_folder_available"] is False
+    assert not new_folder_available(ctx.ledger.load(W))
+    assert ctx.ledger.load(W).plan is not None  # the menu itself stays
+    await whole_day(ctx, MON)
+    await whole_day(ctx, date(2026, 11, 3))
+    assert len(weekmenu_posts(ctx)) == n_posts + 1
+    assert len(ctx.hass.notifications()) == n_notes
+
+
+async def test_hourly_look_is_no_round_for_the_app(tmp_path, planned):
+    """The new-folder look takes the lock but is no menu round: in_round stays off and
+    the round count does not move."""
+    ctx, ah = await early_menu(tmp_path, planned)
+    rounds = ctx.rounds
+    seen = []
+
+    async def watching_notify(title, message, url=None):
+        seen.append((ctx.lock.locked(), ctx.in_round))
+
+    ctx.hass.notify = watching_notify
+    ah.periods = [CUR, NXT]
+    await tick(ctx, at(FRI, 9, 0))
+    assert seen == [(True, False)] and ctx.rounds == rounds
