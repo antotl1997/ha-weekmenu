@@ -82,6 +82,7 @@ class Product:
     orderable: bool
     category: str | None
     hq_id: int | None = None  # AH article number; the only product id on a till receipt
+    image: str | None = None  # product photo (bonus cards only), shown in the Aanbiedingen tab
 
 
 @dataclass
@@ -192,6 +193,7 @@ def product_from_card(c: dict) -> Product:
         orderable=bool(c.get("isOrderable", True)),
         category=c.get("mainCategory") or None,
         hq_id=_pos_int(c.get("hqId")),
+        image=_widest_image(c.get("images")),
     )
 
 

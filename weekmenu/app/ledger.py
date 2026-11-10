@@ -30,12 +30,17 @@ class WeekLog:
     previous_dish: dict[str, dict] = field(default_factory=dict)
     extras_added: dict[int, int] = field(default_factory=dict)
     extras_savings: float = 0.0
+    # Losse aanbiedingen (tab Aanbiedingen): pid -> quantity written, and their saving.
+    # Never lowered by opschonen, so kept apart from `added`.
+    offers_added: dict[int, int] = field(default_factory=dict)
+    offers_savings: float = 0.0
     # Vaste boodschappen in de bonus: suggestions (staples.Staple.to_dict) and why they are
     # missing, when the purchase history could not be read
     staples: list[dict] = field(default_factory=list)
     staples_error: str | None = None
     # Write-ahead record of a write in flight: pid -> {"before", "delta", "target", "order_id"}
     # plus "kind": "extra" for a staple (it settles into extras_added instead of added),
+    # or "kind": "offer" with "savings" (a loose offer: offers_added and offers_savings),
     # or "kind": "reduce" with a negative (or 0) delta and "remove", the amount that
     # leaves `added` once the lowering arrived
     pending: dict[int, dict] = field(default_factory=dict)
@@ -60,6 +65,11 @@ class WeekLog:
     new_folder: date | None = None
     new_folder_notified: bool = False
 
+    @property
+    def extras_total(self) -> float:
+        """What staples and loose offers saved: on top of the menu's own saving."""
+        return round(self.extras_savings + self.offers_savings, 2)
+
     def to_dict(self) -> dict:
         return {
             "week": self.week.isoformat(),
@@ -73,6 +83,8 @@ class WeekLog:
             "previous_dish": {k: dict(v) for k, v in self.previous_dish.items()},
             "extras_added": {str(k): v for k, v in self.extras_added.items()},
             "extras_savings": self.extras_savings,
+            "offers_added": {str(k): v for k, v in self.offers_added.items()},
+            "offers_savings": self.offers_savings,
             "staples": [dict(x) for x in self.staples],
             "staples_error": self.staples_error,
             "pending": {str(k): dict(v) for k, v in self.pending.items()},
@@ -101,6 +113,8 @@ class WeekLog:
             previous_dish={k: dict(v) for k, v in (d.get("previous_dish") or {}).items()},
             extras_added={int(k): int(v) for k, v in (d.get("extras_added") or {}).items()},
             extras_savings=float(d.get("extras_savings") or 0.0),
+            offers_added={int(k): int(v) for k, v in (d.get("offers_added") or {}).items()},
+            offers_savings=float(d.get("offers_savings") or 0.0),
             staples=[dict(x) for x in d.get("staples") or []],
             staples_error=d.get("staples_error"),
             pending={int(k): dict(v) for k, v in (d.get("pending") or {}).items()},

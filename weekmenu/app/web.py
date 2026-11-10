@@ -12,14 +12,14 @@ from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Iterable
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import httpx
 from aiohttp import web
 
 from app import main
-from app.ahclient import LOGIN_URL, AhApiError, AhLoginExpired, extract_code
+from app.ahclient import LOGIN_URL, AhApiError, AhLoginExpired, Product, extract_code
 from app.hass import (
     HELPER_AAN,
     HELPER_AVONDEN,
@@ -30,6 +30,7 @@ from app.hass import (
 )
 from app.ledger import leftovers, new_folder_available
 from app.planner import Dish, Plan
+from app.deals import qty_for_deal, savings as deal_savings
 from app.staples import extras_savings, staple_list
 from app.week import (
     WEEKDAGEN,
@@ -38,7 +39,7 @@ from app.week import (
     eat_days,
     menu_week_start,
 )
-from app.writer import apply, apply_extras
+from app.writer import OFFER, apply, apply_extras
 
 log = logging.getLogger("weekmenu.web")
 
@@ -130,7 +131,8 @@ def week_view(wlog, plan: Plan | None, start: date,
         "savings": 0.0, "products": 0, "bonus_products": 0, "leftovers": [],
         "not_found": [], "short_by": 0, "pending": [], "unknown": [],
         "budget_exhausted": False, "period_warning": wlog.period_warning,
-        "extras_savings": wlog.extras_savings, "staples_error": wlog.staples_error,
+        "extras_savings": wlog.extras_savings, "offers_savings": wlog.offers_savings,
+        "staples_error": wlog.staples_error,
     }
     if plan is None:
         return out
@@ -190,6 +192,38 @@ def staples_view(wlog) -> list[dict]:
          "added": s.product.id in wlog.extras_added}
         for s in staple_list(wlog)
     ]
+
+
+OTHER_CATEGORY = "Overig"
+
+
+def offer_item(p: Product, wlog) -> dict:
+    """One bonus product for the Aanbiedingen tab. added_qty: what a staple or a loose
+    offer already put on the list or in the order this week."""
+    return {
+        "id": p.id, "title": p.title, "mechanism": p.mechanism, "price_now": p.now,
+        "price_regular": p.regular, "unit_size": p.unit_size, "image": p.image,
+        "added_qty": wlog.offers_added.get(p.id, 0) or wlog.extras_added.get(p.id, 0),
+        "orderable": p.orderable,
+    }
+
+
+def offers_view(products: Iterable[Product], wlog, q: str = "", category: str = "") -> dict:
+    """The folder per category (A to Z, "Overig" last), searchable on title."""
+    q, category = q.strip().casefold(), category.strip().casefold()
+    groups: dict[str, list[Product]] = {}
+    for p in products:
+        name = p.category or OTHER_CATEGORY
+        if category and name.casefold() != category:
+            continue
+        if q and q not in p.title.casefold():
+            continue
+        groups.setdefault(name, []).append(p)
+    names = sorted(groups, key=lambda n: (n == OTHER_CATEGORY, n.casefold()))
+    return {"categories": [
+        {"name": n, "items": [offer_item(p, wlog)
+                              for p in sorted(groups[n], key=lambda x: x.title.casefold())]}
+        for n in names]}
 
 
 def dish_view(wlog, plan: Plan, d: Dish, today: date) -> dict:
@@ -399,7 +433,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 wlog.extras_savings = settled
                 ctx.ledger.save(wlog)
         nd = next((x for x in new.dishes if x.date == day), None)
-        await publish(wlog.week, new, wlog.target or "list", wlog.extras_savings)
+        await publish(wlog.week, new, wlog.target or "list", wlog.extras_total)
         # removed: how many products went off the list or out of the order (opschonen)
         done = {"removed": len(res.removed), "target": res.target}
         if nd is None:  # "Gerecht weghalen": no dish left to show
@@ -534,22 +568,94 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                                 items=staples_view(wlog))
         if wlog.plan:
             await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",
-                          wlog.extras_savings)
+                          wlog.extras_total)
         # target: where this product went ("order" or "list"), for the app's message
         return web.json_response({"items": staples_view(wlog), "target": target or "list"})
+
+    # --- aanbiedingen: the whole bonus folder of the menu week ---
+
+    def check_offer_week(start: date) -> None:
+        now = ctx.clock()
+        if start not in (main.week_of(now.date()), menu_week_start(now)):
+            raise web.HTTPBadRequest(
+                text='{"error": "Alleen voor deze of de volgende menuweek"}',
+                content_type="application/json")
+
+    def cached_folder(start: date) -> list[Product] | None:
+        """The folder of the period holding the menu Wednesday, if it is in memory."""
+        for first, items in ctx.bonus_cache.items():
+            if first <= start <= first + timedelta(days=6):
+                return items
+        return None
+
+    async def folder(start: date, locked: bool = False) -> list[Product]:
+        """From the cache; when empty fetched once, under the lock (like a menu round)."""
+        got = cached_folder(start)
+        if got is not None:
+            return got
+        if locked:
+            res = await main.bonus_for_week(ctx, start, ctx.clock(), fallback=True)
+            return res[0]
+        async with ctx.lock:
+            got = cached_folder(start)  # another request may have filled it meanwhile
+            if got is not None:
+                return got
+            res = await main.bonus_for_week(ctx, start, ctx.clock(), fallback=True)
+            return res[0]
+
+    async def get_offers(request):
+        start = shown_week(request)
+        check_offer_week(start)
+        products = await folder(start)
+        return web.json_response(offers_view(
+            products, ctx.ledger.load(start), request.query.get("q", ""),
+            request.query.get("category", "")))
+
+    async def add_offer(request):
+        """One tap: the deal's quantity goes in once, through the same write path as staples."""
+        try:
+            pid = int(request.match_info["pid"])
+        except ValueError:
+            return _err(400, "ongeldig product")
+        start = shown_week(request)
+        check_offer_week(start)
+        async with ctx.lock:
+            product = next((p for p in await folder(start, locked=True) if p.id == pid), None)
+            if product is None:
+                return _err(404, "dit product zit niet in de folder")
+            if not product.orderable:
+                return _err(409, "Dit product is niet te bestellen")
+            wlog = ctx.ledger.load(start)
+            target = wlog.target
+            # a staple that is already in goes in once; its deal quantity is covered
+            if pid not in wlog.offers_added and pid not in wlog.extras_added:
+                qty = qty_for_deal(product, 1)
+                res = await apply_extras(
+                    ctx.client, ctx.ledger, wlog, {pid: qty}, {pid: product.title},
+                    kind=OFFER, savings={pid: deal_savings(product, qty)})
+                target = res.target
+                if pid not in wlog.offers_added:  # outcome unsure, or unknown: never blind
+                    return _err(409, "Onzeker of gelukt, controleer in de AH-app",
+                                added_qty=0)
+        if wlog.plan:
+            await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",
+                          wlog.extras_total)
+        return web.json_response({
+            "id": pid, "added_qty": offer_item(product, wlog)["added_qty"],
+            "target": target or "list", "offers_savings": wlog.offers_savings})
 
     # --- savings and settings ---
 
     async def savings(request):
         today = ctx.clock().date()
         weeks = [w for w in ctx.ledger.weeks() if w.plan]
-        month = sum(w.savings + w.extras_savings for w in weeks
+        month = sum(w.savings + w.extras_total for w in weeks
                     if w.counted and (w.week.year, w.week.month) == (today.year, today.month))
         return web.json_response({
             "month": round(month, 2),
             "total": round(load_total(ctx.total_path), 2),
             "weeks": [{"week": w.week.isoformat(),
-                       "savings": round(w.savings + w.extras_savings, 2),
+                       "savings": round(w.savings + w.extras_total, 2),
                        "counted": w.counted} for w in weeks],
         })
 
@@ -603,6 +709,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     app.router.add_post("/api/run", run)
     app.router.add_get("/api/staples", get_staples)
     app.router.add_post("/api/staples/{pid}", add_staple)
+    app.router.add_get("/api/offers", get_offers)
+    app.router.add_post("/api/offers/{pid}", add_offer)
     app.router.add_get("/api/savings", savings)
     app.router.add_get("/api/settings", get_settings)
     app.router.add_post("/api/settings", post_settings)

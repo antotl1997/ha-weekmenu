@@ -33,7 +33,10 @@ that week.
 
 Staples (vaste boodschappen) go through `apply_extras` with the same loop and
 the same pending/settle rules; their pending entry has "kind": "extra" and
-settles into `log.extras_added` instead of `log.added`.
+settles into `log.extras_added` instead of `log.added`. Loose offers (tab
+Aanbiedingen) use the same route with "kind": "offer": they settle into
+`log.offers_added`, and their saving (kept in the pending entry as "savings")
+into `log.offers_savings`, in the same save. Neither is ever lowered.
 
 Deliberate gap: the gap lasts until the next `apply`. If AH did not apply a
 write, or the user removes the product again before the next round, the entry
@@ -61,6 +64,7 @@ class WriteResult:
 
 
 EXTRA = "extra"  # pending "kind" of a staple write
+OFFER = "offer"  # pending "kind" of a loose offer write
 REDUCE = "reduce"  # pending "kind" of a lowering
 
 log_ = logging.getLogger("weekmenu.writer")
@@ -132,8 +136,12 @@ async def _settle(client, ledger: Ledger, log: WeekLog) -> None:
             del log.pending[pid]
             continue
         if cur >= before + delta:
-            into = log.extras_added if entry.get("kind") == EXTRA else log.added
+            kind = entry.get("kind")
+            into = (log.extras_added if kind == EXTRA
+                    else log.offers_added if kind == OFFER else log.added)
             into[pid] = into.get(pid, 0) + delta
+            if kind == OFFER:
+                log.offers_savings = round(log.offers_savings + float(entry.get("savings") or 0), 2)
             del log.pending[pid]
         elif cur <= before:
             del log.pending[pid]
@@ -200,6 +208,7 @@ async def _reduce_each(
 async def _write_each(
     client, ledger: Ledger, log: WeekLog, order, delta: dict[int, int],
     into: dict[int, int], result: WriteResult, kind: str | None = None,
+    gain: dict[int, float] | None = None,
 ) -> None:
     """One AH call per product, write-ahead `pending` before each, `into` after each.
 
@@ -219,6 +228,8 @@ async def _write_each(
                 }
                 if kind is not None:
                     entry["kind"] = kind
+                if kind == OFFER:
+                    entry["savings"] = float((gain or {}).get(pid, 0.0))
                 log.pending[pid] = entry
                 ledger.save(log)
 
@@ -227,6 +238,8 @@ async def _write_each(
             else:
                 await client.add_to_shopping_list({pid: qty}, on_before=before_write)
             into[pid] = into.get(pid, 0) + qty
+            if kind == OFFER:
+                log.offers_savings = round(log.offers_savings + (gain or {}).get(pid, 0.0), 2)
             log.pending.pop(pid, None)
             result.added[pid] = qty
             ledger.save(log)
@@ -290,27 +303,30 @@ async def apply(
 
 async def apply_extras(
     client, ledger: Ledger, log: WeekLog, adds: dict[int, int],
-    titles: dict[int, str] | None = None,
+    titles: dict[int, str] | None = None, kind: str = EXTRA,
+    savings: dict[int, float] | None = None,
 ) -> WriteResult:
-    """Add staples (vaste boodschappen) with the same guarantees as `apply`.
+    """Add staples (vaste boodschappen) or, with kind="offer", loose offers, with the
+    same guarantees as `apply`. `savings`: the saving per offer, kept with the write.
 
     Same lock rule as `apply`. A product goes in once per week: whatever is in
-    `log.extras_added` is never written again, an unsure (`pending`) or `unknown`
+    `log.extras_added` (`log.offers_added` for an offer) is never written again, an unsure (`pending`) or `unknown`
     product is skipped. Settling first means a write whose outcome was unsure is
     read back before anything new is written.
     """
     titles = titles or {}
+    into = log.offers_added if kind == OFFER else log.extras_added
     await _settle(client, ledger, log)
     delta = {
         p: n for p, n in adds.items()
-        if n > 0 and p not in log.extras_added and p not in log.pending and p not in log.unknown
+        if n > 0 and p not in into and p not in log.pending and p not in log.unknown
     }
     order = await client.active_order()
     result = WriteResult(target="order" if order is not None else "list")
     if log.target is None:
         log.target = result.target
-    _log_target("Vaste boodschappen", order, len(delta))
-    await _write_each(client, ledger, log, order, delta, log.extras_added, result, kind=EXTRA)
+    _log_target("Losse aanbieding" if kind == OFFER else "Vaste boodschappen", order, len(delta))
+    await _write_each(client, ledger, log, order, delta, into, result, kind=kind, gain=savings)
     result.pending = [(titles.get(p, str(p)), int(log.pending[p]["delta"]))
                       for p in adds if p in log.pending]
     result.unknown = [(titles.get(p, str(p)), log.unknown[p]) for p in adds if p in log.unknown]

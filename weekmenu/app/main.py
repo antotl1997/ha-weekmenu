@@ -468,7 +468,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     await guard(ctx.hass.publish(plan_view(plan, start, result.target,
                                           away_dates(start, raw.away),
                                           new_folder=new_folder_available(wlog)),
-                                 plan.savings + wlog.extras_savings), "sensoren")
+                                 plan.savings + wlog.extras_total), "sensoren")
     nothing_new = not (result.added or result.removed or result.pending or result.unknown)
     if completing:  # the message only if it never went out, or something changed
         send = not (wlog.notified and nothing_new)
@@ -559,7 +559,7 @@ async def update_total(ctx: Context, today: date) -> None:
     async with ctx.lock:
         total, known = load_total_state(ctx.total_path)
         weeks = ctx.ledger.weeks()
-        value = {w.week.isoformat(): round(w.savings + w.extras_savings, 2) for w in weeks}
+        value = {w.week.isoformat(): round(w.savings + w.extras_total, 2) for w in weeks}
         if known is None:
             known = {w.week.isoformat() for w in weeks if w.counted}
         if isinstance(known, set):
@@ -664,7 +664,7 @@ async def publish_week(ctx: Context, wlog: WeekLog) -> None:
     await guard(ctx.hass.publish(
         plan_view(plan, wlog.week, wlog.target or "list", away_dates(wlog.week, raw.away),
                   new_folder=new_folder_available(wlog)),
-        plan.savings + wlog.extras_savings), "sensoren")
+        plan.savings + wlog.extras_total), "sensoren")
 
 
 # --- schedule, state and stdin ----------------------------------------------------------
