@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
+from .health import ApiHealth
 from .tokens import Tokens, TokenStore
 
 if TYPE_CHECKING:
@@ -22,9 +23,15 @@ LOGIN_URL = (
     "https://login.ah.nl/login?client_id=appie-ios"
     "&response_type=code&redirect_uri=appie://login-exit"
 )
-# Bump together when AH refuses old app versions.
+# The default of the `ah_app_version` option: raise it there when AH refuses old versions.
 APP_VERSION = "9.28"
-USER_AGENT = f"Appie/{APP_VERSION} (iPhone17,3; iPhone; CPU OS 26_1 like Mac OS X)"
+
+
+def user_agent(version: str) -> str:
+    return f"Appie/{version} (iPhone17,3; iPhone; CPU OS 26_1 like Mac OS X)"
+
+
+USER_AGENT = user_agent(APP_VERSION)
 REFRESH_MARGIN = 300
 log = logging.getLogger("weekmenu.ahclient")
 
@@ -54,6 +61,55 @@ class AhNotJson(AhApiError):
 
 class AhOrderMode(AhApiError):
     """The shopping list is locked because a delivery order is active."""
+
+
+class AhShapeError(AhApiError):
+    """AH answered, but a field the add-on reads is missing or of the wrong type."""
+
+
+_SHAPE = (KeyError, TypeError, ValueError, AttributeError)
+
+
+def health_kind(endpoint: str, e: BaseException) -> str | None:
+    """How a failure counts for ApiHealth ("vorm", "HTTP 403"), or None when it does not:
+    an expired login, the list locked by an order, a 404 on the order (no active order),
+    a 5xx or a network error are not a change of the API."""
+    if isinstance(e, (AhLoginExpired, AhOrderMode)):
+        return None
+    if isinstance(e, AhShapeError):
+        return "vorm"
+    if isinstance(e, AhNotJson):
+        return "geen JSON"
+    if isinstance(e, AhApiError) and 400 <= e.status < 500:
+        if e.status == 404 and endpoint == "bestelling":
+            return None
+        return f"HTTP {e.status}"
+    return None
+
+
+def is_blocking(e: BaseException) -> bool:
+    """Errors that mean AH is refusing us (also a WAF block, 403): stop the round at once."""
+    return isinstance(e, (AhLoginExpired, AhNotJson)) or (
+        isinstance(e, AhApiError) and e.status in (403, 429)
+    )
+
+
+def _list_of(body: Any, key: str, what: str) -> list:
+    """body[key] as a list; a missing key or another type is a shape error."""
+    if not isinstance(body, dict) or not isinstance(body.get(key), list):
+        raise AhShapeError(f"{what}: veld {key} ontbreekt of is geen lijst", 200)
+    return body[key]
+
+
+def _int(v: Any, what: str) -> int:
+    """An int (or a whole number string); anything else is a shape error."""
+    if isinstance(v, bool):
+        raise AhShapeError(f"{what}: geen getal", 200)
+    if isinstance(v, int):
+        return v
+    if isinstance(v, str) and v.strip().isdigit():
+        return int(v)
+    raise AhShapeError(f"{what}: geen getal", 200)
 
 
 @dataclass
@@ -290,9 +346,12 @@ def _check_reductions(reductions: dict[int, int]) -> None:
 
 
 class AhClient:
-    def __init__(self, store: TokenStore, http: httpx.AsyncClient):
+    def __init__(self, store: TokenStore, http: httpx.AsyncClient, *,
+                 health: ApiHealth | None = None, app_version: str = APP_VERSION):
         self.store = store
         self.http = http
+        self.health = health if health is not None else ApiHealth()
+        self.app_version = app_version or APP_VERSION
         self.skipped_categories: list[str] = []
         self.skipped_groups: list[str] = []
         self._called_ah = False
@@ -300,15 +359,40 @@ class AhClient:
 
     def _headers(self, order_id: int | None = None) -> dict[str, str]:
         h = {
-            "User-Agent": USER_AGENT,
+            "User-Agent": user_agent(self.app_version),
             "x-client-name": "appie-ios",
-            "x-client-version": APP_VERSION,
+            "x-client-version": self.app_version,
             "x-application": "AHWEBSHOP",
             "Accept": "application/json",
         }
         if order_id is not None:
             h["Appie-Current-Order-Id"] = str(order_id)
         return h
+
+    async def _track(self, endpoint: str, awaitable):
+        """Await a read or write of a critical endpoint and tell ApiHealth how it went.
+
+        A KeyError, TypeError, ValueError or AttributeError while parsing becomes an
+        AhShapeError (the type name only, never a body). A 403 is logged: AH refuses us.
+        """
+        try:
+            out = await awaitable
+        except _SHAPE as e:
+            err = AhShapeError(f"{endpoint}: onverwachte vorm ({type(e).__name__})", 200)
+            self._failed(endpoint, err)
+            raise err from None
+        except AhApiError as e:
+            self._failed(endpoint, e)
+            raise
+        self.health.ok(endpoint)
+        return out
+
+    def _failed(self, endpoint: str, e: AhApiError) -> None:
+        if e.status == 403:
+            log.warning("AH weigert de toegang (HTTP 403) bij %s: ronde gestopt", endpoint)
+        kind = health_kind(endpoint, e)
+        if kind is not None:
+            self.health.failed(endpoint, kind)
 
     async def _token_call(self, path: str, body: dict, *, refreshing: bool = False) -> None:
         # Error messages never include response bodies: they may echo secrets.
@@ -429,16 +513,25 @@ class AhClient:
         body = await self.request(
             "POST", "/graphql", json={"query": query, "variables": variables}
         )
+        if body is not None and not isinstance(body, dict):
+            raise AhShapeError("graphql: antwoord is geen object", 200)
         if isinstance(body, dict) and body.get("errors"):
-            raise AhApiError("graphql returned errors", 200)
-        return (body or {}).get("data") or {}
+            # a renamed or removed field shows up here: count it as a change
+            raise AhShapeError("graphql returned errors", 200)
+        data = (body or {}).get("data") or {}
+        if not isinstance(data, dict):
+            raise AhShapeError("graphql: data is geen object", 200)
+        return data
 
     # --- bonus ---
 
     async def bonus_periods(self) -> list[BonusPeriod]:
+        return await self._track("bonus", self._bonus_periods())
+
+    async def _bonus_periods(self) -> list[BonusPeriod]:
         body = await self.request("GET", "/mobile-services/bonuspage/v3/metadata")
         out = []
-        for p in (body or {}).get("periods") or []:
+        for p in _list_of(body, "periods", "bonus metadata"):
             cats: list[str] = []
             for tab in p.get("tabs") or []:
                 for u in tab.get("urlMetadataList") or []:
@@ -486,9 +579,7 @@ class AhClient:
     @staticmethod
     def _is_blocking(e: Exception) -> bool:
         """Errors that mean AH is refusing us: stop at once instead of skipping."""
-        return isinstance(e, (AhLoginExpired, AhNotJson)) or (
-            isinstance(e, AhApiError) and e.status == 429
-        )
+        return is_blocking(e)
 
     async def _pause(self) -> None:
         if self._called_ah and CALL_DELAY > 0:
@@ -496,12 +587,18 @@ class AhClient:
         self._called_ah = True
 
     async def bonus_offers(self, period: BonusPeriod) -> list[Product]:
+        """The whole folder. One broken category or group is skipped (and listed); only
+        the folder as a whole counts for ApiHealth."""
+        return await self._track("bonus", self._bonus_offers(period))
+
+    async def _bonus_offers(self, period: BonusPeriod) -> list[Product]:
         self.skipped_categories = []
         self.skipped_groups = []
         self._called_ah = False
         groups: dict[str, list[Product] | None] = {}
         found: dict[int, Product] = {}
         failed_in_row = 0
+        last_shape = False  # the last skipped category failed on its shape
         for cat in period.categories:
             path = (
                 "/mobile-services/bonuspage/v2/section?application=AHWEBSHOP"
@@ -512,7 +609,7 @@ class AhClient:
                 await self._pause()
                 body = await self.request("GET", path)
                 items: list[Product] = []
-                for entry in (body or {}).get("bonusGroupOrProducts") or []:
+                for entry in _list_of(body, "bonusGroupOrProducts", "bonus section"):
                     if entry.get("product"):
                         items.append(product_from_card(entry["product"]))
                     elif entry.get("bonusGroup"):
@@ -532,8 +629,10 @@ class AhClient:
                     raise
                 self.skipped_categories.append(cat)
                 failed_in_row += 1
+                last_shape = isinstance(e, (AhShapeError, *_SHAPE))
                 if failed_in_row >= MAX_CONSECUTIVE_CATEGORY_FAILURES:
-                    raise AhApiError(
+                    cls = AhShapeError if last_shape else AhApiError
+                    raise cls(
                         "bonusfolder niet op te halen: "
                         f"{failed_in_row} categorieen achter elkaar mislukt",
                         getattr(e, "status", 0),
@@ -543,7 +642,8 @@ class AhClient:
             for p in items:
                 found.setdefault(p.id, p)
         if period.categories and len(self.skipped_categories) == len(period.categories):
-            raise AhApiError("bonusfolder niet op te halen: alle categorieen mislukt", 0)
+            cls = AhShapeError if last_shape else AhApiError
+            raise cls("bonusfolder niet op te halen: alle categorieen mislukt", 0)
         return list(found.values())
 
     async def previously_bought_bonus(self, period: BonusPeriod) -> list[Product]:
@@ -638,6 +738,9 @@ class AhClient:
     # --- products ---
 
     async def search_products(self, query: str, size: int = 20) -> list[Product]:
+        return await self._track("product", self._search_products(query, size))
+
+    async def _search_products(self, query: str, size: int) -> list[Product]:
         path = (
             f"/mobile-services/product/search/v2?query={quote(query, safe='')}"
             f"&page=0&size={size}&sortOn=RELEVANCE"
@@ -645,18 +748,21 @@ class AhClient:
         body = await self.request("GET", path)
         return [
             product_from_card(c)
-            for c in (body or {}).get("products") or []
+            for c in _list_of(body, "products", "product search")
             if c.get("webshopId")
         ]
 
     # --- recipes ---
 
     async def search_recipes(self, text: str, size: int = 30) -> list[RecipeSummary]:
+        return await self._track("recept", self._search_recipes(text, size))
+
+    async def _search_recipes(self, text: str, size: int) -> list[RecipeSummary]:
         data = await self.graphql(
             RECIPE_SEARCH_QUERY, {"query": {"searchText": text, "size": size}}
         )
         out = []
-        for r in ((data.get("recipeSearch") or {}).get("result")) or []:
+        for r in _list_of(data.get("recipeSearch"), "result", "recipe search"):
             t = r.get("time") or {}
             out.append(
                 RecipeSummary(
@@ -674,6 +780,9 @@ class AhClient:
         return out
 
     async def get_recipe(self, id: int, servings: int) -> Recipe:
+        return await self._track("recept", self._get_recipe(id, servings))
+
+    async def _get_recipe(self, id: int, servings: int) -> Recipe:
         data = await self.graphql(RECIPE_QUERY, {"id": id, "servings": servings})
         r = data.get("recipe")
         if not r:
@@ -707,6 +816,9 @@ class AhClient:
 
     async def _list_state(self) -> tuple[dict[int, int], set[int]]:
         """Quantities per product, and the products with a struck-through (crossed off) line."""
+        return await self._track("lijst", self._read_list())
+
+    async def _read_list(self) -> tuple[dict[int, int], set[int]]:
         path = "/mobile-services/shoppinglist/v2/items"
         r = await self.request_raw("GET", path)
         if ORDER_MODE_TEXT in r.text:
@@ -717,12 +829,14 @@ class AhClient:
             raise AhNotJson(f"GET {path}: response is not JSON", r.status)
         out: dict[int, int] = {}
         struck: set[int] = set()
-        for it in r.body.get("items") or []:
+        for it in _list_of(r.body, "items", "shopping list"):
             pid = ((it.get("productDetails") or {}).get("product") or {}).get("webshopId")
             if pid:
-                out[int(pid)] = out.get(int(pid), 0) + int(it.get("quantity") or 0)
+                pid = _int(pid, "shopping list webshopId")
+                qty = it.get("quantity")
+                out[pid] = out.get(pid, 0) + (0 if qty is None else _int(qty, "list quantity"))
                 if it.get("strikedthrough") or it.get("strikeThrough"):
-                    struck.add(int(pid))
+                    struck.add(pid)
         return out, struck
 
     async def add_to_shopping_list(
@@ -743,9 +857,9 @@ class AhClient:
             items.append(_list_item(pid, current.get(pid, 0) + qty))
         if on_before is not None:
             on_before({pid: current.get(pid, 0) for pid in adds})
-        await self.request(
+        await self._track("lijst", self.request(
             "PATCH", "/mobile-services/shoppinglist/v2/items", json={"items": items}
-        )
+        ))
 
     async def reduce_on_shopping_list(
         self, reductions: dict[int, int],
@@ -775,31 +889,43 @@ class AhClient:
         if on_before is not None:
             on_before({pid: current.get(pid, 0) for pid in todo})
         if items:
-            await self.request(
+            await self._track("lijst", self.request(
                 "PATCH", "/mobile-services/shoppinglist/v2/items", json={"items": items}
-            )
+            ))
         return skipped
 
     # --- order ---
 
     async def active_order(self) -> ActiveOrder | None:
+        return await self._track("bestelling", self._read_order())
+
+    async def _read_order(self) -> ActiveOrder | None:
         path = "/mobile-services/order/v1/summaries/active?sortBy=DEFAULT"
         r = await self.request_raw("GET", path)
         if r.status == 404:
+            log.info("Bestelling lezen (doel: waar de producten heen gaan): HTTP 404, "
+                     "geen actieve bestelling, lijst gebruikt")
             return None
         if self._is_failure(r.status):
             raise AhApiError(f"GET {path}: HTTP {r.status}", r.status)
-        if not r.is_json or not isinstance(r.body, dict) or "id" not in r.body:
+        if not r.is_json or not isinstance(r.body, dict):
             raise AhNotJson(f"GET {path}: response is not an order", r.status)
+        if "id" not in r.body:
+            raise AhShapeError(f"GET {path}: bestelling zonder id", r.status)
+        ordered = r.body.get("orderedProducts")
+        if ordered is not None and not isinstance(ordered, list):
+            raise AhShapeError(f"GET {path}: orderedProducts is geen lijst", r.status)
         items: dict[int, int] = {}
-        for op in r.body.get("orderedProducts") or []:
+        for op in ordered or []:
             pid = (op.get("product") or {}).get("webshopId")
             if pid:
-                items[int(pid)] = items.get(int(pid), 0) + int(op.get("quantity") or 0)
+                pid = _int(pid, "order webshopId")
+                qty = op.get("quantity")
+                items[pid] = items.get(pid, 0) + (0 if qty is None else _int(qty, "order quantity"))
         body = r.body
         day = (_local_day(body.get("deliveryDate"))
                or _local_day(((body.get("delivery") or {}).get("slot") or {}).get("date")))
-        return ActiveOrder(id=int(body["id"]), items=items, delivery_date=day)
+        return ActiveOrder(id=_int(body["id"], "order id"), items=items, delivery_date=day)
 
     async def order_delivery_date(self, order: ActiveOrder) -> date | None:
         """The day `order` is delivered, or None when that cannot be known.
@@ -847,12 +973,12 @@ class AhClient:
             items.append(_order_item(pid, fresh.items.get(pid, 0) + qty))
         if on_before is not None:
             on_before({pid: fresh.items.get(pid, 0) for pid in adds})
-        await self.request(
+        await self._track("bestelling", self.request(
             "PUT",
             "/mobile-services/order/v1/items?sortBy=DEFAULT",
             json={"items": items},
             order_id=order.id,
-        )
+        ))
 
     async def reduce_in_order(
         self,
@@ -880,9 +1006,9 @@ class AhClient:
         if on_before is not None:
             on_before({pid: fresh.items.get(pid, 0) for pid in reductions})
         if items:
-            await self.request(
+            await self._track("bestelling", self.request(
                 "PUT",
                 "/mobile-services/order/v1/items?sortBy=DEFAULT",
                 json={"items": items},
                 order_id=order.id,
-            )
+            ))

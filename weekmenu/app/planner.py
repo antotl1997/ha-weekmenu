@@ -23,7 +23,7 @@ from pathlib import Path
 
 import yaml
 
-from app.ahclient import AhApiError, AhLoginExpired, AhNotJson, Product, Recipe, RecipeSummary
+from app.ahclient import AhApiError, Product, Recipe, RecipeSummary, is_blocking
 from app.deals import parse_mechanism, qty_for_deal, savings
 from app.ingredients import (
     choose_product,
@@ -318,9 +318,8 @@ def _fits(day: date, cook: int | None) -> bool:
 
 
 def _blocking(e: Exception) -> bool:
-    return isinstance(e, (AhLoginExpired, AhNotJson)) or (
-        isinstance(e, AhApiError) and e.status == 429
-    )
+    """AH refuses us (expired login, no JSON, 403, 429): stop the round at once."""
+    return is_blocking(e)
 
 
 # --- candidates ----------------------------------------------------------------------
