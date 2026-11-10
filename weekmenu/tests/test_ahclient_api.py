@@ -669,3 +669,15 @@ async def test_order_delivery_day_lets_an_expired_login_through(respx_mock, tmp_
     with pytest.raises(AhLoginExpired):
         await client.order_delivery_date(ActiveOrder(123456, {}))
     await http.aclose()
+
+
+async def test_delivery_day_of_a_utc_time_stamp_is_the_dutch_day(respx_mock, tmp_path):
+    body = fx("handmade-order-active__items.json")["body"]
+    # 23:30 UTC on the 3rd is 00:30 on Wednesday the 4th in the Netherlands
+    respx_mock.get(ORDER_GET).respond(json={**body, "deliveryDate": "2026-11-03T23:30:00Z"})
+    client, http = make(tmp_path)
+    assert (await client.active_order()).delivery_date == date(2026, 11, 4)
+    respx_mock.post(GRAPHQL).respond(json={"data": {"orderFulfillments": {"result": [
+        {"orderId": 123456, "delivery": {"slot": {"date": "2026-11-10T23:15:00.000Z"}}}]}}})
+    assert await client.order_delivery_date(ActiveOrder(123456, {})) == date(2026, 11, 11)
+    await http.aclose()

@@ -67,6 +67,8 @@ class WeekLog:
     # why the last menu write wrote nothing (Ruling 42): the active order is delivered
     # outside this menu week, or its delivery day is unknown. None once a write went out.
     held: str | None = None
+    # Ruling 44: the one push for a held week the schedule has moved past
+    held_notified: bool = False
     # Ruling 43: pid -> what a lowering found already gone (the user took it off in the
     # AH app). Never added again that week: Terug, a swap, Nieuw menu or bijwerken
     # count it as if the add-on still had it out there.
@@ -105,6 +107,7 @@ class WeekLog:
             "new_folder": _iso(self.new_folder),
             "new_folder_notified": self.new_folder_notified,
             "held": self.held,
+            "held_notified": self.held_notified,
             "removed_by_user": {str(k): v for k, v in self.removed_by_user.items()},
         }
 
@@ -138,6 +141,7 @@ class WeekLog:
             new_folder=_date(d.get("new_folder")),
             new_folder_notified=bool(d.get("new_folder_notified", False)),
             held=d.get("held"),
+            held_notified=bool(d.get("held_notified", False)),
             removed_by_user={int(k): int(v)
                              for k, v in (d.get("removed_by_user") or {}).items()},
         )

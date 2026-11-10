@@ -44,8 +44,11 @@ Which order (Ruling 42): an active order is only written to (added, lowered,
 staples, offers) when its delivery day lies inside the log's menu week (Wednesday
 to Tuesday). Another week's order, or one whose day cannot be read, gets nothing:
 the plan is saved, `log.held` says why and the result carries `held` (the note
-for the message and the app); a later round writes once there is an order for the
-week, or no order at all (the list). Never a fallback to the wrong order.
+for the message and the app). Never a fallback to the wrong order. Only the week the
+schedule works on (menu_week_start of `today`) is retried later, so only that week's
+note promises it (`held_note`); any other week, and a staple or offer tap, gets the
+titles to add by hand (`manual_note`, Ruling 44). With nothing to write there is no
+note at all.
 
 Deliberate gap: the gap lasts until the next `apply`. If AH did not apply a
 write, or the user removes the product again before the next round, the entry
@@ -55,12 +58,12 @@ before the next round, current <= before, so it is written once more.
 """
 import logging
 from dataclasses import dataclass, field
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta
 from typing import Literal
 
 from app.ledger import Ledger, WeekLog, leftovers
 from app.planner import Plan
-from app.week import lange_datum
+from app.week import lange_datum, menu_week_start
 
 
 @dataclass
@@ -86,6 +89,37 @@ def _log_target(what: str, order, count: int) -> None:
     why = (f"actieve bestelling {order.id}" if order is not None
            else "geen actieve bestelling -> lijst")
     log_.info("%s: %d product(en) naar %s", what, count, why)
+
+
+def manual_note(titles) -> str:
+    """For a week (or a tap) nothing will retry: what to add in the AH app yourself."""
+    return ("Deze producten konden niet in je bestelling. Voeg ze zelf toe in de "
+            "AH-app: " + ", ".join(titles))
+
+
+def cut_note(titles) -> str:
+    """Lowerings that could not go out: never retried, the user decides."""
+    return ("Deze producten konden niet uit je bestelling. Haal ze zelf weg in de "
+            "AH-app als dat moet: " + ", ".join(titles))
+
+
+def missing(log: WeekLog, plan: Plan) -> dict[int, int]:
+    """What `plan` needs that the add-on has not put out there (nor the user removed)."""
+    out = {}
+    for p, n in plan.basket.items():
+        if p in log.pending or p in log.unknown:
+            continue
+        left = n - log.added.get(p, 0) - log.removed_by_user.get(p, 0)
+        if left > 0:
+            out[p] = left
+    return out
+
+
+def retried(week: date, today: date | None) -> bool:
+    """The schedule retries a held week only while it is the week it works on."""
+    if today is None:
+        return True
+    return week == menu_week_start(datetime.combine(today, time()))
 
 
 def held_note(week: date) -> str:
@@ -303,24 +337,9 @@ async def apply(
     """
     await _settle(client, ledger, log)
     # what the add-on put out there, plus what the user took off again (never re-added)
-    had = {p: log.added.get(p, 0) + log.removed_by_user.get(p, 0) for p in plan.basket}
-    delta = {
-        p: n - had[p]
-        for p, n in plan.basket.items()
-        if n - had[p] > 0 and p not in log.pending and p not in log.unknown
-    }
+    delta = missing(log, plan)
     order, why = await _destination(client, log.week)
     target: Literal["order", "list"] = "order" if order is not None else "list"
-    if why is not None:  # another week's order: save the plan, write nothing at all
-        log.plan = plan.to_dict()
-        log.savings = plan.savings
-        log.held = why
-        ledger.save(log)
-        log_.info("Menu: niets geschreven, %s", why)
-        result = WriteResult(target=target, held=held_note(log.week))
-        _report(result, log, plan, replaced)
-        return result
-    log.held = None
     dest = _dest(target, order)
     cuts: dict[int, int] = {}
     if (replaced is not None and today is not None and today < log.week
@@ -330,6 +349,23 @@ async def apply(
             for p, n in log.added.items()
             if n - plan.basket.get(p, 0) > 0 and p not in log.pending and p not in log.unknown
         }
+    if why is not None and (delta or cuts):  # another week's order: write nothing at all
+        log.plan = plan.to_dict()
+        log.savings = plan.savings
+        log.target = target  # where it would have gone: never "list" by mistake
+        log.held = why
+        ledger.save(log)
+        log_.info("Menu: niets geschreven, %s", why)
+        if delta and retried(log.week, today):
+            note = held_note(log.week)
+        elif delta:
+            note = manual_note(_title(plan, replaced, p) for p in delta)
+        else:  # only lowerings: no round ever retries those
+            note = cut_note(_title(plan, replaced, p) for p in cuts)
+        result = WriteResult(target=target, held=note)
+        _report(result, log, plan, replaced)
+        return result
+    log.held = None
     log.plan = plan.to_dict()
     log.savings = plan.savings
     log.target = target
@@ -382,10 +418,11 @@ async def apply_extras(
     }
     order, why = await _destination(client, log.week)
     result = WriteResult(target="order" if order is not None else "list")
-    if why is not None:  # another week's order: nothing written, the caller says so
+    if why is not None and delta:  # another week's order: nothing written, the caller says so
         log_.info("%s: niets geschreven, %s",
                   "Losse aanbieding" if kind == OFFER else "Vaste boodschappen", why)
-        result.held = held_note(log.week)
+        # a tap is never retried: say what to add by hand
+        result.held = manual_note(titles.get(p, str(p)) for p in delta)
         return result
     if log.target is None:
         log.target = result.target

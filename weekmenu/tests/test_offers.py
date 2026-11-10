@@ -303,7 +303,8 @@ async def test_tap_refused_while_the_open_order_is_for_another_week(aiohttp_clie
     r = await client.post("api/offers/52")
     assert r.status == 409
     body = await r.json()
-    assert body["error"] == ("Het menu staat klaar; de producten worden toegevoegd zodra er "
-                             "een bestelling of lijst voor woensdag 4 november is")
+    # a tap is never retried: no promise, the title to add by hand (Ruling 44)
+    assert body["error"] == ("Deze producten konden niet in je bestelling. Voeg ze zelf "
+                             "toe in de AH-app: AH Halfvolle melk")
     assert body["added_qty"] == 0
     assert ctx.client.writes == [] and ctx.ledger.load(W).offers_added == {}

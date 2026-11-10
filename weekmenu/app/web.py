@@ -39,7 +39,7 @@ from app.week import (
     eat_days,
     menu_week_start,
 )
-from app.writer import OFFER, apply, apply_extras, held_note
+from app.writer import OFFER, apply, apply_extras, held_note, manual_note, missing
 
 log = logging.getLogger("weekmenu.web")
 
@@ -120,8 +120,18 @@ def _leftovers(log, plan: Plan) -> list[dict]:
     return [{"product": _title(plan, p), "qty": n} for p, n in leftovers(log, plan).items()]
 
 
+def _held(wlog, plan: Plan | None, start: date, retry: bool) -> str | None:
+    """The note of a held menu: a promise only for the week the schedule retries."""
+    if not wlog.held or plan is None:
+        return None
+    if retry:
+        return held_note(start)
+    todo = missing(wlog, plan)
+    return manual_note(_title(plan, p) for p in todo) if todo else None
+
+
 def week_view(wlog, plan: Plan | None, start: date,
-              away: Iterable[str] = ()) -> dict:
+              away: Iterable[str] = (), retry: bool = True) -> dict:
     away = set(away)
     out = {
         "week": start.isoformat(), "bestelling": bestelling_zin(start),
@@ -134,7 +144,7 @@ def week_view(wlog, plan: Plan | None, start: date,
         "extras_savings": wlog.extras_savings, "offers_savings": wlog.offers_savings,
         "staples_error": wlog.staples_error,
         # Ruling 42: the menu is saved but waits for an order or list for this week
-        "held": held_note(start) if wlog.held and wlog.plan else None,
+        "held": _held(wlog, Plan.from_dict(wlog.plan) if wlog.plan else None, start, retry),
     }
     if plan is None:
         return out
@@ -391,7 +401,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         plan = Plan.from_dict(wlog.plan) if wlog.plan else None
         raw = await settings_now()
         out = week_view(wlog, plan, start,
-                        raw.away if raw is not None else ())
+                        raw.away if raw is not None else (),
+                        retry=start == menu_week_start(now))
         out["enabled"] = raw.enabled if raw is not None else None  # None: HA unreadable
         w = waiting_for(start) if plan is None else None
         out["waiting_for_folder"] = None if w is None else {

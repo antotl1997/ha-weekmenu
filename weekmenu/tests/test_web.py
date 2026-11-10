@@ -806,3 +806,20 @@ async def test_api_swap_then_back_never_rebuys_what_the_user_removed(aiohttp_cli
     assert r.status == 200, await r.text()
     assert ah.held() == {1: 1, 3: 1}  # 9 went off again, 2 never came back
     assert [w for w in ah.writes[n:] if w[1].get(2, 0) > 0] == []  # 2 was never added
+
+
+async def test_api_swap_in_the_running_week_names_what_to_add_by_hand(aiohttp_client,
+                                                                      tmp_path, swaps):
+    """Ruling 44: Thursday 5 November, next week's order is open. The running week is
+    never retried, so the note names the products instead of promising."""
+    from app.ahclient import ActiveOrder
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 5, 10, 0))
+    await planned_ctx(ctx)
+    ctx.client.order = ActiveOrder(5, {}, date(2026, 11, 11))
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.post(f"api/dish/{WO.isoformat()}/swap")).json()
+    manual = ("Deze producten konden niet in je bestelling. Voeg ze zelf toe in de "
+              "AH-app: Product 9")
+    assert body["held"] == manual and ctx.client.order.items == {}
+    week = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+    assert week["held"] == manual

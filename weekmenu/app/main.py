@@ -69,6 +69,7 @@ from app.week import (
     menu_week_start,
     plan_days,
 )
+from app import writer
 from app.writer import WriteResult, apply
 
 # swap_dish, rescale_dish, restore_dish and remove_dish are looked up here by the web API
@@ -651,6 +652,29 @@ async def check_new_folder(ctx: Context, start: date) -> None:
                 log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
 
 
+async def notify_stale_held(ctx: Context, start: date) -> None:
+    """Ruling 44: a held menu of the week before the target week is never retried.
+
+    Once per week (held_notified, saved): one push with what to add by hand.
+    """
+    prev = start - timedelta(days=7)
+    wlog = ctx.ledger.load(prev)
+    if not (wlog.plan and wlog.held) or wlog.held_notified:
+        return
+    plan = Plan.from_dict(wlog.plan)
+    todo = writer.missing(wlog, plan)
+    if not todo:
+        return
+    titles = [plan.products[p].title if p in plan.products else str(p) for p in todo]
+    if await guard(ctx.hass.notify("Weekmenu", writer.manual_note(titles), ctx.ingress_url),
+                   "melding"):
+        wlog.held_notified = True
+        try:
+            ctx.ledger.save(wlog)
+        except Exception as e:
+            log.warning("Logboek %s niet bijgewerkt (%s)", prev, type(e).__name__)
+
+
 async def close_stale_new_folder(ctx: Context, start: date) -> None:
     """The target week moved on (Monday): the week before can no longer be "bijgewerkt".
     Its flag is cleared once, and while the sensor still shows that week (no menu for
@@ -744,6 +768,7 @@ async def tick(ctx: Context, now: datetime) -> None:
         return
     ctx.checked = slot
     await close_stale_new_folder(ctx, start)
+    await notify_stale_held(ctx, start)
     if not auto_done(ctx.ledger.load(start)):
         await run_round(ctx, now, "schema")
     else:

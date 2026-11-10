@@ -1289,3 +1289,38 @@ async def test_unknown_delivery_day_writes_nothing(tmp_path, planned):
     out = await run_round(ctx, at(SUN, 10, 0), "nu_maken")  # the menu week of the 4th
     assert out.status == "done" and out.result.held and ah.writes == []
     assert ctx.ledger.load(W).round_done is False
+
+
+async def test_held_week_the_schedule_moved_past_gets_one_push_to_add_by_hand(tmp_path,
+                                                                             planned):
+    """Ruling 44: on Monday 9 November the schedule works on the 18th; the held menu
+    of the 11th is never retried, so one push names what to add in the AH app."""
+    from app.ahclient import ActiveOrder
+    ah = FakeAh(tmp_path, periods=[CUR, NXT], order=ActiveOrder(5, {}, date(2026, 10, 28)))
+    ctx = make_ctx(tmp_path, ah=ah)
+    await run_round(ctx, at(MON, 8, 0), "nu_maken")  # held for the 11th, with the promise
+    assert "zodra er een bestelling" in ctx.hass.notifications()[0]["message"]
+    manual = ("Deze producten konden niet in je bestelling. Voeg ze zelf toe in de "
+              "AH-app: Product 1, Product 2, Product 3")
+    await whole_day(ctx, date(2026, 11, 9))
+    await whole_day(ctx, date(2026, 11, 10))
+    pushes = [n["message"] for n in ctx.hass.notifications() if n["message"] == manual]
+    assert len(pushes) == 1 and ah.writes == []
+    assert ctx.ledger.load(W2).held_notified is True
+    ctx2 = make_ctx(tmp_path, ah=ah)  # restart: the marker is on disk
+    main.load_state(ctx2)
+    await whole_day(ctx2, date(2026, 11, 10))
+    assert [n for n in ctx2.hass.notifications() if n["message"] == manual] == []
+
+
+async def test_held_push_retried_when_ha_was_down(tmp_path, planned):
+    from app.ahclient import ActiveOrder
+    ah = FakeAh(tmp_path, periods=[CUR, NXT], order=ActiveOrder(5, {}, date(2026, 10, 28)))
+    ctx = make_ctx(tmp_path, ah=ah)
+    await run_round(ctx, at(MON, 8, 0), "nu_maken")
+    ctx.hass.fail_posts = True
+    await main.notify_stale_held(ctx, date(2026, 11, 18))
+    assert ctx.ledger.load(W2).held_notified is False
+    ctx.hass.fail_posts = False
+    await main.notify_stale_held(ctx, date(2026, 11, 18))
+    assert ctx.ledger.load(W2).held_notified is True

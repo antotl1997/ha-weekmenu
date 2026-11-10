@@ -459,7 +459,9 @@ async def test_api_add_staple_refused_while_the_open_order_is_for_another_week(a
     r = await client.post("api/staples/50")
     assert r.status == 409
     body = await r.json()
-    assert "woensdag 4 november" in body["error"] and body["items"][0]["added"] is False
+    assert body["error"] == ("Deze producten konden niet in je bestelling. Voeg ze zelf "
+                             "toe in de AH-app: AH Roomboter")
+    assert body["items"][0]["added"] is False
     assert len(ctx.client.writes) == n and ctx.ledger.load(W).extras_added == {}
 
 

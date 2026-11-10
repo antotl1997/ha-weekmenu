@@ -738,7 +738,10 @@ async def test_no_cut_in_an_order_of_another_week(led):
     log = WeekLog(W, added={1: 2}, added_to="order:5")
     ah.order.delivery_date = date(2026, 10, 28)  # same id, but not this week's delivery
     res = await apply(ah, led, log, plan({}), replaced=old, today=BEFORE)
-    assert ah.calls == [] and res.removed == {} and res.held == HELD_W
+    # only a lowering: no round retries it, so no promise (Ruling 44)
+    assert ah.calls == [] and res.removed == {} and res.held == (
+        "Deze producten konden niet uit je bestelling. Haal ze zelf weg in de AH-app "
+        "als dat moet: Product 1")
     assert ah.order.items == {1: 2} and led.load(W).added == {1: 2}
 
 
@@ -757,7 +760,9 @@ async def test_extras_never_go_into_an_order_of_another_week(led, kind):
     log = WeekLog(W)
     res = await apply_extras(ah, led, log, {7: 1}, {7: "Koffie"}, kind=kind,
                              savings={7: 1.0})
-    assert ah.calls == [] and res.added == {} and res.held == HELD_W
+    # a tap is never retried: no promise, the title to add by hand (Ruling 44)
+    assert ah.calls == [] and res.added == {} and res.held == (
+        "Deze producten konden niet in je bestelling. Voeg ze zelf toe in de AH-app: Koffie")
     assert log.extras_added == {} and log.offers_added == {} and log.offers_savings == 0.0
 
 
@@ -765,3 +770,40 @@ async def test_extras_go_into_this_weeks_order(led):
     ah = FakeAh(order=ActiveOrder(5, {}, date(2026, 11, 6)))
     res = await apply_extras(ah, led, WeekLog(W), {7: 1})
     assert ah.calls == [("order", {7: 1})] and res.held is None
+
+
+
+# --- Ruling 44: only the scheduled week is promised a retry ---
+
+MANUAL = "Deze producten konden niet in je bestelling. Voeg ze zelf toe in de AH-app: "
+
+
+async def test_held_running_week_names_what_to_add_by_hand(led):
+    # Thursday 5 November: the running week is W, the schedule works on the 11th
+    ah = FakeAh(order=ActiveOrder(5, {}, date(2026, 11, 11)))
+    old = plan({1: 1})
+    log = WeekLog(W, added={1: 1}, added_to="list")
+    res = await apply(ah, led, log, plan({1: 1, 2: 1, 3: 2}), replaced=old,
+                      today=date(2026, 11, 5))
+    assert ah.calls == [] and res.held == MANUAL + "Product 2, Product 3"
+
+
+async def test_held_scheduled_week_keeps_the_promise(led):
+    ah = FakeAh(order=ActiveOrder(5, {}, date(2026, 10, 28)))
+    res = await apply(ah, led, WeekLog(W), plan({1: 1}), today=date(2026, 10, 30))
+    assert res.held == HELD_W
+
+
+async def test_nothing_to_write_sets_no_held_and_no_note(led):
+    ah = FakeAh()
+    await apply(ah, led, WeekLog(W), plan({1: 1}))  # all on the list already
+    ah.order = ActiveOrder(5, {}, date(2026, 10, 28))
+    res = await apply(ah, led, led.load(W), plan({1: 1}), today=date(2026, 11, 5))
+    assert ah.calls == [("list", {1: 1})] and res.held is None
+    assert led.load(W).held is None
+
+
+async def test_held_sets_the_target_to_order_not_list(led):
+    ah = FakeAh(order=ActiveOrder(5, {}, date(2026, 10, 28)))
+    res = await apply(ah, led, WeekLog(W), plan({1: 1}))
+    assert res.target == "order" and led.load(W).target == "order"

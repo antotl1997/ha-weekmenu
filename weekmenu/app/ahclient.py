@@ -239,14 +239,6 @@ def _iso(d: Any) -> date | None:
     return date.fromisoformat(d) if d else None
 
 
-def _day(d: Any) -> date | None:
-    """A delivery day from "2026-11-04" or "2026-11-04T..."; None when unreadable."""
-    try:
-        return date.fromisoformat(str(d)[:10]) if d else None
-    except ValueError:
-        return None
-
-
 def _local_day(stamp: Any) -> date | None:
     """The Dutch calendar day of an ISO time stamp ("2026-09-28T11:58:00.000Z")."""
     if not isinstance(stamp, str) or not stamp:
@@ -803,8 +795,8 @@ class AhClient:
             if pid:
                 items[int(pid)] = items.get(int(pid), 0) + int(op.get("quantity") or 0)
         body = r.body
-        day = (_day(body.get("deliveryDate"))
-               or _day(((body.get("delivery") or {}).get("slot") or {}).get("date")))
+        day = (_local_day(body.get("deliveryDate"))
+               or _local_day(((body.get("delivery") or {}).get("slot") or {}).get("date")))
         return ActiveOrder(id=int(body["id"]), items=items, delivery_date=day)
 
     async def order_delivery_date(self, order: ActiveOrder) -> date | None:
@@ -825,7 +817,7 @@ class AhClient:
             return None
         for f in (data.get("orderFulfillments") or {}).get("result") or []:
             if _pos_int(f.get("orderId")) == order.id:
-                return _day(((f.get("delivery") or {}).get("slot") or {}).get("date"))
+                return _local_day(((f.get("delivery") or {}).get("slot") or {}).get("date"))
         return None
 
     async def add_to_order(
