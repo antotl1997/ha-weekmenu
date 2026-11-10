@@ -16,6 +16,12 @@ with the current one, and the warning. Once a menu exists the schedule never cha
 it; when it was made with an older folder, the hourly look only tells, once, that the
 week's own folder is out (`check_new_folder`). "Menu bijwerken" then remakes it.
 
+ApiHealth (v0.7): two failures in a row on a critical AH endpoint pause every write
+(the writer checks it). One push says so (`sync_health`), marked in state.json so it
+goes once per pause, also over a restart; the pause itself is kept there too. While
+paused the hourly look does a read round (`probe_health`) that can switch writing on
+again; "Opnieuw proberen" in the app does it by hand.
+
 Every path that writes to AH (the rounds and the write calls of the web API) runs
 under `Context.lock`: two writers at once could
 add a product twice. Calls to Home Assistant never break a round: their
@@ -37,7 +43,8 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
-from app.ahclient import AhApiError, AhClient, AhLoginExpired, BonusPeriod, Product
+from app.ahclient import APP_VERSION, AhApiError, AhClient, AhLoginExpired, BonusPeriod, Product
+from app.health import PAUSED_MESSAGE, ApiHealth
 from app.hass import (
     AWAY_SCHEMA,
     TOTAL_PATH,
@@ -174,6 +181,22 @@ class Context:
     too_new: set[str] = field(default_factory=set)
     too_new_notified: bool = False
     planner_seconds: float | None = None  # the menu search of the last build_plan
+    # v0.7: AH API health (shared with the client), and whether its one push went out
+    health: ApiHealth = field(default_factory=ApiHealth)
+    health_notified: bool = False
+    app_version: str = APP_VERSION
+    _saved_marks: tuple | None = None  # what state.json holds of the marks above
+
+    def __post_init__(self):
+        own = getattr(self.client, "health", None)
+        if isinstance(own, ApiHealth):
+            self.health = own  # one object: the client counts, the writer and web read
+        else:
+            try:
+                self.client.health = self.health
+            except AttributeError:
+                pass
+        self._saved_marks = _marks(self)
 
 
 @dataclass
@@ -217,15 +240,20 @@ def note_too_new(ctx: Context, path: Path) -> None:
 
 
 async def notify_too_new(ctx: Context) -> None:
-    """The one message that the add-on is older than its data (until it went out)."""
+    """The one message that the add-on is older than its data. The mark is kept in
+    state.json, so it goes once, not once per process (unless state.json itself is the
+    newer file: then this process can only remember it in memory)."""
     if ctx.too_new and not ctx.too_new_notified:
         if await guard(ctx.hass.notify("Weekmenu", UPDATE_MESSAGE, ctx.ingress_url),
                        "melding"):
             ctx.too_new_notified = True
+            _save_state(ctx)
 
 
 def scan_too_new(ctx: Context) -> None:
-    """At startup: the files outside the week logs that a newer add-on may have left."""
+    """At startup: every file a newer add-on may have left, the week logs included.
+    Nothing newer any more (the add-on was updated): the "werk bij" mark is cleared,
+    so a later downgrade tells it again."""
     away = getattr(ctx.hass, "_away_path", None)
     files = [(ctx.total_path, TOTAL_SCHEMA), (ctx.state_path, STATE_SCHEMA),
              (away, AWAY_SCHEMA)]
@@ -234,6 +262,73 @@ def scan_too_new(ctx: Context) -> None:
             note_too_new(ctx, path)
     if ctx.store.too_new():
         note_too_new(ctx, ctx.store.path)
+    try:
+        weeks = ctx.ledger.weeks()
+    except Exception as e:
+        log.warning("Logboeken niet te lezen (%s)", type(e).__name__)
+        weeks = []
+    for w in weeks:
+        if w.too_new:
+            note_too_new(ctx, ctx.ledger.root / f"{w.week.isoformat()}.json")
+    if not ctx.too_new and ctx.too_new_notified:
+        ctx.too_new_notified = False
+        _save_state(ctx)
+
+
+def update_needed(ctx: Context) -> bool:
+    """A file (or the login) is from a newer add-on: the app shows "werk bij"."""
+    return bool(ctx.too_new) or bool(ctx.store.too_new())
+
+
+def _marks(ctx: Context) -> tuple:
+    h = ctx.health
+    return (h.writes_paused, h.paused_by, h.paused_at, ctx.health_notified,
+            ctx.too_new_notified)
+
+
+async def sync_health(ctx: Context) -> None:
+    """The one "AH lijkt iets veranderd" push per pause, and the pause in state.json.
+
+    Never raises and never calls AH. The push is marked sent only when it went out, so
+    an HA failure tries again next time; when writing is on again the mark is cleared,
+    so a later pause tells it again.
+    """
+    h = ctx.health
+    if h.writes_paused and not ctx.health_notified:
+        if await guard(ctx.hass.notify("Weekmenu", PAUSED_MESSAGE, ctx.ingress_url),
+                       "melding"):
+            ctx.health_notified = True
+    elif not h.writes_paused and ctx.health_notified:
+        ctx.health_notified = False
+    if _marks(ctx) != ctx._saved_marks:
+        _save_state(ctx)
+
+
+def health_needs_sync(ctx: Context) -> bool:
+    return (ctx.health.writes_paused != ctx.health_notified
+            or _marks(ctx) != ctx._saved_marks)
+
+
+async def probe_health(ctx: Context) -> None:
+    """Writes are paused: one read round (the folder, the order or else the list, and the
+    endpoint that paused it). When it all succeeds ApiHealth switches writing on again.
+    Only reads; errors are logged, never raised."""
+    h = ctx.health
+    if not h.writes_paused:
+        return
+    async with ctx.lock:
+        try:
+            await ctx.client.bonus_periods()
+            order = await ctx.client.active_order()
+            if order is None or h.paused_by == "lijst":
+                await ctx.client.shopping_list()
+            if h.writes_paused and h.paused_by == "recept":
+                await ctx.client.search_recipes("pasta", 1)
+            if h.writes_paused and h.paused_by == "product":
+                await ctx.client.search_products("melk", 1)
+        except Exception as e:
+            log.warning("Leesronde terwijl schrijven stilstaat: %s", short_error(e))
+    await sync_health(ctx)
 
 
 async def save_log(ctx: Context, wlog: WeekLog) -> None:
@@ -419,6 +514,7 @@ async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
     if outcome.status in ("done", "waiting_for_folder"):
         _save_state(ctx)
     await update_total(ctx, now.date())
+    await sync_health(ctx)
     return outcome
 
 
@@ -522,6 +618,8 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
                         "melding")
             return RoundOutcome("error", start, error=msg, kind="read")
         log.error("Ronde mislukt: %s", msg)
+        if ctx.health.writes_paused:  # AH changed: the one ApiHealth push says it
+            return RoundOutcome("error", start, error=msg)
         text = (f"Er ging iets mis: {msg}. Er is verder niets toegevoegd; "
                 "wat al gelukt was staat in het logboek.")
         if written:
@@ -783,7 +881,9 @@ async def publish_week(ctx: Context, wlog: WeekLog) -> None:
 
 
 def load_state(ctx: Context) -> None:
-    """state.json: {"checked": ISO datetime, "waiting": {"week", "expected"}}.
+    """state.json: {"checked": ISO datetime, "waiting": {"week", "expected"},
+    "too_new_notified": bool, "api": {"writes_paused", "paused_by", "paused_at",
+    "notified"}} (the last two since 0.7, optional: same schema version).
 
     An older file ({"schedule_done": ...}) or a broken one loads as empty: the log
     still knows which weeks have a menu, so nothing runs twice.
@@ -797,6 +897,13 @@ def load_state(ctx: Context) -> None:
         checked = data.get("checked")
         waiting = data.get("waiting")
         ctx.checked = datetime.fromisoformat(checked) if checked else None
+        ctx.too_new_notified = data.get("too_new_notified") is True
+        api = data.get("api")
+        if isinstance(api, dict):
+            ctx.health.restore(api.get("writes_paused") is True, api.get("paused_by"),
+                               api.get("paused_at"))
+            ctx.health_notified = api.get("notified") is True
+        ctx._saved_marks = _marks(ctx)
         if isinstance(waiting, dict):
             exp = waiting.get("expected")
             ctx.waiting = Waiting(date.fromisoformat(waiting["week"]),
@@ -814,9 +921,12 @@ def _save_state(ctx: Context) -> None:
         "waiting": None if w is None else {
             "week": w.week.isoformat(),
             "expected": w.expected.isoformat() if w.expected else None},
+        "too_new_notified": ctx.too_new_notified,
+        "api": {**ctx.health.persisted(), "notified": ctx.health_notified},
     }
     try:
         write_json(Path(ctx.state_path), data, STATE_SCHEMA)
+        ctx._saved_marks = _marks(ctx)
     except SchemaTooNew as e:
         note_too_new(ctx, e.path)
     except OSError as e:
@@ -832,12 +942,15 @@ async def tick(ctx: Context, now: datetime) -> None:
     """
     if ctx.total_day != now.date():
         await update_total(ctx, now.date())
+    if health_needs_sync(ctx):  # a web read may have paused writing: tell it now
+        await sync_health(ctx)
     start = menu_week_start(now)
     last = LAST_FALLBACK_TRY if is_fallback_day(now.date(), start) else LAST_CHECK
     slot = check_slot(now, ctx.schedule_time, last)
     if slot is None or slot == ctx.checked:
         return
     ctx.checked = slot
+    await probe_health(ctx)  # writes paused: one read round may switch them on again
     await close_stale_new_folder(ctx, start)
     await notify_stale_held(ctx, start)
     if not auto_done(ctx.ledger.load(start)):
@@ -907,6 +1020,21 @@ def load_options(path: Path = OPTIONS_PATH) -> tuple[list[str], time]:
     return pantry, at
 
 
+def load_app_version(path: Path = OPTIONS_PATH) -> str:
+    """The `ah_app_version` option: the AH app version the add-on presents itself as."""
+    try:
+        opts = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        opts = {}
+    v = str(opts.get("ah_app_version") or "").strip() if isinstance(opts, dict) else ""
+    if not v:
+        return APP_VERSION
+    if not all(part.isdigit() for part in v.split(".")):
+        log.warning("ah_app_version ongeldig, %s gebruikt", APP_VERSION)
+        return APP_VERSION
+    return v
+
+
 def ingress_url() -> str:
     """The sidebar page: /hassio/ingress/<full slug>.
 
@@ -926,12 +1054,17 @@ async def amain() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logging.getLogger("httpcore").setLevel(logging.WARNING)
+    from app.diag import install_ring
+
+    install_ring()  # the last log lines for api/diagnose
     pantry, at = load_options()
+    version = load_app_version()
     store = TokenStore(DATA / "tokens.json")
     async with httpx.AsyncClient(timeout=30) as ah_http, \
             httpx.AsyncClient(timeout=15) as ha_http:
         ctx = Context(
-            client=AhClient(store, ah_http),
+            client=AhClient(store, ah_http, app_version=version),
+            app_version=version,
             ledger=Ledger(DATA / "weeks"),
             hass=Hass(ha_http),
             store=store,

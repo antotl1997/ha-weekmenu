@@ -5,6 +5,10 @@ must use relative paths (`api/week`, not `/api/week`). Every call that may write
 to AH, or refresh the AH tokens, runs under `ctx.lock`.
 
 Never in a response or in the log: the login code, a token, an Authorization header.
+
+`api/health` (the Supervisor watchdog) takes no lock and calls nothing. The watchdog
+comes from the Supervisor, which is also the ingress proxy (172.30.32.2), so the same
+allowlist lets it through; no other address is needed.
 """
 
 from __future__ import annotations
@@ -31,7 +35,9 @@ from app.hass import (
 from app.ledger import leftovers, new_folder_available
 from app.planner import Dish, Plan
 from app.deals import qty_for_deal, savings as deal_savings
+from app.diag import diagnose
 from app.durable import UPDATE_MESSAGE, SchemaTooNew
+from app.health import PAUSED_NOTE
 from app.staples import extras_savings, staple_list
 from app.week import (
     WEEKDAGEN,
@@ -275,6 +281,20 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     async def guard_mw(request: web.Request, handler):
         if allowed_remotes is not None and request.remote not in allowed_remotes:
             return _err(403, "alleen via Home Assistant")
+        if request.path == "/api/health":  # the watchdog: nothing else, never blocks
+            return await handler(request)
+        try:
+            return await handler(request)
+        finally:
+            # a read or write may have paused writing: the one push goes out now
+            if main.health_needs_sync(ctx):
+                try:
+                    await main.sync_health(ctx)
+                except Exception as e:  # never in the way of the answer itself
+                    log.warning("Melding API-status mislukt (%s)", type(e).__name__)
+
+    @web.middleware
+    async def errors_mw(request: web.Request, handler):
         try:
             return await handler(request)
         except web.HTTPException:
@@ -293,7 +313,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             log.error("API-fout: %s", type(e).__name__)
             return _err(500, type(e).__name__)
 
-    app = web.Application(middlewares=[guard_mw])
+    app = web.Application(middlewares=[guard_mw, errors_mw])
 
     async def body_of(request) -> dict:
         try:
@@ -357,6 +377,12 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         logged_in = ctx.store.load() is not None and not ctx.login_expired
         w = waiting_for()
         return web.json_response({
+            # a file or the login is from a newer add-on: the app says "werk bij"
+            # instead of showing the login screen
+            "update_needed": UPDATE_MESSAGE if main.update_needed(ctx) else None,
+            "ah_app_version": ctx.app_version,
+            "last_ah_sync": ctx.health.last_ok,
+            "writes_paused": ctx.health.writes_paused,
             "logged_in": logged_in, "last_round": ctx.last_round, "error": ctx.error,
             # a menu round only: the hourly new-folder look also takes the lock
             "running": ctx.busy or ctx.in_round, "rounds": ctx.rounds,
@@ -372,6 +398,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         code = extract_code(raw) if isinstance(raw, str) else ""
         if not code:
             return _err(400, "Geen code gevonden. Plak de hele regel met appie://login-exit?code=…")
+        if ctx.store.too_new():  # the answer could not be saved: keep the code unused
+            main.note_too_new(ctx, ctx.store.path)
+            return _err(409, UPDATE_MESSAGE, update=True)
         async with ctx.lock:  # a round may be refreshing the tokens right now
             try:
                 await ctx.client.exchange_code(code)
@@ -383,6 +412,29 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         ctx.error = None
         log.info("Ingelogd bij AH")
         return web.json_response({"logged_in": True})
+
+    async def logout(request):
+        """Uitloggen bij AH: tokens.json (and its .bak) gone, the app shows the login.
+        Under the lock: a round may be refreshing the tokens right now."""
+        async with ctx.lock:
+            await asyncio.to_thread(ctx.store.clear)
+        ctx.login_expired = True
+        log.info("Uitgelogd bij AH: login verwijderd")
+        return web.json_response({"logged_in": False})
+
+    # --- health and diagnose: no lock, no AH call ---
+
+    async def health(request):
+        return web.json_response({"ok": True})
+
+    async def get_diagnose(request):
+        return web.json_response(diagnose(ctx))
+
+    async def retry_writes(request):
+        """"Opnieuw proberen" in Diagnose: writing on again, by hand."""
+        ctx.health.resume("knop Opnieuw proberen")
+        await main.sync_health(ctx)
+        return web.json_response({"writes_paused": ctx.health.writes_paused})
 
     # --- reading ---
 
@@ -409,6 +461,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                         raw.away if raw is not None else (),
                         retry=start == menu_week_start(now))
         out["enabled"] = raw.enabled if raw is not None else None  # None: HA unreadable
+        out["writes_paused"] = PAUSED_NOTE if ctx.health.writes_paused else None
         w = waiting_for(start) if plan is None else None
         out["waiting_for_folder"] = None if w is None else {
             "expected": w.expected.isoformat() if w.expected else None}
@@ -739,6 +792,10 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     app.router.add_get("/", index)
     app.router.add_get("/api/status", status)
     app.router.add_post("/api/login", login)
+    app.router.add_post("/api/logout", logout)
+    app.router.add_get("/api/health", health)
+    app.router.add_get("/api/diagnose", get_diagnose)
+    app.router.add_post("/api/diagnose/retry", retry_writes)
     app.router.add_get("/api/week", week)
     app.router.add_get("/api/dish/{day}", dish)
     app.router.add_post("/api/dish/{day}/swap", swap)

@@ -50,6 +50,12 @@ note promises it (`held_note`); any other week, and a staple or offer tap, gets 
 titles to add by hand (`manual_note`, Ruling 44). With nothing to write there is no
 note at all.
 
+Writes paused (v0.7, ApiHealth): when AH seems to have changed its API
+(`client.health.writes_paused`), `apply` and `apply_extras` make no AH call at all, not
+even the settle reads. `apply` still saves the plan; with something to write it marks
+the round as not done (`round_done` and `completion_tried` off), so the hourly look
+completes it once writing is on again. The result carries `held` = PAUSED_NOTE.
+
 Deliberate gap: the gap lasts until the next `apply`. If AH did not apply a
 write, or the user removes the product again before the next round, the entry
 looks "not applied" and the product is written once more. Example: a list
@@ -62,6 +68,7 @@ from datetime import date, datetime, time, timedelta
 from typing import Literal
 
 from app.durable import SchemaTooNew
+from app.health import PAUSED_NOTE
 from app.ledger import Ledger, WeekLog, leftovers
 from app.planner import Plan
 from app.week import lange_datum, menu_week_start
@@ -155,6 +162,12 @@ def _refuse_too_new(ledger: Ledger, log: WeekLog) -> None:
     (the write-ahead save would refuse anyway; this stops the reads too)."""
     if log.too_new:
         raise SchemaTooNew(ledger.root / f"{log.week.isoformat()}.json")
+
+
+def writes_paused(client) -> bool:
+    """ApiHealth says AH seems to have changed: nothing may go to AH."""
+    health = getattr(client, "health", None)
+    return bool(health is not None and health.writes_paused)
 
 
 def _safe_save(ledger: Ledger, log: WeekLog) -> None:
@@ -345,6 +358,8 @@ async def apply(
     A log from a newer add-on is never written, so nothing goes to AH (SchemaTooNew).
     """
     _refuse_too_new(ledger, log)
+    if writes_paused(client):
+        return _paused_apply(ledger, log, plan, replaced, today)
     await _settle(client, ledger, log)
     # what the add-on put out there, plus what the user took off again (never re-added)
     delta = missing(log, plan)
@@ -402,6 +417,26 @@ async def apply(
     return result
 
 
+def _paused_apply(ledger: Ledger, log: WeekLog, plan: Plan, replaced: Plan | None,
+                  today: date | None) -> WriteResult:
+    """Writes paused: keep the plan, write nothing, and leave the round open when
+    something is still to be written (or lowered), so the hourly look completes it."""
+    delta = missing(log, plan)
+    may_cut = (replaced is not None and today is not None and today < log.week
+               and any(n - plan.basket.get(p, 0) > 0 for p, n in log.added.items()))
+    log.plan = plan.to_dict()
+    log.savings = plan.savings
+    if delta or may_cut:
+        log.round_done = log.completion_tried = False
+    ledger.save(log)
+    target = log.target or "list"
+    result = WriteResult(target=target, held=PAUSED_NOTE if (delta or may_cut) else None)
+    if result.held:
+        log_.warning("Menu: niets geschreven, schrijven staat stil (AH lijkt veranderd)")
+    _report(result, log, plan, replaced)
+    return result
+
+
 def _report(result: WriteResult, log: WeekLog, plan: Plan, replaced: Plan | None) -> None:
     left = leftovers(log, plan)
     if replaced is not None:
@@ -427,6 +462,13 @@ async def apply_extras(
     _refuse_too_new(ledger, log)
     titles = titles or {}
     into = log.offers_added if kind == OFFER else log.extras_added
+    if writes_paused(client):
+        todo = [p for p, n in adds.items() if n > 0 and p not in into]
+        result = WriteResult(target=log.target or "list", held=PAUSED_NOTE if todo else None)
+        if todo:
+            log_.warning("%s: niets geschreven, schrijven staat stil (AH lijkt veranderd)",
+                         "Losse aanbieding" if kind == OFFER else "Vaste boodschappen")
+        return result
     await _settle(client, ledger, log)
     delta = {
         p: n for p, n in adds.items()
