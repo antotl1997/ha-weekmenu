@@ -585,7 +585,11 @@ async def check_new_folder(ctx: Context, start: date) -> None:
                                   and period.start <= wlog.folder_period_start):
                 return
             wlog.new_folder = period.start
-            ctx.ledger.save(wlog)
+            try:
+                ctx.ledger.save(wlog)
+            except Exception as e:  # not noted: no push either, the next hour tries again
+                log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
+                return
             log.info("De folder van de week van %s is er; het menu is met een eerdere folder gemaakt", start)
             await publish_week(ctx, wlog)
         if not new_folder_available(wlog) or wlog.new_folder_notified:
