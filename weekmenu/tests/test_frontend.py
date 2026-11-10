@@ -8,6 +8,7 @@ is saved in tests/screens/ to compare with the mockups by eye. Skipped without C
 import asyncio
 import shutil
 import subprocess
+import sys
 import threading
 from datetime import date, datetime
 from pathlib import Path
@@ -23,13 +24,10 @@ from app.planner import Dish, Line, Plan
 from app.staples import Staple
 from app.tokens import Tokens
 from app.web import STATIC_DIR, make_app
+from tests.chrome import find_chrome
 from tests.fakes import W, make_ctx
 
-CHROME_PATHS = [
-    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-]
-CHROME = next((p for p in CHROME_PATHS if Path(p).is_file()), None) or shutil.which("chrome")
+CHROME = find_chrome()
 SCREENS = Path(__file__).parent / "screens"
 PHONE = (390, 844)
 PHONE_LONG = (390, 1420)  # the whole Week tab, down to "Ook in de bonus"
@@ -203,6 +201,8 @@ def chrome(url, profile, size=(390, 844), screenshot=None) -> str:
             "--force-device-scale-factor=2", f"--window-size={size[0]},{size[1]}",
             f"--user-data-dir={profile}", "--no-first-run", "--no-default-browser-check",
             "--virtual-time-budget=3000"]
+    if sys.platform.startswith("linux"):
+        args.append("--no-sandbox")  # CI runs the tests inside a container-like runner
     if screenshot:
         args.append("--screenshot=" + str(screenshot).replace("\\", "/"))
     else:
