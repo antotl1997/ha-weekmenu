@@ -1,6 +1,6 @@
 [project]
 name = "weekmenu"
-version = "0.3.0"
+version = "0.4.0"
 requires-python = ">=3.12"
 dependencies = ["httpx>=0.27", "aiohttp>=3.9", "pyyaml>=6"]
 

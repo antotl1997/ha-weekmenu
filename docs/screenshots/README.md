@@ -19,11 +19,12 @@ Screenshots of the built Weekmenu app, made by `weekmenu/tests/test_frontend.py`
 | | |
 |---|---|
 | ![Week](app-week.png) | ![Dish](app-gerecht.png) |
-| ![Savings](app-besparing.png) | ![Settings](app-instellingen.png) |
-| ![Login](app-login.png) | |
+| ![Offers](app-aanbiedingen.png) | ![Savings](app-besparing.png) |
+| ![Settings](app-instellingen.png) | ![Login](app-login.png) |
 
 1. Week: under the title the order it is for ("Voor de bestelling van woensdag 4 november"), then the savings of the week, then one card per evening, an evening not at home and a leftover night ("Donderdag · restjes van ...") as quiet cards, and under the dishes "Ook in de bonus": staples bought often that are on offer, each with a plus button
 2. One dish: persons, ingredients with the AH product and the bonus offer, preparation and swap
-3. Savings: this month, since the start, and per week
-4. Settings: the same helpers as in Home Assistant: Kookmomenten with the explanation "6 eetdagen, 5 kookmomenten, 1 keer restjes", "Niet thuis eten" chips per day, plus Nieuw menu and Nu maken
-5. Login: paste the `appie://login-exit?code=…` line from the browser console
+3. Aanbiedingen: the whole bonus folder of the menu week per category with a search field on top; each product has its photo, the action, the price (old price struck through) and a plus button that becomes a check with the quantity once added
+4. Savings: this month, since the start, and per week
+5. Settings: the same helpers as in Home Assistant: Kookmomenten with the explanation "6 eetdagen, 5 kookmomenten, 1 keer restjes", "Niet thuis eten" chips per day, plus Nieuw menu and Nu maken
+6. Login: paste the `appie://login-exit?code=…` line from the browser console
