@@ -28,7 +28,7 @@ from app.hass import (
     load_total,
     plan_view,
 )
-from app.ledger import leftovers
+from app.ledger import leftovers, new_folder_available
 from app.planner import Dish, Plan, Settings
 from app.staples import extras_savings, staple_list
 from app.week import (
@@ -273,7 +273,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         raw = await settings_now()
         if raw is None:
             return
-        view = plan_view(plan, start, target, away_dates(start, raw.away))
+        view = plan_view(plan, start, target, away_dates(start, raw.away),
+                         new_folder=new_folder_available(ctx.ledger.load(start)))
         await main.guard(ctx.hass.publish(view,
                                           plan.savings + extras), "sensoren")
 
@@ -356,7 +357,12 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         out["waiting_for_folder"] = None if w is None else {
             "expected": w.expected.isoformat() if w.expected else None}
         nxt = menu_week_start(now)
-        out["next_week"] = nxt.isoformat() if nxt != start and ctx.ledger.load(nxt).plan else None
+        nxt_log = wlog if nxt == start else ctx.ledger.load(nxt)
+        out["next_week"] = nxt.isoformat() if nxt != start and nxt_log.plan else None
+        # "Nieuwe folder is er": about the week Menu bijwerken remakes, whichever shows
+        fresh = new_folder_available(nxt_log)
+        out["new_folder_available"] = fresh
+        out["new_folder_week"] = nxt.isoformat() if fresh else None
         return web.json_response(out)
 
     def load_dish(day: date):
@@ -481,9 +487,12 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     async def run(request):
         mode = (await body_of(request)).get("mode")
         if mode not in main.BUTTONS:
-            return _err(400, "mode moet nu_maken of nieuw_menu zijn")
+            return _err(400, "mode moet nu_maken, nieuw_menu of bijwerken zijn")
         if ctx.busy or ctx.lock.locked():
             return _err(409, "Er loopt al een ronde")
+        if mode == "bijwerken" and not new_folder_available(
+                ctx.ledger.load(menu_week_start(ctx.clock()))):
+            return _err(409, "Er is geen nieuwe folder om het menu mee bij te werken")
         ctx.busy = True
 
         async def go():

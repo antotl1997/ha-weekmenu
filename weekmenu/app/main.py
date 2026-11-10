@@ -11,6 +11,11 @@ before that Wednesday, at 18:00, fall back to the current folder. The plan in th
 log is the source of truth for "done"; state.json only remembers the last hour
 looked at and when the folder is expected.
 
+The buttons (Nu maken, Nieuw menu, stdin) always make a menu: before the folder is out
+with the current one, and the warning. Once a menu exists the schedule never changes
+it; when it was made with an older folder, the hourly look only tells, once, that the
+week's own folder is out (`check_new_folder`). "Menu bijwerken" then remakes it.
+
 Every path that writes to AH (the rounds and the write calls of the web API) runs
 under `Context.lock`: two writers at once could
 add a product twice. Calls to Home Assistant never break a round: their
@@ -41,7 +46,7 @@ from app.hass import (
     load_total_state,
     plan_view,
 )
-from app.ledger import Ledger, WeekLog
+from app.ledger import Ledger, WeekLog, new_folder_available
 from app.planner import (
     Plan,
     Settings,
@@ -61,7 +66,6 @@ from app.week import (
     WEEKDAGEN,
     away_dates,
     eat_days,
-    lange_datum,
     menu_week_start,
     plan_days,
 )
@@ -73,9 +77,10 @@ __all__ = ["run_round", "swap_dish", "rescale_dish", "restore_dish", "put_dish",
 
 log = logging.getLogger("weekmenu")
 
-Mode = Literal["schema", "nu_maken", "nieuw_menu"]
-MODES = ("schema", "nu_maken", "nieuw_menu")
-BUTTONS = ("nu_maken", "nieuw_menu")
+Mode = Literal["schema", "nu_maken", "nieuw_menu", "bijwerken"]
+MODES = ("schema", "nu_maken", "nieuw_menu", "bijwerken")
+BUTTONS = ("nu_maken", "nieuw_menu", "bijwerken")
+REBUILD = ("nieuw_menu", "bijwerken")  # throw the week's menu away and choose again
 
 DATA = Path("/data")
 OPTIONS_PATH = DATA / "options.json"
@@ -88,6 +93,7 @@ PERIOD_WARNING = (
     "De folder van volgende week was er nog niet: "
     "prijzen gelden woensdag waarschijnlijk niet meer"
 )
+NEW_FOLDER = "De nieuwe folder is er. Open de Weekmenu-app om je menu bij te werken."
 LOGIN_EXPIRED = "AH-login verlopen, log opnieuw in"
 LOGIN_EXPIRED_COMPLETION = ("AH-login verlopen. Log opnieuw in via de Weekmenu-app; "
                             "daarna wordt het menu vanzelf afgemaakt.")
@@ -140,7 +146,6 @@ class Context:
     checked: datetime | None = None
     waiting: Waiting | None = None
     error_kind: str | None = None  # "read": a read that failed; a waiting result clears it
-    button_notified: date | None = None  # menu week of the last "folder not out" push
     away_notified: date | None = None  # menu week of the last "all evenings away" push
     total_day: date | None = None
     # bonus offers per period start: the folder is the same all week
@@ -246,7 +251,16 @@ def auto_done(wlog: WeekLog) -> bool:
 async def bonus_for_week(
     ctx: Context, start: date, now: datetime, fallback: bool
 ) -> tuple[list[Product], str | None] | Waiting:
-    """The offers of the period holding the menu Wednesday.
+    """The offers of the period holding the menu Wednesday, and the warning (or None)."""
+    got = await folder_for_week(ctx, start, now, fallback)
+    return got if isinstance(got, Waiting) else got[:2]
+
+
+async def folder_for_week(
+    ctx: Context, start: date, now: datetime, fallback: bool
+) -> tuple[list[Product], str | None, date] | Waiting:
+    """The offers of the period holding the menu Wednesday, the warning, and the start
+    of the period used.
 
     Not out yet: `Waiting` with AH's expected date (nextPeriodVisibleFrom of the
     current period), and no bonus_offers call. With `fallback` the current period
@@ -267,7 +281,7 @@ async def bonus_for_week(
         ctx.waiting = None  # the folder is out
     if period.start not in ctx.bonus_cache:
         ctx.bonus_cache = {period.start: await ctx.client.bonus_offers(period)}
-    return ctx.bonus_cache[period.start], warning
+    return ctx.bonus_cache[period.start], warning, period.start
 
 
 # --- the round --------------------------------------------------------------------------
@@ -278,11 +292,14 @@ async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
 
     "schema" is the automatic hourly look: it does nothing once the log has a menu
     for that week, and before the Sunday 18:00 fallback a failure that wrote nothing
-    is left for the next hour, without a message. Buttons never use the old folder
-    before that fallback moment either: they report waiting_for_folder.
+    is left for the next hour, without a message. The buttons nu_maken and nieuw_menu
+    always make a menu, with the current folder while next week's is not out.
+    "bijwerken" is nieuw_menu with the week's own folder, and only when the menu is
+    from an older folder and that folder is out (new_folder_available); else it skips.
     """
     start = menu_week_start(now)
-    fallback = fallback_due(ctx, now, start)
+    fallback = (mode in ("nu_maken", "nieuw_menu")
+                or (mode == "schema" and fallback_due(ctx, now, start)))
     try:
         raw = await ctx.hass.read_settings()
     except Exception as e:  # not only HTTP: nothing may stop the schedule silently
@@ -337,6 +354,9 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
         wlog = ctx.ledger.load(start)
         if mode == "schema" and auto_done(wlog):
             return RoundOutcome("skipped", start)  # the log says done: never again
+        if mode == "bijwerken" and not new_folder_available(wlog):
+            log.info("Geen nieuwe folder voor de week van %s: menu niet bijgewerkt", start)
+            return RoundOutcome("skipped", start)
         if mode == "schema" and wlog.plan:
             # a round stopped halfway (crash or write error): complete it once, from the
             # log (pending is settled first, so no write is ever repeated blind)
@@ -344,7 +364,7 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
             wlog.completion_tried = True
             ctx.ledger.save(wlog)
             log.info("Ronde voor week %s was niet afgemaakt: één keer aanvullen", start)
-        if mode != "nieuw_menu" and wlog.plan:
+        if mode not in REBUILD and wlog.plan:
             reused = True
             plan, replaced = Plan.from_dict(wlog.plan), None  # same menu, only fill gaps
         else:
@@ -354,18 +374,21 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
                     ctx.away_notified = start
                     await guard(ctx.hass.notify("Weekmenu", ALL_AWAY, ctx.ingress_url), "melding")
                 return RoundOutcome("skipped", start)
-            got = await bonus_for_week(ctx, start, now, fallback=fallback)
+            got = await folder_for_week(ctx, start, now, fallback=fallback)
             if isinstance(got, Waiting):
                 log.info("Folder voor de week van %s nog niet uit (verwacht %s)",
                          start, got.expected or "onbekend")
                 return RoundOutcome("waiting_for_folder", start, expected=got.expected)
-            bonus, warning = got
+            bonus, warning, period_start = got
             replaced = Plan.from_dict(wlog.plan) if wlog.plan else None
-            old_ids = {d.recipe.id for d in replaced.dishes} if replaced else set()
+            # Nieuw menu asks for other dishes; Menu bijwerken only for the new folder
+            old_ids = ({d.recipe.id for d in replaced.dishes}
+                       if replaced and mode == "nieuw_menu" else set())
             plan = await build_plan(ctx.client, bonus, make_settings(ctx, raw, start, old_ids))
             if not plan.dishes:
                 raise AhApiError("geen enkel recept gevonden dat in de regels past")
             wlog.period_warning = warning  # a menu from the right folder clears it
+            wlog.folder_period_start = period_start  # and so "new folder available"
             if replaced is not None:  # a new menu: the swap history was about the old one
                 wlog.swapped_out.clear()
                 wlog.previous.clear()
@@ -411,7 +434,8 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     await refresh_staples(ctx, wlog, plan, start, now)
     recount_extras(ctx, wlog)  # apply may have settled a staple write
     await guard(ctx.hass.publish(plan_view(plan, start, result.target,
-                                          away_dates(start, raw.away)),
+                                          away_dates(start, raw.away),
+                                          new_folder=new_folder_available(wlog)),
                                  plan.savings + wlog.extras_savings), "sensoren")
     nothing_new = not (result.added or result.removed or result.pending or result.unknown)
     if completing:  # the message only if it never went out, or something changed
@@ -538,6 +562,56 @@ async def update_total(ctx: Context, today: date) -> None:
                     log.warning("Logboek %s niet bijgewerkt (%s)", w.week, type(e).__name__)
 
 
+async def check_new_folder(ctx: Context, start: date) -> None:
+    """The menu of `start` exists and was made with an older folder (period_warning):
+    look whether the week's own folder is out. If so, note it on the week, publish the
+    flag and send one push per week. Never changes the menu, and never raises.
+
+    Only one AH read an hour, and none once the new folder is known or the menu was
+    made with the right folder. The push is marked sent only when it went out, like the
+    "klaar" message, so an HA failure tries again the next hour.
+    """
+    async with ctx.lock:
+        wlog = ctx.ledger.load(start)
+        if not wlog.plan or wlog.period_warning is None:
+            return
+        if wlog.new_folder is None:
+            try:
+                period = _period_for(await ctx.client.bonus_periods(), start)
+            except Exception as e:
+                log.warning("Nieuwe folder niet bekeken: %s", short_error(e))
+                return
+            if period is None or (wlog.folder_period_start is not None
+                                  and period.start <= wlog.folder_period_start):
+                return
+            wlog.new_folder = period.start
+            ctx.ledger.save(wlog)
+            log.info("De folder van de week van %s is er; het menu is met een eerdere folder gemaakt", start)
+            await publish_week(ctx, wlog)
+        if not new_folder_available(wlog) or wlog.new_folder_notified:
+            return
+        if await guard(ctx.hass.notify("Weekmenu", NEW_FOLDER, ctx.ingress_url), "melding"):
+            wlog.new_folder_notified = True
+            try:
+                ctx.ledger.save(wlog)
+            except Exception as e:
+                log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
+
+
+async def publish_week(ctx: Context, wlog: WeekLog) -> None:
+    """sensor.weekmenu for this week's menu as it is, with the new-folder flag."""
+    try:
+        raw = await ctx.hass.read_settings()
+    except Exception as e:
+        log.warning("Home Assistant-instellingen niet te lezen (%s)", type(e).__name__)
+        return
+    plan = Plan.from_dict(wlog.plan)
+    await guard(ctx.hass.publish(
+        plan_view(plan, wlog.week, wlog.target or "list", away_dates(wlog.week, raw.away),
+                  new_folder=new_folder_available(wlog)),
+        plan.savings + wlog.extras_savings), "sensoren")
+
+
 # --- schedule, state and stdin ----------------------------------------------------------
 
 
@@ -553,9 +627,7 @@ def load_state(ctx: Context) -> None:
         data = json.loads(Path(ctx.state_path).read_text(encoding="utf-8"))
         checked = data.get("checked")
         waiting = data.get("waiting")
-        notified = data.get("button_notified")
         ctx.checked = datetime.fromisoformat(checked) if checked else None
-        ctx.button_notified = date.fromisoformat(notified) if notified else None
         if isinstance(waiting, dict):
             exp = waiting.get("expected")
             ctx.waiting = Waiting(date.fromisoformat(waiting["week"]),
@@ -573,8 +645,6 @@ def _save_state(ctx: Context) -> None:
         "waiting": None if w is None else {
             "week": w.week.isoformat(),
             "expected": w.expected.isoformat() if w.expected else None},
-        "button_notified": (ctx.button_notified.isoformat()
-                            if ctx.button_notified else None),
     }
     path = Path(ctx.state_path)
     tmp = Path(str(path) + ".tmp")
@@ -590,7 +660,8 @@ async def tick(ctx: Context, now: datetime) -> None:
     """One look at the clock: the total once a day, and the hourly look for the menu.
 
     At most one look per slot, also over a restart (the slot is saved after the
-    round). A menu in the log for the next menu week ends the looking for that week.
+    round). A menu in the log for the next menu week ends the looking for a menu; a
+    menu from an older folder is then only looked at for the new folder.
     """
     if ctx.total_day != now.date():
         await update_total(ctx, now.date())
@@ -600,8 +671,10 @@ async def tick(ctx: Context, now: datetime) -> None:
     if slot is None or slot == ctx.checked:
         return
     ctx.checked = slot
-    if not auto_done(ctx.ledger.load(menu_week_start(now))):
+    if not auto_done(ctx.ledger.load(start)):
         await run_round(ctx, now, "schema")
+    else:
+        await check_new_folder(ctx, start)
     _save_state(ctx)  # after the round: a crash halfway looks again after the restart
 
 
@@ -616,7 +689,7 @@ async def schedule_loop(ctx: Context) -> None:
 
 
 async def handle_command(ctx: Context, line: str) -> RoundOutcome | None:
-    """One stdin line: {"command": "nu_maken"} or {"command": "nieuw_menu"}."""
+    """One stdin line: {"command": "nu_maken"}, "nieuw_menu" or "bijwerken"."""
     line = line.strip()
     if not line:
         return None
@@ -628,17 +701,7 @@ async def handle_command(ctx: Context, line: str) -> RoundOutcome | None:
     if cmd not in BUTTONS:
         log.warning("Onbekend stdin-commando genegeerd")
         return None
-    out = await run_round(ctx, ctx.clock(), cmd)
-    if out.status == "waiting_for_folder" and ctx.button_notified != out.week:
-        # pressed in Home Assistant, where the app's notice is not seen: say it once
-        ctx.button_notified = out.week
-        _save_state(ctx)
-        when = f", verwacht vanaf {lange_datum(out.expected)}" if out.expected else ""
-        await guard(ctx.hass.notify(
-            "Weekmenu",
-            f"De folder van volgende week is er nog niet{when}. Het menu komt dan vanzelf.",
-            ctx.ingress_url), "melding")
-    return out
+    return await run_round(ctx, ctx.clock(), cmd)
 
 
 async def stdin_loop(ctx: Context) -> None:

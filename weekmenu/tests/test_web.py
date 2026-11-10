@@ -235,7 +235,8 @@ async def test_api_run_starts_round_once(aiohttp_client, ctx, monkeypatch):
 
     monkeypatch.setattr(main, "run_round", fake_round)
     client = await aiohttp_client(make_app(ctx))
-    assert (await client.post("api/run", json={"mode": "fout"})).status == 400
+    r = await client.post("api/run", json={"mode": "fout"})
+    assert r.status == 400 and "bijwerken" in (await r.json())["error"]
     r = await client.post("api/run", json={"mode": "nu_maken"})
     assert r.status == 202
     r = await client.post("api/run", json={"mode": "nieuw_menu"})
@@ -361,25 +362,79 @@ async def test_api_week_reports_period_warning(aiohttp_client, ctx):
 # --- schedule change (2 November 2026) ------------------------------------------------
 
 
-async def test_api_run_before_folder_waits_and_says_when(aiohttp_client, tmp_path):
+async def test_api_run_before_folder_makes_a_menu_with_the_warning(aiohttp_client, tmp_path,
+                                                                   monkeypatch):
+    """v0.4 C: Nu maken before the folder makes the menu with the current folder."""
     from app.ahclient import BonusPeriod
+
+    async def fake_build(client, bonus, s):
+        return week_plan()
+
+    monkeypatch.setattr(main, "build_plan", fake_build)
     cur = BonusPeriod(date(2026, 10, 26), date(2026, 11, 1), date(2026, 10, 30), ["Vlees"])
     ah = FakeAh(tmp_path, periods=[cur])
     ctx = make_ctx(tmp_path, ah=ah, now=datetime(2026, 10, 29, 10, 0))
     client = await aiohttp_client(make_app(ctx))
-    status = await (await client.get("api/status")).json()
-    assert status["waiting_for_folder"] is None
     assert (await client.post("api/run", json={"mode": "nu_maken"})).status == 202
     await asyncio.gather(*ctx.tasks)
-    assert ah.writes == [] and "bonus_offers" not in ah.calls
-    assert ctx.hass.notifications() == []
+    assert ah.offers_for == [cur] and ah.held() == {1: 1, 2: 2, 3: 1}
     status = await (await client.get("api/status")).json()
-    assert status["waiting_for_folder"] == {"week": "2026-11-04", "expected": "2026-10-30"}
+    assert status["waiting_for_folder"] is None
     assert status["error"] is None and status["running"] is False
     body = await (await client.get("api/week")).json()
-    assert body["week"] == "2026-11-04" and body["days"] == []
+    assert body["week"] == "2026-11-04" and len(body["days"]) == 7
     assert body["bestelling"] == "Voor de bestelling van woensdag 4 november"
-    assert body["waiting_for_folder"] == {"expected": "2026-10-30"}
+    assert body["period_warning"] == main.PERIOD_WARNING
+    assert body["waiting_for_folder"] is None and body["new_folder_available"] is False
+
+
+async def test_api_week_and_run_bijwerken_with_the_new_folder(aiohttp_client, tmp_path,
+                                                              monkeypatch):
+    from app.ahclient import BonusPeriod
+    plans = [week_plan(), make_plan([dish(WO, 201, [1, 4], 1.0), dish(VR, 202, [5], 2.0)])]
+
+    async def fake_build(client, bonus, s):
+        return plans.pop(0)
+
+    monkeypatch.setattr(main, "build_plan", fake_build)
+    cur = BonusPeriod(date(2026, 10, 26), date(2026, 11, 1), date(2026, 10, 30), ["Vlees"])
+    nxt = BonusPeriod(date(2026, 11, 2), date(2026, 11, 8), date(2026, 11, 6), ["Vlees"])
+    ah = FakeAh(tmp_path, periods=[cur])
+    ctx = make_ctx(tmp_path, ah=ah, now=datetime(2026, 10, 29, 10, 0))
+    client = await aiohttp_client(make_app(ctx))
+    await main.run_round(ctx, ctx.clock(), "nu_maken")
+    # no new folder yet: nothing to update
+    r = await client.post("api/run", json={"mode": "bijwerken"})
+    assert r.status == 409 and "nieuwe folder" in (await r.json())["error"]
+    assert (await (await client.get("api/week")).json())["new_folder_available"] is False
+    ah.periods = [cur, nxt]
+    ctx.clock = lambda: datetime(2026, 10, 30, 9, 0)
+    await main.tick(ctx, ctx.clock())
+    body = await (await client.get("api/week")).json()
+    assert body["new_folder_available"] is True and body["new_folder_week"] == "2026-11-04"
+    assert (await client.post("api/run", json={"mode": "bijwerken"})).status == 202
+    await asyncio.gather(*ctx.tasks)
+    body = await (await client.get("api/week")).json()
+    assert body["new_folder_available"] is False and body["period_warning"] is None
+    assert [d["recipe"]["id"] for d in body["days"] if d.get("recipe")] == [201, 202]
+    assert ah.held() == {1: 1, 4: 1, 5: 1}  # cleaned up like Nieuw menu
+    assert ah.offers_for == [cur, nxt]
+
+
+async def test_api_week_flags_the_new_folder_while_the_running_week_shows(aiohttp_client,
+                                                                          tmp_path):
+    """Thursday 5 November: the app shows the running week; the flag is about the next."""
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 5, 10, 0))
+    ctx.ledger.save(WeekLog(W, plan=week_plan().to_dict()))
+    nov11 = date(2026, 11, 11)
+    ctx.ledger.save(WeekLog(nov11, plan=week_plan().to_dict(),
+                            period_warning=main.PERIOD_WARNING,
+                            folder_period_start=date(2026, 11, 2),
+                            new_folder=date(2026, 11, 9)))
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert body["week"] == "2026-11-04"
+    assert body["new_folder_available"] is True and body["new_folder_week"] == "2026-11-11"
 
 
 async def test_api_week_names_the_order_and_no_waiting_once_planned(aiohttp_client, ctx):

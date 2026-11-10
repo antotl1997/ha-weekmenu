@@ -5,7 +5,7 @@ import pytest
 
 from app import main
 from app.ahclient import AhApiError, AhLoginExpired, AhNotJson, BonusPeriod
-from app.ledger import Ledger, WeekLog
+from app.ledger import Ledger, WeekLog, new_folder_available
 from app.planner import Plan
 from app.hass import helper_persons
 from app.main import PERIOD_WARNING, handle_command, run_round, tick, update_total
@@ -492,29 +492,37 @@ async def test_monday_after_fallback_menu_makes_no_new_menu(tmp_path, planned):
     assert len(calls) == 1 and len(ctx.hass.notifications()) == 1
 
 
-async def test_nu_maken_before_folder_waits_and_writes_nothing(tmp_path, planned):
+async def test_nu_maken_before_folder_makes_a_menu_with_the_current_folder(tmp_path, planned):
+    """v0.4 C: buttons always make a menu; without next week's folder the current one,
+    with the warning. The first button makes it, the second (nieuw_menu) replaces it."""
     calls, _ = planned
     ah = FakeAh(tmp_path, periods=[CUR])
     ctx = make_ctx(tmp_path, ah=ah)
     for mode in ("nu_maken", "nieuw_menu"):
         out = await run_round(ctx, at(date(2026, 10, 29), 10, 0), mode)
-        assert out.status == "waiting_for_folder" and out.expected == date(2026, 10, 30)
-    assert calls == [] and ah.writes == [] and "bonus_offers" not in ah.calls
-    assert ctx.ledger.load(W).plan is None and ctx.hass.notifications() == []
-    assert ctx.waiting == main.Waiting(W, date(2026, 10, 30)) and ctx.error is None
-    # the folder is out: the same button makes the menu, and the waiting is over
-    ah.periods = [CUR, NXT]
-    out = await run_round(ctx, at(FRI, 10, 0), "nu_maken")
-    assert out.status == "done" and ctx.waiting is None and ah.offers_for == [NXT]
+        assert out.status == "done" and out.warning == PERIOD_WARNING
+    assert len(calls) == 2 and ah.offers_for == [CUR]  # the folder is cached
+    log = ctx.ledger.load(W)
+    assert log.plan is not None and log.period_warning == PERIOD_WARNING
+    assert log.folder_period_start == CUR.start and log.new_folder is None
+    assert ctx.waiting is None and ctx.error is None
+    assert PERIOD_WARNING in ctx.hass.notifications()[0]["message"]
 
 
-async def test_nu_maken_after_sunday_1800_may_use_the_current_folder(tmp_path, planned):
+async def test_nu_maken_on_sunday_before_1800_uses_the_current_folder(tmp_path, planned):
     ah = FakeAh(tmp_path, periods=[CUR])
     ctx = make_ctx(tmp_path, ah=ah)
     out = await run_round(ctx, at(SUN, 17, 59), "nu_maken")
-    assert out.status == "waiting_for_folder"
-    out = await run_round(ctx, at(SUN, 19, 0), "nu_maken")
     assert out.status == "done" and out.warning == PERIOD_WARNING
+
+
+async def test_nu_maken_with_the_folder_out_uses_it(tmp_path, planned):
+    ah = FakeAh(tmp_path, periods=[CUR, NXT])
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await run_round(ctx, at(FRI, 10, 0), "nu_maken")
+    assert out.status == "done" and out.warning is None and ah.offers_for == [NXT]
+    log = ctx.ledger.load(W)
+    assert log.folder_period_start == NXT.start and log.period_warning is None
 
 
 async def test_restart_while_waiting_runs_no_double_round(tmp_path, planned):
@@ -753,20 +761,18 @@ async def test_final_failure_push_while_ha_is_down_is_logged(tmp_path, planned, 
     assert any("melding" in r.getMessage() for r in caplog.records)
 
 
-async def test_stdin_button_before_folder_pushes_once_per_week(tmp_path, planned):
+async def test_stdin_button_before_folder_makes_a_menu(tmp_path, planned):
+    """The old "folder not out yet" push of the stdin button is gone: it makes a menu."""
+    calls, _ = planned
     ah = FakeAh(tmp_path, periods=[CUR])
     ctx = make_ctx(tmp_path, ah=ah, now=at(date(2026, 10, 29), 10, 0))
     out = await handle_command(ctx, '{"command": "nu_maken"}')
-    assert out.status == "waiting_for_folder"
-    await handle_command(ctx, '{"command": "nieuw_menu"}')
+    assert out.status == "done" and out.warning == PERIOD_WARNING
+    assert len(calls) == 1 and ah.held() == {1: 1, 2: 2, 3: 1}
     (note,) = ctx.hass.notifications()
-    assert note["message"] == ("De folder van volgende week is er nog niet, verwacht vanaf "
-                               "vrijdag 30 oktober. Het menu komt dan vanzelf.")
-    assert ah.writes == []
-    ctx2 = make_ctx(tmp_path, ah=ah, now=at(date(2026, 10, 29), 11, 0))  # after a restart
-    main.load_state(ctx2)
-    await handle_command(ctx2, '{"command": "nu_maken"}')
-    assert ctx2.hass.notifications() == []
+    assert "De folder van volgende week is er nog niet" not in note["message"]
+    assert PERIOD_WARNING in note["message"]
+    assert "button_notified" not in json.loads(ctx.state_path.read_text(encoding="utf-8"))
 
 
 async def test_waiting_keeps_an_unrelated_error(tmp_path, planned):
@@ -777,7 +783,7 @@ async def test_waiting_keeps_an_unrelated_error(tmp_path, planned):
     assert write_error
     ah.fail_on_call = None
     ah.periods = [NXT]
-    await run_round(ctx, at(MON, 10, 0), "nu_maken")  # next week: waiting
+    await run_round(ctx, at(MON, 10, 0), "schema")  # next week: waiting
     assert ctx.error == write_error  # not cleared by an unrelated waiting
 
 
@@ -983,3 +989,152 @@ async def test_more_cooking_moments_than_eat_days_is_bounded(tmp_path, planned):
     ctx = make_ctx(tmp_path, hass=hass)
     await run_round(ctx, SUNDAY, "nu_maken")
     assert calls[0].evenings == [WO, DO, VR] and calls[0].leftovers == {}
+
+
+# --- v0.4 C: menu before the new folder ------------------------------------------------------
+
+NEW_FOLDER_TEXT = "De nieuwe folder is er. Open de Weekmenu-app om je menu bij te werken."
+
+
+def weekmenu_posts(ctx):
+    return [p for path, p in ctx.hass.posts if path == "states/sensor.weekmenu"]
+
+
+async def early_menu(tmp_path, planned):
+    """Thursday: Nu maken makes the menu with the current folder."""
+    calls, queue = planned
+    queue[:] = [plan_a(), plan_b()]
+    ah = FakeAh(tmp_path, periods=[CUR])
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await run_round(ctx, at(date(2026, 10, 29), 10, 0), "nu_maken")
+    assert out.status == "done"
+    return ctx, ah
+
+
+async def test_new_folder_appears_one_push_and_the_flag(tmp_path, planned):
+    calls, _ = planned
+    ctx, ah = await early_menu(tmp_path, planned)
+    before = ctx.ledger.load(W)
+    n_notes, n_writes = len(ctx.hass.notifications()), len(ah.writes)
+    ah.calls.clear()
+    await tick(ctx, at(FRI, 8, 0))  # still the old folder only: one look, nothing else
+    assert ah.calls == ["bonus_periods"] and len(ctx.hass.notifications()) == n_notes
+    assert ctx.ledger.load(W).new_folder is None
+    ah.periods = [CUR, NXT]  # the folder of the menu week appears
+    await tick(ctx, at(FRI, 9, 0))
+    notes = ctx.hass.notifications()[n_notes:]
+    assert [n["message"] for n in notes] == [NEW_FOLDER_TEXT]
+    log = ctx.ledger.load(W)
+    assert log.new_folder == NXT.start and log.new_folder_notified
+    assert new_folder_available(log)
+    assert weekmenu_posts(ctx)[-1]["attributes"]["new_folder_available"] is True
+    # the menu itself is untouched: no new plan, nothing written
+    assert len(calls) == 1 and len(ah.writes) == n_writes
+    assert log.plan == before.plan and log.period_warning == PERIOD_WARNING
+    # one push per week, also over a restart; and no more reads once it is known
+    ah.calls.clear()
+    await whole_day(ctx, FRI)
+    await whole_day(ctx, SAT)
+    ctx2 = make_ctx(tmp_path, ah=ah)
+    main.load_state(ctx2)
+    await whole_day(ctx2, SUN)
+    assert len(ctx.hass.notifications()) == n_notes + 1 and ctx2.hass.notifications() == []
+    assert "bonus_periods" not in ah.calls and len(calls) == 1
+
+
+async def test_new_folder_push_retried_when_ha_was_down(tmp_path, planned):
+    ctx, ah = await early_menu(tmp_path, planned)
+    ah.periods = [CUR, NXT]
+    ctx.hass.fail_posts = True
+    await tick(ctx, at(FRI, 9, 0))  # must not raise
+    assert ctx.ledger.load(W).new_folder_notified is False
+    ctx.hass.fail_posts = False
+    n = len(ctx.hass.notifications())
+    await tick(ctx, at(FRI, 10, 0))
+    assert [x["message"] for x in ctx.hass.notifications()[n:]] == [NEW_FOLDER_TEXT]
+    assert ctx.ledger.load(W).new_folder_notified
+
+
+async def test_new_folder_read_failure_is_quiet(tmp_path, planned):
+    ctx, ah = await early_menu(tmp_path, planned)
+    ah.raise_on["bonus_periods"] = AhApiError("boom", 500)
+    n = len(ctx.hass.notifications())
+    await tick(ctx, at(FRI, 9, 0))  # must not raise, nothing reported
+    assert len(ctx.hass.notifications()) == n and ctx.ledger.load(W).new_folder is None
+
+
+async def test_menu_made_with_the_right_folder_reads_nothing_hourly(tmp_path, planned):
+    ah = FakeAh(tmp_path, periods=[CUR, NXT])
+    ctx = make_ctx(tmp_path, ah=ah)
+    await tick(ctx, at(FRI, 8, 0))
+    ah.calls.clear()
+    await whole_day(ctx, SAT)
+    assert ah.calls == [] and len(ctx.hass.notifications()) == 1
+
+
+async def test_old_log_with_the_warning_also_gets_the_new_folder(tmp_path, planned):
+    """A log from before 0.4 C (no folder_period_start) made with the current folder."""
+    ah = FakeAh(tmp_path, periods=[CUR, NXT])
+    ctx = make_ctx(tmp_path, ah=ah)
+    old = WeekLog(W, plan=plan_a().to_dict(), period_warning=PERIOD_WARNING,
+                  round_done=True, notified=True).to_dict()
+    for k in ("folder_period_start", "new_folder", "new_folder_notified"):
+        del old[k]
+    (tmp_path / "weeks").mkdir(exist_ok=True)
+    (tmp_path / "weeks" / f"{W.isoformat()}.json").write_text(json.dumps(old), encoding="utf-8")
+    await tick(ctx, at(FRI, 9, 0))
+    assert [x["message"] for x in ctx.hass.notifications()] == [NEW_FOLDER_TEXT]
+
+
+async def test_bijwerken_makes_a_new_plan_with_the_new_folder(tmp_path, planned):
+    calls, _ = planned
+    ctx, ah = await early_menu(tmp_path, planned)
+    ah.periods = [CUR, NXT]
+    await tick(ctx, at(FRI, 9, 0))
+    out = await run_round(ctx, at(FRI, 10, 0), "bijwerken")
+    assert out.status == "done" and out.warning is None
+    assert len(calls) == 2 and ah.offers_for == [CUR, NXT]
+    # the same eat days, persons and leftover nights as the first menu
+    assert calls[1].evenings == calls[0].evenings and calls[1].persons == calls[0].persons
+    assert calls[1].leftovers == calls[0].leftovers
+    log = ctx.ledger.load(W)
+    assert Plan.from_dict(log.plan).basket == plan_b().basket
+    assert log.folder_period_start == NXT.start and log.period_warning is None
+    assert not new_folder_available(log)
+    # cleaned up like Nieuw menu: 2 and 3 were only for the old menu
+    assert ah.held() == {1: 1, 4: 1, 5: 1} and log.added == {1: 1, 4: 1, 5: 1}
+    note = ctx.hass.notifications()[-1]["message"]
+    assert "2 producten van je lijst gehaald" in note and PERIOD_WARNING not in note
+    assert weekmenu_posts(ctx)[-1]["attributes"]["new_folder_available"] is False
+    # the hourly look has nothing more to say
+    n = len(ctx.hass.notifications())
+    ah.calls.clear()
+    await whole_day(ctx, SAT)
+    assert len(ctx.hass.notifications()) == n and "bonus_periods" not in ah.calls
+    assert len(calls) == 2
+
+
+async def test_bijwerken_without_the_new_folder_changes_nothing(tmp_path, planned):
+    calls, _ = planned
+    ctx, ah = await early_menu(tmp_path, planned)
+    before = ctx.ledger.load(W)
+    n_writes = len(ah.writes)
+    out = await run_round(ctx, at(date(2026, 10, 29), 11, 0), "bijwerken")
+    assert out.status == "skipped"
+    # also on the fallback Sunday it never remakes the menu with the old folder
+    out = await run_round(ctx, at(SUN, 19, 0), "bijwerken")
+    assert out.status == "skipped" and ah.offers_for == [CUR]
+    assert len(calls) == 1 and len(ah.writes) == n_writes
+    assert ctx.ledger.load(W).plan == before.plan
+    # the stdin command does the same
+    out = await handle_command(ctx, '{"command": "bijwerken"}')
+    assert out.status == "skipped" and len(calls) == 1
+
+
+async def test_old_state_file_with_button_notified_loads(tmp_path):
+    ctx = make_ctx(tmp_path)
+    ctx.state_path.write_text(json.dumps(
+        {"checked": "2026-11-01T08:00", "waiting": None, "button_notified": "2026-11-04"}),
+        encoding="utf-8")
+    main.load_state(ctx)
+    assert ctx.checked == datetime(2026, 11, 1, 8, 0)

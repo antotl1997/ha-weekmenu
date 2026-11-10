@@ -446,3 +446,14 @@ async def test_read_settings_writes_bounded_cooking_moments_back(respx_mock):
     num.respond(500, json={})
     async with httpx.AsyncClient() as http:
         assert (await Hass(http).read_settings()).aantal == 3
+
+
+async def test_publish_carries_the_new_folder_flag(respx_mock):
+    r1 = respx_mock.post(f"{BASE_URL}/states/sensor.weekmenu").respond(200, json={})
+    respx_mock.post(f"{BASE_URL}/states/sensor.weekmenu_besparing_week").respond(200, json={})
+    async with httpx.AsyncClient() as http:
+        await Hass(http).publish(plan_view(_plan(), date(2026, 11, 4), "list"), 1.0)
+        await Hass(http).publish(plan_view(_plan(), date(2026, 11, 4), "list",
+                                           new_folder=True), 1.0)
+    first, second = (json.loads(c.request.content)["attributes"] for c in r1.calls)
+    assert first["new_folder_available"] is False and second["new_folder_available"] is True

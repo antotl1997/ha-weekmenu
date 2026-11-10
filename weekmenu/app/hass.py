@@ -149,9 +149,10 @@ def no_cooking_moment(plan: Plan, start: date, away: Iterable[date]) -> list[dat
 
 
 def plan_view(plan: Plan, week_start: date, target: str,
-              away: Iterable[date] = ()) -> dict:
+              away: Iterable[date] = (), new_folder: bool = False) -> dict:
     """Attributes for sensor.weekmenu. `target` is "order" or "list"; `away`: the
-    evenings with 0 persons, without food."""
+    evenings with 0 persons, without food; `new_folder`: the menu is from an older
+    folder and the week's own folder is out ("Menu bijwerken")."""
     dishes = []
     eaten = {d.date for d in plan.dishes} | {d.leftover_date for d in plan.dishes
                                              if d.leftover_date}
@@ -192,6 +193,7 @@ def plan_view(plan: Plan, week_start: date, target: str,
         "geen_gerecht": [d.isoformat() for d in plan.removed_days],  # "Gerecht weghalen"
         "geen_kookmoment": [d.isoformat() for d in no_cooking_moment(plan, week_start, away)],
         "dishes": dishes,
+        "new_folder_available": new_folder,
     }
 
 
@@ -283,6 +285,7 @@ class Hass:
                 "geen_gerecht": plan_view.get("geen_gerecht", []),
                 "geen_kookmoment": plan_view.get("geen_kookmoment", []),
                 "dishes": plan_view["dishes"],
+                "new_folder_available": plan_view.get("new_folder_available", False),
             },
         })
         await self._post("states/sensor.weekmenu_besparing_week", {

@@ -53,6 +53,12 @@ class WeekLog:
     # where everything in `added` went: "list", "order:<id>", or "mixed" once a later
     # write went elsewhere. Only an unmixed, known destination is ever lowered.
     added_to: str | None = None
+    # the start of the bonus period the menu was made with (None: a log from before 0.4)
+    folder_period_start: date | None = None
+    # the start of the menu week's own folder, seen after the menu was made with an
+    # older one; with new_folder_notified the "De nieuwe folder is er" push went out
+    new_folder: date | None = None
+    new_folder_notified: bool = False
 
     def to_dict(self) -> dict:
         return {
@@ -76,6 +82,9 @@ class WeekLog:
             "completion_tried": self.completion_tried,
             "notified": self.notified,
             "added_to": self.added_to,
+            "folder_period_start": _iso(self.folder_period_start),
+            "new_folder": _iso(self.new_folder),
+            "new_folder_notified": self.new_folder_notified,
         }
 
     @classmethod
@@ -102,7 +111,24 @@ class WeekLog:
             completion_tried=bool(d.get("completion_tried", False)),
             notified=bool(d.get("notified", False)),
             added_to=d.get("added_to"),
+            folder_period_start=_date(d.get("folder_period_start")),
+            new_folder=_date(d.get("new_folder")),
+            new_folder_notified=bool(d.get("new_folder_notified", False)),
         )
+
+
+def _iso(d: date | None) -> str | None:
+    return d.isoformat() if d else None
+
+
+def _date(s) -> date | None:
+    return date.fromisoformat(s) if s else None
+
+
+def new_folder_available(log: WeekLog) -> bool:
+    """The menu week's own folder is out and the menu was made with an older one."""
+    return (bool(log.plan) and log.new_folder is not None
+            and (log.folder_period_start is None or log.folder_period_start < log.new_folder))
 
 
 def leftovers(log: WeekLog, plan: Plan) -> dict[int, int]:

@@ -142,3 +142,29 @@ def test_tokens_and_total_fsync_their_directory(tmp_path, monkeypatch):
     _save_total(tmp_path / "s" / "totaal.json", 3.5, {})
     assert dirs == [str(tmp_path / "t"), str(tmp_path / "s")]
     assert load_total(tmp_path / "s" / "totaal.json") == 3.5
+
+
+# --- v0.4 C: menu before the new folder ----------------------------------------------------
+
+
+def test_folder_fields_roundtrip_and_old_file_loads(tmp_path):
+    from app.ledger import new_folder_available
+    led = Ledger(tmp_path)
+    log = WeekLog(W, plan={"dishes": []}, folder_period_start=date(2026, 10, 26),
+                  new_folder=date(2026, 11, 2), new_folder_notified=True)
+    led.save(log)
+    assert led.load(W) == log
+    assert new_folder_available(log)
+    # the menu was remade with the new folder: nothing new any more
+    log.folder_period_start = date(2026, 11, 2)
+    assert not new_folder_available(log)
+    # a log from before these fields
+    (tmp_path / "2026-11-11.json").write_text(json.dumps({
+        "week": "2026-11-11", "plan": {"dishes": []}, "added": {}, "target": "list",
+        "savings": 0.0, "counted": False, "swapped_out": {}, "previous": {},
+    }), encoding="utf-8")
+    old = led.load(date(2026, 11, 11))
+    assert old.folder_period_start is None and old.new_folder is None
+    assert old.new_folder_notified is False and not new_folder_available(old)
+    # no menu: never "bijwerken"
+    assert not new_folder_available(WeekLog(W, new_folder=date(2026, 11, 2)))
