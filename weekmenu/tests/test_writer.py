@@ -824,3 +824,24 @@ async def test_empty_route_keeps_the_target_of_this_week(led):
     ah.order = ActiveOrder(5, {}, date(2026, 11, 11))  # next week's order
     res = await apply(ah, led, led.load(W), plan({1: 1}), today=date(2026, 11, 5))
     assert res.target == "list" and led.load(W).target == "list" and res.held is None
+
+
+# --- v0.6: a week log from a newer add-on --------------------------------------------
+
+
+@pytest.mark.parametrize("kind", ["menu", "extras"])
+async def test_no_ah_write_for_a_too_new_week(tmp_path, kind):
+    from app.durable import SchemaTooNew
+    led = Ledger(tmp_path)
+    path = tmp_path / f"{W.isoformat()}.json"
+    path.write_text(json.dumps({"schema": 42, "week": W.isoformat()}), encoding="utf-8")
+    before = path.read_bytes()
+    log = led.load(W)
+    ah = FakeAh()
+    with pytest.raises(SchemaTooNew):
+        if kind == "menu":
+            await apply(ah, led, log, plan({1: 2}))
+        else:
+            await apply_extras(ah, led, log, {1: 1})
+    assert ah.calls == [] and ah.listed == {}
+    assert path.read_bytes() == before

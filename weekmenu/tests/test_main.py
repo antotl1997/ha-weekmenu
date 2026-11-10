@@ -1327,3 +1327,105 @@ async def test_held_push_retried_when_ha_was_down(tmp_path, planned):
     ctx.hass.fail_posts = False
     await main.notify_stale_held(ctx, date(2026, 11, 18))
     assert ctx.ledger.load(W2).held_notified is True
+
+
+# --- v0.6: files from a newer add-on --------------------------------------------------
+
+
+def _too_new_week(tmp_path, **extra):
+    data = {**WeekLog(W, plan=plan_a().to_dict(), **extra).to_dict(), "schema": 99}
+    path = tmp_path / "weeks" / f"{W.isoformat()}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data), encoding="utf-8")
+    return path
+
+
+def _update_notes(ctx):
+    from app.durable import UPDATE_MESSAGE
+    return [n for n in ctx.hass.notifications() if n["message"] == UPDATE_MESSAGE]
+
+
+@pytest.mark.parametrize("mode", ["nu_maken", "nieuw_menu", "schema"])
+async def test_too_new_week_log_writes_nothing_and_says_so_once(tmp_path, planned, mode):
+    from app.durable import UPDATE_MESSAGE
+    path = _too_new_week(tmp_path)
+    before = path.read_bytes()
+    ah = FakeAh(tmp_path)
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await run_round(ctx, SUNDAY, mode)
+    again = await run_round(ctx, SUNDAY, mode)
+    assert out.status == again.status == "error" and out.error == UPDATE_MESSAGE
+    assert ctx.error == UPDATE_MESSAGE
+    assert ah.writes == []
+    assert path.read_bytes() == before
+    assert not list(path.parent.glob("*.bak")) and not list(path.parent.glob("*.tmp"))
+    assert len(_update_notes(ctx)) == 1
+    assert ctx.ledger.load(W).plan == plan_a().to_dict()  # still readable for display
+
+
+async def test_too_new_tokens_stop_the_round_before_any_ah_call(tmp_path, planned):
+    ah = FakeAh(tmp_path)
+    tokens = tmp_path / "tokens.json"
+    tokens.write_text(json.dumps({"schema": 7, "access_token": "a", "refresh_token": "r",
+                                  "expires_at": 9e9}), encoding="utf-8")
+    before = tokens.read_bytes()
+    ctx = make_ctx(tmp_path, ah=ah)
+    out = await run_round(ctx, SUNDAY, "nu_maken")
+    assert out.status == "error" and ah.writes == [] and ah.calls == []
+    assert tokens.read_bytes() == before
+    assert len(_update_notes(ctx)) == 1
+
+
+async def test_too_new_state_and_total_are_left_alone_and_said_once(tmp_path, planned):
+    ctx = make_ctx(tmp_path)
+    ctx.state_path.write_text('{"schema": 3, "checked": "2026-11-01T07:00"}',
+                              encoding="utf-8")
+    ctx.total_path.write_text('{"schema": 3, "total": 50.0}', encoding="utf-8")
+    state, total = ctx.state_path.read_bytes(), ctx.total_path.read_bytes()
+    main.load_state(ctx)  # reading is fine
+    assert ctx.checked == datetime(2026, 11, 1, 7, 0)
+    out = await run_round(ctx, SUNDAY, "nu_maken")
+    assert out.status == "done"  # only a week log or the tokens stop a round
+    await tick(ctx, SUNDAY.replace(hour=10))
+    await tick(ctx, SUNDAY.replace(hour=11))
+    assert ctx.state_path.read_bytes() == state
+    assert ctx.total_path.read_bytes() == total
+    assert ctx.too_new == {"state.json", "totaal.json"}
+    assert len(_update_notes(ctx)) == 1
+
+
+async def test_too_new_weeks_are_not_counted_nor_pushed(tmp_path):
+    path = _too_new_week(tmp_path, savings=4.0, held="x")
+    before = path.read_bytes()
+    ctx = make_ctx(tmp_path)
+    await update_total(ctx, date(2026, 11, 12))
+    assert json.loads(ctx.total_path.read_text(encoding="utf-8"))["total"] == 0.0
+    await main.notify_stale_held(ctx, date(2026, 11, 11))
+    await main.check_new_folder(ctx, W)
+    await main.close_stale_new_folder(ctx, date(2026, 11, 11))
+    assert ctx.hass.notifications() == []
+    assert path.read_bytes() == before
+
+
+def test_state_migration_v0_to_v1_and_old_state_loads(tmp_path):
+    ctx = make_ctx(tmp_path)
+    old = {"checked": "2026-11-01T08:00", "waiting": {"week": "2026-11-04",
+                                                       "expected": None}}
+    assert main.migrate_state_v0_to_v1(old) == {**old, "schema": 1}
+    ctx.state_path.write_text(json.dumps(old), encoding="utf-8")
+    main.load_state(ctx)
+    assert ctx.checked == datetime(2026, 11, 1, 8, 0) and ctx.waiting.week == W
+    main._save_state(ctx)
+    assert json.loads(ctx.state_path.read_text(encoding="utf-8"))["schema"] == 1
+    assert json.loads((tmp_path / "state.json.bak").read_text(encoding="utf-8")) == old
+
+
+async def test_startup_scan_notes_newer_files_and_the_first_look_says_so(tmp_path):
+    ctx = make_ctx(tmp_path)
+    (tmp_path / "niet_thuis.json").write_text('{"schema": 2}', encoding="utf-8")
+    (tmp_path / "state.json").write_text('{"schema": 1}', encoding="utf-8")  # current
+    main.scan_too_new(ctx)
+    assert ctx.too_new == {"niet_thuis.json"}
+    await main.notify_too_new(ctx)
+    await main.notify_too_new(ctx)
+    assert len(_update_notes(ctx)) == 1

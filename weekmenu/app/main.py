@@ -39,7 +39,9 @@ import httpx
 
 from app.ahclient import AhApiError, AhClient, AhLoginExpired, BonusPeriod, Product
 from app.hass import (
+    AWAY_SCHEMA,
     TOTAL_PATH,
+    TOTAL_SCHEMA,
     Hass,
     RawSettings,
     format_message,
@@ -60,7 +62,7 @@ from app.planner import (
     swap_dish,
 )
 from app import staples
-from app.durable import fsync_dir
+from app.durable import UPDATE_MESSAGE, SchemaTooNew, migrate, schema_of, too_new, write_json
 from app.tokens import TokenStore
 from app.week import (
     WEEKDAGEN,
@@ -105,6 +107,16 @@ ALL_AWAY = ("Alle avonden van deze week staan op niet thuis (0 personen). "
 WRITE_FAILED_HINT = "Tik op Nu maken in de Weekmenu-app om de rest toe te voegen."
 STAPLES_TIMEOUT = 60  # seconds for the whole purchase-history step before the message
 PORT = 8099
+# schema of state.json; 0 is a file from before 0.6
+STATE_SCHEMA = 1
+
+
+def migrate_state_v0_to_v1(data: dict) -> dict:
+    """0 -> 1: only the version field (load_state already reads every older form)."""
+    return {**data, "schema": 1}
+
+
+_STATE_STEPS = {0: migrate_state_v0_to_v1}
 INGRESS_PROXY = "172.30.32.2"
 
 
@@ -157,6 +169,11 @@ class Context:
     # lets the Aanbiedingen tab use a filled cache without asking AH for the periods
     offers_fallback: dict[date, tuple[date, datetime]] = field(default_factory=dict)
     tasks: set = field(default_factory=set)
+    # v0.6: names of files from a newer add-on (never written), and whether the one
+    # "werk de add-on bij" message went out
+    too_new: set[str] = field(default_factory=set)
+    too_new_notified: bool = False
+    planner_seconds: float | None = None  # the menu search of the last build_plan
 
 
 @dataclass
@@ -189,6 +206,34 @@ def short_error(e: BaseException) -> str:
     if isinstance(e, AhApiError):
         return str(e)[:200]
     return type(e).__name__
+
+
+def note_too_new(ctx: Context, path: Path) -> None:
+    """A file from a newer add-on was found (and is not written): log it once."""
+    name = Path(path).name
+    if name not in ctx.too_new:
+        ctx.too_new.add(name)
+        log.warning("%s is van een nieuwere versie van de add-on: wordt niet geschreven", name)
+
+
+async def notify_too_new(ctx: Context) -> None:
+    """The one message that the add-on is older than its data (until it went out)."""
+    if ctx.too_new and not ctx.too_new_notified:
+        if await guard(ctx.hass.notify("Weekmenu", UPDATE_MESSAGE, ctx.ingress_url),
+                       "melding"):
+            ctx.too_new_notified = True
+
+
+def scan_too_new(ctx: Context) -> None:
+    """At startup: the files outside the week logs that a newer add-on may have left."""
+    away = getattr(ctx.hass, "_away_path", None)
+    files = [(ctx.total_path, TOTAL_SCHEMA), (ctx.state_path, STATE_SCHEMA),
+             (away, AWAY_SCHEMA)]
+    for path, known in files:
+        if path is not None and too_new(path, known):
+            note_too_new(ctx, path)
+    if ctx.store.too_new():
+        note_too_new(ctx, ctx.store.path)
 
 
 def week_of(day: date) -> date:
@@ -376,6 +421,12 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     wlog = None
     try:
         wlog = ctx.ledger.load(start)
+        if wlog.too_new or ctx.store.too_new():
+            # v0.6: a newer add-on wrote this week or the login: write nothing at all
+            note_too_new(ctx, ctx.ledger.root / f"{start.isoformat()}.json"
+                         if wlog.too_new else ctx.store.path)
+            await notify_too_new(ctx)
+            return RoundOutcome("error", start, error=UPDATE_MESSAGE, kind="schema")
         if mode == "schema" and auto_done(wlog):
             return RoundOutcome("skipped", start)  # the log says done: never again
         if mode == "bijwerken" and not new_folder_available(wlog):
@@ -576,7 +627,8 @@ async def update_total(ctx: Context, today: date) -> None:
     """
     async with ctx.lock:
         total, known = load_total_state(ctx.total_path)
-        weeks = ctx.ledger.weeks()
+        # a week from a newer add-on is left to that add-on: not counted, not marked
+        weeks = [w for w in ctx.ledger.weeks() if not w.too_new]
         value = {w.week.isoformat(): round(w.savings + w.extras_total, 2) for w in weeks}
         if known is None:
             known = {w.week.isoformat() for w in weeks if w.counted}
@@ -599,6 +651,9 @@ async def update_total(ctx: Context, today: date) -> None:
             await ctx.hass.publish_total(total, counted)
         except httpx.HTTPError as e:
             log.warning("Home Assistant: totaal niet gezet (%s)", type(e).__name__)
+        except SchemaTooNew as e:
+            note_too_new(ctx, e.path)
+            return
         except Exception as e:
             log.error("Totaal niet opgeslagen: %s", type(e).__name__)
             return
@@ -623,7 +678,7 @@ async def check_new_folder(ctx: Context, start: date) -> None:
     """
     async with ctx.lock:
         wlog = ctx.ledger.load(start)
-        if not wlog.plan or wlog.period_warning is None:
+        if not wlog.plan or wlog.period_warning is None or wlog.too_new:
             return
         if wlog.new_folder is None:
             try:
@@ -662,7 +717,7 @@ async def notify_stale_held(ctx: Context, start: date) -> None:
     # otherwise be overwritten by this older copy of the log
     async with ctx.lock:
         wlog = ctx.ledger.load(prev)
-        if not (wlog.plan and wlog.held) or wlog.held_notified:
+        if not (wlog.plan and wlog.held) or wlog.held_notified or wlog.too_new:
             return
         plan = Plan.from_dict(wlog.plan)
         todo = writer.missing(wlog, plan)
@@ -685,7 +740,7 @@ async def close_stale_new_folder(ctx: Context, start: date) -> None:
     the new target yet) it is published again without the flag."""
     async with ctx.lock:
         old = ctx.ledger.load(start - timedelta(days=7))
-        if not new_folder_available(old):
+        if not new_folder_available(old) or old.too_new:
             return
         old.new_folder = None
         try:
@@ -725,6 +780,8 @@ def load_state(ctx: Context) -> None:
         return
     try:
         data = json.loads(Path(ctx.state_path).read_text(encoding="utf-8"))
+        if schema_of(data) <= STATE_SCHEMA:  # a newer file is read as it is
+            data = migrate(data, STATE_SCHEMA, _STATE_STEPS, "state")
         checked = data.get("checked")
         waiting = data.get("waiting")
         ctx.checked = datetime.fromisoformat(checked) if checked else None
@@ -746,12 +803,10 @@ def _save_state(ctx: Context) -> None:
             "week": w.week.isoformat(),
             "expected": w.expected.isoformat() if w.expected else None},
     }
-    path = Path(ctx.state_path)
-    tmp = Path(str(path) + ".tmp")
     try:
-        tmp.write_text(json.dumps(data), encoding="utf-8")
-        os.replace(tmp, path)
-        fsync_dir(path.parent)
+        write_json(Path(ctx.state_path), data, STATE_SCHEMA)
+    except SchemaTooNew as e:
+        note_too_new(ctx, e.path)
     except OSError as e:
         log.warning("Status niet opgeslagen (%s)", type(e).__name__)
 
@@ -778,6 +833,7 @@ async def tick(ctx: Context, now: datetime) -> None:
     else:
         await check_new_folder(ctx, start)
     _save_state(ctx)  # after the round: a crash halfway looks again after the restart
+    await notify_too_new(ctx)
 
 
 async def schedule_loop(ctx: Context) -> None:
@@ -874,6 +930,7 @@ async def amain() -> None:
             ingress_url=ingress_url(),
         )
         load_state(ctx)
+        scan_too_new(ctx)  # the message goes out with the first look of the schedule
         runner = web.AppRunner(make_app(ctx, allowed_remotes={INGRESS_PROXY}))
         await runner.setup()
         await web.TCPSite(runner, "0.0.0.0", PORT).start()

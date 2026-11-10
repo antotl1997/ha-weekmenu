@@ -859,3 +859,31 @@ async def test_stale_held_push_never_overwrites_a_web_write(aiohttp_client, tmp_
     # missing, another set, so the marker is reset for one new push
     assert log.held_notified is False and log.held_notified_items == [1, 2, 3]
     assert ctx.client.writes == []
+
+
+# --- v0.6 -------------------------------------------------------------------------------
+
+
+async def test_api_write_to_a_too_new_week_is_refused_with_the_update_message(
+        aiohttp_client, ctx, swaps):
+    import json as _json
+    from app.durable import UPDATE_MESSAGE
+    await planned_ctx(ctx)
+    path = ctx.ledger.root / f"{W.isoformat()}.json"
+    path.write_text(_json.dumps({**_json.loads(path.read_text(encoding="utf-8")),
+                                 "schema": 9}), encoding="utf-8")
+    before, writes = path.read_bytes(), list(ctx.client.writes)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post(f"api/dish/{WO.isoformat()}/swap")
+    assert r.status == 409 and (await r.json())["error"] == UPDATE_MESSAGE
+    assert ctx.client.writes == writes and path.read_bytes() == before
+    assert f"{W.isoformat()}.json" in ctx.too_new
+    r = await client.get(f"api/dish/{WO.isoformat()}")  # showing it still works
+    assert r.status == 200
+
+
+async def test_api_status_has_planner_seconds(aiohttp_client, ctx):
+    client = await aiohttp_client(make_app(ctx))
+    assert (await (await client.get("api/status")).json())["planner_seconds"] is None
+    ctx.planner_seconds = 1.25
+    assert (await (await client.get("api/status")).json())["planner_seconds"] == 1.25

@@ -31,6 +31,7 @@ from app.hass import (
 from app.ledger import leftovers, new_folder_available
 from app.planner import Dish, Plan
 from app.deals import qty_for_deal, savings as deal_savings
+from app.durable import UPDATE_MESSAGE, SchemaTooNew
 from app.staples import extras_savings, staple_list
 from app.week import (
     WEEKDAGEN,
@@ -278,6 +279,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             return await handler(request)
         except web.HTTPException:
             raise
+        except SchemaTooNew as e:  # a file from a newer add-on: nothing was written
+            main.note_too_new(ctx, e.path)
+            return _err(409, UPDATE_MESSAGE)
         except AhLoginExpired:
             ctx.login_expired = True
             return _err(401, main.LOGIN_EXPIRED, login=True)
@@ -357,6 +361,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             # a menu round only: the hourly new-folder look also takes the lock
             "running": ctx.busy or ctx.in_round, "rounds": ctx.rounds,
             "login_url": LOGIN_URL,
+            "planner_seconds": ctx.planner_seconds,
             "waiting_for_folder": None if w is None else {
                 "week": w.week.isoformat(),
                 "expected": w.expected.isoformat() if w.expected else None},

@@ -61,6 +61,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, time, timedelta
 from typing import Literal
 
+from app.durable import SchemaTooNew
 from app.ledger import Ledger, WeekLog, leftovers
 from app.planner import Plan
 from app.week import lange_datum, menu_week_start
@@ -147,6 +148,13 @@ def _title(plan: Plan, replaced: Plan | None, pid: int) -> str:
         if src is not None and pid in src.products:
             return src.products[pid].title
     return str(pid)
+
+
+def _refuse_too_new(ledger: Ledger, log: WeekLog) -> None:
+    """Before any AH call: a log this code may not write means no write at AH either
+    (the write-ahead save would refuse anyway; this stops the reads too)."""
+    if log.too_new:
+        raise SchemaTooNew(ledger.root / f"{log.week.isoformat()}.json")
 
 
 def _safe_save(ledger: Ledger, log: WeekLog) -> None:
@@ -334,7 +342,9 @@ async def apply(
     With a replacing plan (`replaced`) and `today` before the menu week, also lower
     what the add-on added for the old plan and `plan` no longer needs (see the
     module docstring for when that is safe).
+    A log from a newer add-on is never written, so nothing goes to AH (SchemaTooNew).
     """
+    _refuse_too_new(ledger, log)
     await _settle(client, ledger, log)
     # what the add-on put out there, plus what the user took off again (never re-added)
     delta = missing(log, plan)
@@ -414,6 +424,7 @@ async def apply_extras(
     product is skipped. Settling first means a write whose outcome was unsure is
     read back before anything new is written.
     """
+    _refuse_too_new(ledger, log)
     titles = titles or {}
     into = log.offers_added if kind == OFFER else log.extras_added
     await _settle(client, ledger, log)
