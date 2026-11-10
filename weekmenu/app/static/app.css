@@ -60,6 +60,11 @@ a{color:inherit}
 .note b{display:block;font-weight:600}
 .note .muted{color:#7a746b}
 .note ul{list-style:none;margin-top:3px;color:#5f5a52}
+/* "Nieuwe folder is er": the one card that asks for a tap, above everything else */
+.fresh{padding:14px;display:flex;flex-direction:column;gap:12px;background:#fbecd9;border:1.5px solid #e0a23a;font-size:13.5px;line-height:1.45}
+.fresh b{display:block;font-size:16px;font-weight:700;color:#8a5a14}
+.fresh .muted{color:#6b5a3e}
+.fresh .btn.full{margin:0;width:100%}
 .empty{padding:22px 18px;text-align:center;font-size:14px;color:#5f5a52;line-height:1.5}
 .empty b{display:block;color:#22201c;font-size:16px;margin-bottom:4px}
 .linkrow{display:flex;justify-content:center;margin:4px 16px 14px}

@@ -16,6 +16,8 @@ Then install "Weekmenu AH" from the store.
 
 The menu is made as soon as the AH bonus folder of the delivery week is out, usually on the Friday before. From `schedule_time` (default 08:00) until 18:00 the add-on checks once an hour, as long as there is no menu for that week yet. If the folder is still not out on Sunday at 18:00, it uses the current folder and says so in the message. You get one push message, when the menu is made.
 
+Nu maken (in the app or through `hassio.addon_stdin`) does not wait: before the folder is out it makes the menu with the current folder, with the same warning. When the folder of the delivery week then comes out, the hourly check sends one push message "De nieuwe folder is er" and sets `new_folder_available: true` on `sensor.weekmenu` and in the app. It never changes the menu by itself. The app shows "Nieuwe folder is er" at the top of the Week tab with the button Menu bijwerken, which makes a new menu from the new folder for the same eat days and persons, and takes off what only the old menu needed (`POST api/run` with `{"mode": "bijwerken"}`).
+
 ## Not eating at home
 
 In the app, under Settings, tap the days (Wednesday to Tuesday) you do not eat at home. A tapped day sets the persons of that weekday to 0: no dish and nothing bought. Tap the day again and the earlier number of persons comes back (2 if there was none); the add-on keeps that number in `/data/niet_thuis.json`, also after a restart. If you set a persons helper to 0 in Home Assistant yourself, the app shows that day as tapped. The week tab, the push message and `sensor.weekmenu` call such an evening "niet thuis".

@@ -53,11 +53,6 @@ function longDate(iso) {
   return `${dag} ${dt.getDate()} ${MAANDEN[dt.getMonth()]}`;
 }
 
-function folderText(expected) {
-  return "De folder van volgende week is er nog niet" +
-    (expected ? `, verwacht vanaf ${longDate(expected)}` : "");
-}
-
 function shortDate(dt) {
   const dag = ["zo", "ma", "di", "wo", "do", "vr", "za"][dt.getDay()];
   return `${dag} ${dt.getDate()} ${MAANDEN[dt.getMonth()].slice(0, 3)}`;
@@ -246,9 +241,7 @@ function pollRound() {
     state.polling = false;
     state.dishes = {};
     try { await loadWeek(); } catch (e) { /* shown on the tab */ }
-    const waiting = state.status && state.status.waiting_for_folder;
     if (state.status && state.status.error) toast(state.status.error, true);
-    else if (waiting) toast(folderText(waiting.expected));
     else toast("Het menu is bijgewerkt");
     render();
   };
@@ -367,6 +360,14 @@ function weekScreen() {
   if (running) {
     html += `<div class="card note"><span class="spin dark"></span><div><b>Er wordt een menu gemaakt</b>
       <span class="muted">Dit duurt meestal een minuut.</span></div></div>`;
+  } else if (w.new_folder_available) {
+    // the menu of the next order is from an older folder and the new one is out
+    const sub = w.new_folder_week && w.new_folder_week !== w.week
+      ? `Het menu voor ${longDate(w.new_folder_week)} is nog gemaakt met de vorige folder.`
+      : "Dit menu is nog gemaakt met de vorige folder.";
+    html += `<div class="card fresh"><div><b>Nieuwe folder is er</b>
+      <span class="muted">${esc(sub)} Werk het bij voor de prijzen van nu.</span></div>
+      <button class="btn pri full" data-run="bijwerken">${ICON.refresh} Menu bijwerken</button></div>`;
   }
   if (!w.days.length && w.geen_avonden) {
     html += `<div class="card empty"><b>Alle avonden niet thuis</b>
@@ -375,12 +376,12 @@ function weekScreen() {
     html += `<div class="card empty"><b>Het weekmenu staat uit</b>
       Er wordt nu geen menu gemaakt. Zet het aan bij Instellingen, of tik op Nu maken.</div>
       <button class="btn pri full" data-run="nu_maken">Nu maken</button>`;
-  } else if (!w.days.length && waiting) {
-    html += `<div class="card empty"><b>${esc(folderText(waiting.expected))}</b>
-      Het menu wordt vanzelf gemaakt zodra de folder uit is, en je krijgt dan een melding.</div>`;
   } else if (!w.days.length) {
+    const now = waiting
+      ? "Wil je niet wachten, tik dan op Nu maken. Het menu komt dan met de huidige folder, en je krijgt een melding zodra de nieuwe er is."
+      : "Wil je niet wachten, tik dan op Nu maken.";
     html += `<div class="card empty"><b>Nog geen menu voor deze week</b>
-      Het menu wordt vanzelf gemaakt zodra de folder van die week uit is, meestal op vrijdag. Wil je niet wachten, tik dan op Nu maken.</div>
+      Het menu wordt vanzelf gemaakt zodra de folder van die week uit is, meestal op vrijdag. ${now}</div>
       <button class="btn pri full" data-run="nu_maken">Nu maken</button>`;
   } else {
     const extras = Number(w.extras_savings) || 0;
@@ -643,9 +644,16 @@ async function startRound(btn, mode) {
       "Nieuw menu");
     if (!ok) return;
   }
+  if (mode === "bijwerken") {
+    const ok = await confirmSheet("Het menu bijwerken met de nieuwe folder?",
+      "Er komt een nieuw menu voor dezelfde eetdagen en personen. Wat alleen voor het oude menu was, gaat eruit als dat nog kan. Wat je zelf hebt toegevoegd, blijft staan.",
+      "Menu bijwerken");
+    if (!ok) return;
+  }
   await busy(btn, async () => {
     await api("api/run", { mode });
-    toast(mode === "nieuw_menu" ? "Er wordt een nieuw menu gekozen…" : "Het menu wordt gemaakt…");
+    toast(mode === "nieuw_menu" ? "Er wordt een nieuw menu gekozen…"
+      : mode === "bijwerken" ? "Het menu wordt bijgewerkt…" : "Het menu wordt gemaakt…");
     state.status = Object.assign({}, state.status, { running: true });
     pollRound();
   });

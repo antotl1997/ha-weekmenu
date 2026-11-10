@@ -356,6 +356,37 @@ def test_app_waiting_for_folder_in_chrome(tmp_path):
         off = chrome(base, tmp_path / "profile-wachten-uit")
     line = "Volgende bestelling: woensdag 11 november. De folder komt vanaf vrijdag 6 november."
     assert dom.index("<h1>Weekmenu</h1>") < dom.index(line)
-    assert "De folder van volgende week is er nog niet" in dom
+    # v0.4 C: no waiting card any more; Nu maken works, with the current folder
+    assert "De folder van volgende week is er nog niet" not in dom
+    assert "Nog geen menu voor deze week" in dom and 'data-run="nu_maken"' in dom
+    assert "met de huidige folder" in dom
     assert "Voor de bestelling van" not in dom and "\u2014" not in dom
     assert "Het weekmenu staat uit" in off and "vanzelf" not in off
+
+
+@pytest.mark.slow
+def test_app_new_folder_card_in_chrome(tmp_path):
+    """Friday 30 October: the menu was made on Thursday with the old folder, the new one
+    is out. On top of the Week tab: "Nieuwe folder is er" with Menu bijwerken."""
+    ctx = make_ctx(tmp_path, now=datetime(2026, 10, 30, 10, 0))
+    ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
+    plan = fake_plan()
+    ctx.ledger.save(WeekLog(W, plan=plan.to_dict(), added=dict(plan.basket), target="order",
+                            savings=plan.savings, period_warning=PERIOD_WARNING,
+                            folder_period_start=date(2026, 10, 26),
+                            new_folder=date(2026, 11, 2), new_folder_notified=True))
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "", tmp_path, "week-nieuwe-folder")
+        log = ctx.ledger.load(W)
+        log.folder_period_start = date(2026, 11, 2)  # after Menu bijwerken
+        log.period_warning = None
+        ctx.ledger.save(log)
+        after = chrome(base, tmp_path / "profile-nieuwe-folder-na")
+    order = "Voor de bestelling van woensdag 4 november"
+    assert dom.index(order) < dom.index("Nieuwe folder is er") < dom.index("Bonus bespaard")
+    assert 'data-run="bijwerken"' in dom and "Menu bijwerken" in dom
+    assert "\u2014" not in dom
+    assert "Nieuwe folder is er" not in after and 'data-run="bijwerken"' not in after
+    assert order in after
