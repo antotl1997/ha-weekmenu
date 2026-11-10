@@ -109,6 +109,17 @@ h2{font-size:22px;margin:4px 20px 8px;letter-spacing:-.3px;line-height:1.25}
 .plus svg{width:18px;height:18px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .plus.done{background:#e3f1e4;color:#2f6b3a}
 .plus.busy::after{width:16px;height:16px;margin:-8px 0 0 -8px}
+.search{margin:0 16px 4px}
+.search input{width:100%;box-sizing:border-box;border:1px solid #e1dbd1;border-radius:14px;background:#fff;padding:12px 14px;font:inherit;font-size:15px;color:#22201c}
+.search input:focus{outline:2px solid #2f6b3a;outline-offset:1px}
+.row.offer .thumb{width:48px;height:48px;border-radius:12px;background:#f1ede6;flex:none;position:relative;overflow:hidden}
+.row.offer .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff}
+.row.offer .nm small{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;margin-top:4px}
+.row.offer .pill.b{margin:0;font-size:10.5px;padding:3px 7px}
+.row.offer .price{color:#22201c}
+.row.offer .price s{color:#9a9388;margin-right:2px}
+.plus.done i{font-style:normal;font-weight:700;font-size:13px;margin-left:2px}
+.plus.done:has(i){width:auto;min-width:36px;padding:0 10px;border-radius:18px}
 .pers{display:flex;align-items:center;gap:10px;font-size:14px;padding:12px 14px}
 .pers > svg{width:20px;height:20px;stroke:#5f5a52;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .stp{margin-left:auto;display:flex;align-items:center;gap:14px}

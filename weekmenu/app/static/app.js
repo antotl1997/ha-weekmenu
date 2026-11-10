@@ -17,7 +17,7 @@ const MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli",
 const BUSY_TEXT = "Er loopt al een ronde";
 
 const state = { status: null, week: null, weekParam: null, savings: null, settings: null,
-  staples: [], dishes: {}, open: {}, polling: false };
+  staples: [], dishes: {}, open: {}, polling: false, offers: null, offerQ: "" };
 
 // --- helpers ---------------------------------------------------------------------------
 
@@ -218,6 +218,12 @@ async function loadStaples() {
   }
 }
 
+/* The whole bonus folder of the shown week, per category; searched on this side. */
+async function loadOffers() {
+  const w = state.week ? `?week=${encodeURIComponent(state.week.week)}` : "";
+  state.offers = (await api(`api/offers${w}`)).categories;
+}
+
 async function loadDish(day) {
   state.dishes[day] = await api(`api/dish/${encodeURIComponent(day)}`);
 }
@@ -388,9 +394,11 @@ function weekScreen() {
       <button class="btn pri full" data-run="nu_maken">Nu maken</button>`;
   } else {
     const extras = Number(w.extras_savings) || 0;
+    const loose = Number(w.offers_savings) || 0;
     html += `<div class="save"><div><div class="lbl">Bonus bespaard deze week <em>· geschat</em></div>
-      <div class="big">${eur(w.savings + extras)}</div>
-      ${extras > 0 ? `<div class="lbl">waarvan vaste boodschappen ${eur(extras)}</div>` : ""}</div>
+      <div class="big">${eur(w.savings + extras + loose)}</div>
+      ${extras > 0 ? `<div class="lbl">waarvan vaste boodschappen ${eur(extras)}</div>` : ""}
+      ${loose > 0 ? `<div class="lbl">waarvan losse aanbiedingen ${eur(loose)}</div>` : ""}</div>
       <div class="right">${plural(w.products, "product", "producten")}<br>${w.bonus_products} in de bonus</div></div>`;
     html += notesHtml(w, false);
     html += w.days.map(dayCard).join("");
@@ -461,6 +469,46 @@ function dishScreen(day) {
     <button class="btn sec2 full" data-remove>Gerecht weghalen</button>
     ${safeUrl(r.url) ? `<a class="src" href="${esc(safeUrl(r.url))}" target="_blank" rel="noopener">Recept op Allerhande</a>` : ""}
     </div>`;
+}
+
+// --- screens: aanbiedingen -------------------------------------------------------------
+
+function offerRow(i) {
+  const src = safeUrl(i.image);
+  const img = src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+  const was = Number(i.price_regular) > Number(i.price_now)
+    ? `<s>${eur(i.price_regular)}</s> ` : "";
+  const pill = i.mechanism ? `<span class="pill green b">${esc(i.mechanism)}</span>` : "";
+  const n = Number(i.added_qty) || 0;
+  const btn = n > 0
+    ? `<span class="plus done" role="img" aria-label="Toegevoegd: ${esc(n)} stuks">${ICON.check}<i>${esc(n)}</i></span>`
+    : i.orderable === false ? ""
+    : `<button class="plus" data-offer="${esc(i.id)}" aria-label="${esc(i.title)} toevoegen">${ICON.plus}</button>`;
+  return `<div class="row offer"><div class="thumb">${img}</div>
+    <span class="nm">${esc(i.title)}<small>${pill}<span class="price">${was}<b>${eur(i.price_now)}</b></span>${i.unit_size ? `<span class="unit">${esc(i.unit_size)}</span>` : ""}</small></span>
+    ${btn}</div>`;
+}
+
+/* The list under the search field: it alone is redrawn while typing. */
+function offersList() {
+  const q = state.offerQ.trim().toLowerCase();
+  const groups = (state.offers || []).map((c) => ({ name: c.name,
+    items: c.items.filter((i) => !q || String(i.title).toLowerCase().includes(q)) }))
+    .filter((c) => c.items.length);
+  if (!groups.length) {
+    return `<div class="card empty"><b>${q ? "Niets gevonden" : "Geen aanbiedingen"}</b>${q ? "Probeer een andere zoekterm." : "De folder van deze week is leeg of nog niet op te halen."}</div>`;
+  }
+  return groups.map((c) => `<div class="sec">${esc(c.name)}</div>
+    <div class="card ing">${c.items.map(offerRow).join("")}</div>`).join("");
+}
+
+function offersScreen() {
+  const w = state.week;
+  const n = (state.offers || []).reduce((a, c) => a + c.items.length, 0);
+  const sub = w ? `${plural(n, "aanbieding", "aanbiedingen")} voor de week van ${shortDate(parseDate(w.week))}` : "";
+  return `<header class="top"><div><h1>Aanbiedingen</h1><div class="sub">${esc(sub)}</div></div></header>
+    <div class="search"><input id="offerq" type="search" placeholder="Zoek in de folder" value="${esc(state.offerQ)}" autocomplete="off" aria-label="Zoek in de folder"></div>
+    <div id="offerlist">${offersList()}</div>`;
 }
 
 // --- screens: savings ------------------------------------------------------------------
@@ -577,7 +625,7 @@ function errorScreen(msg) {
 function route() {
   const h = location.hash.replace(/^#/, "");
   if (h.startsWith("gerecht/")) return { tab: "week", dish: h.slice(8) };
-  if (h === "besparing" || h === "instellingen" || h === "inloggen") return { tab: h };
+  if (h === "aanbiedingen" || h === "besparing" || h === "instellingen" || h === "inloggen") return { tab: h };
   return { tab: "week" };
 }
 
@@ -595,6 +643,10 @@ async function render() {
   if (!loggedIn || relogin) { app.innerHTML = loginScreen(loggedIn && relogin); return; }
 
   const need = r.dish ? (state.dishes[r.dish] ? null : () => loadDish(r.dish))
+    : r.tab === "aanbiedingen" ? (state.offers && state.week ? null : async () => {
+        if (!state.week) await loadWeek();
+        await loadOffers();
+      })
     : r.tab === "besparing" ? (state.savings ? null : () => api("api/savings").then((x) => { state.savings = x; }))
     : r.tab === "instellingen" ? (state.settings ? null : () => api("api/settings").then((x) => { state.settings = x; }))
     : (state.week ? null : loadWeek);
@@ -612,6 +664,7 @@ async function render() {
     if (seq !== renderSeq) return;
   }
   app.innerHTML = r.dish ? dishScreen(r.dish)
+    : r.tab === "aanbiedingen" ? offersScreen()
     : r.tab === "besparing" ? savingsScreen()
     : r.tab === "instellingen" ? settingsScreen()
     : weekScreen();
@@ -621,6 +674,7 @@ async function render() {
 async function refreshQuietly(what) {
   try {
     if (what === "week") await loadWeek();
+    if (what === "aanbiedingen") { if (!state.week) await loadWeek(); await loadOffers(); }
     if (what === "besparing") state.savings = await api("api/savings");
     if (what === "instellingen") state.settings = await api("api/settings");
     if (route().tab === what && !route().dish) render();
@@ -669,10 +723,11 @@ app.addEventListener("click", async (ev) => {
 
   if (t.dataset.dish) { location.hash = "#gerecht/" + t.dataset.dish; return; }
   if ("back" in t.dataset) { location.hash = "#week"; return; }
-  if ("retry" in t.dataset) { state.week = state.savings = state.settings = null; state.dishes = {}; boot(); return; }
+  if ("retry" in t.dataset) { state.week = state.savings = state.settings = state.offers = null; state.dishes = {}; boot(); return; }
   if ("week" in t.dataset) {
     state.weekParam = t.dataset.week || null;
     state.week = null;
+    state.offers = null;
     render();
     return;
   }
@@ -691,6 +746,22 @@ app.addEventListener("click", async (ev) => {
         try { state.week = await api(state.weekParam ? `api/week?week=${encodeURIComponent(state.weekParam)}` : "api/week"); } catch (e2) { /* keep */ }
         render();
       }
+    });
+    return;
+  }
+
+  if (t.dataset.offer && state.week) {
+    await busy(t, async () => {
+      const id = Number(t.dataset.offer);
+      const res = await api(`api/offers/${encodeURIComponent(id)}?week=${encodeURIComponent(state.week.week)}`, {});
+      for (const c of state.offers || []) {
+        for (const i of c.items) if (i.id === id) i.added_qty = res.added_qty;
+      }
+      toast(`Toegevoegd, het staat ${res.target === "order" ? "in je bestelling" : "op je lijst"}`);
+      state.savings = null;
+      const list = document.getElementById("offerlist");
+      if (list && route().tab === "aanbiedingen") list.innerHTML = offersList();
+      try { await loadWeek(); } catch (e2) { /* keep */ }  // the savings on the Week tab
     });
     return;
   }
@@ -802,6 +873,13 @@ app.addEventListener("click", async (ev) => {
     await busy(t, async () => { await setSetting(s.entities.persons[dag], n); s.persons[dag] = n; });
     render();
   }
+});
+
+app.addEventListener("input", (ev) => {
+  if (ev.target.id !== "offerq") return;
+  state.offerQ = ev.target.value;
+  const list = document.getElementById("offerlist");
+  if (list) list.innerHTML = offersList();
 });
 
 window.addEventListener("hashchange", () => {

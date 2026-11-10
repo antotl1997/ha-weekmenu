@@ -390,3 +390,60 @@ def test_app_new_folder_card_in_chrome(tmp_path):
     assert "\u2014" not in dom
     assert "Nieuwe folder is er" not in after and 'data-run="bijwerken"' not in after
     assert order in after
+
+
+def fake_offers() -> list[Product]:
+    def o(pid, title, cat, mech, regular, now=None, image=None, unit="500 g"):
+        return Product(pid, title, unit, regular, regular if now is None else now, True, mech,
+                       True, cat, image=image)
+
+    img = "https://example.invalid/p.jpg"  # no network: the photo block falls back
+    return [
+        o(61, "AH Roomboter ongezouten", "Zuivel, eieren", "2e halve prijs", 2.95, image=img),
+        o(62, "AH Halfvolle melk", "Zuivel, eieren", "25% korting", 1.35, 1.01, image=img,
+          unit="1 l"),
+        o(63, "Lay's Naturel chips", "Borrel, chips, snacks", "1 + 1 gratis", 2.49, image=img),
+        o(64, "Zeep <b>fris</b>", "Drogisterij", "2 voor 5.00", 3.19,
+          image="http://example.invalid/zeep.jpg"),  # not https: never shown
+        o(65, "Karvan Cévitam aardbei siroop", "Frisdrank, sappen, water", "VOOR 2.99", 4.19,
+          2.99, image=img),
+    ]
+
+
+@pytest.mark.slow
+def test_app_offers_tab_in_chrome(tmp_path):
+    ctx = build_ctx(tmp_path)
+    ctx.bonus_cache = {date(2026, 11, 2): fake_offers()}  # the folder of the menu week
+    # one offer was added: a check with the quantity, and its own line on the Week tab
+    log = ctx.ledger.load(W)
+    log.offers_added = {63: 2}
+    log.offers_savings = 2.49
+    log.extras_added, log.extras_savings = {21: 2}, 1.48
+    ctx.ledger.save(log)
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "#aanbiedingen", tmp_path, "aanbiedingen")
+        # four items in the bottom bar, Aanbiedingen between Week and Besparing
+        assert dom.index('data-tab="week"') < dom.index('data-tab="aanbiedingen"') < \
+            dom.index('data-tab="besparing"') < dom.index('data-tab="instellingen"')
+        assert dom.count('data-tab="') == 4
+        # the search field on top, then a heading per category
+        assert dom.index('id="offerq"') < dom.index('<div class="sec">Borrel, chips, snacks')
+        for cat in ("Borrel, chips, snacks", "Drogisterij", "Frisdrank, sappen, water",
+                    "Zuivel, eieren"):
+            assert f'<div class="sec">{cat}</div>' in dom, cat
+        assert dom.index(">Drogisterij<") < dom.index(">Zuivel, eieren<")
+        assert "5 aanbiedingen" in dom
+        # pill with the action, price, the old price struck through only when it is lower
+        assert "2e halve prijs" in dom and "1 + 1 gratis" in dom
+        assert "<s>€ 1,35</s>" in dom and "€ 1,01" in dom and "<s>€ 2,49</s>" not in dom
+        assert dom.count('data-offer="') == 4 and 'aria-label="Toegevoegd: 2 stuks"' in dom
+        # escaped titles, https photos only
+        assert "Zeep &lt;b&gt;fris&lt;/b&gt;" in dom and "<b>fris" not in dom
+        assert "http://example.invalid" not in dom  # (https photos fail to load offline and remove themselves)
+
+        week = chrome(base, tmp_path / "profile-offers-week")
+        assert "waarvan losse aanbiedingen € 2,49" in week and "€ 18,82" in week
+        assert "waarvan vaste boodschappen € 1,48" in week
+        assert "—" not in dom
