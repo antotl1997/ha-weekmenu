@@ -168,3 +168,15 @@ def test_folder_fields_roundtrip_and_old_file_loads(tmp_path):
     assert old.new_folder_notified is False and not new_folder_available(old)
     # no menu: never "bijwerken"
     assert not new_folder_available(WeekLog(W, new_folder=date(2026, 11, 2)))
+
+
+def test_removed_by_user_round_trips_and_old_logs_load(tmp_path):
+    from datetime import date as _date
+    from app.ledger import Ledger as _Ledger, WeekLog as _WeekLog
+    led = _Ledger(tmp_path)
+    log = _WeekLog(_date(2026, 11, 4), removed_by_user={5: 2})
+    led.save(log)
+    assert led.load(_date(2026, 11, 4)).removed_by_user == {5: 2}
+    old = log.to_dict()
+    del old["removed_by_user"]  # a log from before 0.4.0's fix
+    assert _WeekLog.from_dict(old).removed_by_user == {}

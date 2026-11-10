@@ -17,7 +17,9 @@ record with "kind": "reduce", a delta <= 0 and "remove" (what leaves `log.added`
 current <= before+delta means it arrived, current >= before that it did not (the
 entry is dropped), anything else moves it to `log.unknown` (with the negative delta).
 Never repeated blind. A product crossed off on the list is never lowered; it stays
-a leftover.
+a leftover. What a lowering finds already gone (the user took it off in the AH app:
+remove - min(remove, before)) goes into `log.removed_by_user` and is never added
+again that week (Ruling 43): `apply` adds only n - added - removed_by_user.
 
 Write-ahead record: right before each PUT/PATCH the quantity AH holds
 (`before`) and the amount we are about to add (`delta`) go into `log.pending`
@@ -159,7 +161,9 @@ async def _settle(client, ledger: Ledger, log: WeekLog) -> None:
         before, delta = int(entry["before"]), int(entry["delta"])
         if entry.get("kind") == REDUCE:
             if cur <= before + delta:  # arrived
-                _take(log.added, pid, int(entry.get("remove", -delta)))
+                remove = int(entry.get("remove", -delta))
+                _take(log.added, pid, remove)
+                _user_removed(log, pid, remove, before)
             elif cur < before:  # partly lower: nobody can tell what happened
                 log.unknown[pid] = delta
             del log.pending[pid]
@@ -185,6 +189,13 @@ def _take(into: dict[int, int], pid: int, n: int) -> None:
         into.pop(pid, None)
 
 
+def _user_removed(log: WeekLog, pid: int, remove: int, before: int) -> None:
+    """The part of a lowering AH no longer had: the user took it off (Ruling 43)."""
+    gone = remove - min(remove, max(0, before))
+    if gone > 0:
+        log.removed_by_user[pid] = log.removed_by_user.get(pid, 0) + gone
+
+
 def _dest(target: str, order) -> str:
     return f"order:{order.id}" if order is not None else target
 
@@ -206,6 +217,7 @@ async def _reduce_each(
                 before = int(current.get(pid, 0))
                 delta = max(0, before - r) - before
                 change.append(delta)
+                change.append(before)
                 log.pending[pid] = {
                     "before": before,
                     "delta": delta,
@@ -225,6 +237,8 @@ async def _reduce_each(
                     ledger.save(log)
                     continue
             _take(log.added, pid, r)
+            if change:
+                _user_removed(log, pid, r, change[1])
             log.pending.pop(pid, None)
             if change and change[0] < 0:
                 result.removed[pid] = -change[0]
@@ -288,10 +302,12 @@ async def apply(
     module docstring for when that is safe).
     """
     await _settle(client, ledger, log)
+    # what the add-on put out there, plus what the user took off again (never re-added)
+    had = {p: log.added.get(p, 0) + log.removed_by_user.get(p, 0) for p in plan.basket}
     delta = {
-        p: n - log.added.get(p, 0)
+        p: n - had[p]
         for p, n in plan.basket.items()
-        if n - log.added.get(p, 0) > 0 and p not in log.pending and p not in log.unknown
+        if n - had[p] > 0 and p not in log.pending and p not in log.unknown
     }
     order, why = await _destination(client, log.week)
     target: Literal["order", "list"] = "order" if order is not None else "list"

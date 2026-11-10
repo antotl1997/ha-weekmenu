@@ -461,7 +461,68 @@ async def test_user_removed_it_already_nothing_lower_than_zero(led):
     await apply(ah, led, WeekLog(W), old)
     ah.listed[1] = 1  # the user took one off in the AH app
     res = await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
-    assert ah.listed == {} and res.removed == {1: 1} and led.load(W).added == {}
+    assert ah.listed == {} and res.removed == {1: 1}
+    saved = led.load(W)
+    assert saved.added == {} and saved.removed_by_user == {1: 1}  # Ruling 43
+
+
+# --- Ruling 43: what the user took off never comes back that week ---
+
+
+async def test_swap_then_back_never_rebuys_what_the_user_removed(led):
+    ah = FakeAh()
+    old = plan({1: 2})
+    await apply(ah, led, WeekLog(W), old)
+    ah.listed.pop(1)  # the user took both off in the AH app
+    await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)  # swap away
+    assert led.load(W).removed_by_user == {1: 2} and led.load(W).added == {}
+    n = len(ah.calls)
+    res = await apply(ah, led, led.load(W), old, replaced=plan({}), today=BEFORE)  # Terug
+    assert len(ah.calls) == n and res.added == {} and ah.listed == {}
+    # and neither a later round of the same menu, nor a new menu that needs it
+    await apply(ah, led, led.load(W), old)
+    await apply(ah, led, led.load(W), plan({1: 2, 2: 1}), replaced=old, today=BEFORE)
+    assert ah.listed == {2: 1}
+
+
+async def test_swap_then_back_adds_only_what_the_user_left(led):
+    ah = FakeAh()
+    old = plan({1: 2})
+    await apply(ah, led, WeekLog(W), old)
+    ah.listed[1] = 1  # the user took one of the two off
+    await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    assert ah.listed == {} and led.load(W).removed_by_user == {1: 1}
+    res = await apply(ah, led, led.load(W), old, replaced=plan({}), today=BEFORE)
+    assert res.added == {1: 1} and ah.listed == {1: 1}
+    saved = led.load(W)
+    assert saved.added == {1: 1} and saved.removed_by_user == {1: 1}
+
+
+async def test_cut_with_everything_still_there_records_nothing(led):
+    ah = FakeAh()
+    old = plan({1: 2})
+    await apply(ah, led, WeekLog(W), old)
+    await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    assert led.load(W).removed_by_user == {}
+    res = await apply(ah, led, led.load(W), old, replaced=plan({}), today=BEFORE)
+    assert res.added == {1: 2} and ah.listed == {1: 2}  # Terug brings the add-on's own back
+
+
+async def test_crash_after_a_cut_settles_what_the_user_removed(led):
+    ah = FakeAh()
+    old = plan({1: 2})
+    await apply(ah, led, WeekLog(W), old)
+    ah.listed[1] = 1  # the user took one off
+    ah.fail_on_call, ah.fail_after = len(ah.calls), True  # AH lowered, then the call raised
+    with pytest.raises(AhApiError):
+        await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    assert 1 in led.load(W).pending and ah.listed == {}
+    ah.fail_on_call = None
+    n = len(ah.calls)
+    res = await apply(ah, led, led.load(W), old, replaced=plan({}), today=BEFORE)
+    saved = led.load(W)
+    assert saved.removed_by_user == {1: 1} and saved.pending == {}
+    assert res.added == {1: 1} and len(ah.calls) == n + 1 and ah.listed == {1: 1}
 
 
 async def test_extras_are_never_lowered(led):

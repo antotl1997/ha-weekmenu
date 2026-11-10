@@ -789,3 +789,20 @@ async def test_api_swap_writes_nothing_into_an_order_of_another_week(aiohttp_cli
     body = await r.json()
     assert body["held"] is None
     assert (await (await client.get("api/week")).json())["held"] is None
+
+
+async def test_api_swap_then_back_never_rebuys_what_the_user_removed(aiohttp_client, ctx,
+                                                                     swaps):
+    """Ruling 43: 101 needs 1 and 2, 102 needs 2 and 3; the user takes both 2s off."""
+    await planned_ctx(ctx)
+    ah = ctx.client
+    ah.listed.pop(2)
+    n = len(ah.writes)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post(f"api/dish/{WO.isoformat()}/swap")  # 301: 1 and 9
+    assert r.status == 200, await r.text()
+    assert ctx.ledger.load(W).removed_by_user == {2: 1}
+    r = await client.post(f"api/dish/{WO.isoformat()}/back")
+    assert r.status == 200, await r.text()
+    assert ah.held() == {1: 1, 3: 1}  # 9 went off again, 2 never came back
+    assert [w for w in ah.writes[n:] if w[1].get(2, 0) > 0] == []  # 2 was never added
