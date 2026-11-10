@@ -41,12 +41,22 @@ def test_find_chrome_none_when_absent():
     assert find_chrome(which=lambda n: None, is_file=lambda p: False) is None
 
 
+def workflow_path():
+    """The CI workflow: live in .github/workflows, or parked in workflows-pending."""
+    for folder in ("workflows", "workflows-pending"):
+        path = REPO / ".github" / folder / "ci.yml"
+        if path.is_file():
+            return path
+    return REPO / ".github" / "workflows" / "ci.yml"
+
+
 def test_store_files_exist():
     for name in ("DOCS.md", "icon.png", "logo.png", "translations/nl.yaml",
                  "translations/en.yaml", "requirements.txt", "requirements-dev.txt"):
         assert (ROOT / name).is_file(), name
-    for name in ("LICENSE", ".github/workflows/ci.yml", ".github/dependabot.yml"):
+    for name in ("LICENSE", ".github/dependabot.yml"):
         assert (REPO / name).is_file(), name
+    assert workflow_path().is_file()
 
 
 def test_icon_sizes():
@@ -99,5 +109,5 @@ def test_runtime_pins_are_exact():
 
 
 def test_workflow_parses_and_has_jobs():
-    ci = yaml.safe_load((REPO / ".github/workflows/ci.yml").read_text(encoding="utf-8"))
+    ci = yaml.safe_load(workflow_path().read_text(encoding="utf-8"))
     assert set(ci["jobs"]) == {"tests", "frontend", "build", "audit"}
