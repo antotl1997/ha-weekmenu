@@ -6,10 +6,12 @@ from app.week import (
     WEEKDAGEN,
     away_dates,
     bestelling_zin,
+    eat_days,
     evenings,
     is_weekend,
     lange_datum,
     menu_week_start,
+    plan_days,
 )
 
 
@@ -109,3 +111,39 @@ def test_zero_on_every_day_gives_no_evenings():
 def test_away_dates_lists_the_week_in_order():
     assert away_dates(WO, {"maandag", "vrijdag", "fundag"}) == [date(2026, 11, 6), date(2026, 11, 9)]
     assert away_dates(WO, set()) == []
+
+
+# --- eetdagen, kookmomenten en restjes (v0.4) ---
+
+DO, VR, ZA, ZO, MA, DI = (date(2026, 11, d) for d in (5, 6, 7, 8, 9, 10))
+
+
+def test_eat_days_are_wednesday_to_tuesday_without_away():
+    assert eat_days(WO, {"zaterdag", "zondag", "maandag", "dinsdag"}) == [WO, DO, VR]
+    assert len(eat_days(WO, set())) == 7
+    assert eat_days(WO, set(WEEKDAGEN)) == []
+
+
+def test_three_eat_days_two_cooking_moments_give_one_leftover_night():
+    assert plan_days([WO, DO, VR], 2) == [(WO, DO), (VR, None)]
+
+
+def test_cooking_moments_are_bounded_by_the_eat_days():
+    assert plan_days([WO, DO, VR], 9) == [(WO, None), (DO, None), (VR, None)]
+    assert plan_days([WO, DO, VR], 0) == [(WO, DO)]  # 1 kookmoment: hooguit 1 restjesavond
+    assert plan_days([], 3) == []
+
+
+def test_earliest_cooking_days_get_the_leftovers():
+    week = [WO, DO, VR, ZA, ZO, MA, DI]
+    assert plan_days(week, 5) == [(WO, DO), (VR, ZA), (ZO, None), (MA, None), (DI, None)]
+
+
+def test_a_cooking_day_gets_at_most_one_leftover_night():
+    week = [WO, DO, VR, ZA, ZO, MA, DI]
+    assert plan_days(week, 2) == [(WO, DO), (VR, ZA)]
+
+
+def test_leftover_night_is_the_next_eat_day_not_the_next_date():
+    # niet thuis op donderdag: de restjes van woensdag zijn op vrijdag
+    assert plan_days([WO, VR, ZA], 2) == [(WO, VR), (ZA, None)]

@@ -66,3 +66,36 @@ def lange_datum(d: date) -> str:
 def bestelling_zin(start: date) -> str:
     """De regel boven het menu, in de app, de melding en op sensor.weekmenu."""
     return f"Voor de bestelling van {lange_datum(start)}"
+
+
+def eat_days(start: date, away: Iterable[str] = ()) -> list[date]:
+    """The eat days of the menu week: Wednesday to Tuesday, without the days in `away`."""
+    away = set(away)
+    days = (start + timedelta(days=i) for i in range(7))
+    return [d for d in days if WEEKDAGEN[d.weekday()] not in away]
+
+
+def plan_days(eat: list[date], kookmomenten: int) -> list[tuple[date, date | None]]:
+    """(cook day, leftover night or None) for each cooking moment.
+
+    The number of cooking moments is bounded to 1 .. len(eat). The extra eat days
+    (len(eat) - k) become leftover nights: the earliest cooking days get the next eat
+    day as their leftover night, at most one each. With fewer than half as many
+    cooking moments as eat days, the last eat days get nothing.
+    """
+    eat = sorted(eat)
+    if not eat:
+        return []
+    k = min(len(eat), max(1, kookmomenten))
+    extra = len(eat) - k
+    out: list[tuple[date, date | None]] = []
+    i = 0
+    while i < len(eat) and len(out) < k:
+        if extra > 0 and i + 1 < len(eat):
+            out.append((eat[i], eat[i + 1]))
+            extra -= 1
+            i += 2
+        else:
+            out.append((eat[i], None))
+            i += 1
+    return out
