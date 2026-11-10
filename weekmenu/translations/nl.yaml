@@ -1,0 +1,7 @@
+configuration:
+  schedule_time:
+    name: Schema-tijd
+    description: Tijdstip (UU:MM) vanaf wanneer de add-on elk uur kijkt, tot 18:00, of de folder van de bezorgweek er is en het menu gemaakt kan worden.
+  pantry:
+    name: Basisvoorraad
+    description: Producten die je altijd in huis hebt, zoals olie en zout. Die komen niet op je lijst of in je bestelling.

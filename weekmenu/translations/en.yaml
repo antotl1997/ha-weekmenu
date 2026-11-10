@@ -1,0 +1,7 @@
+configuration:
+  schedule_time:
+    name: Schedule time
+    description: Time (HH:MM) from which the add-on checks once an hour, until 18:00, whether the folder of the delivery week is out and the menu can be made.
+  pantry:
+    name: Pantry staples
+    description: Products you always have at home, such as oil and salt. They are not put on your list or in your order.

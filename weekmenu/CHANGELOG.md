@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0
+
+- **Winkelklaar.** Er is nu een volledige handleiding (`DOCS.md`, zichtbaar in het tabblad Documentatie van de add-on), een icoon en logo, en Nederlandse en Engelse namen en uitleg bij de instellingen. De handleiding legt ook uit dat de AH-login in je Home Assistant-backups zit en wat je doet bij een lek.
+- **Vaste versies.** De add-on installeert exact dezelfde versies als waarmee getest is (`requirements.txt`), en een versie-test houdt `config.yaml` en `pyproject.toml` gelijk.
+- **Automatische controle.** Elke push draait de tests, de Chrome-test van de app, een build voor amd64 en aarch64 en een audit van de dependencies op bekende kwetsbaarheden. Dependabot houdt de versies bij.
+- **Licentie.** Apache-2.0 (`LICENSE`).
+- Geen wijzigingen aan het gedrag van de add-on.
+
 ## 0.4.0
 
 - **Opschonen.** Bij Ander gerecht, Nieuw menu, Menu bijwerken, minder personen en het nieuwe Gerecht weghalen haalt de add-on producten van de lijst of uit de bestelling die hij zelf voor dat menu heeft toegevoegd en die geen gerecht meer nodig heeft. Wat jullie zelf op de lijst of in de bestelling zetten blijft staan, ook vaste boodschappen en losse aanbiedingen die je zelf aantikte. Elke verlaging loopt via hetzelfde write-ahead-logboek als toevoegen, en afrekenen doet de add-on nog steeds nooit. De regel in de README dat de add-on nooit iets verwijdert is hiermee vervallen.
