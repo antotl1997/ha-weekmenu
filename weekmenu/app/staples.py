@@ -112,8 +112,9 @@ def merge(log, new: list[Staple]) -> None:
 
 
 def open_count(log, menu_basket: dict[int, int] | None = None) -> int:
-    """Suggestions not added yet and not in the menu: the number in the message."""
+    """Suggestions not added yet (as a staple or a loose offer) and not in the menu:
+    the number in the message."""
     menu = menu_basket or {}
     return sum(1 for s in staple_list(log)
-               if s.product.id not in log.extras_added and s.product.id not in log.pending
-               and s.product.id not in menu)
+               if s.product.id not in log.extras_added and s.product.id not in log.offers_added
+               and s.product.id not in log.pending and s.product.id not in menu)

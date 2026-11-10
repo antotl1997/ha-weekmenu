@@ -461,3 +461,12 @@ async def test_api_add_staple_refused_while_the_open_order_is_for_another_week(a
     body = await r.json()
     assert "woensdag 4 november" in body["error"] and body["items"][0]["added"] is False
     assert len(ctx.client.writes) == n and ctx.ledger.load(W).extras_added == {}
+
+
+def test_open_count_skips_a_staple_bought_as_a_loose_offer():
+    """M4: a staple tapped in Aanbiedingen is in, so the message does not count it."""
+    from app.staples import open_count
+    log = WeekLog(W, staples=[Staple(BOTER, 3, 1, 2, 3.0).to_dict()])
+    assert open_count(log) == 1
+    log.offers_added = {50: 2}
+    assert open_count(log) == 0
