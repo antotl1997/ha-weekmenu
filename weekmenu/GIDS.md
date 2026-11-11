@@ -12,17 +12,26 @@ Weekmenu kiest elke week gerechten rond de bonus van Albert Heijn en zet de bood
 
 Open **Weekmenu** in de zijbalk van Home Assistant. Op de Week staat per dag wat er gegeten wordt. Tik op een gerecht voor de ingrediënten en de bereiding. Rustige regels zoals "restjes van", "niet thuis" en "geen gerecht" betekenen dat er die avond niet gekookt hoeft te worden.
 
+## Koken
+
+Tik op het gerecht en dan op **Koken**. Je ziet de hoeveelheden groot en de stappen genummerd; tik een stap aan als hij klaar is. Het scherm blijft aan. Tik op **Klaar** als je klaar bent.
+
 ## Iets anders willen
 
 - **Ander gerecht**: tik op het gerecht en kies Ander gerecht. De boodschappen worden meteen aangepast.
 - **Minder of meer personen**: tik op het gerecht en gebruik de min en plus.
 - **Niet thuis eten**: kies Instellingen en tik de dag aan bij Niet thuis eten.
 - **Hoe vaak koken**: kies Instellingen, Kookmomenten. Kook je minder vaak dan je thuis eet, dan worden de andere avonden restjesavonden.
+- **Dit gerecht liever niet meer**: tik op het gerecht op Duim omlaag (komt minder vaak terug) of Nooit meer (komt niet meer terug). Terugdraaien kan bij Instellingen, Nooit meer.
 - **Een product klopt niet**: tik in het gerecht bij het ingrediënt op Klopt niet. Kies een ander product, Hoeft niet of Hebben we al. Dat onthoudt de add-on voor altijd; terugdraaien kan bij Instellingen, Mijn correcties.
 
 ## Boodschappen en bestellen
 
 Het menu komt meestal op vrijdag, zodra de nieuwe bonusfolder er is. Kijk voor je bestelt even naar de kaart Check voor je bestelt bovenaan de Week: staat daar een groen vinkje, dan staat alles klaar. De boodschappen staan dan in je open bezorgbestelling, of op je AH-lijst als er nog geen bestelling is. Bestellen en betalen doe je zelf in de AH-app. Staat het menu klaar maar is er op zondag om 17:00 nog geen bezorgmoment gekozen, dan krijg je één herinnering.
+
+## Wat heeft het opgeleverd?
+
+Kies **Besparing**. Daar staat wat de bonus scheelde, en een dag na de bezorging ook wat er echt bespaard is ("Echt bespaard (nagerekend)").
 
 ## Inloggen bij AH
 

@@ -11,7 +11,8 @@ This uses the unofficial API of the Albert Heijn app. It is not affiliated with 
 - Cleans up after itself: when you swap a dish, remove one, lower the persons or make a new menu, it takes the products it added itself and no dish needs any more off the list or out of the order.
 - Makes the menu early: Nu maken works before the new folder is out, and when the folder then appears the app offers Menu bijwerken ("Nieuwe folder is er").
 - Shows the whole bonus folder of the week in the Aanbiedingen tab, per category with search, and adds an offer with one tap.
-- Shows the estimated savings per week, per month and in total in the app and in Home Assistant.
+- Shows the estimated savings per week, per month and in total in the app and in Home Assistant, and after the delivery what was really bought and saved.
+- Has a cooking screen (amounts big, numbered steps, the screen stays on) and per dish a thumb down or "Nooit meer".
 
 ## Install
 
@@ -56,6 +57,20 @@ The add-on only writes into an open order whose delivery day lies in the menu we
 ## Offers
 
 The Aanbiedingen tab (between Week and Besparing) lists the whole bonus folder of the menu week, per category, with a search field on the title. Each product shows its photo, the action, the price (the old price struck through) and a plus button. A tap puts the quantity the action asks for (one piece, or 2 for "1+1 gratis") in the open order, or on the list when there is none, through the same write route as Vaste boodschappen: one lock, written to the log first, never retried. The button then becomes a check with the quantity, and tapping twice adds nothing twice. An offer you tapped is a loose offer: it has its own line "waarvan losse aanbiedingen" under the savings of the week (next to "waarvan vaste boodschappen"), counts in the total, and is never cleaned up. Only this week and the next menu week can be added to (`GET api/offers?q=&category=`, `POST api/offers/<product id>`).
+
+## Cooking, taste and recounted savings
+
+The dish screen has a Koken button. It opens one scrolling cooking screen: the recipe amounts big ("400 g kipdijfilet") with the AH product small under each, the preparation as large numbered steps you tap off, and a Klaar button back. While it is open the screen stays on through `navigator.wakeLock` where the browser allows it (best effort, no error when it cannot).
+
+Each dish has Duim omlaag and Nooit meer, on the dish screen and in the cooking screen; a second tap takes it back. A thumb down is a soft penalty in the ranking (score times 0.75). Nooit meer leaves the recipe out of every later menu and of Ander gerecht; the current menu is not changed by it. Settings lists Nooit meer with Terugdraaien. Both live in `/data/taste.json` (with a schema version, written durably).
+
+The day after the delivery (the delivery day the add-on read when it wrote to that week's order; when unknown, the Wednesday after the menu week) the hourly check reads that delivered order once: the order the week was written to, otherwise every delivered order with its slot in the menu week. It only reads (a GraphQL query and GETs), under the same lock as every other AH call, not while writing is paused or the login expired, and a changed answer counts for the API health like any order read. The result is kept per menu week in `/data/reconciliation.json` and never redone: the week is marked before the read, so a failing read gives "niet na te rekenen" instead of a second try. Besparing shows per week "Echt bespaard (nagerekend)": x of y added products really bought, and the deal saving over what was really bought (at the bonus price of that week). No delivered order in the menu week (bought in the store, for instance) gives "niet na te rekenen". The estimate, the month, the total and `sensor.weekmenu_besparing_totaal` stay exactly as they were.
+
+Besparing and the diagnose also show two numbers over the last four weeks: the share of ingredient lines without a correction (no Klopt niet for that line in that week, also one taken back later) and the share of added products that were really bought.
+
+## Status 1.0
+
+This is version 1.0: everything on the roadmap up to and including 1.0 is built and covered by the test suite (cooking screen, thumb down and Nooit meer, the recounted savings and both numbers). The roadmap also sets a usage criterion for 1.0: four weeks in a row without manual work from us, without double products, with both numbers in the app. That can only be measured in real use, and it is counted from the first real week the add-on runs in Home Assistant with a real order. At the time of this release that count has not started: no real week is recorded as done, so 1.0 here means "complete and tested", not yet "proven four weeks in a row". The two numbers in Besparing are the way to follow it.
 
 ## License
 

@@ -607,6 +607,10 @@ def test_app_v10_cooking_screen_taste_and_never_list_in_chrome(tmp_path):
         assert 'data-taste="down" aria-pressed="true"' in dom
         assert "Komt minder vaak in het menu." in dom
 
+        from app.ingredients import SKIP
+        from app.overrides import make_entry
+        ctx.overrides.put("snufje nootmuskaat", make_entry(SKIP, "snufje nootmuskaat", None,
+                                                           NOW))
         ctx.taste.put(2001, NEVER, "Lasagne met spinazie", NOW)
         ctx.taste.put(2002, NEVER, "Bloemkoolcurry", NOW)
         dom = render(base, "#instellingen", tmp_path, "instellingen-nooit-meer",

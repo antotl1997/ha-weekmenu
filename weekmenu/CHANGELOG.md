@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0
+
+- **Koken.** Op het gerechtscherm staat de knop Koken. Die opent een kookscherm met de hoeveelheden uit het recept groot ("400 g kipdijfilet") en het AH-product klein eronder, en daaronder de bereiding in grote, genummerde stappen. Tik op een stap als hij klaar is. Ingrediënten en stappen staan op één scherm dat je doorscrollt; Klaar brengt je terug. Het scherm blijft aan zolang je kookt, als je browser dat toestaat (Wake Lock); kan dat niet, dan werkt de rest gewoon.
+- **Duim omlaag en Nooit meer** per gerecht, op het gerechtscherm en in het kookscherm. Een duim omlaag laat het gerecht minder vaak terugkomen (in de rangschikking telt het voor 75 procent). Nooit meer haalt het gerecht uit elk volgend menu, ook bij Ander gerecht; het menu van deze week verandert er niet door (tik daarvoor op Ander gerecht). Nog een keer tikken draait het terug. In Instellingen staat de lijst Nooit meer, met Terugdraaien. De keuzes staan in `/data/taste.json`.
+- **Besparing nagerekend.** De dag na de bezorging legt de add-on één keer de bezorgde bestelling naast wat hij zelf toevoegde. Hij leest daarvoor alleen (de bestelgegevens bij AH, niets wordt geschreven), en niet zolang schrijven stilstaat of de login verlopen is. In Besparing staat per week "Echt bespaard (nagerekend)": hoeveel van de toegevoegde producten echt gekocht zijn, en de bonusbesparing over wat echt gekocht is. Is er geen bezorgde bestelling in de menuweek (bijvoorbeeld in de winkel gekocht), dan staat er "niet na te rekenen". De schatting en het totaal blijven zoals ze waren. De uitkomsten staan in `/data/reconciliation.json`. Is de bezorgdag niet bekend (je bestelde vanaf de lijst), dan rekent hij na op de woensdag na de menuweek.
+- **Twee meetgetallen**, in Besparing en in de diagnose, over de laatste 4 weken: het aandeel ingrediëntregels zonder ingreep (geen Klopt niet voor die regel in die week) en het aandeel toegevoegde producten dat echt gekocht is.
+- **Terugdraaien in Mijn correcties** zet een week die al bijgewerkt was nu altijd op het dashboard, ook als een volgende stap mislukt. Lukt het opnieuw kiezen niet, dan zegt de app: "Je keuze is weg, het menu wordt bij de volgende ronde aangepast".
+- Klopt niet komt ook in `/data/history.json` (per week), zodat een correctie die later teruggedraaid wordt toch meetelt in het meetgetal.
+- Zet je terug naar 0.9, dan negeert die versie `taste.json` en `reconciliation.json`: Nooit meer en de duim tellen dan niet, en er wordt niets nagerekend. De bestanden blijven bewaard.
+
 ## 0.9.0
 
 - **Check voor je bestelt.** Bovenaan de Week, onder de bestelregel, staat in één kaart wat nog een blik nodig heeft, met de aantallen per soort: wat niet gevonden is (per gerecht), wat nog niet zeker in je bestelling of op je lijst staat, wat over is van het vorige menu, producten die nog niet toegevoegd konden worden en producten met een prijs per gewicht ("hoeveelheid controleren"). Een product dat niet gevonden is, is een actie: "Zoek product" of "Hoeft niet". Klopt alles, dan staat er een groen vinkje: "Alles staat klaar".

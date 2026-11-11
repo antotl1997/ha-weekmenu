@@ -7,7 +7,8 @@ Weekmenu AH maakt elke week een menu van Allerhande-recepten rond de bonus van A
 - Per kookmoment één gerecht. Zijn er meer eetdagen dan kookmomenten, dan worden de extra dagen restjesavonden.
 - Een tabblad met de hele bonusfolder van de week, waar je met één tik een aanbieding toevoegt.
 - Vaste boodschappen die je vaak koopt, voorgesteld uit je bestelgeschiedenis.
-- De geschatte besparing per week, per maand en in totaal.
+- De geschatte besparing per week, per maand en in totaal, en na de bezorging wat er echt bespaard is.
+- Een kookscherm met grote hoeveelheden en stappen, en per gerecht een duim omlaag of Nooit meer.
 
 De add-on gebruikt de onofficiële API van de Albert Heijn-app. Hij is niet verbonden aan of goedgekeurd door Albert Heijn en kan stuk gaan als AH die API aanpast.
 
@@ -79,6 +80,24 @@ De add-on schrijft alleen in een open bestelling die in de menuweek (woensdag to
 Bovenaan de Week staat de kaart Check voor je bestelt. Daarin staat wat niet gevonden is, wat nog niet zeker in je bestelling staat, wat over is van een vorig menu en welke producten een prijs per gewicht hebben (daarvan zet de add-on 1 stuk in je bestelling; pas het aantal zelf aan als dat te weinig is). Klopt alles, dan staat er "Alles staat klaar".
 
 Pakt de add-on een verkeerd product, tik dan in het gerecht bij dat ingrediënt op Klopt niet. Je kunt een ander product zoeken en kiezen, of zeggen dat het niet hoeft of dat je het al in huis hebt. Die keuze geldt voor dat ingrediënt in elke week en wordt meteen in je bestelling of op je lijst verwerkt, op dezelfde manier als Ander gerecht. Alle keuzes staan in Instellingen onder Mijn correcties, met de naam waarvoor ze gelden en Terugdraaien. Na Terugdraaien kiest de add-on weer zelf, ook meteen in het menu van deze week. Ze staan in `overrides.json` in de datamap van de add-on en gaan dus mee in je backups.
+
+## Koken, duim omlaag en Nooit meer
+
+Tik in een gerecht op Koken. Je ziet de hoeveelheden uit het recept groot met het AH-product klein eronder, en de bereiding in genummerde stappen; tik op een stap als hij klaar is. Het scherm blijft aan zolang dit scherm open is, als je browser dat ondersteunt. Klaar brengt je terug naar het gerecht.
+
+Met Duim omlaag komt een gerecht minder vaak terug: in de rangschikking telt het nog voor 75 procent. Met Nooit meer komt het niet meer in een menu, ook niet bij Ander gerecht. Het menu van deze week blijft staan; wil je het nu kwijt, tik dan op Ander gerecht. Nog een keer tikken draait de keuze terug. Instellingen heeft de lijst Nooit meer met Terugdraaien. De keuzes staan in `taste.json` in de datamap.
+
+## Besparing nagerekend
+
+De besparing in de app en in `sensor.weekmenu_besparing_totaal` is een schatting: wat de bonus scheelt op wat de add-on toevoegde. De dag na de bezorging leest de add-on één keer je bezorgde bestelling bij AH en zet die ernaast. In Besparing staat dan per week "Echt bespaard (nagerekend)" met hoeveel van de toegevoegde producten echt gekocht zijn. Die regel telt niet mee in de totalen; die blijven de schatting.
+
+- Alleen lezen: de add-on vraagt de bestelgegevens op en schrijft niets naar AH. Niet zolang schrijven stilstaat (Diagnose) of de login verlopen is; dan later.
+- Hooguit één keer per menuweek, ook als het lezen mislukt (dan staat er "niet na te rekenen").
+- Welke bestelling: de bestelling waar de add-on die week in schreef, anders elke bezorgde bestelling met een bezorgdag in de menuweek. Geen bestelling gevonden, bijvoorbeeld omdat je in de winkel kocht: "niet na te rekenen".
+- Wanneer: de dag na de bezorgdag die de add-on las toen hij in de bestelling schreef. Kent hij die niet (je bestelde vanaf de lijst), dan de woensdag na de menuweek. Weken van meer dan vijf weken geleden worden niet meer gelezen.
+- De uitkomsten staan in `reconciliation.json` in de datamap.
+
+Onder de weken staan twee meetgetallen over de laatste 4 weken: het aandeel ingrediëntregels zonder ingreep (geen Klopt niet voor die regel in die week, ook niet een die later is teruggedraaid) en het aandeel toegevoegde producten dat echt gekocht is. Ze staan ook in de diagnose onder `meetgetallen`.
 
 ## Backups en je AH-login
 
