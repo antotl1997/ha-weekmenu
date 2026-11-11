@@ -18,7 +18,7 @@ const BUSY_TEXT = "Het menu wordt nu gemaakt, even geduld";
 
 const state = { status: null, week: null, weekParam: null, savings: null, settings: null,
   staples: [], dishes: {}, open: {}, polling: false, offers: null, offersNote: "", offerQ: "",
-  welcomed: false, overrides: null, fix: null };
+  welcomed: false, overrides: null, fix: null, taste: null, cookDone: {} };
 
 // --- helpers ---------------------------------------------------------------------------
 
@@ -117,6 +117,9 @@ const ICON = {
   refresh: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>',
   plus: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  thumb: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="4" height="11" rx="1"/><path d="M7 13.5 11 21c1.6 0 2.6-1.2 2.3-2.8L12.6 15H19a2 2 0 0 0 2-2.3l-1.2-7.5A2.5 2.5 0 0 0 17.3 3H7"/></svg>',
+  never: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m6 6 12 12"/></svg>',
+  pan: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="13" r="6.5"/><path d="M16.2 11.5H22"/></svg>',
   bowl: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11h17a8.5 8.5 0 0 1-17 0z"/><path d="M9 7.5c0-1.2 1-1.5 1-2.7M13 7.5c0-1.2 1-1.5 1-2.7"/></svg>',
 };
 
@@ -232,12 +235,21 @@ async function loadDish(day) {
   state.dishes[day] = await api(`api/dish/${encodeURIComponent(day)}`);
 }
 
+async function loadTaste() {
+  state.taste = (await api("api/taste")).items;
+}
+
 async function loadSettings() {
   state.settings = await api("api/settings");
   try {
     state.overrides = (await api("api/overrides")).items;
   } catch (e) {
     state.overrides = [];  // the settings still show
+  }
+  try {
+    await loadTaste();
+  } catch (e) {
+    state.taste = [];
   }
 }
 
@@ -554,6 +566,56 @@ function fixScreen(day, text) {
     <p class="foot">Je keuze geldt voor dit ingrediënt in elke week. Terugdraaien kan bij Instellingen, Mijn correcties.</p>`;
 }
 
+/* Duim omlaag and Nooit meer: on the dish screen and in the cooking screen. A second
+ * tap takes the choice back. */
+function tasteHtml(d) {
+  const down = d.taste === "down", never = d.taste === "never";
+  const note = never ? "Komt niet meer in het menu. Terugdraaien kan bij Instellingen, Nooit meer."
+    : down ? "Komt minder vaak in het menu." : "";
+  return `<div class="btnrow taste">
+      <button class="btn sec2${down ? " on" : ""}" data-taste="down" aria-pressed="${down}">${ICON.thumb} Duim omlaag</button>
+      <button class="btn sec2${never ? " on" : ""}" data-taste="never" aria-pressed="${never}">${ICON.never} Nooit meer</button></div>
+    ${note ? `<p class="foot taste-note">${esc(note)}</p>` : ""}`;
+}
+
+/* Kookmodus: amounts big, the AH product small, numbered steps that can be ticked off,
+ * all on one scrolling screen. The screen stays on (Wake Lock) where the browser can. */
+function cookScreen(day) {
+  const d = state.dishes[day];
+  const done = state.cookDone[day] || (state.cookDone[day] = {});
+  const ings = (d.cook || []).map((x) => {
+    const sub = x.product ? `${x.qty > 1 ? `${esc(x.qty)}× ` : ""}${esc(x.product)}` : esc(x.note || "");
+    return `<li><b>${esc(x.text)}</b>${sub ? `<small>${sub}</small>` : ""}</li>`;
+  }).join("");
+  const steps = (d.steps || []).map((t, i) => `<li><button class="cstep${done[i] ? " done" : ""}" data-cstep="${i}" aria-pressed="${!!done[i]}"><span class="n">${i + 1}</span><span class="t">${esc(t)}</span></button></li>`).join("");
+  return `<header class="top cooktop"><div><h1>${esc(d.recipe.title)}</h1>
+    <div class="sub">${esc(cap(d.dag))} · ${esc(plural(d.persons, "persoon", "personen"))}</div></div>
+    <button class="btn pri sm" data-cookdone>Klaar</button></header>
+    <div class="sec">Ingrediënten</div>
+    <div class="card cook"><ul class="cing">${ings}</ul></div>
+    <div class="sec">Bereiding</div>
+    ${steps ? `<div class="card cook"><ol class="csteps">${steps}</ol></div><p class="foot">Tik op een stap als hij klaar is.</p>`
+      : `<div class="card empty">Geen bereiding gevonden. Bekijk het recept op Allerhande.</div>`}
+    ${tasteHtml(d)}
+    <button class="btn pri full" data-cookdone>Klaar</button>`;
+}
+
+/* The screen stays on while cooking: best effort, never an error when it cannot. */
+let wakeLock = null;
+async function keepAwake(on) {
+  try {
+    if (on && !wakeLock && navigator.wakeLock && document.visibilityState === "visible") {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", () => { wakeLock = null; });
+    } else if (!on && wakeLock) {
+      const w = wakeLock;
+      wakeLock = null;
+      await w.release();
+    }
+  } catch (e) { wakeLock = null; }
+}
+document.addEventListener("visibilitychange", () => { if (route().cook) keepAwake(true); });
+
 function dishScreen(day) {
   const d = state.dishes[day];
   const maxPersons = d.restjes ? 16 : 8;  // a dish with leftovers feeds two evenings
@@ -582,6 +644,7 @@ function dishScreen(day) {
       <b>${d.persons}</b>
       <button data-persons="${d.persons + 1}" aria-label="Meer personen" ${d.persons >= maxPersons ? "disabled" : ""}>+</button></div></div>
     ${d.restjes ? `<p class="foot rest-note">Ook voor de restjes op ${esc(longDate(d.restjes))}: de personen van die avond zijn meegeteld.</p>` : ""}
+    <button class="btn pri full cookbtn" data-cook>${ICON.pan} Koken</button>
     ${left}
     <div class="sec">Ingrediënten</div>
     <div class="card ing">${ingredientRows(d)}</div>
@@ -589,6 +652,7 @@ function dishScreen(day) {
       <button class="btn sec2" data-steps aria-expanded="${open}">${ICON.book} Bereiding</button>
       <button class="btn pri" data-swap>${ICON.swap} Ander gerecht</button></div>
     ${open ? `<div class="sec">Bereiding</div><div class="card steps">${steps}</div>` : ""}
+    ${tasteHtml(d)}
     ${d.can_back ? `<button class="btn sec2 full" data-undo>${ICON.undo} Terug naar het vorige gerecht</button>` : ""}
     <button class="btn sec2 full" data-remove>Gerecht weghalen</button>
     ${safeUrl(r.url) ? `<a class="src" href="${esc(safeUrl(r.url))}" target="_blank" rel="noopener">Recept op Allerhande</a>` : ""}
@@ -713,6 +777,7 @@ function settingsScreen() {
       <button class="btn pri" data-run="nu_maken">Nu maken</button></div>
     <p class="foot">Nu maken vult aan wat nog ontbreekt. Nieuw menu kiest andere gerechten.</p>
     ${correctionsHtml()}
+    ${neverHtml()}
     ${diagnoseHtml()}
     <p class="foot"><a href="#inloggen">Opnieuw inloggen</a> bij AH, als de add-on de login kwijt is.</p>
     <p class="foot"><a href="gids">Lees de gids</a>: waar je ziet wat jullie eten.</p>`;
@@ -730,6 +795,17 @@ function correctionsHtml() {
     ${rows.length ? `<div class="card ing">${rows.join("")}</div>
       <p class="foot">Na Terugdraaien kiest de add-on weer zelf, ook in het menu van deze week.</p>`
       : `<div class="card note soft"><span class="dot"></span><div>Nog geen correcties. Tik bij een ingrediënt op Klopt niet.</div></div>`}`;
+}
+
+/* Instellingen, Nooit meer: every recipe with "Nooit meer", each one can be taken back. */
+function neverHtml() {
+  const items = state.taste || [];
+  const rows = items.map((x) => `<div class="row"><span class="nm">${esc(x.title)}<small>Komt niet meer in het menu</small></span>
+    <button class="btn sec2 sm" data-unnever="${esc(x.recipe_id)}" aria-label="Terugdraaien: ${esc(x.title)}">Terugdraaien</button></div>`);
+  return `<div class="sec">Nooit meer</div>
+    ${rows.length ? `<div class="card ing">${rows.join("")}</div>
+      <p class="foot">Na Terugdraaien kan het gerecht weer in het menu komen.</p>`
+      : `<div class="card note soft"><span class="dot"></span><div>Nog geen gerechten op Nooit meer. Tik bij een gerecht op Nooit meer.</div></div>`}`;
 }
 
 /* "2026-11-11T09:30:12" as "11 november 09:30" (empty when unknown). */
@@ -838,6 +914,7 @@ function errorScreen(msg) {
 function route() {
   const h = location.hash.replace(/^#/, "");
   if (h.startsWith("gerecht/")) return { tab: "week", dish: h.slice(8) };
+  if (h.startsWith("koken/")) return { tab: "week", cook: h.slice(6) };
   if (h.startsWith("klopt/")) {
     const rest = h.slice(6);
     const i = rest.indexOf("/");
@@ -858,7 +935,7 @@ async function render() {
   const r = route();
   const loggedIn = state.status && state.status.logged_in;
   const relogin = r.tab === "inloggen";  // "Opnieuw inloggen" in Instellingen
-  const inner = !!r.dish || !!r.fix;  // a dish or its "Klopt niet": no bottom bar
+  const inner = !!r.dish || !!r.fix || !!r.cook;  // a dish, its "Klopt niet", cooking: no bottom bar
   nav.hidden = !loggedIn || inner || relogin;
   app.classList.toggle("bare", !loggedIn || inner || relogin);
   for (const a of nav.querySelectorAll("a")) a.classList.toggle("on", a.dataset.tab === r.tab);
@@ -867,14 +944,16 @@ async function render() {
   if (!loggedIn && !relogin && state.status.first_start && !state.welcomed) { app.innerHTML = welcomeScreen(); return; }
   if (!loggedIn || relogin) { app.innerHTML = loginScreen(loggedIn && relogin); return; }
 
+  keepAwake(!!r.cook);
   const need = r.fix ? (state.dishes[r.fix.day] ? null : () => loadDish(r.fix.day))
+    : r.cook ? (state.dishes[r.cook] ? null : () => loadDish(r.cook))
     : r.dish ? (state.dishes[r.dish] ? null : () => loadDish(r.dish))
     : r.tab === "aanbiedingen" ? (state.offers && state.week ? null : async () => {
         if (!state.week) await loadWeek();
         await loadOffers();
       })
     : r.tab === "besparing" ? (state.savings ? null : () => api("api/savings").then((x) => { state.savings = x; }))
-    : r.tab === "instellingen" ? (state.settings && state.overrides ? null : loadSettings)
+    : r.tab === "instellingen" ? (state.settings && state.overrides && state.taste ? null : loadSettings)
     : (state.week ? null : loadWeek);
   if (need) {
     app.innerHTML = `<div class="loading"><span class="spin dark"></span></div>`;
@@ -890,6 +969,7 @@ async function render() {
     if (seq !== renderSeq) return;
   }
   app.innerHTML = r.fix ? fixScreen(r.fix.day, r.fix.text)
+    : r.cook ? cookScreen(r.cook)
     : r.dish ? dishScreen(r.dish)
     : r.tab === "aanbiedingen" ? offersScreen()
     : r.tab === "besparing" ? savingsScreen()
@@ -904,7 +984,7 @@ async function refreshQuietly(what) {
     if (what === "aanbiedingen") { if (!state.week) await loadWeek(); await loadOffers(); }
     if (what === "besparing") state.savings = await api("api/savings");
     if (what === "instellingen") { await loadSettings(); await loadStatus(); }
-    if (route().tab === what && !route().dish && !route().fix) render();
+    if (route().tab === what && !route().dish && !route().fix && !route().cook) render();
   } catch (e) { /* the cached view stays */ }
 }
 
@@ -1071,8 +1151,35 @@ app.addEventListener("click", async (ev) => {
     return;
   }
 
+  // duim omlaag / nooit meer, on the dish and in the cooking screen (a second tap takes it back)
+  const tday = r.dish || r.cook;
+  if (tday && t.dataset.taste && state.dishes[tday]) {
+    const kind = state.dishes[tday].taste === t.dataset.taste ? null : t.dataset.taste;
+    await busy(t, async () => {
+      const data = await api(`api/dish/${encodeURIComponent(tday)}/taste`, { kind });
+      state.dishes[tday] = data;
+      state.taste = null;  // Instellingen, Nooit meer: read again
+      toast(kind === "never" ? "Komt niet meer in het menu. Tik op Ander gerecht om het nu te wisselen."
+        : kind === "down" ? "Genoteerd: komt minder vaak in het menu" : "Teruggezet");
+    });
+    render();
+    return;
+  }
+  // the cooking screen
+  if (r.cook) {
+    if ("cookdone" in t.dataset) { location.hash = "#gerecht/" + r.cook; return; }
+    if (t.dataset.cstep !== undefined) {
+      const done = state.cookDone[r.cook] || (state.cookDone[r.cook] = {});
+      const i = Number(t.dataset.cstep);
+      done[i] = !done[i];
+      t.classList.toggle("done", done[i]);
+      t.setAttribute("aria-pressed", String(done[i]));
+      return;
+    }
+  }
   // one dish
   if (r.dish) {
+    if ("cook" in t.dataset) { location.hash = "#koken/" + r.dish; return; }
     const day = r.dish;
     if ("steps" in t.dataset) { state.open[day] = !state.open[day]; render(); return; }
     if (t.dataset.fix) {
@@ -1142,6 +1249,18 @@ app.addEventListener("click", async (ev) => {
       const gone = removedText(res);
       if (res.warning) { toast(res.warning, true); return; }  // the choice is gone, the menu follows later
       toast(res.held || ("Teruggedraaid, de add-on kiest weer zelf" + (gone ? ". " + gone : "")));
+    });
+    render();
+    return;
+  }
+
+  // settings: Nooit meer
+  if (t.dataset.unnever) {
+    await busy(t, async () => {
+      const res = await api("api/taste/remove", { recipe_id: Number(t.dataset.unnever) });
+      state.taste = res.items;
+      state.dishes = {};  // the buttons on the dish screen
+      toast("Teruggedraaid, het gerecht kan weer in het menu komen");
     });
     render();
     return;
@@ -1239,7 +1358,7 @@ window.addEventListener("hashchange", () => {
   const r = route();
   window.scrollTo(0, 0);
   render();
-  if (!r.dish && !r.fix) refreshQuietly(r.tab);
+  if (!r.dish && !r.fix && !r.cook) refreshQuietly(r.tab);
 });
 
 async function boot() {

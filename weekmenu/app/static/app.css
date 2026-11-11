@@ -249,3 +249,23 @@ textarea::placeholder,input::placeholder{color:#6b655c;opacity:1}
 .btnrow.col .btn{justify-content:flex-start;text-align:left;padding:12px 16px}
 .btnrow.col .btn b{display:block;font-size:15px}
 .btnrow.col .btn small{display:block;font-weight:400;font-size:12.5px;color:#6b655c;margin-top:2px}
+/* v1.0: kookmodus, duim omlaag en nooit meer */
+.cookbtn{margin-bottom:12px}
+.taste .btn{font-size:13.5px}
+.taste .btn.on{background:#22201c;color:#fff;border-color:#22201c}
+.taste-note{margin:-6px 22px 10px}
+.cooktop{align-items:flex-start}
+.cooktop h1{font-size:22px;line-height:1.25}
+.cook{padding:4px 16px}
+.cing{list-style:none}
+.cing li{padding:12px 0;border-bottom:1px solid #f1ede6}
+.cing li:last-child{border:0}
+.cing b{display:block;font-size:21px;font-weight:600;line-height:1.3}
+.cing small{display:block;font-size:13px;color:#716b62;margin-top:2px}
+.csteps{list-style:none}
+.csteps li{border-bottom:1px solid #f1ede6}
+.csteps li:last-child{border:0}
+.cstep{display:flex;gap:14px;width:100%;text-align:left;padding:16px 0;font-size:20px;line-height:1.5;min-height:44px}
+.cstep .n{flex:none;width:36px;height:36px;border-radius:50%;background:#e3f1e4;color:#2f6b3a;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.cstep.done .t{color:#9a948a;text-decoration:line-through}
+.cstep.done .n{background:#2f6b3a;color:#fff}

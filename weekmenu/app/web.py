@@ -355,6 +355,26 @@ def offers_view(products: Iterable[Product], wlog, q: str = "", category: str = 
         for n in names]}
 
 
+def cook_lines(d: Dish) -> list[dict]:
+    """v1.0 kookmodus: every recipe line in recipe order ("400 g kipdijfilet"), with the
+    AH product bought for it (shown small) or why there is none."""
+    by_text = {ln.from_ingredient: ln for ln in d.lines}
+    notes = {**{t: "niet gevonden bij AH" for t in d.not_found},
+             **{t: "hoeft niet" for t in d.skipped},
+             **{t: "in huis" for t in d.pantry}}
+    out, seen = [], set()
+    texts = [t for t, _ in d.recipe.ingredients]
+    texts += [t for t in list(by_text) + list(notes) if t not in texts]  # never lost
+    for t in texts:
+        if t in seen:
+            continue
+        seen.add(t)
+        ln = by_text.get(t)
+        out.append({"text": t, "product": ln.product.title if ln else None,
+                    "qty": ln.qty if ln else 0, "note": None if ln else notes.get(t)})
+    return out
+
+
 def dish_view(wlog, plan: Plan, d: Dish, today: date, overrides: dict | None = None,
               taste: str | None = None) -> dict:
     names = {t: (n or t) for t, n in d.recipe.ingredients}
@@ -385,6 +405,7 @@ def dish_view(wlog, plan: Plan, d: Dish, today: date, overrides: dict | None = N
     ]
     iso = d.date.isoformat()
     return {
+        "cook": cook_lines(d),
         "date": iso, "dag": WEEKDAGEN[d.date.weekday()], "week": wlog.week.isoformat(),
         "persons": d.persons, "savings": d.savings, "recipe": _recipe_view(d),
         "restjes": d.leftover_date.isoformat() if d.leftover_date else None,

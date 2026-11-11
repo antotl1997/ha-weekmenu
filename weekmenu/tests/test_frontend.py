@@ -576,3 +576,42 @@ def test_app_v09_check_card_klopt_niet_and_corrections_in_chrome(tmp_path):
         assert dom.count('data-unfix="') == 2 and "Terugdraaien" in dom
         assert "nootmuskaat<small>Hoeft niet" in dom  # the key the choice holds for
         assert "—" not in dom
+
+
+@pytest.mark.slow
+def test_app_v10_cooking_screen_taste_and_never_list_in_chrome(tmp_path):
+    """v1.0: Koken on the dish screen opens one scrolling cooking screen (amounts big,
+    the AH product small under it, numbered steps, Klaar); Duim omlaag and Nooit meer on
+    both screens; Nooit meer in Instellingen with Terugdraaien."""
+    from app.taste import DOWN, NEVER
+
+    ctx = build_ctx(tmp_path)
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "#gerecht/2026-11-04", tmp_path, "gerecht", size=PHONE_LONG)
+        assert "data-cook" in dom and "Koken" in dom
+        assert 'data-taste="down"' in dom and 'data-taste="never"' in dom
+        assert dom.index("Koken") < dom.index("Ingrediënten")
+
+        dom = render(base, "#koken/2026-11-04", tmp_path, "koken", size=PHONE_LONG)
+        assert "<b>400 g kipdijfilet</b><small>AH Kipdijfilet</small>" in dom
+        assert "<b>2 el zonnebloemolie</b><small>in huis</small>" in dom
+        assert dom.count('data-cstep="') == 4 and '<span class="n">1</span>' in dom
+        assert dom.index("Ingrediënten") < dom.index("Bereiding")
+        assert dom.count("data-cookdone") == 2 and 'id="nav" class="nav" hidden' in dom
+        assert "Duim omlaag" in dom and "Nooit meer" in dom
+
+        ctx.taste.put(1001, DOWN, TITLES[0], NOW)
+        dom = chrome(base + "#gerecht/2026-11-04", tmp_path / "profile-down")
+        assert 'data-taste="down" aria-pressed="true"' in dom
+        assert "Komt minder vaak in het menu." in dom
+
+        ctx.taste.put(2001, NEVER, "Lasagne met spinazie", NOW)
+        ctx.taste.put(2002, NEVER, "Bloemkoolcurry", NOW)
+        dom = render(base, "#instellingen", tmp_path, "instellingen-nooit-meer",
+                     size=PHONE_LONG)
+        assert dom.index("Mijn correcties") < dom.index("Nooit meer") < dom.index("Diagnose")
+        assert dom.count('data-unnever="') == 2 and "Lasagne met spinazie" in dom
+        assert TITLES[0] not in dom.split("Nooit meer", 1)[1]  # a thumb is not listed
+        assert "—" not in dom
