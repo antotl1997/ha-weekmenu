@@ -74,7 +74,7 @@ cards:
 
       {% set ververst = a.get('login_refreshed') %}
       {% set wanneer = as_datetime(ververst).strftime('%d-%m %H:%M') if ververst else 'onbekend' %}
-      {% if a.get('login_ok') %}<small>AH-login in orde, laatst ververst {{ wanneer }}</small>{% elif a.get('login_ok') == false %}<ha-alert alert-type="error">AH-login verlopen of al 7 dagen niet ververst (laatst {{ wanneer }}). Log opnieuw in via Weekmenu, Instellingen.</ha-alert>{% endif %}
+      {% if a.get('login_ok') %}<small>AH-login in orde, laatst ververst {{ wanneer }}</small>{% elif a.get('login_ok') == false %}<ha-alert alert-type="error">AH-login verlopen (laatst ververst {{ wanneer }}). Log opnieuw in via Weekmenu.</ha-alert>{% endif %}
     visibility:
       - condition: state
         entity: sensor.weekmenu

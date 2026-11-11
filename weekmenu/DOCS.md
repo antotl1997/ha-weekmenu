@@ -31,7 +31,7 @@ Op een computer, in Chrome of Edge:
 4. Kopieer de regel die begint met `appie://login-exit?code=`.
 5. Plak hem in de app. Dat kan ook op je telefoon, bijvoorbeeld door de regel via WhatsApp naar jezelf te sturen. Plak je de hele chatregel, dan haalt de add-on de code er zelf uit. De code is maar een paar minuten geldig.
 
-Op de Week staat "AH-login in orde, laatst ververst <datum>". Is de login verlopen, of al 7 dagen niet ververst, dan toont de Week een rode kaart met Opnieuw inloggen. Dezelfde informatie staat op `sensor.weekmenu` als `login_ok` en `login_refreshed`.
+Op de Week staat "AH-login in orde, laatst ververst <datum>". Is de login verlopen (AH weigert hem, ook bij het verversen), dan vraagt de app je opnieuw in te loggen en is de regel op de dashboardkaart rood. Dezelfde informatie staat op `sensor.weekmenu` als `login_ok` en `login_refreshed`.
 
 Het AH-account mag gedeeld blijven: jullie AH-apps blijven gewoon werken. Raakt de add-on de login kwijt of weigert AH hem, dan krijg je een melding "AH-login verlopen" en toont de app het inlogscherm weer. Het menu van die week wordt dan pas gemaakt na opnieuw inloggen.
 
@@ -55,8 +55,8 @@ In de app, onder Instellingen:
 ## Meldingen
 
 - **Menu klaar, fouten, login en herinnering** gaan naar `notify_owner`.
-- **Vanavond** gaat elke dag om 16:00 naar de diensten in `notify_today`: "Vanavond: <gerecht>, begin om <tijd>", of "Vanavond: restjes van <gerecht>". De begintijd is `dinner_time` min de kook-, oven- en wachttijd, naar beneden afgerond op een kwartier. Ben je die avond niet thuis, of is er geen gerecht of kookmoment, dan komt er geen melding. Hooguit één keer per dag, ook na een herstart.
-- **Bestelherinnering**: op zondag vanaf 17:00, als het menu voor de komende week klaarstaat en er nog geen bestelling is die in die week bezorgd wordt, één melding "Het menu staat klaar, maar er is nog geen bezorgmoment gekozen." Hooguit één per dag.
+- **Vanavond** gaat elke dag om 16:00 naar de diensten in `notify_today`: "Vanavond: <gerecht>, begin om <tijd>", of "Vanavond: restjes van <gerecht>". De begintijd is `dinner_time` min de kook-, oven- en wachttijd, naar beneden afgerond op een kwartier; zou dat vóór 15:00 zijn, dan noemt de melding geen tijd. Ben je die avond niet thuis, of is er geen gerecht of kookmoment, dan komt er geen melding. Hooguit één keer per dag, ook na een herstart.
+- **Bestelherinnering**: op zondag tussen 17:00 en 23:00, als het menu voor de komende week klaarstaat en er nog geen bestelling is die in die week bezorgd wordt, één melding "Het menu staat klaar, maar er is nog geen bezorgmoment gekozen." Hooguit één per dag.
 
 ## Dashboardkaart
 

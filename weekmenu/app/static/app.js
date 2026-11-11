@@ -426,7 +426,7 @@ function weekScreen() {
 }
 
 /* "AH-login in orde, laatst ververst <datum>" quietly at the bottom of the week; a red
- * card on top when the login expired or was not refreshed for 7 days. */
+ * card on top when the login expired (AH refused it, also on a refresh). */
 function loginCard(l, bottom) {
   if (!l) return "";
   const when = stampText(l.login_refreshed);
@@ -434,12 +434,8 @@ function loginCard(l, bottom) {
     return bottom ? `<p class="foot login-ok">AH-login in orde${when ? `, laatst ververst ${esc(when)}` : ""}.</p>` : "";
   }
   if (bottom) return "";
-  const title = l.login_expired ? "AH-login verlopen" : "AH-login al 7 dagen niet ververst";
-  const sub = l.login_expired
-    ? "Er komt niets in je bestelling of op je lijst tot je opnieuw inlogt."
-    : `Laatst ververst ${esc(when || "onbekend")}. Log opnieuw in, dan gaat het menu van vrijdag zeker goed.`;
-  return `<div class="card note bad login-bad"><span class="dot"></span><div><b>${esc(title)}</b>
-    <span class="muted">${sub}</span></div></div>
+  return `<div class="card note bad login-bad"><span class="dot"></span><div><b>AH-login verlopen</b>
+    <span class="muted">Er komt niets in je bestelling of op je lijst tot je opnieuw inlogt.</span></div></div>
     <a class="btn pri full" href="#inloggen">Opnieuw inloggen</a>`;
 }
 

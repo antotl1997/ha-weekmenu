@@ -159,11 +159,11 @@ h2{font-size:22px;margin:4px 20px 8px;letter-spacing:-.3px;line-height:1.25}
 .lbl2{font-size:14px;padding-top:12px}
 .hint{font-size:12px;color:#716b62;font-weight:400}
 .tw{display:flex;gap:5px;padding:8px 0 12px}
-.chip{flex:1 1 0;min-width:0;min-height:44px;padding:8px 0;border-radius:999px;font-size:12.5px;font-weight:600;background:#ebe7e0;color:#5f5a52;position:relative;text-align:center}
+.chip{flex:1 1 0;min-width:44px;min-height:44px;padding:8px 0;border-radius:999px;font-size:12.5px;font-weight:600;background:#ebe7e0;color:#5f5a52;position:relative;text-align:center}
 .chip.wide{flex-grow:1.5}
 .chip.x{background:#22201c;color:#fff}
 .days{display:flex;gap:5px;padding:8px 0 14px}
-.box{flex:1;text-align:center;border-radius:10px;min-height:44px;padding:7px 0;font-size:11px;background:#f1ede6;color:#6b655c;position:relative}
+.box{flex:1;min-width:44px;text-align:center;border-radius:10px;min-height:44px;padding:7px 0;font-size:11px;background:#f1ede6;color:#6b655c;position:relative}
 .box b{display:block;font-size:15px;color:#22201c}
 .box.x{background:#22201c;color:#fff}
 .box.x b{color:#fff}
@@ -212,3 +212,6 @@ textarea:focus{outline:2px solid #2f6b3a;outline-offset:1px}
 .how summary{cursor:pointer;font-weight:600;color:#22201c;min-height:44px;display:flex;align-items:center}
 .how p{font-size:13.5px}
 .welcome p{color:#22201c}
+textarea::placeholder,input::placeholder{color:#6b655c;opacity:1}
+/* narrow phones (360 px): seven 44 px chips and day boxes do not fit on one row */
+@media (max-width:399px){.tw,.days{display:grid;grid-template-columns:repeat(4,minmax(44px,1fr));gap:6px}}

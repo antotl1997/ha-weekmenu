@@ -94,6 +94,8 @@ SUN = date(2026, 11, 8)
     (30, None, 150, time(15, 30)),
     (0, None, None, time(18, 30)),
     (None, None, None, None),
+    (30, None, 180, time(15, 0)),       # exactly 15:00 still has a time
+    (30, None, 240, None),              # 14:00: before 15:00, no "begin om"
 ])
 def test_start_time_is_dinner_minus_all_times_rounded_down_to_a_quarter(cook, oven, wait,
                                                                         want):
@@ -122,6 +124,9 @@ def test_vanavond_lines():
     assert vanavond(plan, SUN) is None  # geen kookmoment
     assert vanavond(plan, W, away={"woensdag"}) is None  # niet thuis
     assert vanavond(None, W) is None
+    a = plan.dishes[0]
+    a.wait = 300  # marinates for hours: no start time before 15:00
+    assert vanavond(plan, W) == "Vanavond: Recept 101"
 
 
 def tonight_ctx(tmp_path, now, today=("mobile_app_b",), plan=None):
@@ -285,21 +290,68 @@ async def test_no_reminder_without_a_login(tmp_path):
 # --- 4. the login line ----------------------------------------------------------------
 
 
-def test_login_view_ok_stale_and_expired(tmp_path):
-    from datetime import timedelta
+def test_login_view_ok_and_expired_never_stale(tmp_path):
+    import os
     ctx = make_ctx(tmp_path, now=datetime(2026, 11, 11, 12, 0))
     assert main.login_view(ctx)["login_ok"] is False  # never logged in
     assert main.login_view(ctx)["login_refreshed"] is None
     ctx.store.save(Tokens("a", "r", 9e9))
     stamp = main.local_from_epoch(ctx.store.saved_at())
-    view = main.login_view(ctx, stamp)
+    view = main.login_view(ctx)
     assert view == {"login_ok": True, "login_refreshed": stamp.isoformat(timespec="minutes"),
-                    "login_expired": False, "login_stale": False}
-    late = main.login_view(ctx, stamp + timedelta(days=7, minutes=1))
-    assert late["login_ok"] is False and late["login_stale"] is True
-    ctx.login_expired = True
-    view = main.login_view(ctx, stamp)
+                    "login_expired": False}
+    # Ruling 50: a refresh a month ago is shown, not judged
+    old = datetime(2026, 10, 1, 9, 30).timestamp()
+    os.utime(ctx.store.path, (old, old))
+    view = main.login_view(ctx)
+    assert view["login_ok"] is True and view["login_refreshed"] == "2026-10-01T09:30"
+    ctx.login_expired = True  # AH refused it (also a refused refresh sets this)
+    view = main.login_view(ctx)
     assert view["login_ok"] is False and view["login_expired"] is True
+    for name in ("app/main.py", "app/static/app.js", "GIDS.md", "DOCS.md", "CHANGELOG.md",
+                 "dashboard/weekmenu-card.yaml"):
+        assert "7 dagen" not in (ROOT / name).read_text(encoding="utf-8"), name
+    assert "LOGIN_STALE" not in (ROOT / "app" / "main.py").read_text(encoding="utf-8")
+
+
+def test_login_view_reads_tokens_at_most_every_five_minutes(tmp_path, monkeypatch):
+    import os
+    ctx = make_ctx(tmp_path)
+    ctx.store.save(Tokens("a", "r", 9e9))
+    loads = []
+    real = ctx.store.load
+    monkeypatch.setattr(ctx.store, "load", lambda: loads.append(1) or real())
+    clock = [1000.0]
+    monkeypatch.setattr(main._time, "monotonic", lambda: clock[0])
+    for _ in range(5):
+        assert main.login_view(ctx)["login_ok"] is True
+    assert len(loads) == 1
+    clock[0] += 301
+    main.login_view(ctx)
+    assert len(loads) == 2
+    # the file changed (a refresh, a logout): read again at once
+    ctx.store.path.write_text("{kapot", encoding="utf-8")
+    os.utime(ctx.store.path, (5.0, 5.0))
+    assert main.login_view(ctx)["login_ok"] is False and len(loads) == 3
+
+
+def test_broken_tokens_file_warns_at_most_once_an_hour(tmp_path, monkeypatch, caplog):
+    import logging
+    from app import tokens
+    store = tokens.TokenStore(tmp_path / "tokens.json")
+    store.path.write_text("{kapot", encoding="utf-8")
+    clock = [50.0]
+    monkeypatch.setattr(tokens.time, "monotonic", lambda: clock[0])
+    with caplog.at_level(logging.WARNING, logger="app.tokens"):
+        for _ in range(60):
+            assert store.load() is None
+            clock[0] += 59
+        warned = [r for r in caplog.records if "niet te lezen" in r.getMessage()]
+    assert len(warned) == 1
+    clock[0] += 60
+    with caplog.at_level(logging.WARNING, logger="app.tokens"):
+        store.load()
+    assert len([r for r in caplog.records if "niet te lezen" in r.getMessage()]) == 2
 
 
 # --- api/week and the sensor from the web API ------------------------------------------
@@ -557,3 +609,122 @@ def test_dashboard_card_shows_what_the_brief_asks():
     assert button["primary"] == "Open weekmenu"
     assert button["tap_action"] == {"action": "navigate",
                                     "navigation_path": "/e258686e_weekmenu"}
+
+
+# --- fix round 1 (Rulings 50-51) ------------------------------------------------------
+
+
+@pytest.mark.parametrize("broken", ["republish", "notify_tonight", "remind_order"])
+async def test_a_failing_extra_never_keeps_the_slot_round_from_running(tmp_path, monkeypatch,
+                                                                       broken):
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 1, 17, 0))
+    order: list[str] = []
+
+    async def boom(ctx, now):
+        order.append(broken)
+        raise RuntimeError("stuk")
+
+    async def fine(name):
+        async def run(ctx, now):
+            order.append(name)
+        return run
+
+    for name in ("republish", "notify_tonight", "remind_order"):
+        monkeypatch.setattr(main, name, boom if name == broken else await fine(name))
+
+    async def round_(ctx, now, mode):
+        order.append("round")
+    monkeypatch.setattr(main, "run_round", round_)
+    await main.tick(ctx, datetime(2026, 11, 1, 17, 0))  # Sunday: a slot, no menu yet
+    # the slot round first, then all three extras, also after one of them raised
+    assert order == ["round", "republish", "notify_tonight", "remind_order"]
+
+
+async def test_a_failing_slot_still_runs_the_extras(tmp_path, monkeypatch):
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 1, 17, 0))
+    seen = []
+
+    async def round_(ctx, now, mode):
+        raise RuntimeError("stuk")
+
+    async def extra(ctx, now):
+        seen.append(1)
+    monkeypatch.setattr(main, "run_round", round_)
+    monkeypatch.setattr(main, "republish", extra)
+    with pytest.raises(RuntimeError):
+        await main.tick(ctx, datetime(2026, 11, 1, 17, 0))
+    assert seen == [1]
+
+
+async def test_republish_waits_for_the_lock_and_posts_the_newest_menu(tmp_path):
+    import asyncio
+    ctx = tonight_ctx(tmp_path, datetime(2026, 11, 4, 9, 0), today=())
+    ctx.store.save(Tokens("a", "r", 9e9))
+    await ctx.lock.acquire()  # a round is busy
+    task = asyncio.create_task(main.republish(ctx, datetime(2026, 11, 4, 9, 0)))
+    await asyncio.sleep(0.05)
+    assert not [p for p, _ in ctx.hass.posts if p == "states/sensor.weekmenu"]
+    newer = make_plan([dish(W, 999, [1], 9.0)])  # the round saves a new menu
+    ctx.ledger.save(WeekLog(W, plan=newer.to_dict(), target="list", round_done=True))
+    ctx.lock.release()
+    await task
+    (sensor,) = [p for path, p in ctx.hass.posts if path == "states/sensor.weekmenu"]
+    assert [d["titel"] for d in sensor["attributes"]["dishes"]] == ["Recept 999"]
+
+
+async def test_reminder_comes_for_a_menu_made_at_1800_and_stops_at_2300(tmp_path):
+    ctx = reminder_ctx(tmp_path, plan=False)
+    await main.tick(ctx, datetime(2026, 11, 8, 17, 0))  # no menu yet: nothing, not done
+    assert reminders(ctx) == [] and ctx.reminder_done is None
+    ctx.ledger.save(WeekLog(NOV11, plan=make_plan([dish(NOV11, 301, [6])]).to_dict(),
+                            target="list", round_done=True))  # the 18:00 fallback
+    await main.tick(ctx, datetime(2026, 11, 8, 18, 5))
+    assert len(reminders(ctx)) == 1
+
+    (tmp_path / "late").mkdir()
+    late = reminder_ctx(tmp_path / "late", plan=False)
+    late.ledger.save(WeekLog(NOV11, plan=make_plan([dish(NOV11, 301, [6])]).to_dict(),
+                             target="list", round_done=True))
+    await main.tick(late, datetime(2026, 11, 8, 23, 0))
+    assert reminders(late) == [] and late.reminder_done == date(2026, 11, 8)
+
+
+async def test_reminder_looks_again_an_hour_after_an_order_was_chosen(tmp_path):
+    ctx = reminder_ctx(tmp_path, order=ActiveOrder(7, {}, date(2026, 11, 11)))
+    await main.tick(ctx, datetime(2026, 11, 8, 17, 0))
+    assert reminders(ctx) == [] and ctx.reminder_done is None
+    ctx.client.order = None  # the order was cancelled
+    await main.tick(ctx, datetime(2026, 11, 8, 17, 30))
+    assert reminders(ctx) == []  # at most one AH look an hour
+    await main.tick(ctx, datetime(2026, 11, 8, 18, 0))
+    assert len(reminders(ctx)) == 1
+
+
+async def test_vanavond_is_not_marked_when_home_assistant_cannot_be_read(tmp_path):
+    ctx = tonight_ctx(tmp_path, datetime(2026, 11, 4, 16, 0))
+    ctx.hass.fail_reads = True
+    await main.tick(ctx, datetime(2026, 11, 4, 16, 0))
+    assert tonights(ctx) == [] and ctx.tonight_sent is None
+    ctx.hass.fail_reads = False
+    await main.tick(ctx, datetime(2026, 11, 4, 16, 1))
+    assert tonights(ctx) == [("services/notify/mobile_app_b",
+                              "Vanavond: Recept 101, begin om 17:45")]
+
+
+def test_day_boxes_and_chips_are_44px_wide_on_a_360px_phone():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    for sel in (".box", ".chip"):
+        assert _px(_rule(css, sel), "min-width") >= 44, sel
+    # 360 px: 360 - 2 x 16 margin - 2 x 14 card padding = 300 px for seven boxes, too
+    # little for 7 x 44; below 400 px they go in a grid of four columns
+    m = re.search(r"@media \(max-width:(\d+)px\)\{\.tw,\.days\{display:grid;"
+                  r"grid-template-columns:repeat\((\d),minmax\(44px,1fr\)\);gap:(\d+)px\}\}", css)
+    assert m and int(m.group(1)) >= 399
+    cols, gap = int(m.group(2)), int(m.group(3))
+    assert (300 - (cols - 1) * gap) / cols >= 44
+    assert 7 * 44 + 6 * 5 <= 400 - 32 - 28 + 2  # from 400 px seven in a row still fit
+
+
+def test_placeholder_colour_is_explicit():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    assert "textarea::placeholder,input::placeholder{color:#6b655c" in css

@@ -25,7 +25,7 @@ Het menu komt meestal op vrijdag, zodra de nieuwe bonusfolder er is. De boodscha
 
 ## Inloggen bij AH
 
-Eén keer inloggen is genoeg; daarna houdt de add-on de login zelf bij. Op de Week staat "AH-login in orde" met de datum van de laatste verversing. Wordt die kaart rood, log dan opnieuw in via Instellingen, Opnieuw inloggen. Je hebt daarvoor even een computer nodig; het plakken van de code kan ook op je telefoon.
+Eén keer inloggen is genoeg; daarna houdt de add-on de login zelf bij. Onderaan de Week staat "AH-login in orde" met de datum van de laatste verversing. Is de login verlopen, dan vraagt de app je opnieuw in te loggen, en staat het in rood op de Weekmenu-kaart. Je hebt daarvoor even een computer nodig; het plakken van de code kan ook op je telefoon.
 
 ## Hulp
 

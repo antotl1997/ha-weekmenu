@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -30,6 +31,14 @@ class TokenStore:
     def __init__(self, path: Path):
         self.path = Path(path)
         self._warned_new = False
+        self._warned_bad: float | None = None  # monotonic time of the last warning
+
+    def _warn_bad(self, e: Exception) -> None:
+        """A broken file: said at most once an hour (the schedule asks every minute)."""
+        now = time.monotonic()
+        if self._warned_bad is None or now - self._warned_bad >= 3600:
+            self._warned_bad = now
+            log.warning("%s niet te lezen (%s)", self.path.name, type(e).__name__)
 
     def load(self) -> Tokens | None:
         """The tokens, or None when there are none that this code may use.
@@ -43,7 +52,7 @@ class TokenStore:
         except FileNotFoundError:
             return None
         except (OSError, ValueError) as e:
-            log.warning("%s niet te lezen (%s)", self.path.name, type(e).__name__)
+            self._warn_bad(e)
             return None
         if schema_of(data) > TOKENS_SCHEMA:
             if not self._warned_new:  # the status page loads this every few seconds
@@ -57,7 +66,7 @@ class TokenStore:
                 data["access_token"], data["refresh_token"], float(data["expires_at"])
             )
         except (KeyError, ValueError, TypeError) as e:
-            log.warning("%s niet te lezen (%s)", self.path.name, type(e).__name__)
+            self._warn_bad(e)
             return None
 
     def saved_at(self) -> float | None:

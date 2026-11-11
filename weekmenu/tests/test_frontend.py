@@ -493,13 +493,12 @@ def test_app_v08_tonight_login_and_welcome_in_chrome(tmp_path):
         assert dom.index("<b>Vanavond</b>") < dom.index("Bonus bespaard")
         assert "AH-login in orde, laatst ververst" in dom and "login-bad" not in dom
 
+        # Ruling 50: an old refresh is shown, never judged
         old = datetime(2026, 10, 20, 9, 30).timestamp()
         os.utime(ctx.store.path, (old, old))
-        dom = render(base, "", tmp_path, "week-login-rood")
-        assert "AH-login al 7 dagen niet ververst" in dom
-        assert "Laatst ververst 20 oktober 09:30" in dom and 'href="#inloggen"' in dom
-        assert dom.index("login-bad") < dom.index("Bonus bespaard")
-        assert "AH-login in orde" not in dom
+        dom = chrome(base, tmp_path / "profile-v08-old")
+        assert "AH-login in orde, laatst ververst 20 oktober 09:30" in dom
+        assert "login-bad" not in dom and "7 dagen" not in dom
 
         dom = chrome(base + "gids", tmp_path / "profile-gids")
         assert "Weekmenu: de gids" in dom and 'href="./"' in dom

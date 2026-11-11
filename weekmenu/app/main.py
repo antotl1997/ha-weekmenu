@@ -35,6 +35,7 @@ import json
 import logging
 import os
 import sys
+import time as _time
 from dataclasses import dataclass, field
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
@@ -129,8 +130,9 @@ WRITE_FAILED_HINT = "Tik op Nu maken in de Weekmenu-app om de rest toe te voegen
 TONIGHT_AT = time(16, 0)
 TONIGHT_LAST = time(20, 0)  # not after this (a start late in the day sends nothing)
 REMINDER_AT = time(17, 0)
+REMINDER_LAST = time(23, 0)
 REMINDER = "Het menu staat klaar, maar er is nog geen bezorgmoment gekozen."
-LOGIN_STALE = timedelta(days=7)  # no refresh for this long: the red login card
+LOGIN_CACHE = 300  # seconds: tokens.json is read again at most this often (or on change)
 STAPLES_TIMEOUT = 60  # seconds for the whole purchase-history step before the message
 PORT = 8099
 INGRESS_PROXY = "172.30.32.2"
@@ -212,6 +214,8 @@ class Context:
     reminder_tried: datetime | None = None  # not kept: a failed read tries again hourly
     reminder_done: date | None = None  # not kept: the day's check found nothing to say
     published: tuple | None = None  # (day, login_ok) of the last sensor.weekmenu
+    # (mtime of tokens.json, monotonic time read, a usable login in it) for login_view
+    _login_cache: tuple | None = None
     _saved_marks: tuple | None = None  # what state.json holds of the marks above
     # one sync_health at a time: two requests at once must not both send the push
     _sync_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
@@ -375,20 +379,29 @@ def local_from_epoch(stamp: float) -> datetime:
     return datetime.fromtimestamp(stamp, zone).replace(tzinfo=None)
 
 
+def _have_login(ctx: Context, stamp: float | None) -> bool:
+    """Whether tokens.json holds a usable login; read again only when the file changed
+    or after LOGIN_CACHE seconds (the schedule asks every minute)."""
+    cached = ctx._login_cache
+    clock = _time.monotonic()
+    if cached is not None and cached[0] == stamp and clock - cached[1] < LOGIN_CACHE:
+        return cached[2]
+    have = stamp is not None and ctx.store.load() is not None
+    ctx._login_cache = (stamp, clock, have)
+    return have
+
+
 def login_view(ctx: Context, now: datetime | None = None) -> dict:
-    """"AH-login in orde, laatst ververst <datum>": `login_ok` is false when there is no
-    login, it expired, or it was not refreshed for LOGIN_STALE (7 days)."""
-    now = now or ctx.clock()
+    """"AH-login in orde, laatst ververst <datum>": `login_ok` is false only when there
+    is no login or it expired (AH refused it, also on a refresh). How long ago it was
+    refreshed is shown, never judged (Ruling 50)."""
     stamp = ctx.store.saved_at()
     refreshed = local_from_epoch(stamp) if stamp is not None else None
-    have = ctx.store.load() is not None
-    stale = refreshed is not None and now - refreshed > LOGIN_STALE
-    expired = not have or ctx.login_expired
+    expired = ctx.login_expired or not _have_login(ctx, stamp)
     return {
-        "login_ok": not expired and not stale,
+        "login_ok": not expired,
         "login_refreshed": refreshed.isoformat(timespec="minutes") if refreshed else None,
         "login_expired": expired,
-        "login_stale": stale and not expired,
     }
 
 
@@ -970,12 +983,15 @@ async def republish(ctx: Context, now: datetime) -> None:
     key = (now.date(), login_view(ctx, now)["login_ok"])
     if key == ctx.published:
         return
-    wlog = ctx.ledger.load(shown_week(ctx, now))
-    if not wlog.plan or wlog.too_new:
-        ctx.published = key
-        return
-    if await publish_week(ctx, wlog):
-        ctx.published = key
+    # load and post under the lock: a round (or a web write) that publishes a newer
+    # menu meanwhile is never overwritten by this older copy
+    async with ctx.lock:
+        wlog = ctx.ledger.load(shown_week(ctx, now))
+        if not wlog.plan or wlog.too_new:
+            ctx.published = key
+            return
+        if await publish_week(ctx, wlog):
+            ctx.published = key
 
 
 async def notify_tonight(ctx: Context, now: datetime) -> None:
@@ -983,7 +999,8 @@ async def notify_tonight(ctx: Context, now: datetime) -> None:
 
     At most once a day: the day is saved in state.json before the push goes out (no
     push at all when it cannot be saved). Not at home, no dish or no cooking moment:
-    nothing, and nothing more that day.
+    nothing, and nothing more that day. Home Assistant unreadable: not marked, so the
+    next minute tries again.
     """
     today = now.date()
     targets = list(getattr(ctx.hass, "today", []) or [])
@@ -992,9 +1009,10 @@ async def notify_tonight(ctx: Context, now: datetime) -> None:
         return
     try:
         away = (await ctx.hass.read_settings()).away
-    except Exception as e:  # the menu still says what is eaten
-        log.warning("Home Assistant-instellingen niet te lezen (%s)", type(e).__name__)
-        away = set()
+    except Exception as e:  # not marked: the next minute tries again
+        log.warning("Vanavond: Home Assistant-instellingen niet te lezen (%s)",
+                    type(e).__name__)
+        return
     text = tonight(ctx, today, away)
     ctx.tonight_sent = today
     if not _save_state(ctx):
@@ -1007,23 +1025,27 @@ async def notify_tonight(ctx: Context, now: datetime) -> None:
 
 
 async def remind_order(ctx: Context, now: datetime) -> None:
-    """Sunday from 17:00: a menu for the coming menu week but no active order delivered
-    in that week yet: one push to the owner. Only reads AH (the order and its day).
+    """Sunday from 17:00 until 23:00: a menu for the coming menu week but no active
+    order delivered in that week yet: one push to the owner. Only reads AH (the order
+    and its day), at most once an hour, so a menu made at 18:00 (the fallback) still
+    gets its reminder that evening.
 
-    At most once a day (saved in state.json before the push). A failed read tries
-    again an hour later; an order whose day is unknown counts as chosen (no guess).
+    At most once a day (saved in state.json before the push). An order whose day is
+    unknown counts as chosen (no guess).
     """
     today = now.date()
     if (now.weekday() != 6 or now.time() < REMINDER_AT
             or today in (ctx.reminder_sent, ctx.reminder_done)):
+        return
+    if now.time() >= REMINDER_LAST:
+        ctx.reminder_done = today  # the day is over for the reminder
         return
     if ctx.reminder_tried is not None and now - ctx.reminder_tried < timedelta(hours=1):
         return
     start = menu_week_start(now)
     wlog = ctx.ledger.load(start)
     if not wlog.plan or wlog.too_new or ctx.login_expired or ctx.store.load() is None:
-        ctx.reminder_done = today
-        return
+        return  # looked again next minute: only the log and the login file, no AH
     ctx.reminder_tried = now
     async with ctx.lock:
         try:
@@ -1032,10 +1054,9 @@ async def remind_order(ctx: Context, now: datetime) -> None:
         except Exception as e:
             log.warning("Bestelherinnering: bestelling niet te lezen (%s)", short_error(e))
             return
-    ctx.reminder_done = today
     if order is not None and (day is None or start <= day <= start + timedelta(days=6)):
-        return
-    ctx.reminder_sent = today
+        return  # chosen (or unknown): looked at again an hour later
+    ctx.reminder_sent = ctx.reminder_done = today
     if not _save_state(ctx):
         log.warning("Bestelherinnering niet verstuurd: de status kon niet worden opgeslagen")
         return
@@ -1126,9 +1147,19 @@ async def tick(ctx: Context, now: datetime) -> None:
         await update_total(ctx, now.date())
     if health_needs_sync(ctx):  # a web read may have paused writing: tell it now
         await sync_health(ctx)
-    await republish(ctx, now)
-    await notify_tonight(ctx, now)
-    await remind_order(ctx, now)
+    try:
+        await _slot(ctx, now)
+    finally:
+        # v0.8, after the menu look: none of these may ever keep a menu from being made
+        for extra in (republish, notify_tonight, remind_order):
+            try:
+                await extra(ctx, now)
+            except Exception as e:
+                log.warning("%s mislukt: %s", extra.__name__, short_error(e))
+
+
+async def _slot(ctx: Context, now: datetime) -> None:
+    """The hourly look for the menu of the next menu week (at most one per slot)."""
     start = menu_week_start(now)
     last = LAST_FALLBACK_TRY if is_fallback_day(now.date(), start) else LAST_CHECK
     slot = check_slot(now, ctx.schedule_time, last)

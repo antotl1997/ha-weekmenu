@@ -184,15 +184,22 @@ def no_cooking_moment(plan: Plan, start: date, away: Iterable[date]) -> list[dat
     return [d for d in days if d not in away and d not in taken]
 
 
+EARLIEST_START = 15 * 60  # minutes after midnight
+
+
 def start_time(dinner: time, cook: int | None, oven: int | None,
                wait: int | None) -> time | None:
     """When to start cooking: `dinner` minus cooking, oven and waiting time, rounded down
-    to a quarter of an hour (never later than needed). None when no time is known."""
+    to a quarter of an hour (never later than needed). None when no time is known, or
+    when it would be before 15:00 (a dish that marinates or simmers for hours: the
+    16:00 message would come too late for it anyway)."""
     if cook is None and oven is None and wait is None:
         return None
     total = (cook or 0) + (oven or 0) + (wait or 0)
     at = max(0, dinner.hour * 60 + dinner.minute - total)
     at -= at % 15
+    if at < EARLIEST_START:
+        return None
     return time(at // 60, at % 60)
 
 
