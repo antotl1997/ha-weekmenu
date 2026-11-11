@@ -448,7 +448,7 @@ def test_guide_exists_and_is_dutch_and_plain():
     text = (ROOT / "GIDS.md").read_text(encoding="utf-8")
     assert text.startswith("# Weekmenu: de gids")
     assert "Wat eten we vanavond?" in text
-    assert "2014" not in text and "2013" not in text  # no dashes as punctuation
+    assert "—" not in text and "–" not in text  # no dashes as punctuation
     assert len(text.splitlines()) < 60  # one page
     assert "COPY GIDS.md /GIDS.md" in (ROOT / "Dockerfile").read_text(encoding="utf-8")
 

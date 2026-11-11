@@ -21,14 +21,17 @@ Installeer daarna "Weekmenu AH" uit de store, start hem en zet "Toon in zijbalk"
 
 ## Inloggen bij AH
 
-Je logt één keer in. Daarna ververst de add-on de login zelf. Inloggen kan alleen met de hand, want de AH-inlogpagina gebruikt een captcha.
+Je logt één keer in. Daarna ververst de add-on de login zelf. Inloggen kan alleen met de hand, want de AH-inlogpagina gebruikt een captcha. Bij de eerste start toont de app eerst een kort welkomstscherm.
 
-1. Open de app in de zijbalk. Zonder login toont hij het inlogscherm met een knop naar de AH-inlogpagina.
-2. Doe dit op een computer, in Chrome of Edge. Open de AH-inlogpagina, druk op F12 en kies het tabblad Console.
-3. Log in bij AH. In de console verschijnt een regel met `appie://login-exit?code=...`.
-4. Kopieer die hele regel, plak hem in het vak in de app en kies Inloggen. De code is maar kort geldig, dus doe stap 3 en 4 meteen na elkaar.
+Op een computer, in Chrome of Edge:
 
-Op een telefoon kan dit niet, omdat je daar geen ontwikkelaarsconsole hebt om die regel uit te lezen. Gebruik een computer.
+1. Open de link naar de AH-inlogpagina in de app.
+2. Druk F12 en kies Console.
+3. Log in.
+4. Kopieer de regel die begint met `appie://login-exit?code=`.
+5. Plak hem in de app. Dat kan ook op je telefoon, bijvoorbeeld door de regel via WhatsApp naar jezelf te sturen. Plak je de hele chatregel, dan haalt de add-on de code er zelf uit. De code is maar een paar minuten geldig.
+
+Op de Week staat "AH-login in orde, laatst ververst <datum>". Is de login verlopen, of al 7 dagen niet ververst, dan toont de Week een rode kaart met Opnieuw inloggen. Dezelfde informatie staat op `sensor.weekmenu` als `login_ok` en `login_refreshed`.
 
 Het AH-account mag gedeeld blijven: jullie AH-apps blijven gewoon werken. Raakt de add-on de login kwijt of weigert AH hem, dan krijg je een melding "AH-login verlopen" en toont de app het inlogscherm weer. Het menu van die week wordt dan pas gemaakt na opnieuw inloggen.
 
@@ -48,6 +51,20 @@ In de app, onder Instellingen:
 - **Kookmomenten**: hoeveel avonden je kookt, van 1 tot het aantal eetdagen. De overige eetdagen worden restjesavonden: dan wordt voor twee avonden gekookt en niets extra gekocht.
 - **Niet thuis eten**: tik de dagen aan waarop je niet thuis eet. Die avond krijgt geen gerecht en er wordt niets voor gekocht. Tik je de dag nog eens aan, dan komt het eerdere aantal personen terug.
 - **Personen**: het aantal personen per dag. Dit zijn helpers in Home Assistant (`input_number.weekmenu_personen_<dag>`), die je ook daar kunt aanpassen. Per gerecht kun je het aantal personen nog wijzigen.
+
+## Meldingen
+
+- **Menu klaar, fouten, login en herinnering** gaan naar `notify_owner`.
+- **Vanavond** gaat elke dag om 16:00 naar de diensten in `notify_today`: "Vanavond: <gerecht>, begin om <tijd>", of "Vanavond: restjes van <gerecht>". De begintijd is `dinner_time` min de kook-, oven- en wachttijd, naar beneden afgerond op een kwartier. Ben je die avond niet thuis, of is er geen gerecht of kookmoment, dan komt er geen melding. Hooguit één keer per dag, ook na een herstart.
+- **Bestelherinnering**: op zondag vanaf 17:00, als het menu voor de komende week klaarstaat en er nog geen bestelling is die in die week bezorgd wordt, één melding "Het menu staat klaar, maar er is nog geen bezorgmoment gekozen." Hooguit één per dag.
+
+## Dashboardkaart
+
+In de map `dashboard` van de repository staat `weekmenu-card.yaml`, een kaart voor een Lovelace-dashboard met Vanavond, de week per dag, de besparing van de week, de AH-login en een knop Open weekmenu. Voeg hem toe via Bewerken, Kaart toevoegen, Handmatig. Hij gebruikt Mushroom (HACS). De knop gaat naar `/e258686e_weekmenu`; heet het paneel bij jou anders (kijk in de adresbalk als je Weekmenu in de zijbalk opent), pas dan `navigation_path` aan.
+
+## Gids
+
+`GIDS.md` is een korte gebruikersgids voor iedereen in huis: waar je ziet wat jullie eten en hoe je iets verandert. In de app staat hij onder "Lees de gids".
 
 ## In je bestelling
 

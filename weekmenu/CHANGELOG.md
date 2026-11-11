@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.8.0
+
+- **Vanavond.** Elke dag om 16:00 een korte melding: "Vanavond: <gerecht>, begin om <tijd>", of "Vanavond: restjes van <gerecht>". De begintijd is de etenstijd (`dinner_time`, standaard 18:30) min kook-, oven- en wachttijd, naar beneden afgerond op een kwartier. Niet thuis, geen gerecht of geen kookmoment: geen melding. Hooguit één keer per dag, ook na een herstart. Hetzelfde staat bovenaan de Week in de app, als attribuut `vanavond` op `sensor.weekmenu` en in `api/week`.
+- **Meldingsdoelen als instelling.** `notify_owner` krijgt het menu, fouten, de login en de herinnering; `notify_today` (een lijst) krijgt alleen Vanavond. De vaste naam in de code is weg.
+- **Bestelherinnering.** Op zondag om 17:00, als het menu voor de komende week klaarstaat maar er nog geen bestelling is die in die week bezorgd wordt, één melding: "Het menu staat klaar, maar er is nog geen bezorgmoment gekozen." De add-on leest daarvoor alleen de bestelling. Is de bezorgdag van een open bestelling niet te lezen, dan komt er geen herinnering.
+- **Inloggen zonder stress.** Het inlogscherm is een stappenplan; de uitleg over F12 staat onder "Hoe werkt dit?". De code plakken kan ook op je telefoon, ook als een hele chatregel. Op de Week staat "AH-login in orde, laatst ververst <datum>"; is de login verlopen of al 7 dagen niet ververst, dan een rode kaart met Opnieuw inloggen. `sensor.weekmenu` heeft de attributen `login_ok` en `login_refreshed`.
+- **Welkom en een gids.** Bij de eerste start, zonder login en zonder menu, een kort welkomstscherm met drie stappen. `GIDS.md` is een gebruikersgids van één pagina, in de app te openen via "Lees de gids".
+- **Gewone taal.** "Er loopt al een ronde" heet nu "Het menu wordt nu gemaakt, even geduld" en "Onzeker of gelukt" heet "Nog niet zeker of dit in je bestelling staat" (of "op je lijst"). Grijze tekst heeft minstens 4.5:1 contrast en alle knoppen zijn minstens 44 px.
+- **Dashboardkaart.** `dashboard/weekmenu-card.yaml`: Vanavond, de week per dag (restjes, niet thuis en geen gerecht als rustige regels), de besparing van de week, de AH-login en een knop Open weekmenu. Zonder `condition: template`.
+- `sensor.weekmenu` wordt nu één keer per dag opnieuw gezet (en als de login verandert), zodat `vanavond` meeloopt. Het menu zelf verandert daardoor niet.
+- Een verzoek dat niet via Home Assistant komt, wordt geweigerd en nu ook gelogd, met alleen het adres en het pad.
+- Zet je terug naar 0.7, dan vergeet die versie dat Vanavond of de herinnering vandaag al verstuurd is zodra hij `state.json` bijwerkt; op die dag kan er dan één keer een tweede komen.
+
 ## 0.7.0
 
 - **Als AH iets verandert, weet je het meteen.** De add-on controleert of de antwoorden van AH (bonus, recepten, producten, lijst en bestelling) de vorm hebben die hij verwacht. Gaat het twee keer achter elkaar mis op hetzelfde onderdeel, dan schrijft hij niets meer naar je bestelling of lijst en krijg je één melding: "AH lijkt iets veranderd te hebben, schrijven naar je bestelling staat stil. Kijk in de Weekmenu-app bij Diagnose." Het menu wordt wel bewaard. Zodra AH weer normaal antwoordt gaat het schrijven vanzelf weer aan en vult het elk uur aan wat bleef liggen, of je tikt in Diagnose op Opnieuw proberen.
