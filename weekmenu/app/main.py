@@ -220,6 +220,7 @@ class Context:
     tonight_sent: date | None = None
     reminder_sent: date | None = None
     reminder_tried: datetime | None = None  # not kept: a failed read tries again hourly
+    tonight_warned: datetime | None = None  # not kept: HA unreadable is logged hourly
     reminder_done: date | None = None  # not kept: the day's check found nothing to say
     published: tuple | None = None  # (day, login_ok) of the last sensor.weekmenu
     # (mtime of tokens.json, monotonic time read, a usable login in it) for login_view
@@ -1033,7 +1034,8 @@ async def notify_tonight(ctx: Context, now: datetime) -> None:
     At most once a day: the day is saved in state.json before the push goes out (no
     push at all when it cannot be saved). Not at home, no dish or no cooking moment:
     nothing, and nothing more that day. Home Assistant unreadable: not marked, so the
-    next minute tries again.
+    next minute tries again; the warning is logged at most once an hour, so it does not
+    push every other line out of the diagnose.
     """
     today = now.date()
     targets = list(getattr(ctx.hass, "today", []) or [])
@@ -1043,8 +1045,10 @@ async def notify_tonight(ctx: Context, now: datetime) -> None:
     try:
         away = (await ctx.hass.read_settings()).away
     except Exception as e:  # not marked: the next minute tries again
-        log.warning("Vanavond: Home Assistant-instellingen niet te lezen (%s)",
-                    type(e).__name__)
+        if ctx.tonight_warned is None or now - ctx.tonight_warned >= timedelta(hours=1):
+            ctx.tonight_warned = now
+            log.warning("Vanavond: Home Assistant-instellingen niet te lezen (%s)",
+                        type(e).__name__)
         return
     text = tonight(ctx, today, away)
     ctx.tonight_sent = today

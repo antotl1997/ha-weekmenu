@@ -209,3 +209,25 @@ async def test_waiting_weeks_stay_hidden_in_the_savings_api(aiohttp_client, tmp_
     client = await aiohttp_client(make_app(ctx))
     weeks = (await (await client.get("api/savings")).json())["weeks"]
     assert next(w for w in weeks if w["week"] == W.isoformat())["reconciled"] is None
+
+
+# --- M6: notify_tonight warns at most once an hour when HA cannot be read ---------------
+
+from tests.test_v08 import tonight_ctx, tonights  # noqa: E402
+
+
+async def test_tonight_warns_at_most_once_an_hour_and_still_sends_later(tmp_path, caplog):
+    ctx = tonight_ctx(tmp_path, datetime(2026, 11, 4, 16, 0))
+    real = ctx.hass.read_settings
+
+    async def broken():
+        raise OSError("ha weg")
+    ctx.hass.read_settings = broken
+    caplog.set_level("WARNING", logger="weekmenu")
+    for minute in range(0, 90):  # 16:00 to 17:29, every minute
+        await main.notify_tonight(ctx, datetime(2026, 11, 4, 16 + minute // 60, minute % 60))
+    warned = [r for r in caplog.records if "Vanavond" in r.getMessage()]
+    assert len(warned) == 2  # 16:00 and 17:00
+    ctx.hass.read_settings = real  # HA back: the next minute still sends
+    await main.notify_tonight(ctx, datetime(2026, 11, 4, 17, 30))
+    assert any("Vanavond" in m for _, m in tonights(ctx))
