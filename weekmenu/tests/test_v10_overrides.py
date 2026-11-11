@@ -43,7 +43,7 @@ async def test_terugdraaien_when_choosing_again_fails(aiohttp_client, tmp_path):
     assert r.status == 200, await r.text()
     body = await r.json()
     assert body["warning"] == REPICK_FAILED
-    assert REPICK_FAILED == "Je keuze is weg, het menu wordt bij de volgende ronde aangepast"
+    assert REPICK_FAILED == "Je keuze is weg, maar het menu is nog niet aangepast. Tik op Ander gerecht of Menu bijwerken."
     assert ctx.overrides.load() == {} and ctx.client.writes == writes
 
 

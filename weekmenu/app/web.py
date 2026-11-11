@@ -66,7 +66,8 @@ MIN_PERSONS, MAX_PERSONS = 1, 8
 MAX_FOUND = 200  # products kept from "Ander product" searches (a choice is one of these)
 MAX_PERSONS_LEFTOVERS = 2 * MAX_PERSONS  # a dish that also feeds a leftover night
 # v1.0: Terugdraaien took the choice back, but choosing again failed halfway
-REPICK_FAILED = "Je keuze is weg, het menu wordt bij de volgende ronde aangepast"
+REPICK_FAILED = ("Je keuze is weg, maar het menu is nog niet aangepast. "
+                 "Tik op Ander gerecht of Menu bijwerken.")
 
 FALLBACK_HTML = """<!doctype html>
 <html lang="nl"><head><meta charset="utf-8">
