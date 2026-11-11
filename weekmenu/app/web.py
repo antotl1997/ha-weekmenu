@@ -106,6 +106,12 @@ status();
 # --- views ------------------------------------------------------------------------------
 
 
+def _printable(text, limit: int = 80) -> str:
+    """For a log line: no line breaks or other control characters, and not too long."""
+    out = "".join(c if c.isprintable() else "?" for c in str(text or "?"))
+    return out[:limit] + ("..." if len(out) > limit else "")
+
+
 def _err(status: int, message: str, **extra) -> web.Response:
     return web.json_response({"error": message, **extra}, status=status)
 
@@ -280,6 +286,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     @web.middleware
     async def guard_mw(request: web.Request, handler):
         if allowed_remotes is not None and request.remote not in allowed_remotes:
+            # remote and path only: no query, no Referer (it may carry the ingress token)
+            log.warning("Verzoek geweigerd (niet via Home Assistant): %s %s",
+                        _printable(request.remote), _printable(request.path))
             return _err(403, "alleen via Home Assistant")
         if request.path == "/api/health":  # the watchdog: nothing else, never blocks
             return await handler(request)

@@ -316,3 +316,33 @@ async def test_api_week_has_vanavond_and_login(tmp_path, aiohttp_client):
     ctx.login_expired = True
     body = await (await client.get("api/week")).json()
     assert body["login"]["login_ok"] is False and body["login"]["login_expired"] is True
+
+
+# --- 8. a refused request is logged: remote and path only -----------------------------
+
+
+async def test_refused_request_is_logged_with_remote_and_path_only(tmp_path, aiohttp_client,
+                                                                   caplog):
+    import logging
+    from app.web import make_app
+    ctx = make_ctx(tmp_path)
+    client = await aiohttp_client(make_app(ctx, allowed_remotes={"172.30.32.2"}))
+    with caplog.at_level(logging.WARNING, logger="weekmenu.web"):
+        r = await client.get("/api/health?token=geheim-123",
+                             headers={"Referer": "http://x/api/hassio_ingress/tok-999/"})
+    assert r.status == 403
+    lines = [rec.getMessage() for rec in caplog.records if rec.name == "weekmenu.web"]
+    assert lines == ["Verzoek geweigerd (niet via Home Assistant): 127.0.0.1 /api/health"]
+    text = caplog.text
+    assert "geheim-123" not in text and "tok-999" not in text and "Referer" not in text
+
+
+async def test_refused_path_is_cut_and_has_no_line_breaks(tmp_path, aiohttp_client, caplog):
+    import logging
+    from app.web import make_app
+    ctx = make_ctx(tmp_path)
+    client = await aiohttp_client(make_app(ctx, allowed_remotes={"172.30.32.2"}))
+    with caplog.at_level(logging.WARNING, logger="weekmenu.web"):
+        await client.get("/a%0Ab" + "x" * 300)
+    (line,) = [rec.getMessage() for rec in caplog.records if rec.name == "weekmenu.web"]
+    assert "\n" not in line and len(line) < 200
