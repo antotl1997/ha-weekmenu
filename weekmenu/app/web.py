@@ -217,8 +217,8 @@ def _held(wlog, plan: Plan | None, start: date, retry: bool) -> str | None:
     """The note of a held menu: a promise only for the week the schedule retries."""
     if not wlog.held or plan is None:
         return None
-    if retry:
-        return held_note(start)
+    if retry:  # writes paused: the hourly look completes it once writing is on again
+        return PAUSED_NOTE if wlog.held == PAUSED_NOTE else held_note(start)
     todo = missing(wlog, plan)
     return manual_note(_title(plan, p) for p in todo) if todo else None
 
@@ -226,7 +226,10 @@ def _held(wlog, plan: Plan | None, start: date, retry: bool) -> str | None:
 def check_view(wlog, plan: Plan, held: str | None) -> dict:
     """"Check voor je bestelt": what still needs a look before ordering, by kind.
 
-    ok: nothing at all, the app shows "Alles staat klaar".
+    ok: nothing at all, the app shows "Alles staat klaar". v1.0: products the menu
+    needs that were never added (writes paused, a write that stopped halfway) count as
+    "nog niet toegevoegd" too, also without a held note, so the card is never green
+    while something is missing.
     """
     dishes = sorted(plan.dishes, key=lambda d: d.date)
     not_found = [{"date": d.date.isoformat(), "dag": WEEKDAGEN[d.date.weekday()],
@@ -238,11 +241,14 @@ def check_view(wlog, plan: Plan, held: str | None) -> dict:
     pending = [_title(plan, p) for p in wlog.pending]
     unknown = [_title(plan, p) for p in wlog.unknown]
     left = _leftovers(wlog, plan)
+    todo = [] if held else [{"product": _title(plan, p), "qty": n}
+                            for p, n in missing(wlog, plan).items()]
     counts = {"not_found": len(not_found), "unsure": len(pending) + len(unknown),
-              "leftovers": len(left), "held": 1 if held else 0, "weigh": len(weigh)}
+              "leftovers": len(left), "held": 1 if held else 0, "missing": len(todo),
+              "weigh": len(weigh)}
     return {"ok": not any(counts.values()), "counts": counts, "not_found": not_found,
             "weigh": weigh, "pending": pending, "unknown": unknown, "leftovers": left,
-            "held": held}
+            "held": held, "missing": todo}
 
 
 def week_view(wlog, plan: Plan | None, start: date,

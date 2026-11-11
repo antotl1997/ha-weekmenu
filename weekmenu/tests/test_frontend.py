@@ -565,6 +565,17 @@ def test_app_v09_check_card_klopt_niet_and_corrections_in_chrome(tmp_path):
         assert "Alles staat klaar" in dom and "19 producten in je bestelling" in dom
         assert "Check voor je bestelt" not in dom
 
+        # 1.0 final review I1: a product the menu needs but never added is never green
+        log = ctx.ledger.load(W)
+        gone = next(iter(log.added))
+        had = log.added.pop(gone)
+        ctx.ledger.save(log)
+        dom = chrome(base, tmp_path / "profile-v10-missing")
+        assert "Alles staat klaar" not in dom and "1 nog niet toegevoegd" in dom
+        assert "<b>Nog niet toegevoegd</b>" in dom and "nog niet in je bestelling gezet" in dom
+        log.added[gone] = had
+        ctx.ledger.save(log)
+
         ctx.overrides.put("nootmuskaat", make_entry(SKIP, "snufje nootmuskaat", None, NOW))
         ctx.overrides.put("rode ui", make_entry(
             PRODUCT, "1 rode ui", Product(31, "AH Rode uien", "1 kg", 1.5, 1.5, False, None,

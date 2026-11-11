@@ -325,10 +325,15 @@ function checkCard(w) {
   if (n.leftovers) parts.push(`${n.leftovers} over`);
   if (n.weigh) parts.push(`${n.weigh} hoeveelheid controleren`);
   if (n.held) parts.push("nog niet toegevoegd");
+  if (n.missing) parts.push(`${n.missing} nog niet toegevoegd`);
   const list = (items) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
   let body = "";
   if (c.held) {
     body += `<div class="ck"><b>Nog niet toegevoegd</b><span class="muted">${esc(c.held)}</span></div>`;
+  }
+  if (c.missing && c.missing.length) {
+    body += `<div class="ck bad"><b>Nog niet toegevoegd</b><span class="muted">Het menu heeft ze nodig, maar de add-on heeft ze nog niet ${where} gezet. Controleer in de AH-app.</span>
+      ${list(c.missing.map((m) => `${m.qty}× ${m.product}`))}</div>`;
   }
   if (c.not_found && c.not_found.length) {
     body += `<div class="ck"><b>Niet gevonden bij AH</b><span class="muted">Zoek zelf een product, of tik op Hoeft niet.</span>

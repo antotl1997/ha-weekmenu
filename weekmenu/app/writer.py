@@ -54,7 +54,10 @@ Writes paused (v0.7, ApiHealth): when AH seems to have changed its API
 (`client.health.writes_paused`), `apply` and `apply_extras` make no AH call at all, not
 even the settle reads. `apply` still saves the plan; with something to write it marks
 the round as not done (`round_done` and `completion_tried` off), so the hourly look
-completes it once writing is on again. The result carries `held` = PAUSED_NOTE.
+completes it once writing is on again. With something to add, `log.held` = PAUSED_NOTE
+(v1.0), so a week no round comes back to gets the Ruling 44 push and the Check card shows
+it. The result carries `held` = PAUSED_NOTE for the week the schedule retries, and the
+titles to add (or take out) by hand for any other week.
 
 Deliberate gap: the gap lasts until the next `apply`. If AH did not apply a
 write, or the user removes the product again before the next round, the entry
@@ -429,15 +432,28 @@ def _paused_apply(ledger: Ledger, log: WeekLog, plan: Plan, replaced: Plan | Non
     """Writes paused: keep the plan, write nothing, and leave the round open when
     something is still to be written (or lowered), so the hourly look completes it."""
     delta = missing(log, plan)
-    may_cut = (replaced is not None and today is not None and today < log.week
-               and any(n - plan.basket.get(p, 0) > 0 for p, n in log.added.items()))
+    cuts = {p: n - plan.basket.get(p, 0) for p, n in log.added.items()
+            if n - plan.basket.get(p, 0) > 0}
+    may_cut = replaced is not None and today is not None and today < log.week and bool(cuts)
     log.plan = plan.to_dict()
     log.savings = plan.savings
     if delta or may_cut:
         log.round_done = log.completion_tried = False
+    if delta:  # v1.0: the log says it too, so a week no round retries gets its push
+        log.held = PAUSED_NOTE
+        if log.held_notified and sorted(delta) != log.held_notified_items:
+            log.held_notified = False  # other products missing now: push again once
     ledger.save(log)
     target = log.target or "list"
-    result = WriteResult(target=target, held=PAUSED_NOTE if (delta or may_cut) else None)
+    note = None
+    if delta or may_cut:
+        if retried(log.week, today):  # the hourly look completes it once writing is on
+            note = PAUSED_NOTE
+        elif delta:  # Ruling 44: no round comes back to this week, say what to add
+            note = manual_note(_title(plan, replaced, p) for p in delta)
+        else:
+            note = cut_note(_title(plan, replaced, p) for p in cuts)
+    result = WriteResult(target=target, held=note)
     if result.held:
         log_.warning("Menu: niets geschreven, schrijven staat stil (AH lijkt veranderd)")
     _report(result, log, plan, replaced)

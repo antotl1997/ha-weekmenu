@@ -126,7 +126,7 @@ async def test_apply_while_paused_calls_nothing_at_ah_and_keeps_the_round_open(t
     assert ah.writes == [] and ah.calls == [] and ah.held() == {}
     saved = ctx.ledger.load(W)
     assert saved.plan and not saved.round_done and not saved.completion_tried
-    assert saved.held is None  # not a Ruling 42 hold: the live state says why
+    assert saved.held == PAUSED_NOTE  # v1.0 final review I1: a week left over gets its push
 
 
 async def test_apply_while_paused_with_nothing_to_write_has_no_note(tmp_path):

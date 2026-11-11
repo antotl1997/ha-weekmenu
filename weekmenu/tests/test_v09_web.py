@@ -59,6 +59,7 @@ async def test_check_card_bundles_what_needs_a_look(aiohttp_client, tmp_path):
     check = (await (await client.get("api/week")).json())["check"]
     assert check["ok"] is False
     assert check["counts"] == {"not_found": 1, "unsure": 1, "leftovers": 1, "held": 0,
+                               "missing": 0,
                                "weigh": 0}
     assert check["not_found"] == [{"date": "2026-11-04", "dag": "woensdag",
                                    "title": "Kip met ui", "ingredient": "1 tl komijn"}]
