@@ -24,11 +24,14 @@ FRACTIONS = {"½": 0.5, "¼": 0.25, "¾": 0.75, "⅓": 1 / 3, "⅔": 2 / 3, "⅛
 _FRAC = "".join(FRACTIONS)
 
 _NUMBER = re.compile(
-    rf"^\s*(?:(?P<whole>\d+)\s*(?P<mfrac>[{_FRAC}])"  # 1½
+    rf"\s*(?:(?P<mwhole>\d+)\s+(?P<mnum>\d+)\s*/\s*(?P<mden>\d+)"  # 1 1/2
+    rf"|(?P<whole>\d+)\s*(?P<mfrac>[{_FRAC}])"  # 1½
     rf"|(?P<num>\d+)\s*/\s*(?P<den>\d+)"  # 1/2
     rf"|(?P<dec>\d+(?:[.,]\d+)?)"  # 2.5 or 2,5
     rf"|(?P<frac>[{_FRAC}]))"  # ½
 )
+# "2-3 el", "2 à 3", "2 tot 3": a range; the top of it is what gets bought
+_RANGE = re.compile(r"\s*(?:-|–|à|a|tot)(?=\s*\d|\s*[" + _FRAC + r"])")
 _WORD = re.compile(r"^\s*([A-Za-z]+)\b")
 
 UNITS = {
@@ -47,14 +50,15 @@ UNITS = {
 }
 
 
-def parse_ingredient(text: str, name: str) -> Amount:
-    """'1½ teen knoflook' -> Amount(1.5, 'teen', name). No number: qty and unit None."""
-    name = (name or "").strip()
-    t = html.unescape(text or "").strip()
-    m = _NUMBER.match(t)
+def _number(t: str, pos: int = 0) -> tuple[float | None, int] | None:
+    """The number at `pos` and where it ends; None when there is none (qty None: n/0)."""
+    m = _NUMBER.match(t, pos)
     if not m:
-        return Amount(None, None, name)
-    if m.group("whole"):
+        return None
+    if m.group("mwhole"):
+        den = int(m.group("mden"))
+        qty = int(m.group("mwhole")) + int(m.group("mnum")) / den if den else None
+    elif m.group("whole"):
         qty = int(m.group("whole")) + FRACTIONS[m.group("mfrac")]
     elif m.group("num"):
         den = int(m.group("den"))
@@ -63,9 +67,28 @@ def parse_ingredient(text: str, name: str) -> Amount:
         qty = float(m.group("dec").replace(",", "."))
     else:
         qty = FRACTIONS[m.group("frac")]
+    return qty, m.end()
+
+
+def parse_ingredient(text: str, name: str) -> Amount:
+    """'1½ teen knoflook' -> Amount(1.5, 'teen', name). No number: qty and unit None.
+
+    A range ('2-3 el', '2 à 3', '2 tot 3') gives its top; '1 1/2' is 1.5.
+    """
+    name = (name or "").strip()
+    t = html.unescape(text or "").strip()
+    got = _number(t)
+    if got is None:
+        return Amount(None, None, name)
+    qty, end = got
+    r = _RANGE.match(t, end)
+    if r:
+        top = _number(t, r.end())
+        if top is not None and top[0] is not None:
+            qty, end = top
     if qty is None:
         return Amount(None, None, name)
-    w = _WORD.match(t[m.end():])
+    w = _WORD.match(t[end:])
     unit = UNITS.get(w.group(1).lower()) if w else None
     return Amount(qty, unit or "stuks", name)
 
@@ -99,14 +122,52 @@ def _words(text: str) -> list[str]:
 TAP_WATER_WORDS = frozenset({"water", "kraanwater", "kokend", "lauw", "koud", "warm", "heet"})
 
 
-def is_pantry(name: str, pantry: list[str]) -> bool:
+# --- v0.9: "Klopt niet" choices, before every heuristic -------------------------------
+
+PRODUCT, SKIP, PANTRY = "product", "skip", "pantry"
+KINDS = (PRODUCT, SKIP, PANTRY)
+
+
+def override_key(name: str) -> str:
+    """The normalised ingredient name a choice is kept under: no amount or unit in
+    front, nothing between brackets, folded, words only ("2-3 el Olijfolie" -> "olijfolie")."""
+    t = html.unescape(name or "").strip()
+    got = _number(t)
+    if got is not None:
+        end = got[1]
+        r = _RANGE.match(t, end)
+        if r:
+            top = _number(t, r.end())
+            if top is not None:
+                end = top[1]
+        w = _WORD.match(t[end:])
+        if w and w.group(1).lower() in UNITS:
+            end += w.end()
+        t = t[end:]
+    return " ".join(_words(re.sub(r"\([^)]*\)", " ", t)))
+
+
+def override_for(name: str, overrides: dict | None) -> dict | None:
+    """The user's choice for this ingredient name, if any."""
+    if not overrides:
+        return None
+    return overrides.get(override_key(name))
+
+
+def is_pantry(name: str, pantry: list[str], overrides: dict | None = None) -> bool:
     """A pantry word equals a word of the name or is the tail of a compound word.
 
     'olijfolie' and 'zeezout' match 'olie' and 'zout'; 'oliebollen' and 'peperkoek'
     do not (the pantry word is at the start of the compound). Only the part before
     'in/op/met/voor/uit' counts ('tonijn in olie' is tuna), so 'olie voor het bakken'
     is pantry. 'peper' is pantry only as the spice. Plain (tap) water counts as pantry.
+
+    A "Klopt niet" choice goes first: "Hebben we al" and "Hoeft niet" are never bought,
+    "Ander product" always is.
     """
+    ov = override_for(name, overrides)
+    if ov is not None:
+        return ov["kind"] in (PANTRY, SKIP)
     first = (name or "").split(",")[0]  # drop a trailing ", snufje" clause
     head = _CUT.sub("", " ".join(_words(re.sub(r"\([^)]*\)", " ", first))))
     ws = head.split()
@@ -157,6 +218,16 @@ def parse_unit_size(s: str | None) -> tuple[float, str] | None:
     if m.group("mult"):
         n *= float(m.group("mult").replace(",", "."))
     return (n, unit)
+
+
+# "AH Rundergehakt per 100 gram": priced by weight. Without a pack size the title's
+# weight is no pack, so never buy several of them to reach the recipe's weight.
+_PER_WEIGHT = re.compile(r"\bper\s*(?:\d+(?:[.,]\d+)?\s*)?(?:gram|gr|g|kilo|kg)\b")
+
+
+def weight_priced(p: Product) -> bool:
+    """A title priced 'per 100 gram' or 'per kilo' and no pack size: 1 piece, check it."""
+    return parse_unit_size(p.unit_size) is None and bool(_PER_WEIGHT.search(_fold(p.title)))
 
 
 _TO_BASE = {
@@ -257,22 +328,70 @@ SIZE_WORDS = frozenset({"pack", "per", "stuk", "stuks", "los", "gram", "kilo", "
 MAX_EXTRA_WORDS_BONUS = 1
 
 
+# Compound words whose last part is not what they are: pindakaas is no cheese.
+NOT_A_TAIL = frozenset({"pindakaas"})
+# A last part that only says the form, not what it is: kruidenmix is kruiden,
+# spekblokjes is spek, kipfiletreepjes is kipfilet.
+FORM_SUFFIXES = ("mix", "blokjes", "blokje", "plakjes", "reepjes", "schijfjes", "stukjes")
+# Distinguishing adjectives: before the core word they must be in the title too, so "rode
+# ui" never falls back on white onions. "verse" is handled apart: a plain title is fresh.
+_ADJECTIVES = [("rode", "rood"), ("witte", "wit"), ("gele", "geel"), ("zoete", "zoet"),
+               ("gerookte", "gerookt"), ("gedroogde", "gedroogd")]
+ADJECTIVE_FORMS = {w: frozenset(group) for group in _ADJECTIVES for w in group}
+FRESH_WORDS = frozenset({"verse", "vers"})
+PRESERVED = ("gedroogd", "gerookt", "diepvries", "gevriesdroogd")
+
+
 class _Title:
     def __init__(self, title: str):
         self.words = _words(title)
         self.forms = [_forms(w) for w in self.words]
         self.flat = set().union(*self.forms) if self.forms else set()
         self.nospace = "".join(self.words)
+        self.ends = set()
+        n = 0
+        for w in self.words:
+            n += len(w)
+            self.ends.add(n)
 
     def has(self, kw: str) -> bool:
+        """The keyword is a title word, or the last part of one (kaas: geitenkaas, not
+        kaasstengels or pindakaas). A distinguishing adjective may also start a word
+        (rode: rodekool)."""
+        if kw in ADJECTIVE_FORMS:
+            return self.has_adjective(kw)
         for f in _forms(kw):
             if f in self.flat:
                 return True
-            if len(f) >= 4 and any(f in tf for forms in self.forms for tf in forms):
+            if len(f) >= 4 and any(
+                tf.endswith(f) or any(tf.endswith(f + x) for x in FORM_SUFFIXES)
+                for w, forms in zip(self.words, self.forms) if w not in NOT_A_TAIL
+                for tf in forms
+            ):
                 return True  # compound: kipfilet in scharrelkipfilet
-            if len(f) >= 6 and f in self.nospace:
-                return True  # split compound: "scharrel kipfilet"
+            if len(f) >= 6 and self._split_tail(f):
+                return True  # split compound: "scharrel kip filet"
         return False
+
+    def _split_tail(self, f: str) -> bool:
+        """`f` spans title words and ends where a word ends (a plural s/en may follow)."""
+        start = self.nospace.find(f)
+        while start >= 0:
+            rest = self.nospace[start + len(f):]
+            nxt = min((e for e in self.ends if e >= start + len(f)), default=None)
+            if nxt is not None and rest[: nxt - start - len(f)] in ("", "s", "en"):
+                return True
+            start = self.nospace.find(f, start + 1)
+        return False
+
+    def has_adjective(self, kw: str) -> bool:
+        forms = ADJECTIVE_FORMS[kw]
+        return any(w in forms or any(len(a) >= 4 and w.startswith(a) for a in forms)
+                   for w in self.words)
+
+    def preserved(self) -> bool:
+        """Dried, smoked or frozen: not what a recipe asking for "verse" means."""
+        return any(w.startswith(PRESERVED) for w in self.words)
 
     def extras(self, kws: list[str], wanted: frozenset[str] = frozenset()) -> int:
         """Title words that say nothing about the wanted ingredient (brand, other dish).
@@ -329,6 +448,11 @@ def _plausible(p: Product, t: "_Title", kws: list[str]) -> bool:
     return True
 
 
+def _variant_ok(t: "_Title", wanted: frozenset[str]) -> bool:
+    """A recipe asking for "verse" gets no dried, smoked or frozen product."""
+    return not (wanted & FRESH_WORDS and t.preserved())
+
+
 def _discount(p: Product) -> float:
     return (p.regular - p.now) / p.regular if p.regular else 0.0
 
@@ -336,7 +460,8 @@ def _discount(p: Product) -> float:
 def _best_search_hit(
     orderable: list[Product], kws: list[str], wanted: frozenset[str]
 ) -> Product | None:
-    orderable = [p for p in orderable if _plausible(p, _Title(p.title), kws)]
+    orderable = [p for p in orderable if _plausible(p, _Title(p.title), kws)
+                 and _variant_ok(_Title(p.title), wanted)]
     titles = [_Title(p.title) for p in orderable]
     # 1. all keywords in the title; the plainest product (fewest unrelated words) first
     full = [(t.extras(kws, wanted), i) for i, t in enumerate(titles) if all(t.has(k) for k in kws)]
@@ -346,7 +471,7 @@ def _best_search_hit(
     part = []
     for i, t in enumerate(titles):
         hits = [t.has(k) for k in kws]
-        if hits[-1]:
+        if hits[-1] and all(h for k, h in zip(kws, hits) if k in ADJECTIVE_FORMS):
             part.append((-sum(hits), t.extras(kws, wanted), i))
     return orderable[min(part)[2]] if part else None
 
@@ -356,12 +481,24 @@ async def choose_product(
     amount: Amount,
     bonus: list[Product],
     cache: dict | None = None,
+    overrides: dict | None = None,
 ) -> Product | None:
     """A bonus product with all keywords in its title, else the best orderable search hit.
 
     Only orderable products count, also in the bonus list. Nothing that fits: None (the
     ingredient goes to Plan.not_found). Search results are cached per name in `cache`.
+
+    A "Klopt niet" choice goes first, without any search: "Ander product" gives that
+    product (its bonus version when it is in `bonus`), "Hoeft niet" and "Hebben we al"
+    give None.
     """
+    ov = override_for(amount.name, overrides)
+    if ov is not None:
+        if ov["kind"] != PRODUCT:
+            return None
+        chosen = Product(**ov["product"])
+        fresh = next((p for p in bonus if p.id == chosen.id and p.orderable), None)
+        return fresh or chosen
     name = (amount.name or "").strip()
     kws = keywords(name)
     if not name or not kws:
@@ -377,6 +514,7 @@ async def choose_product(
             all(t.has(k) for k in kws)
             and t.extras(kws, wanted) <= MAX_EXTRA_WORDS_BONUS
             and _plausible(p, t, kws)
+            and _variant_ok(t, wanted)
         ):
             hits.append(p)
     if hits:

@@ -26,13 +26,18 @@ import yaml
 from app.ahclient import AhApiError, Product, Recipe, RecipeSummary, is_blocking
 from app.deals import parse_mechanism, qty_for_deal, savings
 from app.ingredients import (
+    PRODUCT,
+    SKIP,
     choose_product,
     is_pantry,
     keywords,
+    override_for,
+    override_key,
     pack_fraction,
     packs_needed,
     parse_ingredient,
     parse_unit_size,
+    weight_priced,
 )
 from app.week import is_weekend
 
@@ -99,6 +104,8 @@ class Settings:
     recent_recipe_ids: set[int]
     # cook day -> its leftover night; persons of a cook day already include that night
     leftovers: dict[date, date] = field(default_factory=dict)
+    # v0.9: "Klopt niet" choices (override_key -> choice), before every heuristic
+    overrides: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -107,6 +114,7 @@ class Line:
     qty: int  # whole packs for this dish alone
     from_ingredient: str
     fraction: float | None = None  # the amount as part of a pack; None: not convertible
+    check: bool = False  # v0.9: priced per weight without a pack size: 1 piece, check it
 
 
 @dataclass
@@ -125,6 +133,7 @@ class Dish:
     not_found: list[str] = field(default_factory=list)
     search_term: str = ""
     leftover_date: date | None = None  # the leftover night eaten from this dish
+    skipped: list[str] = field(default_factory=list)  # v0.9: "Hoeft niet" texts
 
 
 @dataclass
@@ -177,11 +186,13 @@ def _dish_to_dict(d: Dish) -> dict:
     out["recipe"]["ingredients"] = [list(i) for i in d.recipe.ingredients]
     out["lines"] = [
         {"product": dataclasses.asdict(ln.product), "qty": ln.qty,
-         "from_ingredient": ln.from_ingredient, "fraction": ln.fraction}
+         "from_ingredient": ln.from_ingredient, "fraction": ln.fraction,
+         "check": ln.check}
         for ln in d.lines
     ]
     out["pantry"] = list(d.pantry)
     out["not_found"] = list(d.not_found)
+    out["skipped"] = list(d.skipped)
     return out
 
 
@@ -195,7 +206,7 @@ def _dish_from_dict(x: dict) -> Dish:
         is_fish=bool(x["is_fish"]),
         lines=[
             Line(Product(**ln["product"]), int(ln["qty"]), ln["from_ingredient"],
-                 ln.get("fraction"))
+                 ln.get("fraction"), bool(ln.get("check", False)))
             for ln in x["lines"]
         ],
         savings=float(x["savings"]),
@@ -207,6 +218,7 @@ def _dish_from_dict(x: dict) -> Dish:
         not_found=list(x.get("not_found") or []),
         search_term=x.get("search_term") or "",
         leftover_date=date.fromisoformat(x["leftover_date"]) if x.get("leftover_date") else None,
+        skipped=list(x.get("skipped") or []),
     )
 
 
@@ -301,10 +313,10 @@ def search_terms(bonus: list[Product]) -> list[str]:
     return terms[:MAX_RECIPE_SEARCHES]
 
 
-def _fresh_count(recipe: Recipe, pantry: list[str]) -> int:
+def _fresh_count(recipe: Recipe, pantry: list[str], overrides: dict | None = None) -> int:
     n = 0
     for text, name in recipe.ingredients:
-        if is_pantry(name or text, pantry):
+        if is_pantry(name or text, pantry, overrides):
             continue
         if not any(w in _fold(name or text) for w in SHELF_STABLE):
             n += 1
@@ -354,15 +366,15 @@ class _Cand:
 
 
 async def _score(
-    recipe: Recipe, bonus: list[Product], pantry: list[str]
+    recipe: Recipe, bonus: list[Product], pantry: list[str], overrides: dict | None = None,
 ) -> tuple[float, list[Product]]:
     parts: dict[int, list[Line]] = {}
     prods: dict[int, Product] = {}
     for text, name in recipe.ingredients:
-        if is_pantry(name or text, pantry):
+        if is_pantry(name or text, pantry, overrides):
             continue
         amount = parse_ingredient(text, name or text)
-        p = await choose_product(_BonusOnly(), amount, bonus)
+        p = await choose_product(_BonusOnly(), amount, bonus, overrides=overrides)
         if p is None:
             continue
         prods[p.id] = p
@@ -437,7 +449,7 @@ async def _gather(
         cuisine = cuisine_of(recipe, term)
         if cuisine is None:
             continue
-        score, prods = await _score(recipe, bonus, s.pantry)
+        score, prods = await _score(recipe, bonus, s.pantry, s.overrides)
         names = " ".join(n or t for t, n in recipe.ingredients)
         fish = (
             is_fishy(recipe.title)
@@ -448,7 +460,8 @@ async def _gather(
             _Cand(
                 summary=summ, recipe=recipe, term=term, cuisine=cuisine, is_fish=fish,
                 is_chicken=_is_chicken(recipe.title) or _is_chicken(names),
-                fresh=_fresh_count(recipe, s.pantry), score=score, order=len(cands),
+                fresh=_fresh_count(recipe, s.pantry, s.overrides), score=score,
+                order=len(cands),
             )
         )
     return cands, calls
@@ -584,21 +597,27 @@ def _choose_menu(
 # --- building dishes and the basket ------------------------------------------------------
 
 
-async def _lines(client, recipe: Recipe, resolve) -> tuple[list[Line], list[str], list[str]]:
-    lines, pantry, not_found = [], [], []
+async def _lines(client, recipe: Recipe, resolve):
+    """(lines, pantry texts, not found texts, "Hoeft niet" texts) of a recipe."""
+    lines, pantry, not_found, skipped = [], [], [], []
     for i, (text, name) in enumerate(recipe.ingredients):
         kind, p = await resolve(i, text, name)
         if kind == "pantry":
             pantry.append(text)
             continue
+        if kind == "skip":
+            skipped.append(text)
+            continue
         if p is None:
             not_found.append(text)
             continue
         lines.append(_line(p, parse_ingredient(text, name or text), text))
-    return lines, pantry, not_found
+    return lines, pantry, not_found, skipped
 
 
 def _line(p: Product, amount, text: str) -> Line:
+    if weight_priced(p):  # "per 100 gram" and no pack size: never several to reach weight
+        return Line(p, 1, text, None, check=True)
     # most bonus cards have no salesUnitSize; the title often says it ("... 3 kilo")
     size = parse_unit_size(p.unit_size) or parse_unit_size(p.title)
     return Line(p, packs_needed(amount, size), text, pack_fraction(amount, size))
@@ -611,12 +630,16 @@ def _packs(lines: list[Line]) -> int:
     return max(1, math.ceil(parts - 1e-9) + whole) if lines else 0
 
 
-def _resolver(client, bonus: list[Product], pantry: list[str], cache: dict):
+def _resolver(client, bonus: list[Product], pantry: list[str], cache: dict,
+              overrides: dict | None = None):
     async def resolve(_i: int, text: str, name: str):
-        if is_pantry(name or text, pantry):
+        ov = override_for(name or text, overrides)
+        if ov is not None and ov["kind"] == SKIP:
+            return "skip", None
+        if is_pantry(name or text, pantry, overrides):
             return "pantry", None
         amount = parse_ingredient(text, name or text)
-        return "product", await choose_product(client, amount, bonus, cache)
+        return "product", await choose_product(client, amount, bonus, cache, overrides)
 
     return resolve
 
@@ -637,11 +660,12 @@ async def _make_dish(
                     raise
         if recipe is c.recipe:
             persons = recipe.servings  # could not scale: say honestly for how many it is
-    lines, pantry, not_found = await _lines(client, recipe, resolve)
+    lines, pantry, not_found, skipped = await _lines(client, recipe, resolve)
     return Dish(
         date=day, recipe=recipe, cuisine=c.cuisine, is_fish=c.is_fish, lines=lines,
         savings=0.0, persons=persons, cook=c.cook, oven=c.summary.oven, wait=c.summary.wait,
         pantry=pantry, not_found=not_found, search_term=c.term, leftover_date=leftover_date,
+        skipped=skipped,
     )
 
 
@@ -734,7 +758,7 @@ async def build_plan(client, bonus: list[Product], s: Settings) -> Plan:
         _choose_menu, cands, evenings, frozenset(s.leftovers))
     searched = time.perf_counter() - t0
     budget = [MAX_RECIPE_DETAILS - used]  # what is left for scaling to the persons
-    resolve = _resolver(client, bonus, s.pantry, {})
+    resolve = _resolver(client, bonus, s.pantry, {}, s.overrides)
     dishes = [
         await _make_dish(client, c, day, s.persons.get(day, SCORE_SERVINGS), resolve, budget,
                          s.leftovers.get(day))
@@ -774,7 +798,7 @@ async def swap_dish(
         log.info("Planner: geen ander gerecht, %.2f s", time.perf_counter() - started)
         return dataclasses.replace(plan, short_by=1)
     best = min(ok, key=_rank(day))
-    resolve = _resolver(client, bonus, s.pantry, {})
+    resolve = _resolver(client, bonus, s.pantry, {}, s.overrides)
     dish = await _make_dish(client, best, day, persons, resolve, leftover_date=leftover)
     dishes = others + [dish]
     filled = {d.date for d in dishes}
@@ -785,7 +809,8 @@ async def swap_dish(
     )
 
 
-async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
+async def rescale_dish(client, plan: Plan, day: date, persons: int,
+                       overrides: dict | None = None) -> Plan:
     """The same recipe for another number of persons; only this dish changes."""
     old = next((d for d in plan.dishes if d.date == day), None)
     if old is None or persons < 1:
@@ -801,8 +826,14 @@ async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
     known_bonus = [p for p in plan.products.values() if p.is_bonus]
 
     async def resolve(i: int, text: str, name: str):
-        if is_pantry(name or text, plan.pantry):
+        ov = override_for(name or text, overrides)
+        if ov is not None and ov["kind"] == SKIP:
+            return "skip", None
+        if is_pantry(name or text, plan.pantry, overrides):
             return "pantry", None  # never bought, also not after scaling
+        if ov is not None and ov["kind"] == PRODUCT:
+            return "product", await choose_product(
+                client, parse_ingredient(text, name or text), known_bonus, overrides=overrides)
         # the scaled text differs ("4 el" for "2 el"): match on name, else on position
         key = name or (old_keys[i] if same_list else text)
         if key in by_key:
@@ -813,9 +844,10 @@ async def rescale_dish(client, plan: Plan, day: date, persons: int) -> Plan:
             client, parse_ingredient(text, name or text), known_bonus
         )
 
-    lines, pantry, not_found = await _lines(client, recipe, resolve)
+    lines, pantry, not_found, skipped = await _lines(client, recipe, resolve)
     dish = dataclasses.replace(
-        old, recipe=recipe, persons=persons, lines=lines, pantry=pantry, not_found=not_found
+        old, recipe=recipe, persons=persons, lines=lines, pantry=pantry, not_found=not_found,
+        skipped=skipped,
     )
     dishes = [dish if d.date == day else d for d in plan.dishes]
     log.info("Planner: %d personen in %.2f s", persons, time.perf_counter() - started)
@@ -859,7 +891,8 @@ def remove_dish(plan: Plan, day: date) -> Plan:
 
 
 async def restore_dish(
-    client, plan: Plan, day: date, recipe_id: int, bonus: list[Product]
+    client, plan: Plan, day: date, recipe_id: int, bonus: list[Product],
+    overrides: dict | None = None,
 ) -> Plan:
     """Put recipe `recipe_id` back on `day`: the fallback for logs without a saved dish.
 
@@ -871,8 +904,8 @@ async def restore_dish(
     persons = old.persons if old else SCORE_SERVINGS
     recipe = await client.get_recipe(recipe_id, servings=persons)
     names = " ".join(n or t for t, n in recipe.ingredients)
-    resolve = _resolver(client, bonus, plan.pantry, {})
-    lines, pantry, not_found = await _lines(client, recipe, resolve)
+    resolve = _resolver(client, bonus, plan.pantry, {}, overrides)
+    lines, pantry, not_found, skipped = await _lines(client, recipe, resolve)
     fish = is_fishy(recipe.title) or is_fishy(names) or any(
         is_fishy(ln.product.title) or _fold(ln.product.category or "") == "vis" for ln in lines
     )
@@ -880,8 +913,50 @@ async def restore_dish(
         date=day, recipe=recipe, cuisine=cuisine_of(recipe) or (old.cuisine if old else ""),
         is_fish=fish, lines=lines, savings=0.0, persons=persons, cook=recipe.cook,
         pantry=pantry, not_found=not_found, leftover_date=old.leftover_date if old else None,
+        skipped=skipped,
     )
     dishes = [d for d in plan.dishes if d.date != day] + [dish]
     back = {day, dish.leftover_date}
     return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
                    [x for x in plan.removed_days if x not in back])
+
+
+def apply_override(plan: Plan, key: str, overrides: dict) -> Plan:
+    """A "Klopt niet" choice on the menu as it is: every ingredient of every dish with
+    this key is resolved again by the choice alone; nothing else changes, no AH call.
+
+    Returns `plan` itself when no dish has the ingredient (or there is no choice).
+    """
+    ov = overrides.get(key)
+    if ov is None:
+        return plan
+    hit_any = False
+    dishes = []
+    for d in plan.dishes:
+        hit = [(t, n) for t, n in d.recipe.ingredients if override_key(n or t) == key]
+        if not hit:
+            dishes.append(d)
+            continue
+        hit_any = True
+        texts = {t for t, _ in hit}
+        lines = [ln for ln in d.lines if ln.from_ingredient not in texts]
+        pantry = [x for x in d.pantry if x not in texts]
+        not_found = [x for x in d.not_found if x not in texts]
+        skipped = [x for x in d.skipped if x not in texts]
+        for text, name in hit:
+            if ov["kind"] == PRODUCT:
+                chosen = Product(**ov["product"])
+                p = plan.products.get(chosen.id) or chosen
+                lines.append(_line(p, parse_ingredient(text, name or text), text))
+            elif ov["kind"] == SKIP:
+                skipped.append(text)
+            else:
+                pantry.append(text)
+        order = {t: i for i, (t, _) in enumerate(d.recipe.ingredients)}
+        lines.sort(key=lambda ln: order.get(ln.from_ingredient, len(order)))
+        dishes.append(dataclasses.replace(d, lines=lines, pantry=pantry, not_found=not_found,
+                                          skipped=skipped))
+    if not hit_any:
+        return plan
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
+                   plan.removed_days)

@@ -59,13 +59,15 @@ vis: [zalm, kabeljauw, garnaal, garnalen, tonijn, pangasius, schol, tilapia, mak
       mossel, scampi, zeevruchten, sardine, poon, dorade, zeewolf]
 vis_uitzonderingen: [vissaus, visbouillon, visfond, ansjovis]
 
-# Kip: gaat net als vis bij voorkeur naar de eerste twee avonden.
+# Kip: gaat net als vis bij voorkeur naar de eerste twee avonden. Kipkruiden en
+# kippenbouillon zijn geen kip.
 kip: [kip, chicken]
-kip_uitzonderingen: [kippenbouillon]
+kip_uitzonderingen: [kippenbouillon, kipbouillon, kipkruiden]
 
 # Houdbaar of diepvries: telt niet als vers product (maandag en dinsdag krijgen het
-# recept met de minste verse producten).
-houdbaar: [diepvries, gedroogd, blik, pot, rijst, pasta, spaghetti, penne, linguine,
+# recept met de minste verse producten). Deel van een woord telt, dus geen "pot"
+# (hutspot is vers).
+houdbaar: [diepvries, gedroogd, blik, rijst, pasta, spaghetti, penne, linguine,
            lasagnevel, orzo, noedel, linzen, bonen, bouillon, saus, kruiden, specerij,
            zaad, poeder, vlokken, meel, ketjap, sambal, sojasaus, mirin, azijn, wijn,
            noten, amandel, honing, mosterd, wrap, tortilla, tapenade, couscous,
@@ -82,7 +84,7 @@ bonus_categorieen: [vlees, vis, kip, groente, aardappel, kaas, zuivel]
 # Kernwoorden: de zoekterm voor Allerhande bij een bonusproduct. Het langste kernwoord
 # dat in een woord van de producttitel zit wint ("AH Rundergehakt" -> gehakt,
 # "AH Zeebaarsfilet op huid" -> zeebaars). Met een spatie: deel van de hele titel.
-# Geen kernwoord: het langste titelwoord.
+# Geen kernwoord: het langste titelwoord. Geen losse "room": die zit ook in roomboter.
 kernwoorden: [gehakt, kip, kipfilet, kipdij, kipworst, kippendij, rundvlees, biefstuk,
               varkenshaas, speklap, spek, rookworst, braadworst, worst, shoarma, hamlap,
               schnitzel, slavink, hamburger, burger, gyros, pulled pork, sate, stoofvlees,
@@ -92,4 +94,4 @@ kernwoorden: [gehakt, kip, kipfilet, kipdij, kipworst, kippendij, rundvlees, bie
               winterpeen, uien, avocado, bleekselderij, spitskool, boerenkool, zuurkool,
               andijvie, rodekool, witlof, pompoen, tomaat, sperziebonen, aubergine,
               knolselderij, pastinaak, zoete aardappel, kaas, feta, mozzarella, geitenkaas,
-              halloumi, burrata, ricotta, room, kookroom, yoghurt, creme fraiche, eieren, tomaten]
+              halloumi, burrata, ricotta, kookroom, slagroom, yoghurt, creme fraiche, eieren, tomaten]
