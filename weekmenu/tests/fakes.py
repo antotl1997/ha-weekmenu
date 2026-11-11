@@ -73,6 +73,13 @@ class FakeAh:
         self.prev_bonus: list[Product] = []  # previously_bought_bonus()
         self.history_for: list = []
         self.fresh_checks = 0
+        self.search_results: dict[str, list[Product]] = {}  # v0.9: "Ander product"
+        self.searches: list[str] = []
+
+    async def search_products(self, query, size=20):
+        self._maybe_raise("search_products")
+        self.searches.append(query)
+        return list(self.search_results.get(query, []))
 
     def _maybe_raise(self, name):
         self.calls.append(name)

@@ -46,7 +46,7 @@ def swaps(monkeypatch):
         assert new.recipe.id not in exclude
         return make_plan([d for d in plan.dishes if d.date != day] + [new])
 
-    async def fake_restore(client, plan, day, recipe_id, bonus):
+    async def fake_restore(client, plan, day, recipe_id, bonus, overrides=None):
         old = {101: dish(WO, 101, [1, 2], 2.0), 102: dish(DO, 102, [2, 3], 3.0)}[recipe_id]
         return make_plan([d for d in plan.dishes if d.date != day] + [old])
 
@@ -200,7 +200,7 @@ async def test_api_persons_rescales_only_that_dish(aiohttp_client, ctx, monkeypa
     await planned_ctx(ctx)
     seen = []
 
-    async def fake_rescale(client, plan, day, persons):
+    async def fake_rescale(client, plan, day, persons, overrides=None):
         seen.append((day, persons))
         return make_plan([dish(WO, 101, [1, 2, 7], 2.0, persons=persons)]
                          + [d for d in plan.dishes if d.date != WO])
@@ -592,7 +592,7 @@ async def test_api_persons_4_to_2_lowers(aiohttp_client, ctx, monkeypatch):
     four.basket = {1: 2, 2: 2}  # four persons: two packs each
     await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), four)
 
-    async def fake_rescale(client, plan, day, persons):
+    async def fake_rescale(client, plan, day, persons, overrides=None):
         return make_plan([dish(WO, 101, [1, 2], 2.0, persons=persons)])
 
     monkeypatch.setattr(main, "rescale_dish", fake_rescale)
@@ -684,7 +684,7 @@ async def test_api_persons_up_to_16_for_a_dish_with_leftovers(aiohttp_client, ct
     await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), leftover_plan())
     seen = []
 
-    async def fake_rescale(client, plan, day, persons):
+    async def fake_rescale(client, plan, day, persons, overrides=None):
         seen.append((day, persons))
         out = []
         for d in plan.dishes:

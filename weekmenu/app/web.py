@@ -36,7 +36,9 @@ from app.hass import (
     plan_view,
     unsure,
 )
+from app.ingredients import KINDS, PRODUCT, override_key
 from app.ledger import leftovers, new_folder_available
+from app.overrides import make_entry
 from app.planner import Dish, Plan
 from app.deals import qty_for_deal, savings as deal_savings
 from app.diag import diagnose
@@ -59,6 +61,7 @@ STATIC_DIR = Path(__file__).parent / "static"
 GUIDE_PATH = Path(__file__).resolve().parent.parent / "GIDS.md"
 _ASSET = r"{name:[A-Za-z0-9_-][A-Za-z0-9_.-]*\.(?:css|js|png|svg|ico|jpg|webp|json|webmanifest)}"
 MIN_PERSONS, MAX_PERSONS = 1, 8
+MAX_FOUND = 200  # products kept from "Ander product" searches (a choice is one of these)
 MAX_PERSONS_LEFTOVERS = 2 * MAX_PERSONS  # a dish that also feeds a leftover night
 
 FALLBACK_HTML = """<!doctype html>
@@ -216,6 +219,28 @@ def _held(wlog, plan: Plan | None, start: date, retry: bool) -> str | None:
     return manual_note(_title(plan, p) for p in todo) if todo else None
 
 
+def check_view(wlog, plan: Plan, held: str | None) -> dict:
+    """"Check voor je bestelt": what still needs a look before ordering, by kind.
+
+    ok: nothing at all, the app shows "Alles staat klaar".
+    """
+    dishes = sorted(plan.dishes, key=lambda d: d.date)
+    not_found = [{"date": d.date.isoformat(), "dag": WEEKDAGEN[d.date.weekday()],
+                  "title": d.recipe.title, "ingredient": t}
+                 for d in dishes for t in d.not_found]
+    weigh = [{"date": d.date.isoformat(), "dag": WEEKDAGEN[d.date.weekday()],
+              "product": ln.product.title, "ingredient": ln.from_ingredient}
+             for d in dishes for ln in d.lines if ln.check]
+    pending = [_title(plan, p) for p in wlog.pending]
+    unknown = [_title(plan, p) for p in wlog.unknown]
+    left = _leftovers(wlog, plan)
+    counts = {"not_found": len(not_found), "unsure": len(pending) + len(unknown),
+              "leftovers": len(left), "held": 1 if held else 0, "weigh": len(weigh)}
+    return {"ok": not any(counts.values()), "counts": counts, "not_found": not_found,
+            "weigh": weigh, "pending": pending, "unknown": unknown, "leftovers": left,
+            "held": held}
+
+
 def week_view(wlog, plan: Plan | None, start: date,
               away: Iterable[str] = (), retry: bool = True) -> dict:
     away = set(away)
@@ -279,6 +304,7 @@ def week_view(wlog, plan: Plan | None, start: date,
         pending=[_title(plan, p) for p in wlog.pending],
         unknown=[_title(plan, p) for p in wlog.unknown],
     )
+    out["check"] = check_view(wlog, plan, out["held"])
     return out
 
 
@@ -326,17 +352,32 @@ def offers_view(products: Iterable[Product], wlog, q: str = "", category: str = 
         for n in names]}
 
 
-def dish_view(wlog, plan: Plan, d: Dish, today: date) -> dict:
+def dish_view(wlog, plan: Plan, d: Dish, today: date, overrides: dict | None = None) -> dict:
+    names = {t: (n or t) for t, n in d.recipe.ingredients}
+    chosen = overrides or {}
+
+    def fix(text: str) -> dict:
+        """"Klopt niet": the search term to start with, and the choice already made."""
+        key = override_key(names.get(text, text))
+        o = chosen.get(key)
+        return {"query": key, "override": o["kind"] if o else None}
+
     lines = [
         {"product": ln.product.title, "product_id": ln.product.id, "qty": ln.qty,
          "mechanism": ln.product.mechanism if ln.product.is_bonus else None,
-         "bonus": ln.product.is_bonus, "ingredient": ln.from_ingredient, "pantry": False}
+         "bonus": ln.product.is_bonus, "ingredient": ln.from_ingredient, "pantry": False,
+         "check": ln.check, **fix(ln.from_ingredient)}
         for ln in d.lines
     ]
     lines += [
         {"product": text, "product_id": None, "qty": 0, "mechanism": None, "bonus": False,
-         "ingredient": text, "pantry": True}
+         "ingredient": text, "pantry": True, "check": False, **fix(text)}
         for text in d.pantry
+    ]
+    lines += [
+        {"product": text, "product_id": None, "qty": 0, "mechanism": None, "bonus": False,
+         "ingredient": text, "pantry": False, "skipped": True, "check": False, **fix(text)}
+        for text in d.skipped
     ]
     iso = d.date.isoformat()
     return {
@@ -344,6 +385,7 @@ def dish_view(wlog, plan: Plan, d: Dish, today: date) -> dict:
         "persons": d.persons, "savings": d.savings, "recipe": _recipe_view(d),
         "restjes": d.leftover_date.isoformat() if d.leftover_date else None,
         "lines": lines, "not_found": list(d.not_found), "steps": list(d.recipe.steps),
+        "missing": [{"ingredient": t, **fix(t)} for t in d.not_found],
         "can_back": iso in wlog.previous and today < wlog.week,
         "week_savings": plan.savings, "leftovers": _leftovers(wlog, plan),
     }
@@ -579,6 +621,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         # v0.8: tonight (whichever week is shown) and the AH login line
         out["vanavond"] = main.tonight(ctx, now.date(), raw.away if raw is not None else ())
         out["login"] = main.login_view(ctx, now)
+        if "check" in out and (out["writes_paused"] or out["login"]["login_expired"]):
+            out["check"]["ok"] = False  # nothing reaches AH now: the card above says why
+            out["check"]["blocked"] = True
         return web.json_response(out)
 
     def load_dish(day: date):
@@ -595,19 +640,40 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
 
     async def dish(request):
         wlog, plan, d = load_dish(day_of(request))
-        return web.json_response(dish_view(wlog, plan, d, ctx.clock().date()))
+        return web.json_response(dish_view(wlog, plan, d, ctx.clock().date(),
+                                           ctx.overrides.load()))
 
     # --- writing: one at a time ---
 
-    async def _write(day: date, change) -> web.Response:
-        """Load, change and apply under the lock; `change` returns the new plan or a Response."""
+    async def note_history(week: date, d: Dish, action: str) -> None:
+        """v0.9: the swapped out or removed recipe in history.json; never in the way."""
+        try:
+            await asyncio.to_thread(ctx.history.record, week, d.date, d.recipe.id,
+                                    d.recipe.title, action, ctx.clock())
+        except SchemaTooNew as e:
+            main.note_too_new(ctx, e.path)
+        except Exception as e:
+            log.warning("history.json niet bijgewerkt (%s)", type(e).__name__)
+
+    async def _write(day: date, change, action: str | None = None) -> web.Response:
+        """Load, change and apply under the lock; `change` returns the new plan or a Response.
+
+        `action`: the old dish goes into history.json once the new plan is in the log
+        (also when a write to AH failed after that)."""
         async with ctx.lock:
             wlog, plan, d = load_dish(day)
             new = await change(wlog, plan, d)
             if isinstance(new, web.Response):
                 return new
-            res = await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan,
-                              today=ctx.clock().date())
+            try:
+                res = await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan,
+                                  today=ctx.clock().date())
+            except Exception:
+                if action is not None and wlog.plan == new.to_dict():
+                    await note_history(wlog.week, d, action)
+                raise
+            if action is not None:
+                await note_history(wlog.week, d, action)
             settled = extras_savings(wlog)  # apply may have settled a staple write
             if settled != wlog.extras_savings:
                 wlog.extras_savings = settled
@@ -618,7 +684,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         done = {"removed": len(res.removed), "target": res.target, "held": res.held}
         if nd is None:  # "Gerecht weghalen": no dish left to show
             return web.json_response({"date": day.isoformat(), **done})
-        return web.json_response({**dish_view(wlog, new, nd, ctx.clock().date()), **done})
+        return web.json_response({**dish_view(wlog, new, nd, ctx.clock().date(),
+                                             ctx.overrides.load()), **done})
 
     async def swap(request):
         day = day_of(request)
@@ -638,7 +705,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             wlog.previous_dish[iso] = main.dish_to_dict(d)  # "Terug" puts exactly this back
             return new
 
-        return await _write(day, change)
+        return await _write(day, change, "swap")
 
     async def back(request):
         day = day_of(request)
@@ -656,14 +723,15 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             else:  # a log from before previous_dish: look the recipe up again
                 bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(),
                                                      fallback=True)
-                new = await main.restore_dish(ctx.client, plan, day, prev, bonus)
+                new = await main.restore_dish(ctx.client, plan, day, prev, bonus,
+                                              overrides=ctx.overrides.load())
             if d.recipe.id not in wlog.swapped_out.setdefault(iso, []):
                 wlog.swapped_out[iso].append(d.recipe.id)
             del wlog.previous[iso]
             wlog.previous_dish.pop(iso, None)
             return new
 
-        return await _write(day, change)
+        return await _write(day, change, "back")
 
     async def persons(request):
         day = day_of(request)
@@ -676,7 +744,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             top = MAX_PERSONS_LEFTOVERS if d.leftover_date else MAX_PERSONS
             if n > top:  # 2 x 8 only when the dish also feeds a leftover night
                 return _err(400, f"personen moet tussen {MIN_PERSONS} en {top} liggen")
-            return await main.rescale_dish(ctx.client, plan, day, n)  # only this dish
+            return await main.rescale_dish(ctx.client, plan, day, n,  # only this dish
+                                           overrides=ctx.overrides.load())
 
         return await _write(day, change)
 
@@ -690,7 +759,81 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             wlog.previous_dish.pop(iso, None)
             return main.remove_dish(plan, day)
 
+        return await _write(day, change, "remove")
+
+    # --- v0.9: "Klopt niet" per ingredient line ---
+
+    async def products(request):
+        """"Ander product": an AH search (a read, under the lock like every AH call that
+        may refresh the login). Only orderable products; a choice must be one of them."""
+        q = request.query.get("q", "").strip()
+        if not 2 <= len(q) <= 60:
+            return _err(400, "Zoek op 2 tot 60 tekens")
+        async with ctx.lock:
+            found = await ctx.client.search_products(q)
+        items = [x for x in found if x.orderable][:20]
+        for x in items:
+            ctx.found.pop(x.id, None)
+            ctx.found[x.id] = x
+        while len(ctx.found) > MAX_FOUND:
+            ctx.found.pop(next(iter(ctx.found)))
+        return web.json_response({"items": [
+            {"id": x.id, "title": x.title, "unit_size": x.unit_size, "price_now": x.now,
+             "price_regular": x.regular, "mechanism": x.mechanism if x.is_bonus else None,
+             "bonus": x.is_bonus, "image": x.image}
+            for x in items]})
+
+    async def correct(request):
+        """"Klopt niet" on one ingredient line: the choice is kept for good (overrides.json)
+        and put on this week's menu through the same apply as Ander gerecht: cleanup
+        and adds, one lock, write-ahead, never retried, the order-week check."""
+        day = day_of(request)
+        body = await body_of(request)
+        text, kind, pid = body.get("ingredient"), body.get("kind"), body.get("product_id")
+        if not isinstance(text, str) or not text.strip() or kind not in KINDS:
+            return _err(400, "ingredient en kind (product, skip of pantry) zijn nodig")
+        product = None
+        if kind == PRODUCT:
+            if not isinstance(pid, int) or isinstance(pid, bool):
+                return _err(400, "product_id is nodig")
+            product = ctx.found.get(pid)
+            if product is None:
+                return _err(400, "Zoek het product opnieuw")
+
+        async def change(wlog, plan, d):
+            names = {t: n for t, n in d.recipe.ingredients}
+            if text not in names:
+                return _err(404, "Dit ingrediënt staat niet in dit gerecht")
+            key = override_key(names[text] or text)
+            if not key:
+                return _err(400, "Dit ingrediënt heeft geen naam")
+            await asyncio.to_thread(ctx.overrides.put, key,
+                                    make_entry(kind, text, product, ctx.clock()))
+            log.info("Correctie bewaard (%s)", kind)
+            new = main.apply_override(plan, key, ctx.overrides.load())
+            ended = ctx.clock().date() > wlog.week + timedelta(days=6)
+            if new is plan or ended:  # nothing on this menu to change (or the week is over)
+                return web.json_response({
+                    **dish_view(wlog, plan, d, ctx.clock().date(), ctx.overrides.load()),
+                    "removed": 0, "target": wlog.target or "list", "held": None})
+            return new
+
         return await _write(day, change)
+
+    async def get_overrides(request):
+        return web.json_response({"items": ctx.overrides.listing()})
+
+    async def remove_override(request):
+        """"Terugdraaien" in Mijn correcties: from the next menu (or Ander gerecht) on the
+        add-on chooses by itself again; this week's products stay as they are."""
+        key = (await body_of(request)).get("key")
+        if not isinstance(key, str) or not key:
+            return _err(400, "key is nodig")
+        async with ctx.lock:
+            gone = await asyncio.to_thread(ctx.overrides.remove, key)
+        if not gone:
+            return _err(404, "Deze correctie bestaat niet (meer)")
+        return web.json_response({"items": ctx.overrides.listing()})
 
     async def run(request):
         mode = (await body_of(request)).get("mode")
@@ -910,6 +1053,10 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     app.router.add_post("/api/dish/{day}/back", back)
     app.router.add_post("/api/dish/{day}/persons", persons)
     app.router.add_post("/api/dish/{day}/remove", remove)
+    app.router.add_post("/api/dish/{day}/correct", correct)
+    app.router.add_get("/api/products", products)
+    app.router.add_get("/api/overrides", get_overrides)
+    app.router.add_post("/api/overrides/remove", remove_override)
     app.router.add_post("/api/run", run)
     app.router.add_get("/api/staples", get_staples)
     app.router.add_post("/api/staples/{pid}", add_staple)

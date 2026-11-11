@@ -302,7 +302,7 @@ async def test_swap_that_settles_a_staple_updates_extras_savings(aiohttp_client,
     assert (await client.post("api/staples/50")).status == 502  # unsure: pending
     assert ctx.ledger.load(W).extras_savings == 0.0
 
-    async def fake_rescale(client_, plan, day, n):
+    async def fake_rescale(client_, plan, day, n, overrides=None):
         return make_plan([dish(W, 101, [1, 2], 2.0, persons=n)])
 
     monkeypatch.setattr(main, "rescale_dish", fake_rescale)

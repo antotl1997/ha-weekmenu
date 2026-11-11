@@ -68,10 +68,13 @@ from app.hass import (
     plan_view,
     vanavond,
 )
+from app.history import HISTORY_SCHEMA, History
 from app.ledger import Ledger, WeekLog, new_folder_available
+from app.overrides import OVERRIDES_SCHEMA, Overrides
 from app.planner import (
     Plan,
     Settings,
+    apply_override,
     build_plan,
     dish_from_dict,
     dish_to_dict,
@@ -96,7 +99,7 @@ from app.writer import WriteResult, apply
 
 # swap_dish, rescale_dish, restore_dish and remove_dish are looked up here by the web API
 __all__ = ["run_round", "swap_dish", "rescale_dish", "restore_dish", "put_dish", "remove_dish",
-           "build_plan", "dish_to_dict", "dish_from_dict"]
+           "build_plan", "dish_to_dict", "dish_from_dict", "apply_override"]
 
 log = logging.getLogger("weekmenu")
 
@@ -219,8 +222,18 @@ class Context:
     _saved_marks: tuple | None = None  # what state.json holds of the marks above
     # one sync_health at a time: two requests at once must not both send the push
     _sync_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
+    # v0.9: "Klopt niet" choices and the swap history, next to the week logs in /data
+    overrides: Overrides | None = None
+    history: History | None = None
+    # products from the last "Ander product" searches: a choice must be one of these
+    found: dict[int, Product] = field(default_factory=dict)
 
     def __post_init__(self):
+        data = self.ledger.root.parent
+        if self.overrides is None:
+            self.overrides = Overrides(data / "overrides.json")
+        if self.history is None:
+            self.history = History(data / "history.json")
         own = getattr(self.client, "health", None)
         if isinstance(own, ApiHealth):
             self.health = own  # one object: the client counts, the writer and web read
@@ -289,7 +302,8 @@ def scan_too_new(ctx: Context) -> None:
     so a later downgrade tells it again."""
     away = getattr(ctx.hass, "_away_path", None)
     files = [(ctx.total_path, TOTAL_SCHEMA), (ctx.state_path, STATE_SCHEMA),
-             (away, AWAY_SCHEMA)]
+             (away, AWAY_SCHEMA), (ctx.overrides.path, OVERRIDES_SCHEMA),
+             (ctx.history.path, HISTORY_SCHEMA)]
     for path, known in files:
         if path is not None and too_new(path, known):
             note_too_new(ctx, path)
@@ -452,7 +466,8 @@ def make_settings(ctx: Context, raw: RawSettings, start: date, exclude=()) -> Se
     persons = {cook: persons_on(cook) + (persons_on(rest) if rest else 0)
                for cook, rest in pairs}
     recent = ctx.ledger.recent_recipe_ids(start) | set(exclude)
-    return Settings(days, persons, list(ctx.pantry), recent, leftovers)
+    return Settings(days, persons, list(ctx.pantry), recent, leftovers,
+                    overrides=ctx.overrides.load())
 
 
 def settings_from_plan(ctx: Context, plan: Plan, start: date) -> Settings:
@@ -464,6 +479,7 @@ def settings_from_plan(ctx: Context, plan: Plan, start: date) -> Settings:
         leftovers={x.date: x.leftover_date for x in plan.dishes if x.leftover_date},
         pantry=list(plan.pantry or ctx.pantry),
         recent_recipe_ids=ctx.ledger.recent_recipe_ids(start),
+        overrides=ctx.overrides.load(),
     )
 
 
