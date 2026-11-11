@@ -74,6 +74,12 @@ De add-on schrijft alleen in een open bestelling die in de menuweek (woensdag to
 - Hij haalt alleen producten weg die hij **zelf** voor een menu heeft toegevoegd en die geen gerecht meer nodig heeft, bijvoorbeeld als je een ander gerecht kiest of minder personen. Wat jullie zelf in de bestelling zetten blijft staan, ook vaste boodschappen en aanbiedingen die je zelf aantikte. Wat je zelf van de lijst haalde komt die week niet terug.
 - Elke wijziging wordt eerst in een logboek genoteerd, dan geschreven, en na een crash eerst gecontroleerd. Zo komt er niets dubbel in.
 
+## Check voor je bestelt en Klopt niet
+
+Bovenaan de Week staat de kaart Check voor je bestelt. Daarin staat wat niet gevonden is, wat nog niet zeker in je bestelling staat, wat over is van een vorig menu en welke producten een prijs per gewicht hebben (daarvan zet de add-on 1 stuk in je bestelling; pas het aantal zelf aan als dat te weinig is). Klopt alles, dan staat er "Alles staat klaar".
+
+Pakt de add-on een verkeerd product, tik dan in het gerecht bij dat ingrediënt op Klopt niet. Je kunt een ander product zoeken en kiezen, of zeggen dat het niet hoeft of dat je het al in huis hebt. Die keuze geldt voor dat ingrediënt in elke week en wordt meteen in je bestelling of op je lijst verwerkt, op dezelfde manier als Ander gerecht. Alle keuzes staan in Instellingen onder Mijn correcties, met Terugdraaien. Ze staan in `overrides.json` in de datamap van de add-on en gaan dus mee in je backups.
+
 ## Backups en je AH-login
 
 De AH-login staat in het bestand `tokens.json` in de datamap van de add-on. Die map zit in je Home Assistant-backups. Wie een backup van jou heeft, kan daarmee dus ook bij de AH-login. Bewaar backups goed en deel ze niet.

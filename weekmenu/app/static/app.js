@@ -324,9 +324,11 @@ function checkCard(w) {
         <span class="ck-btns"><button class="btn sec2 sm" data-fixday="${esc(x.date)}" data-fix="${esc(x.ingredient)}">Zoek product</button>
         <button class="btn sec2 sm" data-skipday="${esc(x.date)}" data-skip="${esc(x.ingredient)}">Hoeft niet</button></span></div>`).join("")}</div>`;
   }
-  if (c.pending && c.pending.length) {
-    body += `<div class="ck bad"><b>${w.target === "list" ? "Nog niet zeker of dit op je lijst staat"
-      : "Nog niet zeker of dit in je bestelling staat"}</b><span class="muted">Controleer in de AH-app.</span>${list(c.pending)}</div>`;
+  const unsureItems = c.pending || [];
+  if (unsureItems.length) {
+    const head = w.target === "list" ? "Nog niet zeker of dit op je lijst staat"
+      : "Nog niet zeker of dit in je bestelling staat";
+    body += `<div class="ck bad"><b>${head}</b><span class="muted">Controleer in de AH-app.</span>${list(unsureItems)}</div>`;
   }
   if (c.unknown && c.unknown.length) {
     body += `<div class="ck bad"><b>Status onbekend</b><span class="muted">Controleer in de AH-app.</span>${list(c.unknown)}</div>`;

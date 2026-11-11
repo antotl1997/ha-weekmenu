@@ -18,10 +18,11 @@ Open **Weekmenu** in de zijbalk van Home Assistant. Op de Week staat per dag wat
 - **Minder of meer personen**: tik op het gerecht en gebruik de min en plus.
 - **Niet thuis eten**: kies Instellingen en tik de dag aan bij Niet thuis eten.
 - **Hoe vaak koken**: kies Instellingen, Kookmomenten. Kook je minder vaak dan je thuis eet, dan worden de andere avonden restjesavonden.
+- **Een product klopt niet**: tik in het gerecht bij het ingrediënt op Klopt niet. Kies een ander product, Hoeft niet of Hebben we al. Dat onthoudt de add-on voor altijd; terugdraaien kan bij Instellingen, Mijn correcties.
 
 ## Boodschappen en bestellen
 
-Het menu komt meestal op vrijdag, zodra de nieuwe bonusfolder er is. De boodschappen staan dan in je open bezorgbestelling, of op je AH-lijst als er nog geen bestelling is. Bestellen en betalen doe je zelf in de AH-app. Staat het menu klaar maar is er op zondag om 17:00 nog geen bezorgmoment gekozen, dan krijg je één herinnering.
+Het menu komt meestal op vrijdag, zodra de nieuwe bonusfolder er is. Kijk voor je bestelt even naar de kaart Check voor je bestelt bovenaan de Week: staat daar een groen vinkje, dan staat alles klaar. De boodschappen staan dan in je open bezorgbestelling, of op je AH-lijst als er nog geen bestelling is. Bestellen en betalen doe je zelf in de AH-app. Staat het menu klaar maar is er op zondag om 17:00 nog geen bezorgmoment gekozen, dan krijg je één herinnering.
 
 ## Inloggen bij AH
 

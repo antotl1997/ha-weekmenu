@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.0
+
+- **Check voor je bestelt.** Bovenaan de Week, onder de bestelregel, staat in één kaart wat nog een blik nodig heeft, met de aantallen per soort: wat niet gevonden is (per gerecht), wat nog niet zeker in je bestelling of op je lijst staat, wat over is van het vorige menu, producten die nog niet toegevoegd konden worden en producten met een prijs per gewicht ("hoeveelheid controleren"). Een product dat niet gevonden is, is een actie: "Zoek product" of "Hoeft niet". Klopt alles, dan staat er een groen vinkje: "Alles staat klaar".
+- **Klopt niet.** Elke ingrediëntregel op het gerechtscherm heeft "Klopt niet", met drie keuzes: een ander product (zoeken bij AH en kiezen), "Hoeft niet" (nooit meer kopen voor dit ingrediënt) en "Hebben we al" (telt voortaan als in huis). De keuze geldt voor dit ingrediënt in elke week en gaat vóór de eigen keuze van de add-on. Op het menu van deze week wordt hij meteen toegepast, met dezelfde garanties als Ander gerecht: wat alleen voor het oude product was gaat eruit als dat nog kan, en de bestelweek-check en de pauze bij een AH-wijziging gelden ook hier. De keuzes staan in `/data/overrides.json`.
+- **Mijn correcties** in Instellingen: elke keuze met Terugdraaien. Terugdraaien geldt vanaf het volgende menu of Ander gerecht; wat nu al in je bestelling of op je lijst staat, blijft.
+- **Minder verkeerde producten.** "2-3 el" telt als 3 el en "1 1/2 el" als 1,5. Een product met "per 100 gram" of "per kilo" in de titel en zonder verpakkingsmaat wordt nooit meerdere keren gekocht om aan het gewicht te komen: er komt 1 stuk, met "hoeveelheid controleren". Kaas is geen pindakaas of kaasstengels, room geen roomboter, melk geen melkchocolade (een kernwoord moet een titelwoord zijn of het laatste deel ervan). Kipkruiden en kippenbouillon tellen niet als kip. "Rode ui" valt niet meer terug op witte uien: rode, witte, gele, zoete, gerookte en gedroogde moeten in de titel staan, en bij "verse" kiest de add-on geen gedroogd, gerookt of diepvriesproduct.
+- **Wissels en weghalingen vastgelegd.** Ander gerecht, Terug en Gerecht weghalen komen per week in `/data/history.json`, zonder om een reden te vragen. Er is nog geen scherm voor; 1.0 rekent er de meetgetallen mee uit.
+- Zet je terug naar 0.8, dan negeert die versie `overrides.json` en `history.json`; de keuzes gelden dan niet, maar blijven bewaard.
+
 ## 0.8.0
 
 - **Vanavond.** Elke dag om 16:00 een korte melding: "Vanavond: <gerecht>, begin om <tijd>", of "Vanavond: restjes van <gerecht>". De begintijd is de etenstijd (`dinner_time`, standaard 18:30) min kook-, oven- en wachttijd, naar beneden afgerond op een kwartier; zou dat vóór 15:00 zijn, dan staat er geen begintijd. Niet thuis, geen gerecht of geen kookmoment: geen melding. Hooguit één keer per dag, ook na een herstart. Hetzelfde staat bovenaan de Week in de app, als attribuut `vanavond` op `sensor.weekmenu` en in `api/week`.
