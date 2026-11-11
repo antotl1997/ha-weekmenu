@@ -9,7 +9,7 @@
 - **Terugdraaien in Mijn correcties** zet een week die al bijgewerkt was nu altijd op het dashboard, ook als een volgende stap mislukt. Lukt het opnieuw kiezen niet, dan zegt de app eerlijk: "Je keuze is weg, maar het menu is nog niet aangepast. Tik op Ander gerecht of Menu bijwerken."
 - **Niets raakt ongemerkt kwijt als schrijven stilstaat.** Tik je op Ander gerecht, Klopt niet, een ander aantal personen of Terugdraaien terwijl schrijven stilstaat, in een week waar geen ronde meer naar kijkt (de lopende week), dan noemt de app de producten die je zelf moet toevoegen en krijg je daar één melding over. Check voor je bestelt telt elk product dat het menu nodig heeft maar dat nog niet is toegevoegd als "nog niet toegevoegd", zodat de kaart dan nooit groen is.
 - Klopt niet komt ook in `/data/history.json` (per week), zodat een correctie die later teruggedraaid wordt toch meetelt in het meetgetal.
-- Zet je terug naar 0.9, dan negeert die versie `taste.json` en `reconciliation.json`: Nooit meer en de duim tellen dan niet, en er wordt niets nagerekend. De bestanden blijven bewaard.
+- Zet je terug naar 0.9, dan negeert die versie `taste.json` en `reconciliation.json`: Nooit meer en de duim tellen dan niet, en er wordt niets nagerekend. De bestanden blijven bewaard. Schrijft 0.9 een weeklogboek opnieuw, dan raakt hij de velden kwijt die het nagerekende bedrag gebruikt (de bezorgdag en de besparing per losse aanbieding); die week telt dan minder mee in "Echt bespaard".
 
 ## 0.9.0
 

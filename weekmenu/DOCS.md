@@ -95,6 +95,7 @@ De besparing in de app en in `sensor.weekmenu_besparing_totaal` is een schatting
 - Hooguit één keer per dag. Is de bestelling nog niet bezorgd, is er (nog) geen bestelling te vinden of lukt het lezen niet (AH even onbereikbaar, login verlopen), dan kijkt hij de volgende dag opnieuw, tot een week na die dag. Lukt het dan nog niet, of is de bestelling geannuleerd, dan staat er "niet na te rekenen".
 - Welke bestelling: de bestelling waar de add-on die week in schreef, anders elke bezorgde bestelling met een bezorgdag in de menuweek. Geen bestelling gevonden, bijvoorbeeld omdat je in de winkel kocht: na een week "niet na te rekenen".
 - Wanneer: de dag na de bezorgdag die de add-on las toen hij in de bestelling schreef. Kent hij die niet (je bestelde vanaf de lijst), dan de woensdag na de menuweek. Weken van meer dan vijf weken geleden worden niet meer gelezen.
+- Losse aanbiedingen die vóór 1.0 zijn toegevoegd tellen wel mee in hoeveel er gekocht is, maar niet in het echt bespaarde bedrag: hun besparing werd toen nog niet bewaard.
 - De uitkomsten staan in `reconciliation.json` in de datamap.
 
 Onder de weken staan twee meetgetallen over de laatste 4 weken: het aandeel ingrediëntregels zonder ingreep (geen Klopt niet voor die regel in die week, ook niet een die later is teruggedraaid) en het aandeel toegevoegde producten dat echt gekocht is. Ze staan ook in de diagnose onder `meetgetallen`.
