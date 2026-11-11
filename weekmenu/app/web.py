@@ -63,6 +63,8 @@ _ASSET = r"{name:[A-Za-z0-9_-][A-Za-z0-9_.-]*\.(?:css|js|png|svg|ico|jpg|webp|js
 MIN_PERSONS, MAX_PERSONS = 1, 8
 MAX_FOUND = 200  # products kept from "Ander product" searches (a choice is one of these)
 MAX_PERSONS_LEFTOVERS = 2 * MAX_PERSONS  # a dish that also feeds a leftover night
+# v1.0: Terugdraaien took the choice back, but choosing again failed halfway
+REPICK_FAILED = "Je keuze is weg, het menu wordt bij de volgende ronde aangepast"
 
 FALLBACK_HTML = """<!doctype html>
 <html lang="nl"><head><meta charset="utf-8">
@@ -829,38 +831,60 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         """"Terugdraaien" in Mijn correcties: the add-on chooses by itself again, also on
         the menus of this and the next menu week that have not ended. Those go through
         the same apply as Ander gerecht (cleanup and adds, write-ahead, never retried,
-        the order-week check, the pause)."""
+        the order-week check, the pause).
+
+        The choice is gone once it is taken back. When choosing again fails (an AH
+        read or a write), the answer says so (REPICK_FAILED) instead of an error, and
+        every week apply got to is published anyway (try/finally): apply saves the new
+        plan before it writes, so a week may already be changed. An expired login and
+        a file from a newer add-on still give their own answer."""
         key = (await body_of(request)).get("key")
         if not isinstance(key, str) or not key:
             return _err(400, "key is nodig")
-        done = {"removed": 0, "held": None, "target": None}
-        published = []
-        async with ctx.lock:
-            gone = await asyncio.to_thread(ctx.overrides.remove, key)
-            if not gone:
-                return _err(404, "Deze correctie bestaat niet (meer)")
-            now = ctx.clock()
-            today = now.date()
-            for start in sorted({main.week_of(today), menu_week_start(now)}):
-                wlog = ctx.ledger.load(start)
-                if not wlog.plan or today > start + timedelta(days=6):
-                    continue
-                plan = Plan.from_dict(wlog.plan)
-                if not any(override_key(n or t) == key
-                           for d in plan.dishes for t, n in d.recipe.ingredients):
-                    continue
-                got = await main.bonus_for_week(ctx, start, now, fallback=True)
-                bonus = got[0] if isinstance(got, tuple) else []
-                new = await main.reresolve(ctx.client, plan, key, bonus, ctx.overrides.load())
-                if new is plan:
-                    continue
-                res = await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan, today=today)
-                done["removed"] += len(res.removed)
-                done["held"] = done["held"] or res.held
-                done["target"] = res.target
-                published.append((wlog, new))
-        for wlog, new in published:
-            await publish(wlog.week, new, wlog.target or "list", wlog.extras_total)
+        done = {"removed": 0, "held": None, "target": None, "warning": None}
+        touched: list[date] = []
+        try:
+            async with ctx.lock:
+                gone = await asyncio.to_thread(ctx.overrides.remove, key)
+                if not gone:
+                    return _err(404, "Deze correctie bestaat niet (meer)")
+                now = ctx.clock()
+                today = now.date()
+                try:
+                    for start in sorted({main.week_of(today), menu_week_start(now)}):
+                        wlog = ctx.ledger.load(start)
+                        if not wlog.plan or today > start + timedelta(days=6):
+                            continue
+                        plan = Plan.from_dict(wlog.plan)
+                        if not any(override_key(n or t) == key
+                                   for d in plan.dishes for t, n in d.recipe.ingredients):
+                            continue
+                        got = await main.bonus_for_week(ctx, start, now, fallback=True)
+                        bonus = got[0] if isinstance(got, tuple) else []
+                        new = await main.reresolve(ctx.client, plan, key, bonus,
+                                                   ctx.overrides.load())
+                        if new is plan:
+                            continue
+                        touched.append(start)
+                        res = await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan,
+                                          today=today)
+                        done["removed"] += len(res.removed)
+                        done["held"] = done["held"] or res.held
+                        done["target"] = res.target
+                except (AhLoginExpired, SchemaTooNew):
+                    raise
+                except Exception as e:
+                    log.warning("Opnieuw kiezen na Terugdraaien mislukt: %s", main.short_error(e))
+                    done["warning"] = REPICK_FAILED
+        finally:
+            for start in touched:  # what is in the log now, also after a failed write
+                try:
+                    wlog = ctx.ledger.load(start)
+                    if wlog.plan:
+                        await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",
+                                      wlog.extras_total)
+                except Exception as e:
+                    log.warning("Sensor niet bijgewerkt (%s)", type(e).__name__)
         log.info("Correctie teruggedraaid")
         return web.json_response({"items": ctx.overrides.listing(), **done})
 

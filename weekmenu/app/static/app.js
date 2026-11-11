@@ -1140,6 +1140,7 @@ app.addEventListener("click", async (ev) => {
       state.savings = null;
       try { await loadWeek(); } catch (e) { /* the week refreshes on the next visit */ }
       const gone = removedText(res);
+      if (res.warning) { toast(res.warning, true); return; }  // the choice is gone, the menu follows later
       toast(res.held || ("Teruggedraaid, de add-on kiest weer zelf" + (gone ? ". " + gone : "")));
     });
     render();
