@@ -65,6 +65,7 @@ from app.hass import (
     load_total_state,
     notify_target,
     plan_view,
+    vanavond,
 )
 from app.ledger import Ledger, WeekLog, new_folder_available
 from app.planner import (
@@ -124,6 +125,12 @@ FINAL_FAILURE = ("Weekmenu kon niet gemaakt worden: Home Assistant/AH niet berei
 ALL_AWAY = ("Alle avonden van deze week staan op niet thuis (0 personen). "
             "Er is geen menu gemaakt.")
 WRITE_FAILED_HINT = "Tik op Nu maken in de Weekmenu-app om de rest toe te voegen."
+# v0.8: the daily "Vanavond" push to notify_today, and the Sunday order reminder
+TONIGHT_AT = time(16, 0)
+TONIGHT_LAST = time(20, 0)  # not after this (a start late in the day sends nothing)
+REMINDER_AT = time(17, 0)
+REMINDER = "Het menu staat klaar, maar er is nog geen bezorgmoment gekozen."
+LOGIN_STALE = timedelta(days=7)  # no refresh for this long: the red login card
 STAPLES_TIMEOUT = 60  # seconds for the whole purchase-history step before the message
 PORT = 8099
 INGRESS_PROXY = "172.30.32.2"
@@ -198,6 +205,13 @@ class Context:
     health: ApiHealth = field(default_factory=ApiHealth)
     health_notified: bool = False
     app_version: str = APP_VERSION
+    # v0.8, kept in state.json: the day "Vanavond" and the order reminder went out
+    # (marked before the push: at most once a day, also over a restart)
+    tonight_sent: date | None = None
+    reminder_sent: date | None = None
+    reminder_tried: datetime | None = None  # not kept: a failed read tries again hourly
+    reminder_done: date | None = None  # not kept: the day's check found nothing to say
+    published: tuple | None = None  # (day, login_ok) of the last sensor.weekmenu
     _saved_marks: tuple | None = None  # what state.json holds of the marks above
     # one sync_health at a time: two requests at once must not both send the push
     _sync_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
@@ -350,6 +364,52 @@ async def probe_health(ctx: Context) -> None:
         except Exception as e:
             log.warning("Leesronde terwijl schrijven stilstaat: %s", short_error(e))
     await sync_health(ctx)
+
+
+def local_from_epoch(stamp: float) -> datetime:
+    tz = os.environ.get("TZ") or "Europe/Amsterdam"
+    try:
+        zone = ZoneInfo(tz)
+    except Exception:
+        zone = ZoneInfo("Europe/Amsterdam")
+    return datetime.fromtimestamp(stamp, zone).replace(tzinfo=None)
+
+
+def login_view(ctx: Context, now: datetime | None = None) -> dict:
+    """"AH-login in orde, laatst ververst <datum>": `login_ok` is false when there is no
+    login, it expired, or it was not refreshed for LOGIN_STALE (7 days)."""
+    now = now or ctx.clock()
+    stamp = ctx.store.saved_at()
+    refreshed = local_from_epoch(stamp) if stamp is not None else None
+    have = ctx.store.load() is not None
+    stale = refreshed is not None and now - refreshed > LOGIN_STALE
+    expired = not have or ctx.login_expired
+    return {
+        "login_ok": not expired and not stale,
+        "login_refreshed": refreshed.isoformat(timespec="minutes") if refreshed else None,
+        "login_expired": expired,
+        "login_stale": stale and not expired,
+    }
+
+
+def tonight(ctx: Context, day: date, away=()) -> str | None:
+    """The "Vanavond" line for `day`, from the menu week holding it."""
+    try:
+        wlog = ctx.ledger.load(week_of(day))
+    except Exception as e:
+        log.warning("Logboek niet te lezen (%s)", type(e).__name__)
+        return None
+    if not wlog.plan:
+        return None
+    return vanavond(Plan.from_dict(wlog.plan), day, away, ctx.dinner_time)
+
+
+def sensor_extras(ctx: Context, away=(), now: datetime | None = None) -> dict:
+    """What sensor.weekmenu carries besides the menu: tonight and the login."""
+    now = now or ctx.clock()
+    login = login_view(ctx, now)
+    return {"vanavond": tonight(ctx, now.date(), away),
+            "login_ok": login["login_ok"], "login_refreshed": login["login_refreshed"]}
 
 
 async def save_log(ctx: Context, wlog: WeekLog) -> None:
@@ -665,10 +725,10 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     if not (held and completing):
         await refresh_staples(ctx, wlog, plan, start, now)
     await recount_extras(ctx, wlog)  # apply may have settled a staple write
-    await guard(ctx.hass.publish(plan_view(plan, start, result.target,
-                                          away_dates(start, raw.away),
-                                          new_folder=new_folder_available(wlog)),
-                                 plan.savings + wlog.extras_total), "sensoren")
+    view = plan_view(plan, start, result.target, away_dates(start, raw.away),
+                     new_folder=new_folder_available(wlog))
+    view.update(sensor_extras(ctx, raw.away, now))
+    await guard(ctx.hass.publish(view, plan.savings + wlog.extras_total), "sensoren")
     nothing_new = not (result.added or result.removed or result.pending or result.unknown)
     if completing:  # the message only if it never went out, or something changed
         send = not (wlog.notified and nothing_new)
@@ -884,18 +944,102 @@ async def close_stale_new_folder(ctx: Context, start: date) -> None:
             await publish_week(ctx, old)
 
 
-async def publish_week(ctx: Context, wlog: WeekLog) -> None:
+async def publish_week(ctx: Context, wlog: WeekLog) -> bool:
     """sensor.weekmenu for this week's menu as it is, with the new-folder flag."""
     try:
         raw = await ctx.hass.read_settings()
     except Exception as e:
         log.warning("Home Assistant-instellingen niet te lezen (%s)", type(e).__name__)
-        return
+        return False
     plan = Plan.from_dict(wlog.plan)
-    await guard(ctx.hass.publish(
-        plan_view(plan, wlog.week, wlog.target or "list", away_dates(wlog.week, raw.away),
-                  new_folder=new_folder_available(wlog)),
-        plan.savings + wlog.extras_total), "sensoren")
+    view = plan_view(plan, wlog.week, wlog.target or "list", away_dates(wlog.week, raw.away),
+                     new_folder=new_folder_available(wlog))
+    view.update(sensor_extras(ctx, raw.away))
+    return await guard(ctx.hass.publish(view, plan.savings + wlog.extras_total), "sensoren")
+
+
+def shown_week(ctx: Context, now: datetime) -> date:
+    """The week sensor.weekmenu shows: the next menu week once it has a menu."""
+    nxt = menu_week_start(now)
+    return nxt if ctx.ledger.load(nxt).plan else week_of(now.date())
+
+
+async def republish(ctx: Context, now: datetime) -> None:
+    """A new day or a change in the login: sensor.weekmenu again, so "vanavond" and
+    the login line on the dashboard card follow. Only when there is a menu to show."""
+    key = (now.date(), login_view(ctx, now)["login_ok"])
+    if key == ctx.published:
+        return
+    wlog = ctx.ledger.load(shown_week(ctx, now))
+    if not wlog.plan or wlog.too_new:
+        ctx.published = key
+        return
+    if await publish_week(ctx, wlog):
+        ctx.published = key
+
+
+async def notify_tonight(ctx: Context, now: datetime) -> None:
+    """Every day from 16:00 (until 20:00): "Vanavond: ..." to the notify_today targets.
+
+    At most once a day: the day is saved in state.json before the push goes out (no
+    push at all when it cannot be saved). Not at home, no dish or no cooking moment:
+    nothing, and nothing more that day.
+    """
+    today = now.date()
+    targets = list(getattr(ctx.hass, "today", []) or [])
+    if (ctx.tonight_sent == today or not targets
+            or not TONIGHT_AT <= now.time() < max(TONIGHT_LAST, ctx.dinner_time)):
+        return
+    try:
+        away = (await ctx.hass.read_settings()).away
+    except Exception as e:  # the menu still says what is eaten
+        log.warning("Home Assistant-instellingen niet te lezen (%s)", type(e).__name__)
+        away = set()
+    text = tonight(ctx, today, away)
+    ctx.tonight_sent = today
+    if not _save_state(ctx):
+        log.warning("Vanavond niet verstuurd: de status kon niet worden opgeslagen")
+        return
+    if text is None:
+        return
+    for target in targets:
+        await guard(ctx.hass.notify_to(target, "Weekmenu", text, ctx.ingress_url), "melding")
+
+
+async def remind_order(ctx: Context, now: datetime) -> None:
+    """Sunday from 17:00: a menu for the coming menu week but no active order delivered
+    in that week yet: one push to the owner. Only reads AH (the order and its day).
+
+    At most once a day (saved in state.json before the push). A failed read tries
+    again an hour later; an order whose day is unknown counts as chosen (no guess).
+    """
+    today = now.date()
+    if (now.weekday() != 6 or now.time() < REMINDER_AT
+            or today in (ctx.reminder_sent, ctx.reminder_done)):
+        return
+    if ctx.reminder_tried is not None and now - ctx.reminder_tried < timedelta(hours=1):
+        return
+    start = menu_week_start(now)
+    wlog = ctx.ledger.load(start)
+    if not wlog.plan or wlog.too_new or ctx.login_expired or ctx.store.load() is None:
+        ctx.reminder_done = today
+        return
+    ctx.reminder_tried = now
+    async with ctx.lock:
+        try:
+            order = await ctx.client.active_order()
+            day = await ctx.client.order_delivery_date(order) if order is not None else None
+        except Exception as e:
+            log.warning("Bestelherinnering: bestelling niet te lezen (%s)", short_error(e))
+            return
+    ctx.reminder_done = today
+    if order is not None and (day is None or start <= day <= start + timedelta(days=6)):
+        return
+    ctx.reminder_sent = today
+    if not _save_state(ctx):
+        log.warning("Bestelherinnering niet verstuurd: de status kon niet worden opgeslagen")
+        return
+    await guard(ctx.hass.notify("Weekmenu", REMINDER, ctx.ingress_url), "melding")
 
 
 # --- schedule, state and stdin ----------------------------------------------------------
@@ -926,6 +1070,8 @@ def load_state(ctx: Context) -> None:
             ctx.health_notified = api.get("notified") is True
             ctx.health.restore_last_ok(api.get("last_ok"))
         ctx._saved_marks = _marks(ctx)
+        ctx.tonight_sent = _day_or_none(data.get("tonight_sent"))
+        ctx.reminder_sent = _day_or_none(data.get("reminder_sent"))
         if isinstance(waiting, dict):
             exp = waiting.get("expected")
             ctx.waiting = Waiting(date.fromisoformat(waiting["week"]),
@@ -934,9 +1080,17 @@ def load_state(ctx: Context) -> None:
         pass
 
 
-def _save_state(ctx: Context) -> None:
+def _day_or_none(value) -> date | None:
+    try:
+        return date.fromisoformat(value) if isinstance(value, str) else None
+    except ValueError:
+        return None
+
+
+def _save_state(ctx: Context) -> bool:
+    """state.json, durably; False when it could not be written."""
     if ctx.state_path is None:
-        return
+        return True
     w = ctx.waiting
     data = {
         "checked": ctx.checked.isoformat(timespec="minutes") if ctx.checked else None,
@@ -946,14 +1100,19 @@ def _save_state(ctx: Context) -> None:
         "too_new_notified": ctx.too_new_notified,
         "api": {**ctx.health.persisted(), "notified": ctx.health_notified,
                 "last_ok": ctx.health.last_ok},
+        # v0.8 (optional: same schema version)
+        "tonight_sent": ctx.tonight_sent.isoformat() if ctx.tonight_sent else None,
+        "reminder_sent": ctx.reminder_sent.isoformat() if ctx.reminder_sent else None,
     }
     try:
         write_json(Path(ctx.state_path), data, STATE_SCHEMA)
         ctx._saved_marks = _marks(ctx)
+        return True
     except SchemaTooNew as e:
         note_too_new(ctx, e.path)
     except OSError as e:
         log.warning("Status niet opgeslagen (%s)", type(e).__name__)
+    return False
 
 
 async def tick(ctx: Context, now: datetime) -> None:
@@ -967,6 +1126,9 @@ async def tick(ctx: Context, now: datetime) -> None:
         await update_total(ctx, now.date())
     if health_needs_sync(ctx):  # a web read may have paused writing: tell it now
         await sync_health(ctx)
+    await republish(ctx, now)
+    await notify_tonight(ctx, now)
+    await remind_order(ctx, now)
     start = menu_week_start(now)
     last = LAST_FALLBACK_TRY if is_fallback_day(now.date(), start) else LAST_CHECK
     slot = check_slot(now, ctx.schedule_time, last)

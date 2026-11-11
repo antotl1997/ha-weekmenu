@@ -347,6 +347,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             return
         view = plan_view(plan, start, target, away_dates(start, raw.away),
                          new_folder=new_folder_available(ctx.ledger.load(start)))
+        view.update(main.sensor_extras(ctx, raw.away, now))
         await main.guard(ctx.hass.publish(view,
                                           plan.savings + extras), "sensoren")
 
@@ -480,6 +481,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         fresh = new_folder_available(nxt_log)
         out["new_folder_available"] = fresh
         out["new_folder_week"] = nxt.isoformat() if fresh else None
+        # v0.8: tonight (whichever week is shown) and the AH login line
+        out["vanavond"] = main.tonight(ctx, now.date(), raw.away if raw is not None else ())
+        out["login"] = main.login_view(ctx, now)
         return web.json_response(out)
 
     def load_dish(day: date):

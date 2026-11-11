@@ -60,6 +60,14 @@ class TokenStore:
             log.warning("%s niet te lezen (%s)", self.path.name, type(e).__name__)
             return None
 
+    def saved_at(self) -> float | None:
+        """When the login was last written (logging in or a refresh): the file's mtime,
+        as the durable write replaces it whole. None without a file."""
+        try:
+            return self.path.stat().st_mtime
+        except OSError:
+            return None
+
     def too_new(self) -> bool:
         """tokens.json was written by a newer add-on."""
         return too_new(self.path, TOKENS_SCHEMA)

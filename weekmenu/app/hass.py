@@ -7,7 +7,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from collections.abc import Iterable
-from datetime import date, timedelta
+from datetime import date, time, timedelta
 from pathlib import Path
 
 import httpx
@@ -184,6 +184,36 @@ def no_cooking_moment(plan: Plan, start: date, away: Iterable[date]) -> list[dat
     return [d for d in days if d not in away and d not in taken]
 
 
+def start_time(dinner: time, cook: int | None, oven: int | None,
+               wait: int | None) -> time | None:
+    """When to start cooking: `dinner` minus cooking, oven and waiting time, rounded down
+    to a quarter of an hour (never later than needed). None when no time is known."""
+    if cook is None and oven is None and wait is None:
+        return None
+    total = (cook or 0) + (oven or 0) + (wait or 0)
+    at = max(0, dinner.hour * 60 + dinner.minute - total)
+    at -= at % 15
+    return time(at // 60, at % 60)
+
+
+def vanavond(plan: Plan | None, day: date, away: Iterable[str] = (),
+             dinner: time = time(18, 30)) -> str | None:
+    """"Vanavond: <gerecht>, begin om <tijd>", "Vanavond: restjes van <gerecht>", or
+    None: no menu, not at home (0 persons on that weekday), no dish or no cooking moment."""
+    if plan is None or WEEKDAGEN[day.weekday()] in set(away):
+        return None
+    for d in plan.dishes:
+        if d.date == day:
+            at = start_time(dinner, d.cook, d.oven, d.wait)
+            if at is None:
+                return f"Vanavond: {d.recipe.title}"
+            return f"Vanavond: {d.recipe.title}, begin om {at.hour}:{at.minute:02d}"
+    for d in plan.dishes:
+        if d.leftover_date == day:
+            return f"Vanavond: restjes van {d.recipe.title}"
+    return None
+
+
 def plan_view(plan: Plan, week_start: date, target: str,
               away: Iterable[date] = (), new_folder: bool = False) -> dict:
     """Attributes for sensor.weekmenu. `target` is "order" or "list"; `away`: the
@@ -326,6 +356,10 @@ class Hass:
                 "geen_kookmoment": plan_view.get("geen_kookmoment", []),
                 "dishes": plan_view["dishes"],
                 "new_folder_available": plan_view.get("new_folder_available", False),
+                # v0.8: tonight's dish (any week) and the AH login, for the dashboard card
+                "vanavond": plan_view.get("vanavond"),
+                "login_ok": plan_view.get("login_ok"),
+                "login_refreshed": plan_view.get("login_refreshed"),
             },
         })
         await self._post("states/sensor.weekmenu_besparing_week", {

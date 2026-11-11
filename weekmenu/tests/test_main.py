@@ -425,11 +425,17 @@ async def test_no_second_round_on_saturday_or_sunday(tmp_path, planned):
     n_calls, n_writes, n_posts = len(ah.calls), len(ah.writes), len(ctx.hass.posts)
     await whole_day(ctx, SAT)
     await whole_day(ctx, SUN)
+    # (no login in this fake, so no v0.8 order reminder on Sunday either)
     assert len(calls) == 1 and len(ctx.hass.notifications()) == 1
     assert len(ah.calls) == n_calls and len(ah.writes) == n_writes  # not even a read
-    # only the daily total is published again, never the menu
-    assert all(p == "states/sensor.weekmenu_besparing_totaal"
+    # the daily total, and once a day the same menu again (v0.8: "vanavond" moves on);
+    # the menu itself never changes
+    menu = ctx.ledger.load(W).plan
+    assert all(p in ("states/sensor.weekmenu_besparing_totaal", "states/sensor.weekmenu",
+                     "states/sensor.weekmenu_besparing_week")
                for p, _ in ctx.hass.posts[n_posts:])
+    assert sum(p == "states/sensor.weekmenu" for p, _ in ctx.hass.posts[n_posts:]) == 2
+    assert ctx.ledger.load(W).plan == menu
 
 
 async def test_sunday_1800_without_folder_falls_back_with_warning(tmp_path, planned):

@@ -197,8 +197,9 @@ class FakeHass(Hass):
     """The real Hass logic on top of an in-memory state table; posts are recorded."""
 
     def __init__(self, total_path, enabled=True, aantal=5,
-                 fail_posts=False):
-        super().__init__(http=None, total_path=total_path)
+                 fail_posts=False, today=()):
+        # no "Vanavond" targets unless a test asks: older tests count every push
+        super().__init__(http=None, total_path=total_path, today=today)
         self.states = {
             HELPER_AAN: "on" if enabled else "off",
             HELPER_AVONDEN: str(aantal),
