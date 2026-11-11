@@ -6,13 +6,15 @@ wrote to that order; unknown: the Wednesday after the menu week), the hourly loo
 the delivered order: the order the week was written to (`added_to` "order:<id>"), else
 every delivered order with its slot in the menu week. Only reads (a GraphQL query and
 GETs), under `ctx.lock` like every AH call that may refresh the login. Not while writing
-is paused (AH seems changed) or without a usable login; a changed answer counts for
-ApiHealth like any other read of the order.
+is paused (AH seems changed) or without a usable login. These reads never count for
+ApiHealth (Ruling 53): a changed answer (AhShapeError) cannot pause writing or send
+the "AH lijkt iets veranderd" push; it makes that week "niet na te rekenen" at once.
 
 The result goes into `/data/reconciliation.json` (schema, durable), one entry per menu
 week. A marker ("bezig", with the try count) is written before every read, so a crash
 never gives a second read the same day. An order that is not delivered yet, no order in
-the menu week (yet) and a read that fails (5xx, a timeout, the login lost) are not final:
+the menu week (yet) and a read that fails (5xx, a timeout, the login lost; not a
+changed answer, which is final at once) are not final:
 the entry becomes "wacht" with `tries` and `next` (the next day) and is read again once a
 day, until DEADLINE_DAYS after the due day; the try on or after that day is the last
 one. A marker left by a crash counts as a failed try. Per week, final:
@@ -37,7 +39,7 @@ import logging
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-from app.ahclient import AhLoginExpired, DeliveredOrder, Product
+from app.ahclient import AhLoginExpired, AhShapeError, DeliveredOrder, Product
 from app.deals import savings as deal_savings
 from app.durable import SchemaTooNew, too_new, write_json
 from app.ingredients import override_key
@@ -333,6 +335,9 @@ async def reconcile_due(ctx, now: datetime) -> None:
         except AhLoginExpired:
             ctx.login_expired = True
             bought, why, final = None, UNREADABLE, False
+        except AhShapeError as e:  # Ruling 53: AH changed the answer, no daily retry
+            log.warning("Nagerekende besparing: onverwacht antwoord (%s)", short_error(e))
+            bought, why, final = None, UNREADABLE, True
         except Exception as e:
             log.warning("Nagerekende besparing: bestelling niet te lezen (%s)", short_error(e))
             bought, why, final = None, UNREADABLE, False

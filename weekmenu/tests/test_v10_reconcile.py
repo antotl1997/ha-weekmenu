@@ -93,14 +93,16 @@ async def test_delivered_order_by_id_and_a_cancelled_one(respx_mock, tmp_path, n
     assert await client.delivered_order(900004) is None  # cancelled
 
 
-async def test_a_changed_order_shape_counts_for_api_health(respx_mock, tmp_path, no_delay):
+async def test_a_changed_order_shape_never_counts_for_api_health(respx_mock, tmp_path,
+                                                                 no_delay):
+    """Ruling 53 (was: counts for ApiHealth): the recount may not pause writing."""
     respx_mock.get(url__regex=r".*/order/v1/\d+/details-grouped-by-taxonomy").respond(
         json={"orderState": "DELIVERED", "groupedProductsInTaxonomy": "geen lijst"})
     client = make_client(tmp_path)
     for _ in range(2):
         with pytest.raises(AhApiError):
             await client.delivered_order(1)
-    assert client.health.writes_paused and client.health.paused_by == "bestelling"
+    assert not client.health.writes_paused
 
 
 # --- the sums ---------------------------------------------------------------------------------

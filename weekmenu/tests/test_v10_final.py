@@ -258,3 +258,53 @@ def test_short_error_hides_numeric_path_segments():
                                    "details-grouped-by-taxonomy: HTTP 500")
     assert main.short_error(AhApiError("GET /x/v2/items failed: ReadTimeout")) == \
         "GET /x/v2/items failed: ReadTimeout"
+
+
+# --- Ruling 53: recount reads never feed ApiHealth; a changed shape is final ------------
+
+from app.ahclient import AhShapeError  # noqa: E402
+from app.health import PAUSED_MESSAGE  # noqa: E402
+
+
+async def test_a_changed_order_shape_in_the_recount_does_not_pause_writing(
+        respx_mock, tmp_path, no_delay):
+    respx_mock.get(url__regex=r".*/order/v1/\d+/details-grouped-by-taxonomy").respond(
+        json={"orderState": "DELIVERED", "groupedProductsInTaxonomy": "geen lijst"})
+    client = make_client(tmp_path)
+    for _ in range(3):
+        with pytest.raises(AhShapeError):
+            await client.delivered_order(1)
+    assert not client.health.writes_paused and client.health.fails["bestelling"] == 0
+
+
+async def test_a_shape_error_makes_the_week_final_at_once(tmp_path):
+    ctx = ctx_with_week(tmp_path, at(DUE), [], added_to="list", delivery=date(2026, 11, 6))
+    ctx.client.raise_on["delivered_orders"] = AhShapeError("bestelling: vorm", 200)
+    await reconcile.reconcile_due(ctx, at(DUE))
+    got = entry(ctx)
+    assert got["status"] == UNCHECKABLE and got["tries"] == 1
+    assert not ctx.health.writes_paused
+    assert PAUSED_MESSAGE not in [n["message"] for n in ctx.hass.notifications()]
+    del ctx.client.raise_on["delivered_orders"]
+    await reconcile.reconcile_due(ctx, at(DUE + timedelta(days=1)))
+    assert ctx.client.calls.count("delivered_orders") == 1  # never again
+
+
+# --- Ruling 53: Opnieuw proberen clears the stale pause note of the target week ---------
+
+
+async def test_retry_by_hand_clears_the_pause_note_of_the_target_week(
+        aiohttp_client, tmp_path):
+    ctx = make_ctx(tmp_path)  # SUNDAY: the target week is W
+    pause(ctx)
+    await apply(ctx.client, ctx.ledger, WeekLog(W), make_plan([dish(W, 101, [1, 2], 2.0)]),
+                today=date(2026, 11, 1))
+    assert ctx.ledger.load(W).held == PAUSED_NOTE
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post("api/diagnose/retry")
+    assert (await r.json()) == {"writes_paused": False}
+    saved = ctx.ledger.load(W)
+    assert saved.held is None and not saved.round_done  # the hourly look still adds them
+    week = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+    assert week["held"] is None
+    assert week["check"]["ok"] is False and week["check"]["counts"]["missing"] == 2

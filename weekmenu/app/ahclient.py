@@ -403,6 +403,16 @@ class AhClient:
         self.health.ok(endpoint)
         return out
 
+    @staticmethod
+    async def _untracked(endpoint: str, awaitable):
+        """Like `_track`, but ApiHealth never hears of it (Ruling 53: the recount after
+        the delivery may not pause writing). A parse error still becomes AhShapeError."""
+        try:
+            return await awaitable
+        except _SHAPE as e:
+            raise AhShapeError(f"{endpoint}: onverwachte vorm ({type(e).__name__})",
+                               200) from None
+
     def _failed(self, endpoint: str, e: AhApiError) -> None:
         if e.status == 403:
             log.warning("AH weigert de toegang (HTTP 403) bij %s: ronde gestopt", endpoint)
@@ -787,10 +797,10 @@ class AhClient:
 
     async def delivered_order(self, order_id: int) -> DeliveredOrder | None:
         """The order with this id as delivered; None when it is cancelled; an order that
-        is not delivered yet has `delivered` False. Only a GET; a changed shape counts
-        for ApiHealth."""
+        is not delivered yet has `delivered` False. Only a GET. Never counts for
+        ApiHealth (Ruling 53): a changed shape raises AhShapeError and nothing else."""
         self._called_ah = False
-        return await self._track("bestelling", self._read_delivered(order_id))
+        return await self._untracked("bestelling", self._read_delivered(order_id))
 
     async def delivered_orders(self, start: date, end: date) -> list[DeliveredOrder]:
         """Every order with its delivery slot from `start` to `end` that is delivered or
@@ -811,7 +821,7 @@ class AhClient:
 
         self._called_ah = False
         await self._pause()
-        return await self._track("bestelling", read())
+        return await self._untracked("bestelling", read())
 
     # --- products ---
 

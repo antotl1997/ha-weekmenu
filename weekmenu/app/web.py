@@ -612,9 +612,23 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         return web.json_response(diagnose(ctx))
 
     async def retry_writes(request):
-        """"Opnieuw proberen" in Diagnose: writing on again, by hand."""
+        """"Opnieuw proberen" in Diagnose: writing on again, by hand.
+
+        Ruling 53: the target week's pause note goes too (its round stays open, so the
+        hourly look still adds what is missing; the Check card shows it meanwhile).
+        Skipped while a round runs: that round's apply clears it anyway."""
         ctx.health.resume("knop Opnieuw proberen")
         await main.sync_health(ctx)
+        if not (ctx.busy or ctx.in_round):
+            async with ctx.lock:
+                wlog = ctx.ledger.load(menu_week_start(ctx.clock()))
+                if wlog.held == PAUSED_NOTE and not wlog.too_new:
+                    wlog.held = None
+                    try:
+                        await main.save_log(ctx, wlog)
+                    except Exception as e:
+                        log.warning("Logboek %s niet bijgewerkt (%s)", wlog.week,
+                                    type(e).__name__)
         return web.json_response({"writes_paused": ctx.health.writes_paused})
 
     # --- reading ---
