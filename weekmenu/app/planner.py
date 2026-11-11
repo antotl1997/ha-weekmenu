@@ -25,6 +25,7 @@ import yaml
 
 from app.ahclient import AhApiError, Product, Recipe, RecipeSummary, is_blocking
 from app.deals import parse_mechanism, qty_for_deal, savings
+from app.taste import DOWN_FACTOR
 from app.ingredients import (
     PRODUCT,
     SKIP,
@@ -107,6 +108,9 @@ class Settings:
     leftovers: dict[date, date] = field(default_factory=dict)
     # v0.9: "Klopt niet" choices (override_key -> choice), before every heuristic
     overrides: dict = field(default_factory=dict)
+    # v1.0 (taste.json): recipes never chosen again, and recipes with a thumb down
+    never: set[int] = field(default_factory=set)
+    down: set[int] = field(default_factory=set)
 
 
 @dataclass
@@ -423,7 +427,8 @@ async def _gather(
             if i >= len(rs):
                 continue
             r = rs[i]
-            if r.id in seen or r.id in exclude or r.id in s.recent_recipe_ids:
+            if (r.id in seen or r.id in exclude or r.id in s.recent_recipe_ids
+                    or r.id in s.never):
                 continue
             seen.add(r.id)
             if any(x in _fold(r.title) for x in EXCLUDE_TITLES):
@@ -451,6 +456,8 @@ async def _gather(
         if cuisine is None:
             continue
         score, prods = await _score(recipe, bonus, s.pantry, s.overrides)
+        if recipe.id in s.down or summ.id in s.down:  # duim omlaag: a soft penalty
+            score = round(score * DOWN_FACTOR, 2)
         names = " ".join(n or t for t, n in recipe.ingredients)
         fish = (
             is_fishy(recipe.title)

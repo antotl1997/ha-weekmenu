@@ -39,6 +39,7 @@ from app.hass import (
 from app.ingredients import KINDS, PRODUCT, override_key
 from app.ledger import leftovers, new_folder_available
 from app.overrides import make_entry
+from app.taste import KINDS as TASTE_KINDS
 from app.planner import Dish, Plan
 from app.deals import qty_for_deal, savings as deal_savings
 from app.diag import diagnose
@@ -354,7 +355,8 @@ def offers_view(products: Iterable[Product], wlog, q: str = "", category: str = 
         for n in names]}
 
 
-def dish_view(wlog, plan: Plan, d: Dish, today: date, overrides: dict | None = None) -> dict:
+def dish_view(wlog, plan: Plan, d: Dish, today: date, overrides: dict | None = None,
+              taste: str | None = None) -> dict:
     names = {t: (n or t) for t, n in d.recipe.ingredients}
     chosen = overrides or {}
 
@@ -390,6 +392,8 @@ def dish_view(wlog, plan: Plan, d: Dish, today: date, overrides: dict | None = N
         "missing": [{"ingredient": t, **fix(t)} for t in d.not_found],
         "can_back": iso in wlog.previous and today < wlog.week,
         "week_savings": plan.savings, "leftovers": _leftovers(wlog, plan),
+        # v1.0: "down" (duim omlaag), "never" (nooit meer) or None
+        "taste": taste,
     }
 
 
@@ -640,10 +644,13 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                                    content_type="application/json")
         return wlog, plan, d
 
+    def taste_of(d: Dish) -> str | None:
+        return ctx.taste.kind_of(d.recipe.id)
+
     async def dish(request):
         wlog, plan, d = load_dish(day_of(request))
         return web.json_response(dish_view(wlog, plan, d, ctx.clock().date(),
-                                           ctx.overrides.load()))
+                                           ctx.overrides.load(), taste_of(d)))
 
     # --- writing: one at a time ---
 
@@ -687,7 +694,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         if nd is None:  # "Gerecht weghalen": no dish left to show
             return web.json_response({"date": day.isoformat(), **done})
         return web.json_response({**dish_view(wlog, new, nd, ctx.clock().date(),
-                                             ctx.overrides.load()), **done})
+                                             ctx.overrides.load(), taste_of(nd)), **done})
 
     async def swap(request):
         day = day_of(request)
@@ -818,11 +825,48 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             ended = ctx.clock().date() > wlog.week + timedelta(days=6)
             if new is plan or ended:  # nothing on this menu to change (or the week is over)
                 return web.json_response({
-                    **dish_view(wlog, plan, d, ctx.clock().date(), ctx.overrides.load()),
+                    **dish_view(wlog, plan, d, ctx.clock().date(), ctx.overrides.load(),
+                                taste_of(d)),
                     "removed": 0, "target": wlog.target or "list", "held": None})
             return new
 
         return await _write(day, change)
+
+    # --- v1.0: duim omlaag and "nooit meer" (taste.json; nothing goes to AH) ---
+
+    async def set_taste(request):
+        """{"kind": "down" | "never" | null} for the dish on that day. Not for a whole
+        menu round: the lock is only taken when no round holds it."""
+        day = day_of(request)
+        kind = (await body_of(request)).get("kind")
+        if kind is not None and kind not in TASTE_KINDS:
+            return _err(400, "kind moet down, never of null zijn")
+        if ctx.busy or ctx.in_round:
+            return _err(409, BUSY)
+        async with ctx.lock:
+            wlog, plan, d = load_dish(day)
+            if kind is None:
+                await asyncio.to_thread(ctx.taste.remove, d.recipe.id)
+            else:
+                await asyncio.to_thread(ctx.taste.put, d.recipe.id, kind, d.recipe.title,
+                                        ctx.clock())
+        log.info("Smaak bewaard (%s)", kind or "geen")
+        return web.json_response(dish_view(wlog, plan, d, ctx.clock().date(),
+                                           ctx.overrides.load(), taste_of(d)))
+
+    async def get_taste(request):
+        return web.json_response({"items": ctx.taste.listing()})
+
+    async def remove_taste(request):
+        """"Terugdraaien" in Nooit meer: the recipe may be chosen again."""
+        rid = (await body_of(request)).get("recipe_id")
+        if not isinstance(rid, int) or isinstance(rid, bool):
+            return _err(400, "recipe_id is nodig")
+        async with ctx.lock:
+            if ctx.taste.kind_of(rid) != "never":
+                return _err(404, "Dit gerecht staat niet (meer) op Nooit meer")
+            await asyncio.to_thread(ctx.taste.remove, rid)
+        return web.json_response({"items": ctx.taste.listing()})
 
     async def get_overrides(request):
         return web.json_response({"items": ctx.overrides.listing()})
@@ -1108,6 +1152,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     app.router.add_post("/api/dish/{day}/remove", remove)
     app.router.add_post("/api/dish/{day}/correct", correct)
     app.router.add_get("/api/products", products)
+    app.router.add_post("/api/dish/{day}/taste", set_taste)
+    app.router.add_get("/api/taste", get_taste)
+    app.router.add_post("/api/taste/remove", remove_taste)
     app.router.add_get("/api/overrides", get_overrides)
     app.router.add_post("/api/overrides/remove", remove_override)
     app.router.add_post("/api/run", run)

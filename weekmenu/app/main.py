@@ -71,6 +71,7 @@ from app.hass import (
 from app.history import HISTORY_SCHEMA, History
 from app.ledger import Ledger, WeekLog, new_folder_available
 from app.overrides import OVERRIDES_SCHEMA, Overrides
+from app.taste import TASTE_SCHEMA, Taste
 from app.planner import (
     Plan,
     Settings,
@@ -229,6 +230,8 @@ class Context:
     history: History | None = None
     # products from the last "Ander product" searches: a choice must be one of these
     found: dict[int, Product] = field(default_factory=dict)
+    # v1.0: duim omlaag and "nooit meer" per recipe
+    taste: Taste | None = None
 
     def __post_init__(self):
         data = self.ledger.root.parent
@@ -236,6 +239,8 @@ class Context:
             self.overrides = Overrides(data / "overrides.json")
         if self.history is None:
             self.history = History(data / "history.json")
+        if self.taste is None:
+            self.taste = Taste(data / "taste.json")
         own = getattr(self.client, "health", None)
         if isinstance(own, ApiHealth):
             self.health = own  # one object: the client counts, the writer and web read
@@ -305,7 +310,7 @@ def scan_too_new(ctx: Context) -> None:
     away = getattr(ctx.hass, "_away_path", None)
     files = [(ctx.total_path, TOTAL_SCHEMA), (ctx.state_path, STATE_SCHEMA),
              (away, AWAY_SCHEMA), (ctx.overrides.path, OVERRIDES_SCHEMA),
-             (ctx.history.path, HISTORY_SCHEMA)]
+             (ctx.history.path, HISTORY_SCHEMA), (ctx.taste.path, TASTE_SCHEMA)]
     for path, known in files:
         if path is not None and too_new(path, known):
             note_too_new(ctx, path)
@@ -469,7 +474,8 @@ def make_settings(ctx: Context, raw: RawSettings, start: date, exclude=()) -> Se
                for cook, rest in pairs}
     recent = ctx.ledger.recent_recipe_ids(start) | set(exclude)
     return Settings(days, persons, list(ctx.pantry), recent, leftovers,
-                    overrides=ctx.overrides.load())
+                    overrides=ctx.overrides.load(), never=ctx.taste.never(),
+                    down=ctx.taste.down())
 
 
 def settings_from_plan(ctx: Context, plan: Plan, start: date) -> Settings:
@@ -482,6 +488,8 @@ def settings_from_plan(ctx: Context, plan: Plan, start: date) -> Settings:
         pantry=list(plan.pantry or ctx.pantry),
         recent_recipe_ids=ctx.ledger.recent_recipe_ids(start),
         overrides=ctx.overrides.load(),
+        never=ctx.taste.never(),
+        down=ctx.taste.down(),
     )
 
 
