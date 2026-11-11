@@ -346,3 +346,96 @@ async def test_refused_path_is_cut_and_has_no_line_breaks(tmp_path, aiohttp_clie
         await client.get("/a%0Ab" + "x" * 300)
     (line,) = [rec.getMessage() for rec in caplog.records if rec.name == "weekmenu.web"]
     assert "\n" not in line and len(line) < 200
+
+
+# --- 6. system words out, contrast, tap targets ---------------------------------------
+
+import re  # noqa: E402
+
+STATIC = ROOT / "app" / "static"
+
+
+def _lum(hex_colour: str) -> float:
+    h = hex_colour.lstrip("#")
+    c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    c = [x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+
+def contrast(a: str, b: str) -> float:
+    hi, lo = sorted((_lum(a), _lum(b)), reverse=True)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def test_contrast_helper_matches_known_values():
+    assert round(contrast("#000000", "#ffffff"), 1) == 21.0
+    assert round(contrast("#7a746b", "#f4f1ec"), 2) == 4.11  # the old grey: too light
+
+
+def test_grey_text_has_contrast_on_the_background():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    assert "#7a746b" not in css and "#9a9388" not in css
+    greys = set(re.findall(r"color:(#[0-9a-f]{6})", css))
+    for grey in {"#6b655c", "#716b62"}:
+        assert grey in greys
+        assert contrast(grey, "#f4f1ec") >= 4.5, grey
+        assert contrast(grey, "#ffffff") >= 4.5, grey
+    # every text colour that is used on the page background passes
+    for colour in greys:
+        if colour in ("#ffffff", "#fff"):
+            continue
+        r, g, b = (int(colour[i:i + 2], 16) for i in (1, 3, 5))
+        if max(r, g, b) - min(r, g, b) < 40 and r < 200:  # a grey or near-black
+            assert contrast(colour, "#f4f1ec") >= 4.5, colour
+
+
+def _rule(css: str, selector: str) -> str:
+    m = re.search(r"(?:^|\})" + re.escape(selector) + r"\{([^}]*)\}", css, re.M)
+    assert m, selector
+    return m.group(1)
+
+
+def _px(rule: str, prop: str) -> int:
+    m = re.search(r"(?:^|;)" + prop + r":(\d+)px", rule)
+    return int(m.group(1)) if m else 0
+
+
+@pytest.mark.parametrize("selector", [
+    ".back", ".plus", ".stp button", ".toggle", ".chip", ".box", ".nav a",
+    ".linkrow .pill", ".src", ".btn", ".foot a",
+])
+def test_tap_targets_are_at_least_44px(selector):
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    rule = _rule(css, selector)
+    assert max(_px(rule, "height"), _px(rule, "min-height")) >= 44, selector
+
+
+def test_no_system_words_in_user_texts():
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    web = (ROOT / "app" / "web.py").read_text(encoding="utf-8")
+    hass = (ROOT / "app" / "hass.py").read_text(encoding="utf-8")
+    for text in (js, web, hass):
+        assert "Er loopt al een ronde" not in text
+        assert "Onzeker of gelukt" not in text
+        assert "Zoeken ingekort" not in text
+    assert "Het menu wordt nu gemaakt, even geduld" in js
+    # strings shown to the user in the app: no "ronde", "plan" or "pending"
+    shown = re.findall(r'"([^"\n]*)"|`([^`]*)`', js)
+    for a, b in shown:
+        words = (a or b).lower()
+        if " " not in words:  # identifiers, paths, class names
+            continue
+        assert not re.search(r"\bronde\b|\bplan\b|\bpending\b", words), words
+
+
+async def test_busy_and_unsure_texts_from_the_api(tmp_path, aiohttp_client):
+    from app.hass import BUSY, unsure
+    from app.web import make_app
+    assert unsure("order") == "Nog niet zeker of dit in je bestelling staat"
+    assert unsure("list") == "Nog niet zeker of dit op je lijst staat"
+    ctx = make_ctx(tmp_path)
+    ctx.busy = True
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post("api/run", json={"mode": "nu_maken"})
+    assert r.status == 409 and (await r.json())["error"] == BUSY
+    assert BUSY == "Het menu wordt nu gemaakt, even geduld"

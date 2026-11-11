@@ -25,12 +25,14 @@ from aiohttp import web
 from app import main
 from app.ahclient import LOGIN_URL, AhApiError, AhLoginExpired, Product, extract_code
 from app.hass import (
+    BUSY,
     HELPER_AAN,
     HELPER_AVONDEN,
     eat_count,
     helper_persons,
     load_total,
     plan_view,
+    unsure,
 )
 from app.ledger import leftovers, new_folder_available
 from app.planner import Dish, Plan
@@ -83,7 +85,7 @@ const $ = (id) => document.getElementById(id);
 async function status() {
   const s = await (await fetch("api/status")).json();
   $("status").textContent = (s.logged_in ? "Ingelogd bij AH." : "Niet ingelogd bij AH.")
-    + (s.last_round ? " Laatste ronde: " + s.last_round + "." : "")
+    + (s.last_round ? " Laatste menu: " + s.last_round + "." : "")
     + (s.error ? " Fout: " + s.error : "");
   $("login").href = s.login_url;
 }
@@ -611,7 +613,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         if mode not in main.BUTTONS:
             return _err(400, "mode moet nu_maken, nieuw_menu of bijwerken zijn")
         if ctx.busy or ctx.in_round:
-            return _err(409, "Er loopt al een ronde")
+            return _err(409, BUSY)
         if mode == "bijwerken" and not new_folder_available(
                 ctx.ledger.load(menu_week_start(ctx.clock()))):
             return _err(409, "Er is geen nieuwe folder om het menu mee bij te werken")
@@ -660,7 +662,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 wlog.extras_savings = extras_savings(wlog)
                 await main.save_log(ctx, wlog)
                 if pid not in wlog.extras_added:  # outcome unsure, or unknown: never blind
-                    return _err(409, "Onzeker of gelukt, controleer in de AH-app",
+                    return _err(409, f"{unsure(target)}. Controleer in de AH-app.",
                                 items=staples_view(wlog))
         if wlog.plan:
             await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",
@@ -748,7 +750,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                     return _err(409, res.held, added_qty=0)
                 target = res.target
                 if pid not in wlog.offers_added:  # outcome unsure, or unknown: never blind
-                    return _err(409, "Onzeker of gelukt, controleer in de AH-app",
+                    return _err(409, f"{unsure(target)}. Controleer in de AH-app.",
                                 added_qty=0)
         if wlog.plan:
             await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",

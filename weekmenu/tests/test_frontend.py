@@ -322,7 +322,8 @@ def test_app_screens_in_chrome(tmp_path):
         assert "Lurpak &lt;i&gt;ongezouten&lt;/i&gt;" in dom and "<i>ongezouten" not in dom
         assert "waarvan vaste boodschappen € 1,48" in dom and "€ 16,33" in dom
         assert "Over van het vorige gerecht" in dom and "1× AH Kipdijfilet" in dom
-        assert "Onzeker of gelukt" in dom and "AH Gehaktballetjes" in dom
+        assert "Nog niet zeker of dit in je bestelling staat" in dom
+        assert "Onzeker" not in dom and "AH Gehaktballetjes" in dom
         assert "Status onbekend" in dom and "De Cecco Penne rigate" in dom
         assert "Snel gekozen" in dom
         assert "Maandag</b> · geen gerecht" in dom and TITLES[4] not in dom

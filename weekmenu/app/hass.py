@@ -465,6 +465,15 @@ class Hass:
         await self._post(f"services/notify/{name}", payload)
 
 
+BUSY = "Het menu wordt nu gemaakt, even geduld"
+
+
+def unsure(target: str | None) -> str:
+    """A write whose outcome is not known yet, in words for the user."""
+    return ("Nog niet zeker of dit op je lijst staat" if target == "list"
+            else "Nog niet zeker of dit in je bestelling staat")
+
+
 def _plural(n: int, one: str, many: str) -> str:
     return f"{n} {one if n == 1 else many}"
 
@@ -518,11 +527,11 @@ def format_message(
         lines.append("Over van het vorige menu: "
                      + ", ".join(f"{t} ({q}x)" for t, q in result.leftovers))
     if result.pending:
-        lines.append("Onzeker of gelukt: " + ", ".join(t for t, _ in result.pending))
+        lines.append(f"{unsure(result.target)}: " + ", ".join(t for t, _ in result.pending))
     if result.unknown:
         lines.append("Controleer in de AH-app: " + ", ".join(t for t, _ in result.unknown))
     if plan.short_by > 0:
         lines.append("Te weinig recepten voor " + _plural(plan.short_by, "avond", "avonden"))
     if plan.budget_exhausted:
-        lines.append("Zoeken ingekort")
+        lines.append("Snel gekozen: misschien niet het allerbeste menu")
     return title, "\n".join(lines)

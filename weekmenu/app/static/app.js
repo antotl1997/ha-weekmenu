@@ -14,7 +14,7 @@ const DAGEN_KORT = { maandag: "ma", dinsdag: "di", woensdag: "wo", donderdag: "d
 const WEEK_ORDER = ["woensdag", "donderdag", "vrijdag", "zaterdag", "zondag", "maandag", "dinsdag"];
 const MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus",
   "september", "oktober", "november", "december"];
-const BUSY_TEXT = "Er loopt al een ronde";
+const BUSY_TEXT = "Het menu wordt nu gemaakt, even geduld";
 
 const state = { status: null, week: null, weekParam: null, savings: null, settings: null,
   staples: [], dishes: {}, open: {}, polling: false, offers: null, offersNote: "", offerQ: "" };
@@ -157,7 +157,7 @@ async function api(path, body) {
 
 function errorText(e) {
   if (e && e.status === 409 && String(e.message).startsWith(BUSY_TEXT)) {
-    return "Even geduld, er loopt al een ronde";
+    return BUSY_TEXT;
   }
   return (e && e.message) || "Er ging iets mis";
 }
@@ -278,7 +278,8 @@ function notesHtml(w, soft) {
       "Er waren te weinig recepten die binnen de regels passen.", []);
   }
   if (w.pending && w.pending.length) {
-    note("bad", "Onzeker of gelukt", "Controleer in de AH-app.", w.pending);
+    note("bad", w.target === "list" ? "Nog niet zeker of dit op je lijst staat"
+      : "Nog niet zeker of dit in je bestelling staat", "Controleer in de AH-app.", w.pending);
   }
   if (w.unknown && w.unknown.length) {
     note("bad", "Status onbekend", "Controleer in de AH-app.", w.unknown);
