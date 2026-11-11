@@ -329,3 +329,18 @@ async def test_savings_api_and_diagnose_show_both(aiohttp_client, tmp_path):
     assert d["schemas"]["code"]["taste.json"] == 1
     after = ctx.total_path.read_bytes() if ctx.total_path.exists() else None
     assert after == total
+
+
+async def test_the_week_logs_are_looked_at_once_an_hour(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 11, 9, 0)
+    ctx = ctx_with_week(tmp_path, now, [], added_to="list")
+    looks = []
+    real = reconcile.week_to_check
+    monkeypatch.setattr(reconcile, "week_to_check",
+                        lambda *a: looks.append(1) or real(*a))
+    ctx.reconciliations.put(W.isoformat(), {"status": OK})  # nothing due
+    for minute in (0, 1, 30, 59):
+        await reconcile.reconcile_due(ctx, now.replace(minute=minute))
+    assert len(looks) == 1
+    await reconcile.reconcile_due(ctx, now.replace(hour=10))
+    assert len(looks) == 2

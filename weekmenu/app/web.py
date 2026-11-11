@@ -896,6 +896,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         rid = (await body_of(request)).get("recipe_id")
         if not isinstance(rid, int) or isinstance(rid, bool):
             return _err(400, "recipe_id is nodig")
+        if ctx.busy or ctx.in_round:
+            return _err(409, BUSY)
         async with ctx.lock:
             if ctx.taste.kind_of(rid) != "never":
                 return _err(404, "Dit gerecht staat niet (meer) op Nooit meer")

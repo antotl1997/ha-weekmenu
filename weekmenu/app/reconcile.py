@@ -245,6 +245,10 @@ async def reconcile_due(ctx, now: datetime) -> None:
         return
     if ctx.health.writes_paused or ctx.login_expired:
         return
+    hour = now.replace(minute=0, second=0, microsecond=0)
+    if getattr(ctx, "recon_checked", None) == hour:
+        return  # the week logs are looked at once an hour, not every minute
+    ctx.recon_checked = hour
     recon = ctx.reconciliations
     if recon.too_new():
         note_too_new(ctx, recon.path)

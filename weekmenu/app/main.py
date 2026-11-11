@@ -235,6 +235,7 @@ class Context:
     # v1.0: duim omlaag and "nooit meer" per recipe, and "Besparing nagerekend"
     taste: Taste | None = None
     reconciliations: Reconciliations | None = None
+    recon_checked: datetime | None = None  # not kept: the hour "nagerekend" last looked
 
     def __post_init__(self):
         data = self.ledger.root.parent
