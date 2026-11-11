@@ -574,4 +574,5 @@ def test_app_v09_check_card_klopt_niet_and_corrections_in_chrome(tmp_path):
         assert dom.index("Mijn correcties") < dom.index("Diagnose")
         assert "Ander product: AH Rode uien" in dom and "Hoeft niet" in dom
         assert dom.count('data-unfix="') == 2 and "Terugdraaien" in dom
+        assert "nootmuskaat<small>Hoeft niet" in dom  # the key the choice holds for
         assert "—" not in dom

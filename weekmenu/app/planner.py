@@ -33,6 +33,7 @@ from app.ingredients import (
     keywords,
     override_for,
     override_key,
+    stored_product,
     pack_fraction,
     packs_needed,
     parse_ingredient,
@@ -921,15 +922,10 @@ async def restore_dish(
                    [x for x in plan.removed_days if x not in back])
 
 
-def apply_override(plan: Plan, key: str, overrides: dict) -> Plan:
-    """A "Klopt niet" choice on the menu as it is: every ingredient of every dish with
-    this key is resolved again by the choice alone; nothing else changes, no AH call.
-
-    Returns `plan` itself when no dish has the ingredient (or there is no choice).
-    """
-    ov = overrides.get(key)
-    if ov is None:
-        return plan
+async def _redo(plan: Plan, key: str, resolve) -> Plan:
+    """Every ingredient with this key, in every dish, resolved again by `resolve`
+    (text, name) -> (kind, product); nothing else changes. `plan` itself when no dish
+    has the ingredient."""
     hit_any = False
     dishes = []
     for d in plan.dishes:
@@ -944,19 +940,56 @@ def apply_override(plan: Plan, key: str, overrides: dict) -> Plan:
         not_found = [x for x in d.not_found if x not in texts]
         skipped = [x for x in d.skipped if x not in texts]
         for text, name in hit:
-            if ov["kind"] == PRODUCT:
-                chosen = Product(**ov["product"])
-                p = plan.products.get(chosen.id) or chosen
-                lines.append(_line(p, parse_ingredient(text, name or text), text))
-            elif ov["kind"] == SKIP:
+            kind, p = await resolve(text, name)
+            if kind == "skip":
                 skipped.append(text)
-            else:
+            elif kind == "pantry":
                 pantry.append(text)
+            elif p is None:
+                not_found.append(text)
+            else:
+                lines.append(_line(p, parse_ingredient(text, name or text), text))
         order = {t: i for i, (t, _) in enumerate(d.recipe.ingredients)}
         lines.sort(key=lambda ln: order.get(ln.from_ingredient, len(order)))
+        not_found.sort(key=lambda t: order.get(t, len(order)))
         dishes.append(dataclasses.replace(d, lines=lines, pantry=pantry, not_found=not_found,
                                           skipped=skipped))
     if not hit_any:
         return plan
     return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
                    plan.removed_days)
+
+
+async def apply_override(plan: Plan, key: str, overrides: dict,
+                         current: Product | None = None) -> Plan:
+    """A "Klopt niet" choice on the menu as it is, without any AH call. For "Ander
+    product" the product as this week knows it: `current` (just found by the search),
+    else the plan's own copy, else the stored one (no deal).
+
+    Returns `plan` itself when no dish has the ingredient (or there is no choice).
+    """
+    ov = overrides.get(key)
+    if ov is None:
+        return plan
+
+    async def resolve(text, name):
+        if ov["kind"] != PRODUCT:
+            return ov["kind"], None
+        chosen = stored_product(ov["product"])
+        if current is not None and current.id == chosen.id:
+            return PRODUCT, current
+        return PRODUCT, plan.products.get(chosen.id) or chosen
+
+    return await _redo(plan, key, resolve)
+
+
+async def reresolve(client, plan: Plan, key: str, bonus: list[Product],
+                    overrides: dict) -> Plan:
+    """After "Terugdraaien": the add-on chooses again for this ingredient, as it would
+    in a new menu (pantry list, bonus, AH search), with the remaining choices."""
+    resolve_one = _resolver(client, bonus, plan.pantry, {}, overrides)
+
+    async def resolve(text, name):
+        return await resolve_one(0, text, name)
+
+    return await _redo(plan, key, resolve)

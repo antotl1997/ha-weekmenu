@@ -254,3 +254,48 @@ async def test_a_broken_history_never_stops_the_swap(aiohttp_client, tmp_path, s
     r = await client.post(f"api/dish/{WO}/swap")
     assert r.status == 200 and (await r.json())["recipe"]["id"] == 301
     assert "history.json" in ctx.too_new
+
+
+async def test_products_search_does_not_wait_for_a_menu_round(aiohttp_client, tmp_path):
+    from app.hass import BUSY
+    ctx = await planned(tmp_path)
+    ctx.in_round = True
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.get("api/products", params={"q": "rode ui"})
+    assert r.status == 409 and (await r.json())["error"] == BUSY
+    assert ctx.client.searches == []
+
+
+async def test_terugdraaien_puts_the_add_ons_own_choice_back_this_week(aiohttp_client,
+                                                                        tmp_path):
+    ctx = await planned(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.post(f"api/dish/{WO}/correct",
+                          json={"ingredient": "300 g kipfilet", "kind": "pantry"})
+    assert r.status == 200 and ctx.client.held() == {1: 2}
+    ctx.client.search_results["kipfilet"] = [p(2, "AH Kipfilet", "300 g")]
+    r = await client.post("api/overrides/remove", json={"key": "kipfilet"})
+    assert r.status == 200, await r.text()
+    body = await r.json()
+    assert body["items"] == [] and body["held"] is None
+    assert ctx.client.held() == {1: 2, 2: 1}  # back on the list, through apply
+    assert ctx.client.searches == ["kipfilet"]
+    log = ctx.ledger.load(W)
+    assert log.added == {1: 2, 2: 1} and log.pending == {}
+    d = await (await client.get(f"api/dish/{WO}")).json()
+    line = next(x for x in d["lines"] if x["ingredient"] == "300 g kipfilet")
+    assert line["product_id"] == 2 and line["override"] is None
+
+
+async def test_terugdraaien_while_writes_are_paused_writes_nothing(aiohttp_client, tmp_path):
+    ctx = await planned(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    await client.post(f"api/dish/{WO}/correct",
+                      json={"ingredient": "300 g kipfilet", "kind": "pantry"})
+    before = list(ctx.client.writes)
+    ctx.client.search_results["kipfilet"] = [p(2, "AH Kipfilet", "300 g")]
+    ctx.health.failed("lijst", "vorm")
+    ctx.health.failed("lijst", "vorm")
+    r = await client.post("api/overrides/remove", json={"key": "kipfilet"})
+    assert r.status == 200 and (await r.json())["held"] == PAUSED_NOTE
+    assert ctx.client.writes == before and ctx.overrides.load() == {}

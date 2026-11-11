@@ -76,6 +76,7 @@ from app.planner import (
     Settings,
     apply_override,
     build_plan,
+    reresolve,
     dish_from_dict,
     dish_to_dict,
     put_dish,
@@ -99,7 +100,8 @@ from app.writer import WriteResult, apply
 
 # swap_dish, rescale_dish, restore_dish and remove_dish are looked up here by the web API
 __all__ = ["run_round", "swap_dish", "rescale_dish", "restore_dish", "put_dish", "remove_dish",
-           "build_plan", "dish_to_dict", "dish_from_dict", "apply_override"]
+           "build_plan", "dish_to_dict", "dish_from_dict", "apply_override",
+           "reresolve"]
 
 log = logging.getLogger("weekmenu")
 

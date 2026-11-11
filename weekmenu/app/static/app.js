@@ -723,11 +723,12 @@ function correctionsHtml() {
   const items = state.overrides || [];
   const what = (x) => x.kind === "product" ? `Ander product: ${x.product || "?"}`
     : x.kind === "skip" ? "Hoeft niet" : "Hebben we al";
-  const rows = items.map((x) => `<div class="row"><span class="nm">${esc(x.text)}<small>${esc(what(x))}</small></span>
-    <button class="btn sec2 sm" data-unfix="${esc(x.key)}" aria-label="Terugdraaien: ${esc(x.text)}">Terugdraaien</button></div>`);
+  // the key is what the choice holds for ("rode ui", in every recipe and week)
+  const rows = items.map((x) => `<div class="row"><span class="nm">${esc(x.key)}<small>${esc(what(x))}</small></span>
+    <button class="btn sec2 sm" data-unfix="${esc(x.key)}" aria-label="Terugdraaien: ${esc(x.key)}">Terugdraaien</button></div>`);
   return `<div class="sec">Mijn correcties</div>
     ${rows.length ? `<div class="card ing">${rows.join("")}</div>
-      <p class="foot">Terugdraaien geldt vanaf het volgende menu of Ander gerecht; wat nu al in je bestelling of op je lijst staat, blijft.</p>`
+      <p class="foot">Na Terugdraaien kiest de add-on weer zelf, ook in het menu van deze week.</p>`
       : `<div class="card note soft"><span class="dot"></span><div>Nog geen correcties. Tik bij een ingrediënt op Klopt niet.</div></div>`}`;
 }
 
@@ -1136,7 +1137,10 @@ app.addEventListener("click", async (ev) => {
       const res = await api("api/overrides/remove", { key: t.dataset.unfix });
       state.overrides = res.items;
       state.dishes = {};  // the "jouw keuze" marks
-      toast("Teruggedraaid. Vanaf het volgende menu kiest de add-on zelf weer.");
+      state.savings = null;
+      try { await loadWeek(); } catch (e) { /* the week refreshes on the next visit */ }
+      const gone = removedText(res);
+      toast(res.held || ("Teruggedraaid, de add-on kiest weer zelf" + (gone ? ". " + gone : "")));
     });
     render();
     return;

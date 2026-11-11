@@ -21,9 +21,8 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-from app.ahclient import Product
 from app.durable import too_new, write_json
-from app.ingredients import KINDS, PRODUCT, override_key
+from app.ingredients import KINDS, PRODUCT, STORED_FIELDS, override_key, stored_product
 
 log = logging.getLogger(__name__)
 
@@ -40,17 +39,20 @@ def _valid(entry) -> bool:
         if not isinstance(p, dict):
             return False
         try:
-            Product(**p)
-        except TypeError:
+            stored_product(p)
+        except (KeyError, TypeError, ValueError):
             return False
     return True
 
 
-def make_entry(kind: str, text: str, product: Product | None, at: datetime) -> dict:
-    """One choice: the ingredient text it was made on (for the list), and when."""
+def make_entry(kind: str, text: str, product, at: datetime) -> dict:
+    """One choice: the ingredient text it was made on (for the list), and when. Of a
+    product only who it is and its size: a deal of the week it was chosen in must never
+    count in a later week (the bonus list of that week decides)."""
     entry = {"kind": kind, "text": text, "at": at.isoformat(timespec="minutes")}
     if kind == PRODUCT and product is not None:
-        entry["product"] = dataclasses.asdict(product)
+        full = dataclasses.asdict(product)
+        entry["product"] = {f: full[f] for f in STORED_FIELDS}
     return entry
 
 

@@ -130,7 +130,8 @@ KINDS = (PRODUCT, SKIP, PANTRY)
 
 def override_key(name: str) -> str:
     """The normalised ingredient name a choice is kept under: no amount or unit in
-    front, nothing between brackets, folded, words only ("2-3 el Olijfolie" -> "olijfolie")."""
+    front, no trailing ", ..." clause (like is_pantry), folded, words only. Words between
+    brackets stay: "tomaten (in blik)" is not "tomaten". ("2-3 el Olijfolie" -> "olijfolie")"""
     t = html.unescape(name or "").strip()
     got = _number(t)
     if got is not None:
@@ -144,7 +145,22 @@ def override_key(name: str) -> str:
         if w and w.group(1).lower() in UNITS:
             end += w.end()
         t = t[end:]
-    return " ".join(_words(re.sub(r"\([^)]*\)", " ", t)))
+    t = re.sub(r",[^()]*$", "", t)  # "peper, naar smaak" -> "peper"
+    return " ".join(_words(t))
+
+
+# What a choice keeps of a product: who it is and its size, never this week's deal.
+STORED_FIELDS = ("id", "title", "unit_size", "regular", "orderable", "category", "image")
+
+
+def stored_product(d: dict) -> Product:
+    """A chosen product as kept in overrides.json, without any bonus: price `regular`,
+    no deal. The bonus version comes only from the bonus list of the week itself.
+    Raises KeyError or TypeError/ValueError for an entry that is not a product."""
+    return Product(int(d["id"]), str(d["title"]), d.get("unit_size"),
+                   float(d["regular"]), float(d["regular"]), False, None,
+                   bool(d.get("orderable", True)), d.get("category"),
+                   image=d.get("image"))
 
 
 def override_for(name: str, overrides: dict | None) -> dict | None:
@@ -354,12 +370,12 @@ class _Title:
             n += len(w)
             self.ends.add(n)
 
-    def has(self, kw: str) -> bool:
+    def has(self, kw: str, kws: list[str] = ()) -> bool:
         """The keyword is a title word, or the last part of one (kaas: geitenkaas, not
         kaasstengels or pindakaas). A distinguishing adjective may also start a word
         (rode: rodekool)."""
         if kw in ADJECTIVE_FORMS:
-            return self.has_adjective(kw)
+            return self.has_adjective(kw, kws)
         for f in _forms(kw):
             if f in self.flat:
                 return True
@@ -384,10 +400,12 @@ class _Title:
             start = self.nospace.find(f, start + 1)
         return False
 
-    def has_adjective(self, kw: str) -> bool:
+    def has_adjective(self, kw: str, kws=()) -> bool:
+        """A whole title word ("Gelei suiker" is not gele, "Zoetzuur" not zoete), or the
+        adjective glued to another keyword of the same name ("rode kool": Rodekool)."""
         forms = ADJECTIVE_FORMS[kw]
-        return any(w in forms or any(len(a) >= 4 and w.startswith(a) for a in forms)
-                   for w in self.words)
+        glued = {a + f for a in forms for k in kws if k != kw for f in _forms(k)}
+        return any(w in forms or w in glued for w in self.words)
 
     def preserved(self) -> bool:
         """Dried, smoked or frozen: not what a recipe asking for "verse" means."""
@@ -464,13 +482,14 @@ def _best_search_hit(
                  and _variant_ok(_Title(p.title), wanted)]
     titles = [_Title(p.title) for p in orderable]
     # 1. all keywords in the title; the plainest product (fewest unrelated words) first
-    full = [(t.extras(kws, wanted), i) for i, t in enumerate(titles) if all(t.has(k) for k in kws)]
+    full = [(t.extras(kws, wanted), i) for i, t in enumerate(titles)
+            if all(t.has(k, kws) for k in kws)]
     if full:
         return orderable[min(full)[1]]
     # 2. some keywords, but the last one (the thing itself: appel, not friszoete) must match
     part = []
     for i, t in enumerate(titles):
-        hits = [t.has(k) for k in kws]
+        hits = [t.has(k, kws) for k in kws]
         if hits[-1] and all(h for k, h in zip(kws, hits) if k in ADJECTIVE_FORMS):
             part.append((-sum(hits), t.extras(kws, wanted), i))
     return orderable[min(part)[2]] if part else None
@@ -496,7 +515,7 @@ async def choose_product(
     if ov is not None:
         if ov["kind"] != PRODUCT:
             return None
-        chosen = Product(**ov["product"])
+        chosen = stored_product(ov["product"])
         fresh = next((p for p in bonus if p.id == chosen.id and p.orderable), None)
         return fresh or chosen
     name = (amount.name or "").strip()
@@ -511,7 +530,7 @@ async def choose_product(
             continue
         t = _Title(p.title)
         if (
-            all(t.has(k) for k in kws)
+            all(t.has(k, kws) for k in kws)
             and t.extras(kws, wanted) <= MAX_EXTRA_WORDS_BONUS
             and _plausible(p, t, kws)
             and _variant_ok(t, wanted)

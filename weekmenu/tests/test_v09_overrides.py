@@ -63,7 +63,10 @@ def choice(kind, product=None, text="x"):
     ("kipdijfilet", "kipdijfilet"),
     ("2-3 el Olijfolie", "olijfolie"),
     ("1 1/2 tl gemalen komijn", "gemalen komijn"),
-    ("400 g crème fraîche (light)", "creme fraiche"),
+    ("400 g crème fraîche (light)", "creme fraiche light"),
+    ("1 blik tomaten (in blik)", "tomaten in blik"),
+    ("peper, naar smaak", "peper"),
+    ("1 tl komijn, gemalen", "komijn"),
     ("1 rode ui", "rode ui"),
     ("  Rode  Ui ", "rode ui"),
 ])
@@ -179,26 +182,26 @@ def _menu():
     return _finish([d1, d2], 0, PANTRY_LIST)
 
 
-def test_apply_override_changes_every_dish_with_the_ingredient_only():
+async def test_apply_override_changes_every_dish_with_the_ingredient_only():
     plan = _menu()
     rood = prod(7, "AH Rode uien", unit="3 stuks")
-    new = apply_override(plan, "rode ui", {"rode ui": choice(PRODUCT, rood)})
+    new = await apply_override(plan, "rode ui", {"rode ui": choice(PRODUCT, rood)})
     assert new.basket == {7: 1, 2: 1}  # 1 + 2 red onions from one pack of 3
     assert [ln.product.id for ln in new.dishes[0].lines] == [7, 2]  # recipe order
     assert new.dishes[0].not_found == ["1 tl komijn"]
 
-    skip = apply_override(new, "komijn", {"komijn": choice(SKIP)})
+    skip = await apply_override(new, "komijn", {"komijn": choice(SKIP)})
     assert skip.dishes[0].not_found == [] and skip.dishes[0].skipped == ["1 tl komijn"]
     assert skip.not_found == []
 
-    home = apply_override(plan, "kipfilet", {"kipfilet": choice(PANTRY)})
+    home = await apply_override(plan, "kipfilet", {"kipfilet": choice(PANTRY)})
     assert 2 not in home.basket and home.dishes[0].pantry == ["300 g kipfilet"]
 
-    assert apply_override(plan, "spinazie", {"spinazie": choice(SKIP)}) is plan
+    assert await apply_override(plan, "spinazie", {"spinazie": choice(SKIP)}) is plan
 
 
-def test_skipped_survives_the_log():
-    plan = apply_override(_menu(), "komijn", {"komijn": choice(SKIP)})
+async def test_skipped_survives_the_log():
+    plan = await apply_override(_menu(), "komijn", {"komijn": choice(SKIP)})
     again = Plan.from_dict(json.loads(json.dumps(plan.to_dict())))
     assert again.dishes[0].skipped == ["1 tl komijn"]
     old = plan.to_dict()
@@ -208,7 +211,7 @@ def test_skipped_survives_the_log():
 
 
 async def test_rescale_keeps_the_choices():
-    plan = apply_override(_menu(), "komijn", {"komijn": choice(SKIP)})
+    plan = await apply_override(_menu(), "komijn", {"komijn": choice(SKIP)})
     ov = {"komijn": choice(SKIP)}
 
     class Scaling(FakeClient):
@@ -248,3 +251,47 @@ def test_history_from_a_newer_add_on_is_never_written(tmp_path):
     with pytest.raises(SchemaTooNew):
         History(path).record(date(2026, 11, 11), date(2026, 11, 11), 1, "x", "swap", AT)
     assert History(path).too_new()
+
+
+# --- fix round 1: a chosen product never carries an old deal into a later week -------
+
+
+def test_a_choice_keeps_only_who_the_product_is(tmp_path):
+    deal = Product(5, "AH Rode uien", "1 kg", 2.0, 1.0, True, "1+1 gratis", True, "Groente",
+                   image="https://example.invalid/u.jpg")
+    entry = make_entry(PRODUCT, "1 rode ui", deal, AT)
+    assert set(entry["product"]) == {"id", "title", "unit_size", "regular", "orderable",
+                                     "category", "image"}
+    assert "now" not in entry["product"] and "mechanism" not in entry["product"]
+
+
+async def test_bonus_choice_from_week_one_has_no_deal_in_week_two():
+    from app.planner import _finish, _score
+    deal = Product(5, "AH Rode uien", "3 stuks", 2.0, 1.0, True, "1+1 gratis", True, None)
+    ov = {"rode ui": make_entry(PRODUCT, "1 rode ui", deal, AT)}
+    r = Recipe(1, "R", "", 30, None, None, ["hoofdgerecht"], [], 2,
+               [("1 rode ui", "rode ui")], [], None)
+    # week 2: the onions are not in the bonus any more
+    p = await choose_product(FakeClient(), Amount(1, "stuks", "rode ui"), [], {}, ov)
+    assert (p.is_bonus, p.mechanism, p.now) == (False, None, 2.0)
+    score, _ = await _score(r, [], PANTRY_LIST, ov)
+    assert score == 0.0  # no score boost
+    client = FakeClient()
+    lines, *_ = await _lines(client, r, _resolver(client, [], PANTRY_LIST, {}, ov))
+    plan = _finish([Dish(date(2026, 11, 18), r, "x", False, lines, 0.0),
+                    Dish(date(2026, 11, 19), r, "x", False, list(lines), 0.0)],
+                   0, PANTRY_LIST)
+    assert plan.savings == 0.0 and plan.basket == {5: 1}  # no "1+1 gratis" top-up
+    # in a week where it is in the bonus again, that week's deal counts
+    again = dataclasses.replace(deal, now=1.5, mechanism="25% korting")
+    p = await choose_product(FakeClient(), Amount(1, "stuks", "rode ui"), [again], {}, ov)
+    assert p is again
+
+
+@pytest.mark.parametrize("name, title", [
+    ("gele suiker", "Van Gilse Gelei suiker"),
+    ("zoete saus", "AH Zoetzure saus"),
+])
+async def test_adjective_must_be_a_whole_word(name, title):
+    client = FakeClient({name: [prod(1, title)]})
+    assert await choose_product(client, Amount(1, "stuks", name), []) is None

@@ -769,6 +769,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         q = request.query.get("q", "").strip()
         if not 2 <= len(q) <= 60:
             return _err(400, "Zoek op 2 tot 60 tekens")
+        if ctx.busy or ctx.in_round:  # never wait a whole menu round for a search
+            return _err(409, BUSY)
         async with ctx.lock:
             found = await ctx.client.search_products(q)
         items = [x for x in found if x.orderable][:20]
@@ -810,7 +812,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             await asyncio.to_thread(ctx.overrides.put, key,
                                     make_entry(kind, text, product, ctx.clock()))
             log.info("Correctie bewaard (%s)", kind)
-            new = main.apply_override(plan, key, ctx.overrides.load())
+            new = await main.apply_override(plan, key, ctx.overrides.load(), product)
             ended = ctx.clock().date() > wlog.week + timedelta(days=6)
             if new is plan or ended:  # nothing on this menu to change (or the week is over)
                 return web.json_response({
@@ -824,16 +826,43 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         return web.json_response({"items": ctx.overrides.listing()})
 
     async def remove_override(request):
-        """"Terugdraaien" in Mijn correcties: from the next menu (or Ander gerecht) on the
-        add-on chooses by itself again; this week's products stay as they are."""
+        """"Terugdraaien" in Mijn correcties: the add-on chooses by itself again, also on
+        the menus of this and the next menu week that have not ended. Those go through
+        the same apply as Ander gerecht (cleanup and adds, write-ahead, never retried,
+        the order-week check, the pause)."""
         key = (await body_of(request)).get("key")
         if not isinstance(key, str) or not key:
             return _err(400, "key is nodig")
+        done = {"removed": 0, "held": None, "target": None}
+        published = []
         async with ctx.lock:
             gone = await asyncio.to_thread(ctx.overrides.remove, key)
-        if not gone:
-            return _err(404, "Deze correctie bestaat niet (meer)")
-        return web.json_response({"items": ctx.overrides.listing()})
+            if not gone:
+                return _err(404, "Deze correctie bestaat niet (meer)")
+            now = ctx.clock()
+            today = now.date()
+            for start in sorted({main.week_of(today), menu_week_start(now)}):
+                wlog = ctx.ledger.load(start)
+                if not wlog.plan or today > start + timedelta(days=6):
+                    continue
+                plan = Plan.from_dict(wlog.plan)
+                if not any(override_key(n or t) == key
+                           for d in plan.dishes for t, n in d.recipe.ingredients):
+                    continue
+                got = await main.bonus_for_week(ctx, start, now, fallback=True)
+                bonus = got[0] if isinstance(got, tuple) else []
+                new = await main.reresolve(ctx.client, plan, key, bonus, ctx.overrides.load())
+                if new is plan:
+                    continue
+                res = await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan, today=today)
+                done["removed"] += len(res.removed)
+                done["held"] = done["held"] or res.held
+                done["target"] = res.target
+                published.append((wlog, new))
+        for wlog, new in published:
+            await publish(wlog.week, new, wlog.target or "list", wlog.extras_total)
+        log.info("Correctie teruggedraaid")
+        return web.json_response({"items": ctx.overrides.listing(), **done})
 
     async def run(request):
         mode = (await body_of(request)).get("mode")
