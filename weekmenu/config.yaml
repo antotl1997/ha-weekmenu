@@ -28,8 +28,16 @@ options:
     - bloem
     - azijn
   ah_app_version: "9.28"
+  notify_owner: mobile_app_s_26_ultra_anto
+  notify_today:
+    - mobile_app_s24_van_maartje
+  dinner_time: "18:30"
 schema:
   schedule_time: match(^([01][0-9]|2[0-3]):[0-5][0-9]$)
   pantry:
     - str
   ah_app_version: match(^[0-9]+(\.[0-9]+){1,2}$)
+  notify_owner: match(^[a-z0-9_]+$)
+  notify_today:
+    - match(^[a-z0-9_]+$)
+  dinner_time: match(^([01][0-9]|2[0-3]):[0-5][0-9]$)

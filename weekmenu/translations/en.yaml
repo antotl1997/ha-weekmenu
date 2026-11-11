@@ -8,3 +8,12 @@ configuration:
   ah_app_version:
     name: AH app version
     description: The version of the AH app the add-on presents itself as (for example 9.28). Only change it when AH refuses the add-on with a message about an old app version.
+  notify_owner:
+    name: Notify owner
+    description: The notify service (without "notify.") of the phone that gets the menu, errors, the AH login and the order reminder, for example mobile_app_my_phone.
+  notify_today:
+    name: Notify tonight
+    description: The notify services (without "notify.") that get only the short daily "Vanavond" message at 16:00. Leave empty to send it to nobody.
+  dinner_time:
+    name: Dinner time
+    description: Time (HH:MM) dinner is on the table. "Vanavond" counts the start time back from it, rounded down to a quarter of an hour.

@@ -39,6 +39,9 @@ Onder Configuratie van de add-on:
 - **schedule_time (Schema-tijd)**: vanaf dit tijdstip (standaard 08:00) kijkt de add-on elk uur of de folder van de bezorgweek er is, tot 18:00 en zolang er nog geen menu is. Meestal komt de folder op vrijdag.
 - **pantry (Basisvoorraad)**: producten die je altijd in huis hebt, zoals olie, zout en peper. Die komen niet op je lijst.
 - **ah_app_version (AH-appversie)**: de versie van de AH-app waarmee de add-on zich bij AH meldt, standaard 9.28. Pas dit alleen aan als AH de add-on weigert met een melding over een oude app-versie; zet er dan de versie in van de AH-app op je telefoon.
+- **notify_owner (Melding eigenaar)**: de notify-dienst van de telefoon die het menu, fouten, de AH-login en de bestelherinnering krijgt, zonder `notify.` ervoor (bijvoorbeeld `mobile_app_mijn_telefoon`). Je vindt de naam in Home Assistant onder Ontwikkelaarshulpmiddelen, Acties, bij `notify.`.
+- **notify_today (Melding vanavond)**: een lijst notify-diensten die alleen de korte melding "Vanavond" krijgen, elke dag om 16:00. Laat de lijst leeg als niemand die hoeft.
+- **dinner_time (Etenstijd)**: hoe laat het eten op tafel staat, standaard 18:30. "Vanavond" rekent de begintijd daarvan terug.
 
 In de app, onder Instellingen:
 

@@ -55,12 +55,15 @@ from app.ahclient import (
 from app.health import PAUSED_MESSAGE, ApiHealth
 from app.hass import (
     AWAY_SCHEMA,
+    DEFAULT_OWNER,
+    DEFAULT_TODAY,
     TOTAL_PATH,
     TOTAL_SCHEMA,
     Hass,
     RawSettings,
     format_message,
     load_total_state,
+    notify_target,
     plan_view,
 )
 from app.ledger import Ledger, WeekLog, new_folder_available
@@ -104,6 +107,7 @@ DATA = Path("/data")
 OPTIONS_PATH = DATA / "options.json"
 DEFAULT_PANTRY = ["olie", "zout", "peper", "suiker", "bloem", "azijn"]
 DEFAULT_SCHEDULE = time(8, 0)
+DEFAULT_DINNER = time(18, 30)
 LAST_CHECK = time(18, 0)  # the last look of the day; on the Sunday the fallback
 LAST_FALLBACK_TRY = time(23, 0)  # on the fallback Sunday: keep trying a failing round
 FALLBACK_DAYS = 3  # the fallback is on the Sunday, three days before the menu Wednesday
@@ -162,6 +166,7 @@ class Context:
     total_path: Path = TOTAL_PATH
     state_path: Path | None = None
     schedule_time: time = DEFAULT_SCHEDULE
+    dinner_time: time = DEFAULT_DINNER  # v0.8: "Vanavond" counts back from this
     ingress_url: str = "/hassio/ingress/weekmenu"
     clock: Callable[[], datetime] = local_now
     lock: asyncio.Lock = field(default_factory=asyncio.Lock)
@@ -1053,6 +1058,31 @@ def load_app_version(path: Path = OPTIONS_PATH) -> str:
     return v
 
 
+def _hhmm(value, default: time) -> time:
+    try:
+        hh, mm = str(value).split(":")
+        return time(int(hh), int(mm))
+    except (ValueError, TypeError):
+        return default
+
+
+def load_notify_options(path: Path = OPTIONS_PATH) -> tuple[str, list[str], time]:
+    """notify_owner, notify_today and dinner_time (v0.8). A target that is not a plain
+    notify service name is left out (the owner falls back to the default)."""
+    try:
+        opts = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        opts = {}
+    if not isinstance(opts, dict):
+        opts = {}
+    owner = notify_target(opts.get("notify_owner")) or DEFAULT_OWNER
+    raw = opts.get("notify_today", DEFAULT_TODAY)
+    today = [t for t in (notify_target(x) for x in (raw if isinstance(raw, list) else []))
+             if t]
+    dinner = _hhmm(opts.get("dinner_time") or "18:30", DEFAULT_DINNER)
+    return owner, today, dinner
+
+
 def ingress_url() -> str:
     """The sidebar page: /hassio/ingress/<full slug>.
 
@@ -1077,6 +1107,7 @@ async def amain() -> None:
     install_ring()  # the last log lines for api/diagnose
     pantry, at = load_options()
     version = load_app_version()
+    owner, today_targets, dinner = load_notify_options()
     store = TokenStore(DATA / "tokens.json")
     async with httpx.AsyncClient(timeout=30) as ah_http, \
             httpx.AsyncClient(timeout=15) as ha_http:
@@ -1084,12 +1115,13 @@ async def amain() -> None:
             client=AhClient(store, ah_http, app_version=version),
             app_version=version,
             ledger=Ledger(DATA / "weeks"),
-            hass=Hass(ha_http),
+            hass=Hass(ha_http, owner=owner, today=today_targets),
             store=store,
             pantry=pantry,
             total_path=TOTAL_PATH,
             state_path=DATA / "state.json",
             schedule_time=at,
+            dinner_time=dinner,
             ingress_url=ingress_url(),
         )
         load_state(ctx)

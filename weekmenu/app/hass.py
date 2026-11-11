@@ -4,6 +4,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 from dataclasses import dataclass, field
 from collections.abc import Iterable
 from datetime import date, timedelta
@@ -58,7 +59,24 @@ def helper_persons() -> dict[str, str]:
 
 _ALLOWED_NUMBERS = {HELPER_AVONDEN, *helper_persons().values()}
 
-NOTIFY_SERVICE = "notify/mobile_app_s_26_ultra_anto"
+# Who gets what (options notify_owner and notify_today, v0.8): the owner gets the menu,
+# errors, the login and the order reminder; the "today" targets only "Vanavond".
+DEFAULT_OWNER = "mobile_app_s_26_ultra_anto"
+DEFAULT_TODAY = ["mobile_app_s24_van_maartje"]
+_NOTIFY_NAME = re.compile(r"^[a-z0-9_]+$")
+
+
+def notify_target(raw) -> str | None:
+    """A notify service name as the option may hold it ("notify.x", "notify/x" or "x"),
+    as the bare name; None for anything that is not a plain service name, so an option
+    can never point the post at another Home Assistant path."""
+    if not isinstance(raw, str):
+        return None
+    name = raw.strip().lower()
+    for prefix in ("notify.", "notify/"):
+        if name.startswith(prefix):
+            name = name[len(prefix):]
+    return name if _NOTIFY_NAME.match(name) else None
 
 DEFAULT_AANTAL = 5
 DEFAULT_PERSONEN = 2
@@ -217,8 +235,12 @@ def plan_view(plan: Plan, week_start: date, target: str,
 
 class Hass:
     def __init__(self, http: httpx.AsyncClient, total_path: Path = TOTAL_PATH,
-                 away_path: Path | None = None):
+                 away_path: Path | None = None, owner: str = DEFAULT_OWNER,
+                 today: Iterable[str] | None = None):
         self._http = http
+        self.owner = notify_target(owner) or DEFAULT_OWNER
+        self.today = [t for t in (notify_target(x) for x in (
+            DEFAULT_TODAY if today is None else today)) if t]
         self._total_path = Path(total_path)
         self._away_path = (Path(away_path) if away_path is not None
                            else self._total_path.with_name(AWAY_PATH.name))
@@ -395,10 +417,18 @@ class Hass:
             return value
 
     async def notify(self, title: str, message: str, url: str | None = None) -> None:
+        """A push to the owner (notify_owner)."""
+        await self.notify_to(self.owner, title, message, url)
+
+    async def notify_to(self, target: str, title: str, message: str,
+                        url: str | None = None) -> None:
+        name = notify_target(target)
+        if name is None:
+            raise ValueError("geen notify-dienst")
         payload: dict = {"title": title, "message": message}
         if url:
             payload["data"] = {"clickAction": url}
-        await self._post(f"services/{NOTIFY_SERVICE}", payload)
+        await self._post(f"services/notify/{name}", payload)
 
 
 def _plural(n: int, one: str, many: str) -> str:
