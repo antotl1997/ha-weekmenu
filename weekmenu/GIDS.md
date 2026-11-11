@@ -1,0 +1,32 @@
+# Weekmenu: de gids
+
+Weekmenu kiest elke week gerechten rond de bonus van Albert Heijn en zet de boodschappen in je bestelling of op je AH-lijst. Je hoeft er bijna niets voor te doen. Deze pagina zegt waar je wat vindt.
+
+## Wat eten we vanavond?
+
+- Om 16:00 krijg je een korte melding: "Vanavond: kip teriyaki, begin om 17:45". Bij een restjesavond staat er "Vanavond: restjes van ...". Ben je niet thuis of is er geen gerecht, dan komt er geen melding.
+- In de app staat het bovenaan de Week, onder **Vanavond**.
+- Op het dashboard van Home Assistant staat het op de Weekmenu-kaart, als die is toegevoegd.
+
+## De week bekijken
+
+Open **Weekmenu** in de zijbalk van Home Assistant. Op de Week staat per dag wat er gegeten wordt. Tik op een gerecht voor de ingrediënten en de bereiding. Rustige regels zoals "restjes van", "niet thuis" en "geen gerecht" betekenen dat er die avond niet gekookt hoeft te worden.
+
+## Iets anders willen
+
+- **Ander gerecht**: tik op het gerecht en kies Ander gerecht. De boodschappen worden meteen aangepast.
+- **Minder of meer personen**: tik op het gerecht en gebruik de min en plus.
+- **Niet thuis eten**: kies Instellingen en tik de dag aan bij Niet thuis eten.
+- **Hoe vaak koken**: kies Instellingen, Kookmomenten. Kook je minder vaak dan je thuis eet, dan worden de andere avonden restjesavonden.
+
+## Boodschappen en bestellen
+
+Het menu komt meestal op vrijdag, zodra de nieuwe bonusfolder er is. De boodschappen staan dan in je open bezorgbestelling, of op je AH-lijst als er nog geen bestelling is. Bestellen en betalen doe je zelf in de AH-app. Staat het menu klaar maar is er op zondag om 17:00 nog geen bezorgmoment gekozen, dan krijg je één herinnering.
+
+## Inloggen bij AH
+
+Eén keer inloggen is genoeg; daarna houdt de add-on de login zelf bij. Op de Week staat "AH-login in orde" met de datum van de laatste verversing. Wordt die kaart rood, log dan opnieuw in via Instellingen, Opnieuw inloggen. Je hebt daarvoor even een computer nodig; het plakken van de code kan ook op je telefoon.
+
+## Hulp
+
+Werkt iets niet, kijk dan in de app bij Instellingen, Diagnose. Daar zie je of AH nog antwoordt zoals verwacht, en kun je de diagnose kopiëren om door te sturen.

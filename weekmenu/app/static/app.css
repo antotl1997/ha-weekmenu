@@ -202,3 +202,13 @@ textarea:focus{outline:2px solid #2f6b3a;outline-offset:1px}
 /* gradient fallbacks per cuisine (mockup b1..b5) */
 .b1{background:linear-gradient(135deg,#f6d6b8,#e9a679)}.b2{background:linear-gradient(135deg,#fbe1a6,#f0b84f)}.b3{background:linear-gradient(135deg,#d5e8c4,#94c27a)}.b4{background:linear-gradient(135deg,#f8c9b9,#e07a5f)}.b5{background:linear-gradient(135deg,#c9dcf0,#7fa8d6)}
 .foot a{display:inline-block;min-height:44px;line-height:44px}
+/* v0.8: tonight, the login line, the login steps, the welcome */
+.tonight{padding:14px 16px;display:flex;flex-direction:column;gap:2px;border-left:4px solid #2f6b3a}
+.tonight b{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#2f6b3a}
+.tonight span{font-size:16px;font-weight:600;line-height:1.35}
+.login-ok{margin-top:10px}
+.login-bad{border:1.5px solid #c4553d}
+.how{margin-top:14px;font-size:13.5px;color:#5f5a52}
+.how summary{cursor:pointer;font-weight:600;color:#22201c;min-height:44px;display:flex;align-items:center}
+.how p{font-size:13.5px}
+.welcome p{color:#22201c}

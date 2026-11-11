@@ -475,3 +475,43 @@ def test_app_diagnose_paused_and_update_in_chrome(tmp_path):
         ctx.store.path.write_text('{"schema": 99}', encoding="utf-8")
         dom = render(base, "", tmp_path, "werk-bij")
         assert "Werk de add-on bij" in dom and "appie://login-exit" not in dom
+
+
+@pytest.mark.slow
+def test_app_v08_tonight_login_and_welcome_in_chrome(tmp_path):
+    """v0.8: Vanavond on top of the week, the login line, the red login card, the
+    welcome screen on a first start, the step plan to log in, and the guide."""
+    import os
+
+    ctx = build_ctx(tmp_path)
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = chrome(base, tmp_path / "profile-v08-week")
+        # NOW is woensdag 4 november: the teriyaki, 25 min before 18:30, at 18:00
+        assert f"<b>Vanavond</b><span>{TITLES[0]}, begin om 18:00</span>" in dom
+        assert dom.index("<b>Vanavond</b>") < dom.index("Bonus bespaard")
+        assert "AH-login in orde, laatst ververst" in dom and "login-bad" not in dom
+
+        old = datetime(2026, 10, 20, 9, 30).timestamp()
+        os.utime(ctx.store.path, (old, old))
+        dom = render(base, "", tmp_path, "week-login-rood")
+        assert "AH-login al 7 dagen niet ververst" in dom
+        assert "Laatst ververst 20 oktober 09:30" in dom and 'href="#inloggen"' in dom
+        assert dom.index("login-bad") < dom.index("Bonus bespaard")
+        assert "AH-login in orde" not in dom
+
+        dom = chrome(base + "gids", tmp_path / "profile-gids")
+        assert "Weekmenu: de gids" in dom and 'href="./"' in dom
+        dom = chrome(base + "#instellingen", tmp_path / "profile-v08-set")
+        assert 'href="gids"' in dom
+
+    fresh = make_ctx(tmp_path / "fresh", now=NOW)
+    with Server(fresh, static) as base:
+        dom = render(base, "", tmp_path, "welkom")
+        assert "Welkom bij Weekmenu" in dom and "data-welcome" in dom
+        assert dom.count("<li>") == 3 and 'href="gids"' in dom
+        assert "appie://login-exit" not in dom and "—" not in dom
+        dom = render(base, "#inloggen", tmp_path, "login-stappen")
+        assert "Op een computer:" in dom and "Druk F12 en kies Console." in dom
+        assert "via WhatsApp naar jezelf" in dom and "<summary>Hoe werkt dit?</summary>" in dom

@@ -17,7 +17,8 @@ const MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli",
 const BUSY_TEXT = "Het menu wordt nu gemaakt, even geduld";
 
 const state = { status: null, week: null, weekParam: null, savings: null, settings: null,
-  staples: [], dishes: {}, open: {}, polling: false, offers: null, offersNote: "", offerQ: "" };
+  staples: [], dishes: {}, open: {}, polling: false, offers: null, offersNote: "", offerQ: "",
+  welcomed: false };
 
 // --- helpers ---------------------------------------------------------------------------
 
@@ -372,6 +373,10 @@ function weekScreen() {
     ${order ? `<div class="full order">${esc(order)}</div>` : ""}
     <div class="full sub">${shortDate(start)} – ${shortDate(end)}${w.target === "order" ? " · bezorging woensdag" : ""}</div></header>`;
 
+  html += loginCard(w.login, false);
+  if (w.vanavond) {
+    html += `<div class="card tonight"><b>Vanavond</b><span>${esc(String(w.vanavond).replace(/^Vanavond: /, ""))}</span></div>`;
+  }
   if (running) {
     html += `<div class="card note"><span class="spin dark"></span><div><b>Er wordt een menu gemaakt</b>
       <span class="muted">Dit duurt meestal een minuut.</span></div></div>`;
@@ -411,12 +416,31 @@ function weekScreen() {
     html += staplesHtml(w);
     html += notesHtml(w, true);
   }
+  html += loginCard(w.login, true);
   if (w.next_week) {
     html += `<div class="linkrow"><button class="pill grey" data-week="${esc(w.next_week)}">Volgende week bekijken →</button></div>`;
   } else if (state.weekParam) {
     html += `<div class="linkrow"><button class="pill grey" data-week="">← Terug naar deze week</button></div>`;
   }
   return html;
+}
+
+/* "AH-login in orde, laatst ververst <datum>" quietly at the bottom of the week; a red
+ * card on top when the login expired or was not refreshed for 7 days. */
+function loginCard(l, bottom) {
+  if (!l) return "";
+  const when = stampText(l.login_refreshed);
+  if (l.login_ok) {
+    return bottom ? `<p class="foot login-ok">AH-login in orde${when ? `, laatst ververst ${esc(when)}` : ""}.</p>` : "";
+  }
+  if (bottom) return "";
+  const title = l.login_expired ? "AH-login verlopen" : "AH-login al 7 dagen niet ververst";
+  const sub = l.login_expired
+    ? "Er komt niets in je bestelling of op je lijst tot je opnieuw inlogt."
+    : `Laatst ververst ${esc(when || "onbekend")}. Log opnieuw in, dan gaat het menu van vrijdag zeker goed.`;
+  return `<div class="card note bad login-bad"><span class="dot"></span><div><b>${esc(title)}</b>
+    <span class="muted">${sub}</span></div></div>
+    <a class="btn pri full" href="#inloggen">Opnieuw inloggen</a>`;
 }
 
 // --- screens: one dish -----------------------------------------------------------------
@@ -595,7 +619,8 @@ function settingsScreen() {
       <button class="btn pri" data-run="nu_maken">Nu maken</button></div>
     <p class="foot">Nu maken vult aan wat nog ontbreekt. Nieuw menu kiest andere gerechten.</p>
     ${diagnoseHtml()}
-    <p class="foot"><a href="#inloggen">Opnieuw inloggen</a> bij AH, als de add-on de login kwijt is.</p>`;
+    <p class="foot"><a href="#inloggen">Opnieuw inloggen</a> bij AH, als de add-on de login kwijt is.</p>
+    <p class="foot"><a href="gids">Lees de gids</a>: waar je ziet wat jullie eten.</p>`;
 }
 
 /* "2026-11-11T09:30:12" as "11 november 09:30" (empty when unknown). */
@@ -645,22 +670,46 @@ function loginScreen(again) {
   const url = safeUrl(state.status && state.status.login_url);
   const why = again
     ? "Log opnieuw in als de add-on de AH-login kwijt is."
-    : "De add-on is niet (meer) ingelogd.";
+    : "Log één keer in, daarna houdt de add-on de login zelf bij.";
+  const link = url
+    ? `<a href="${esc(url)}" target="_blank" rel="noopener">deze link</a>`
+    : "de AH-inlogpagina";
   return `<header class="top"><div><h1>Weekmenu</h1><div class="sub">inloggen bij Albert Heijn</div></div></header>
     <div class="card login">
       <h2>${again ? "Opnieuw inloggen bij AH" : "Log één keer in bij AH"}</h2>
-      <p>${why} Inloggen kan alleen met de hand, omdat AH een captcha gebruikt. Daarna houdt de add-on de login zelf bij.</p>
-      <ol>
-        <li><span>Open op een computer de AH-inlogpagina in Chrome of Edge.</span></li>
-        <li><span>Druk op F12 en kies het tabblad Console.</span></li>
-        <li><span>Log in. In de console verschijnt een regel met <code>appie://login-exit?code=…</code></span></li>
-        <li><span>Kopieer die hele regel en plak hem hieronder. De code is maar kort geldig.</span></li>
+      <p>${why}</p>
+      <p><b>Op een computer:</b></p>
+      <ol class="steps-login">
+        <li><span>Open ${link}.</span></li>
+        <li><span>Druk F12 en kies Console.</span></li>
+        <li><span>Log in.</span></li>
+        <li><span>Kopieer de regel die begint met <code>appie://login-exit?code=</code></span></li>
+        <li><span>Plak hem hier. Dat kan ook op je telefoon, bijvoorbeeld via WhatsApp naar jezelf.</span></li>
       </ol>
       ${url ? `<a class="btn sec2 full" style="margin:0 0 12px;width:100%" href="${esc(url)}" target="_blank" rel="noopener">AH-inlogpagina openen</a>` : ""}
-      <textarea id="code" placeholder="appie://login-exit?code=…" autocomplete="off" spellcheck="false"></textarea>
+      <textarea id="code" placeholder="appie://login-exit?code=…" autocomplete="off" spellcheck="false" aria-label="Plak hier de regel met de code"></textarea>
       <div class="btnrow"><button class="btn pri" data-login>Inloggen</button></div>
+      <details class="how"><summary>Hoe werkt dit?</summary>
+        <p>AH beveiligt het inloggen met een captcha, daarom kan de add-on niet zelf inloggen. Na het inloggen stuurt AH een code naar de AH-app, via een link die begint met <code>appie://</code>. Een computer kan die link niet openen, maar laat hem wel zien in de ontwikkelaarstools: druk F12 en kies het tabblad Console. Daar staat de regel met de code.</p>
+        <p>De code is maar een paar minuten geldig. Plak je een hele chatregel, dan haalt de add-on de code er zelf uit. De add-on ruilt de code één keer in voor een login die hij daarna zelf ververst.</p>
+      </details>
     </div>
     ${again ? `<p class="foot"><a href="#instellingen">Terug naar instellingen</a></p>` : ""}`;
+}
+
+/* The first start: no login yet, no menu yet. What the add-on does, in three steps. */
+function welcomeScreen() {
+  return `<header class="top"><div><h1>Welkom bij Weekmenu</h1><div class="sub">elke week een menu rond de AH-bonus</div></div></header>
+    <div class="card login welcome">
+      <p>Weekmenu kiest elke week gerechten rond de bonus van Albert Heijn en zet de boodschappen in je bestelling of op je AH-lijst. Bestellen en betalen doe je zelf.</p>
+      <ol>
+        <li><span>Log één keer in bij AH. Daarvoor heb je even een computer nodig.</span></li>
+        <li><span>Kies bij Instellingen hoe vaak je kookt en wie er mee-eet.</span></li>
+        <li><span>Het menu komt vanzelf zodra de nieuwe folder er is, meestal op vrijdag. Je krijgt een melding.</span></li>
+      </ol>
+      <div class="btnrow"><button class="btn pri" data-welcome>Inloggen bij AH</button></div>
+    </div>
+    <p class="foot"><a href="gids">Lees de gids</a>: waar je ziet wat jullie eten.</p>`;
 }
 
 /* A file or the login is from a newer add-on: no login screen, the update message. */
@@ -696,6 +745,7 @@ async function render() {
   for (const a of nav.querySelectorAll("a")) a.classList.toggle("on", a.dataset.tab === r.tab);
   if (!state.status) return;
   if (!loggedIn && state.status.update_needed) { app.innerHTML = updateScreen(state.status.update_needed); return; }
+  if (!loggedIn && !relogin && state.status.first_start && !state.welcomed) { app.innerHTML = welcomeScreen(); return; }
   if (!loggedIn || relogin) { app.innerHTML = loginScreen(loggedIn && relogin); return; }
 
   const need = r.dish ? (state.dishes[r.dish] ? null : () => loadDish(r.dish))
@@ -778,6 +828,7 @@ app.addEventListener("click", async (ev) => {
   const r = route();
 
   if (t.dataset.dish) { location.hash = "#gerecht/" + t.dataset.dish; return; }
+  if ("welcome" in t.dataset) { state.welcomed = true; render(); return; }
   if ("back" in t.dataset) { location.hash = "#week"; return; }
   if ("retry" in t.dataset) { state.week = state.savings = state.settings = state.offers = null; state.dishes = {}; boot(); return; }
   if ("week" in t.dataset) {

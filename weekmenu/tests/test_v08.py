@@ -439,3 +439,67 @@ async def test_busy_and_unsure_texts_from_the_api(tmp_path, aiohttp_client):
     r = await client.post("api/run", json={"mode": "nu_maken"})
     assert r.status == 409 and (await r.json())["error"] == BUSY
     assert BUSY == "Het menu wordt nu gemaakt, even geduld"
+
+
+# --- 4/5. welcome, the guide, the login steps ------------------------------------------
+
+
+def test_guide_exists_and_is_dutch_and_plain():
+    text = (ROOT / "GIDS.md").read_text(encoding="utf-8")
+    assert text.startswith("# Weekmenu: de gids")
+    assert "Wat eten we vanavond?" in text
+    assert "—" not in text and "–" not in text  # no dashes as punctuation
+    assert len(text.splitlines()) < 60  # one page
+    assert "COPY GIDS.md /GIDS.md" in (ROOT / "Dockerfile").read_text(encoding="utf-8")
+
+
+def test_markdown_page_escapes_and_renders_lists():
+    from app.web import markdown_page
+    page = markdown_page("# Titel\n\nEen <b>zin</b> met **vet** en `code`.\n\n"
+                         "- een\n- twee\n\n1. a\n2. b\n")
+    assert "<h1>Titel</h1>" in page
+    assert "Een &lt;b&gt;zin&lt;/b&gt; met <b>vet</b> en <code>code</code>." in page
+    assert "<ul><li>een</li><li>twee</li></ul>" in page
+    assert "<ol><li>a</li><li>b</li></ol>" in page
+    assert '<a href="./">Terug naar Weekmenu</a>' in page
+
+
+async def test_guide_page_under_the_ingress_path(tmp_path, aiohttp_client):
+    from app.web import make_app
+    ctx = make_ctx(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    r = await client.get("gids")
+    assert r.status == 200 and r.content_type == "text/html"
+    body = await r.text()
+    assert "<h1>Weekmenu: de gids</h1>" in body and "Wat eten we vanavond?" in body
+
+
+async def test_first_start_only_without_login_menu_or_ah_contact(tmp_path, aiohttp_client):
+    from app.web import make_app
+    ctx = make_ctx(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+
+    async def first():
+        return (await (await client.get("api/status")).json())["first_start"]
+
+    assert await first() is True
+    ctx.health.ok("bonus")  # AH answered once: someone logged in before
+    assert await first() is False
+    ctx.health.last_ok = None
+    ctx.ledger.save(WeekLog(W, plan=make_plan([dish(W, 1, [1])]).to_dict()))
+    assert await first() is False
+    (tmp_path / "weeks" / f"{W.isoformat()}.json").unlink()
+    ctx.store.save(Tokens("a", "r", 9e9))
+    assert await first() is False  # logged in
+
+
+def test_login_screen_is_a_step_plan_with_f12_under_how():
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    start = js.index("function loginScreen(again)")
+    screen = js[start:js.index("function welcomeScreen()")]
+    steps = ["Open ${link}.", "Druk F12 en kies Console.", "Log in.",
+             "Kopieer de regel die begint met <code>appie://login-exit?code=</code>",
+             "Plak hem hier. Dat kan ook op je telefoon, bijvoorbeeld via WhatsApp naar jezelf."]
+    at = [screen.index(x) for x in steps]
+    assert at == sorted(at) and "Op een computer:" in screen
+    assert screen.index("<summary>Hoe werkt dit?</summary>") < screen.index("ontwikkelaarstools")

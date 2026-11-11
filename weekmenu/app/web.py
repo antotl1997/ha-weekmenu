@@ -14,7 +14,9 @@ allowlist lets it through; no other address is needed.
 from __future__ import annotations
 
 import asyncio
+import html
 import logging
+import re
 from collections.abc import Iterable
 from datetime import date, timedelta
 from pathlib import Path
@@ -53,6 +55,8 @@ from app.writer import OFFER, apply, apply_extras, held_note, manual_note, missi
 log = logging.getLogger("weekmenu.web")
 
 STATIC_DIR = Path(__file__).parent / "static"
+# the user guide: weekmenu/GIDS.md here, /GIDS.md in the image (see Dockerfile)
+GUIDE_PATH = Path(__file__).resolve().parent.parent / "GIDS.md"
 _ASSET = r"{name:[A-Za-z0-9_-][A-Za-z0-9_.-]*\.(?:css|js|png|svg|ico|jpg|webp|json|webmanifest)}"
 MIN_PERSONS, MAX_PERSONS = 1, 8
 MAX_PERSONS_LEFTOVERS = 2 * MAX_PERSONS  # a dish that also feeds a leftover night
@@ -70,12 +74,14 @@ button{background:#2f6b3a;color:#fff;border:0;border-radius:10px;padding:12px 18
 <h1>Weekmenu AH</h1>
 <p id="status">Status laden…</p>
 <h2>Inloggen bij AH</h2>
+<p>Op een computer:</p>
 <ol>
-<li>Open in een browser op de computer de ontwikkelaarstools (F12), tabblad Console.</li>
-<li>Ga naar de AH-inlogpagina en log in.</li>
-<li>Kopieer de regel met <code>appie://login-exit?code=…</code> uit de console en plak hem hieronder.</li>
+<li>Open deze link: <a id="login" target="_blank" rel="noopener">AH-inlogpagina</a>.</li>
+<li>Druk F12 en kies Console.</li>
+<li>Log in.</li>
+<li>Kopieer de regel die begint met <code>appie://login-exit?code=</code></li>
+<li>Plak hem hier (dat kan ook op je telefoon, bijvoorbeeld via WhatsApp naar jezelf).</li>
 </ol>
-<p><a id="login" target="_blank" rel="noopener">AH-inlogpagina openen</a></p>
 <textarea id="code" placeholder="appie://login-exit?code=…"></textarea>
 <p><button id="send">Inloggen</button></p>
 <p id="msg"></p>
@@ -103,6 +109,71 @@ $("send").onclick = async () => {
 status();
 </script></body></html>
 """
+
+
+GUIDE_HTML = """<!doctype html>
+<html lang="nl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekmenu: de gids</title>
+<style>
+body{font-family:"Segoe UI",Roboto,system-ui,sans-serif;background:#f4f1ec;margin:0;color:#22201c}
+main{max-width:480px;margin:0 auto;padding:22px 20px 40px;line-height:1.55;font-size:15px}
+h1{font-size:24px;margin:0 0 10px}h2{font-size:18px;margin:22px 0 6px}
+ul,ol{padding-left:22px}li{margin:4px 0}
+a{color:#2f6b3a;display:inline-block;min-height:44px;line-height:44px}
+code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:#ebe7e0;border-radius:6px;padding:1px 5px}
+</style></head><body><main>
+<a href="./">Terug naar Weekmenu</a>
+{body}
+</main></body></html>
+"""
+
+
+def _inline(text: str) -> str:
+    """Escaped first; then only **bold** and `code`."""
+    out = html.escape(text, quote=True)
+    out = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", out)
+    return re.sub(r"`(.+?)`", r"<code>\1</code>", out)
+
+
+def markdown_page(md: str) -> str:
+    """The small part of Markdown GIDS.md uses: headings, paragraphs and lists."""
+    parts: list[str] = []
+    para: list[str] = []
+    items: list[str] = []
+    kind = ""
+
+    def flush():
+        nonlocal kind
+        if para:
+            parts.append(f"<p>{_inline(' '.join(para))}</p>")
+            para.clear()
+        if items:
+            parts.append(f"<{kind}>" + "".join(f"<li>{_inline(i)}</li>" for i in items)
+                         + f"</{kind}>")
+            items.clear()
+
+    for line in md.splitlines():
+        line = line.strip()
+        m = re.match(r"^(#{1,3}) (.+)$", line)
+        if not line:
+            flush()
+        elif m:
+            flush()
+            level = len(m.group(1))
+            parts.append(f"<h{level}>{_inline(m.group(2))}</h{level}>")
+        elif re.match(r"^[-*] ", line) or re.match(r"^\d+\. ", line):
+            new = "ul" if line[0] in "-*" else "ol"
+            if para or (items and new != kind):
+                flush()
+            kind = new
+            items.append(re.sub(r"^([-*]|\d+\.) ", "", line))
+        else:
+            if items:
+                flush()
+            para.append(line)
+    flush()
+    return GUIDE_HTML.replace("{body}", "\n".join(parts))
 
 
 # --- views ------------------------------------------------------------------------------
@@ -370,6 +441,14 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             return web.FileResponse(page)
         return web.Response(text=FALLBACK_HTML, content_type="text/html")
 
+    async def guide(request):
+        """GIDS.md, the user guide, as a page under the ingress path ("gids")."""
+        try:
+            md = GUIDE_PATH.read_text(encoding="utf-8")
+        except OSError:
+            raise web.HTTPNotFound() from None
+        return web.Response(text=markdown_page(md), content_type="text/html")
+
     async def asset(request):
         f = static_dir / request.match_info["name"]
         if static_dir.is_dir() and f.is_file() and f.parent == static_dir:
@@ -387,6 +466,10 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
 
     async def status(request):
         logged_in = ctx.store.load() is not None and not ctx.login_expired
+        # the welcome screen: no login file, AH never answered and no menu yet
+        first = (not logged_in and ctx.store.saved_at() is None
+                 and ctx.health.last_ok is None
+                 and not any(w.plan for w in ctx.ledger.weeks()))
         w = waiting_for()
         return web.json_response({
             # a file or the login is from a newer add-on: the app says "werk bij"
@@ -396,6 +479,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             "last_ah_sync": ctx.health.last_ok,
             "writes_paused": ctx.health.writes_paused,
             "logged_in": logged_in, "last_round": ctx.last_round, "error": ctx.error,
+            "first_start": first,
             # a menu round only: the hourly new-folder look also takes the lock
             "running": ctx.busy or ctx.in_round, "rounds": ctx.rounds,
             "login_url": LOGIN_URL,
@@ -813,6 +897,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         return web.json_response({"ok": True, "value": value})
 
     app.router.add_get("/", index)
+    app.router.add_get("/gids", guide)
     app.router.add_get("/api/status", status)
     app.router.add_post("/api/login", login)
     app.router.add_post("/api/logout", logout)
