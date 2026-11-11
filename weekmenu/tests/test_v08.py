@@ -448,7 +448,7 @@ def test_guide_exists_and_is_dutch_and_plain():
     text = (ROOT / "GIDS.md").read_text(encoding="utf-8")
     assert text.startswith("# Weekmenu: de gids")
     assert "Wat eten we vanavond?" in text
-    assert "—" not in text and "–" not in text  # no dashes as punctuation
+    assert "2014" not in text and "2013" not in text  # no dashes as punctuation
     assert len(text.splitlines()) < 60  # one page
     assert "COPY GIDS.md /GIDS.md" in (ROOT / "Dockerfile").read_text(encoding="utf-8")
 
@@ -503,3 +503,57 @@ def test_login_screen_is_a_step_plan_with_f12_under_how():
     at = [screen.index(x) for x in steps]
     assert at == sorted(at) and "Op een computer:" in screen
     assert screen.index("<summary>Hoe werkt dit?</summary>") < screen.index("ontwikkelaarstools")
+
+
+# --- 7. the dashboard card ----------------------------------------------------------------
+
+CARD = ROOT / "dashboard" / "weekmenu-card.yaml"
+
+
+def _walk(node):
+    yield node
+    if isinstance(node, dict):
+        for v in node.values():
+            yield from _walk(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _walk(v)
+
+
+def test_dashboard_card_is_valid_yaml_without_template_conditions():
+    text = CARD.read_text(encoding="utf-8")
+    card = yaml.safe_load(text)
+    assert card["type"] == "vertical-stack" and len(card["cards"]) == 3
+    body = "\n".join(ln for ln in text.splitlines() if not ln.lstrip().startswith("#"))
+    assert "template" not in yaml.safe_dump([n.get("condition") for n in _walk(card)
+                                             if isinstance(n, dict)])
+    assert "condition: template" not in body and "2014" not in text
+    conditions = [n["condition"] for n in _walk(card) if isinstance(n, dict) and "condition" in n]
+    assert conditions and set(conditions) <= {"state", "numeric_state"}
+    for n in _walk(card):
+        if isinstance(n, dict) and n.get("condition") == "state":
+            assert n["entity"] == "sensor.weekmenu"
+            assert n["state_not"] == ["unavailable", "unknown"]
+    paths = [n["navigation_path"] for n in _walk(card)
+             if isinstance(n, dict) and "navigation_path" in n]
+    assert paths == ["/e258686e_weekmenu", "/e258686e_weekmenu"]
+    assert "navigation_path" in text.split("type: vertical-stack")[0]  # the comment says how
+
+
+def test_dashboard_card_shows_what_the_brief_asks():
+    card = yaml.safe_load(CARD.read_text(encoding="utf-8"))
+    top, week, button = card["cards"]
+    assert top["type"] == "custom:mushroom-template-card" and top["primary"] == "Vanavond"
+    assert "vanavond" in top["secondary"]
+    assert week["type"] == "markdown"
+    content = week["content"]
+    for part in ("restjes van", "niet thuis", "geen gerecht", "geen kookmoment",
+                 "sensor.weekmenu_besparing_week", "AH-login in orde, laatst ververst",
+                 "login_refreshed", 'alert-type="error"'):
+        assert part in content, part
+    # every attribute is read with .get: a missing one never breaks the template
+    assert not re.search(r"attributes\.(?!get\()", content + top["secondary"])
+    assert not re.search(r"\ba\.(?!get\()", content)
+    assert button["primary"] == "Open weekmenu"
+    assert button["tap_action"] == {"action": "navigate",
+                                    "navigation_path": "/e258686e_weekmenu"}

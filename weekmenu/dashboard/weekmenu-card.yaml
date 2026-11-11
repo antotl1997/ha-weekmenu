@@ -1,0 +1,91 @@
+# Weekmenu-kaart voor een Lovelace-dashboard (Weekmenu AH 0.8)
+#
+# Toevoegen: open een dashboard, Bewerken, Kaart toevoegen, Handmatig, en plak dit
+# bestand. Nodig: Mushroom (HACS) voor de bovenste en onderste regel; de rest is de
+# ingebouwde markdown-kaart.
+#
+# De kaart leest alleen sensor.weekmenu en sensor.weekmenu_besparing_week, die de
+# add-on zelf bijhoudt. Er staat bewust geen `condition: template` in: Lovelace kent
+# die niet en verbergt de kaart dan stilzwijgend. Zichtbaarheid gaat alleen via
+# `condition: state`.
+#
+# "Open weekmenu" gaat naar het paneel van de add-on in de zijbalk. Dat pad is
+# /<slug van de add-on>. Hieronder staat /e258686e_weekmenu; staat er in de
+# adresbalk iets anders als je Weekmenu in de zijbalk opent, vervang dan beide
+# regels `navigation_path` door dat pad.
+type: vertical-stack
+cards:
+  # Vanavond: wat er vandaag gegeten wordt. Een tik opent het weekmenu.
+  - type: custom:mushroom-template-card
+    entity: sensor.weekmenu
+    icon: mdi:silverware-fork-knife
+    icon_color: green
+    primary: Vanavond
+    secondary: >-
+      {% set v = states.sensor.weekmenu.attributes.get('vanavond') if states.sensor.weekmenu else none %}
+      {% if v %}{{ v | replace('Vanavond: ', '') }}{% else %}Geen gerecht vanavond{% endif %}
+    multiline_secondary: true
+    tap_action:
+      action: navigate
+      navigation_path: /e258686e_weekmenu
+    visibility:
+      - condition: state
+        entity: sensor.weekmenu
+        state_not:
+          - unavailable
+          - unknown
+
+  # De week: per dag het gerecht; restjes, niet thuis en geen gerecht als rustige regels.
+  # Dan de besparing van de week en de AH-login.
+  - type: markdown
+    content: |
+      {% set s = states.sensor.weekmenu %}
+      {% set a = s.attributes if s else {} %}
+      {% set namen = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'] %}
+      {% set ns = namespace(rows=[]) %}
+      {% for d in a.get('dishes', []) %}
+        {% set dag = namen[as_datetime(d.get('datum')).weekday()] %}
+        {% if d.get('restjes_van') %}
+          {% set ns.rows = ns.rows + [[d.get('datum'), dag ~ ' · _restjes van ' ~ d.get('restjes_van') ~ '_']] %}
+        {% else %}
+          {% set ns.rows = ns.rows + [[d.get('datum'), '**' ~ dag ~ '** · ' ~ d.get('titel', '')]] %}
+        {% endif %}
+      {% endfor %}
+      {% for iso in a.get('niet_thuis', []) %}
+        {% set ns.rows = ns.rows + [[iso, namen[as_datetime(iso).weekday()] ~ ' · _niet thuis_']] %}
+      {% endfor %}
+      {% for iso in a.get('geen_gerecht', []) %}
+        {% set ns.rows = ns.rows + [[iso, namen[as_datetime(iso).weekday()] ~ ' · _geen gerecht_']] %}
+      {% endfor %}
+      {% for iso in a.get('geen_kookmoment', []) %}
+        {% set ns.rows = ns.rows + [[iso, namen[as_datetime(iso).weekday()] ~ ' · _geen kookmoment_']] %}
+      {% endfor %}
+      ### Weekmenu
+      {% if a.get('bestelling') %}{{ a.get('bestelling') }}{% endif %}
+
+      {% for row in ns.rows | sort(attribute='0') %}
+      {{ row[1] }}<br>
+      {% else %}
+      _Nog geen menu voor deze week._
+      {% endfor %}
+
+      {% set b = states('sensor.weekmenu_besparing_week') %}
+      {% if is_number(b) %}Bespaard deze week: **€ {{ '%.2f' | format(b | float) | replace('.', ',') }}**{% endif %}
+
+      {% set ververst = a.get('login_refreshed') %}
+      {% set wanneer = as_datetime(ververst).strftime('%d-%m %H:%M') if ververst else 'onbekend' %}
+      {% if a.get('login_ok') %}<small>AH-login in orde, laatst ververst {{ wanneer }}</small>{% elif a.get('login_ok') == false %}<ha-alert alert-type="error">AH-login verlopen of al 7 dagen niet ververst (laatst {{ wanneer }}). Log opnieuw in via Weekmenu, Instellingen.</ha-alert>{% endif %}
+    visibility:
+      - condition: state
+        entity: sensor.weekmenu
+        state_not:
+          - unavailable
+          - unknown
+
+  # Naar de app in de zijbalk.
+  - type: custom:mushroom-template-card
+    icon: mdi:food
+    primary: Open weekmenu
+    tap_action:
+      action: navigate
+      navigation_path: /e258686e_weekmenu
