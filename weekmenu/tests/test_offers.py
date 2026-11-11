@@ -213,7 +213,8 @@ async def test_week_savings_are_menu_plus_extras_plus_offers(aiohttp_client, tmp
     assert week["savings"] == 5.0 and week["extras_savings"] == 1.5
     assert week["offers_savings"] == 2.0
     s = await (await client.get("api/savings")).json()
-    assert s["weeks"] == [{"week": W.isoformat(), "savings": 8.5, "counted": True}]
+    assert s["weeks"] == [{"week": W.isoformat(), "savings": 8.5, "counted": True,
+                           "reconciled": None}]  # v1.0: nothing recounted yet
 
 
 async def test_total_counts_the_offers_once(tmp_path):

@@ -19,7 +19,9 @@ from app.durable import too_new, write_json
 log = logging.getLogger(__name__)
 
 HISTORY_SCHEMA = 1
-ACTIONS = ("swap", "back", "remove")
+# v1.0: "correct" is a "Klopt niet" choice (with the ingredient key), for the
+# share of ingredient lines without a correction
+ACTIONS = ("swap", "back", "remove", "correct")
 
 
 class History:
@@ -44,13 +46,16 @@ class History:
         return too_new(self.path, HISTORY_SCHEMA)
 
     def record(self, week: date, day: date, recipe_id: int, title: str, action: str,
-               at: datetime) -> None:
+               at: datetime, key: str | None = None) -> None:
         """Add one event. Raises SchemaTooNew for a newer add-on's file (nothing written)."""
         if action not in ACTIONS:
             raise ValueError(action)
         weeks = self.load()
-        weeks.setdefault(week.isoformat(), []).append({
+        event = {
             "date": day.isoformat(), "recipe_id": int(recipe_id), "title": title,
             "action": action, "at": at.isoformat(timespec="minutes"),
-        })
+        }
+        if key is not None:
+            event["key"] = key
+        weeks.setdefault(week.isoformat(), []).append(event)
         write_json(self.path, {"weeks": weeks}, HISTORY_SCHEMA)

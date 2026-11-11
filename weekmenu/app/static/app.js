@@ -711,7 +711,7 @@ function savingsScreen() {
     <div class="card"><small>Sinds start</small><b>${eur(s.total)}</b></div></div>`;
   const weeks = s.weeks.slice(-6);
   if (!weeks.length) {
-    return html + `<div class="card empty"><b>Nog geen weken</b>Na het eerste menu staat hier per week wat de bonus scheelde.</div>`;
+    return html + `<div class="card empty"><b>Nog geen weken</b>Na het eerste menu staat hier per week wat de bonus scheelde.</div>` + metricsHtml(s.metrics);
   }
   const max = Math.max(...weeks.map((w) => w.savings), 0.01);
   const last = weeks.length - 1;
@@ -722,7 +722,39 @@ function savingsScreen() {
     html += `<p class="foot">Gestreept: die week is nog niet begonnen en telt nog niet mee.</p>`;
   }
   html += `<p class="foot">Wat het menu toevoegde, tegen de normale AH-prijs. Wat je daarna in de AH-app weghaalt of bijzet, ziet de add-on niet.</p>`;
-  return html;
+  return html + checkedHtml(s.weeks) + metricsHtml(s.metrics);
+}
+
+function pct(x) { return `${Math.round(Number(x) * 100)}%`; }
+
+/* v1.0: per week, after the delivery, the real order next to the estimate. */
+function checkedHtml(weeks) {
+  const done = weeks.filter((w) => w.reconciled).slice(-6).reverse();
+  if (!done.length) return "";
+  const rows = done.map((w) => {
+    const r = w.reconciled;
+    const head = `<small>Week van ${esc(shortDate(parseDate(w.week)))} · geschat ${eur(w.savings)}</small>`;
+    if (r.status !== "ok") {
+      return `<div class="row chk"><span class="nm">${head}<b>Echt bespaard (nagerekend): niet na te rekenen</b><small>${esc(r.reason || "")}</small></span></div>`;
+    }
+    const b = r.bought_share || {};
+    return `<div class="row chk"><span class="nm">${head}<b>Echt bespaard (nagerekend) <span class="save-s">${eur(r.realised_savings)}</span></b><small>${esc(b.bought)} van ${esc(b.added)} toegevoegde producten echt gekocht</small></span></div>`;
+  }).join("");
+  return `<div class="sec">Nagerekend na bezorging</div><div class="card ing">${rows}</div>
+    <p class="foot">De dag na de bezorging legt de add-on je bestelling naast wat hij toevoegde. Dit telt niet mee in de totalen hierboven, die blijven de schatting.</p>`;
+}
+
+/* v1.0: the two numbers over the last four weeks. */
+function metricsHtml(m) {
+  m = m || {};
+  const u = m.untouched, b = m.bought;
+  const line = (label, x, of, none) => `<div class="srow"><span>${label}</span><span class="v">${x ? `${pct(x.share)} <small class="hint">(${esc(of(x))})</small>` : `<small class="hint">${none}</small>`}</span></div>`;
+  return `<div class="sec">Meetgetallen, laatste 4 weken</div>
+    <div class="card set">
+      ${line("Ingrediëntregels zonder ingreep", u, (x) => `${x.untouched} van ${x.lines}`, "nog niets te meten")}
+      ${line("Toegevoegd en echt gekocht", b, (x) => `${x.bought} van ${x.added}`, "nog niets nagerekend")}
+    </div>
+    <p class="foot">Zonder ingreep: geen Klopt niet voor die regel. Echt gekocht: na bezorging nagerekend.</p>`;
 }
 
 // --- screens: settings -----------------------------------------------------------------

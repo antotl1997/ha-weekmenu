@@ -94,12 +94,20 @@ def diagnose(ctx, ring: RingHandler = RING) -> dict:
     from app.hass import AWAY_SCHEMA, TOTAL_SCHEMA
     from app.ledger import LEDGER_SCHEMA
     from app.main import STATE_SCHEMA
+    from app.overrides import OVERRIDES_SCHEMA
+    from app.history import HISTORY_SCHEMA
+    from app.reconcile import RECON_SCHEMA, metrics
+    from app.taste import TASTE_SCHEMA
     from app.tokens import TOKENS_SCHEMA
 
     try:
         weeks = _weeks(ctx)
     except Exception as e:
         weeks = [{"error": type(e).__name__}]
+    try:  # v1.0: the two numbers, as in Besparing
+        numbers = metrics(ctx, ctx.clock().date())
+    except Exception as e:
+        numbers = {"error": type(e).__name__}
     out = {
         "addon_version": __version__,
         "ah_app_version": ctx.app_version,
@@ -112,10 +120,13 @@ def diagnose(ctx, ring: RingHandler = RING) -> dict:
         "schemas": {
             "code": {"weeklogboek": LEDGER_SCHEMA, "totaal.json": TOTAL_SCHEMA,
                      "niet_thuis.json": AWAY_SCHEMA, "state.json": STATE_SCHEMA,
-                     "tokens.json": TOKENS_SCHEMA},
+                     "tokens.json": TOKENS_SCHEMA, "overrides.json": OVERRIDES_SCHEMA,
+                     "history.json": HISTORY_SCHEMA, "taste.json": TASTE_SCHEMA,
+                     "reconciliation.json": RECON_SCHEMA},
             "nieuwer_dan_code": sorted(ctx.too_new),
         },
         "weeks": weeks,
+        "meetgetallen": numbers,
         "log": list(ring.lines),
     }
     clean = scrub(json.dumps(out, ensure_ascii=False), _secrets(ctx))

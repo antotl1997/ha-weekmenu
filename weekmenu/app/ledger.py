@@ -84,6 +84,11 @@ class WeekLog:
     # AH app). Never added again that week: Terug, a swap, Nieuw menu or bijwerken
     # count it as if the add-on still had it out there.
     removed_by_user: dict[int, int] = field(default_factory=dict)
+    # v1.0: the delivery day of the order this week was written to (when the add-on read
+    # it and it lies in the menu week), for "Besparing nagerekend" the day after
+    delivery: date | None = None
+    # v1.0: pid -> the saving of each loose offer, to recount it against the delivery
+    offers_saved: dict[int, float] = field(default_factory=dict)
     # not stored: the file was written by a newer add-on. Shown, never written (v0.6).
     too_new: bool = field(default=False, compare=False, repr=False)
 
@@ -123,6 +128,8 @@ class WeekLog:
             "held_notified": self.held_notified,
             "held_notified_items": list(self.held_notified_items),
             "removed_by_user": {str(k): v for k, v in self.removed_by_user.items()},
+            "delivery": _iso(self.delivery),
+            "offers_saved": {str(k): v for k, v in self.offers_saved.items()},
         }
 
     @classmethod
@@ -159,6 +166,8 @@ class WeekLog:
             held_notified_items=[int(x) for x in d.get("held_notified_items") or []],
             removed_by_user={int(k): int(v)
                              for k, v in (d.get("removed_by_user") or {}).items()},
+            delivery=_date(d.get("delivery")),
+            offers_saved={int(k): float(v) for k, v in (d.get("offers_saved") or {}).items()},
         )
 
 

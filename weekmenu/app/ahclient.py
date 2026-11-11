@@ -173,6 +173,14 @@ class Recipe:
 
 
 @dataclass
+class DeliveredOrder:
+    """v1.0: a delivered order (read only): webshop id -> quantity really delivered."""
+    id: int
+    day: date
+    items: dict[int, int] = field(default_factory=dict)
+
+
+@dataclass
 class ActiveOrder:
     id: int
     items: dict[int, int] = field(default_factory=dict)
@@ -734,6 +742,61 @@ class AhClient:
             if p.product_id == 0 and p.hq_id in hq_to_ws:
                 p.product_id = hq_to_ws[p.hq_id]
         return out
+
+    # --- v1.0: the delivered order of a menu week, read only ---
+
+    def _delivered_from(self, order_id: int, body: Any, day: date | None) -> DeliveredOrder | None:
+        if not isinstance(body, dict):
+            raise AhShapeError("bestelling: geen object", 200)
+        if body.get("orderState") != DELIVERED:
+            return None
+        groups = body.get("groupedProductsInTaxonomy")
+        if groups is not None and not isinstance(groups, list):
+            raise AhShapeError("bestelling: groupedProductsInTaxonomy is geen lijst", 200)
+        items: dict[int, int] = {}
+        for g in groups or []:
+            for op in g.get("orderedProducts") or []:
+                ws = _pos_int((op.get("product") or {}).get("webshopId"))
+                qty = op.get("allocatedQuantity", op.get("quantity"))
+                if ws is None or not isinstance(qty, int) or qty <= 0:
+                    continue
+                items[ws] = items.get(ws, 0) + qty
+        day = _iso(body.get("deliveryDate")) or day
+        if day is None:
+            raise AhShapeError("bestelling: geen bezorgdatum", 200)
+        return DeliveredOrder(order_id, day, items)
+
+    async def _read_delivered(self, order_id: int, day: date | None = None):
+        await self._pause()
+        body = await self.request(
+            "GET", f"/mobile-services/order/v1/{int(order_id)}/details-grouped-by-taxonomy")
+        return self._delivered_from(int(order_id), body, day)
+
+    async def delivered_order(self, order_id: int) -> DeliveredOrder | None:
+        """The order with this id as delivered; None when it is not delivered (yet), for
+        instance cancelled. Only a GET; a changed shape counts for ApiHealth."""
+        self._called_ah = False
+        return await self._track("bestelling", self._read_delivered(order_id))
+
+    async def delivered_orders(self, start: date, end: date) -> list[DeliveredOrder]:
+        """Every delivered order with its delivery slot from `start` to `end`. Only a
+        GraphQL query and GETs."""
+        async def read():
+            data = await self.graphql(FULFILLMENTS_QUERY, {})
+            out = []
+            for f in (data.get("orderFulfillments") or {}).get("result") or []:
+                day = _iso(((f.get("delivery") or {}).get("slot") or {}).get("date"))
+                oid = _pos_int(f.get("orderId"))
+                if day is None or oid is None or not start <= day <= end:
+                    continue
+                got = await self._read_delivered(oid, day)
+                if got is not None:
+                    out.append(got)
+            return out
+
+        self._called_ah = False
+        await self._pause()
+        return await self._track("bestelling", read())
 
     # --- products ---
 

@@ -72,6 +72,8 @@ from app.history import HISTORY_SCHEMA, History
 from app.ledger import Ledger, WeekLog, new_folder_available
 from app.overrides import OVERRIDES_SCHEMA, Overrides
 from app.taste import TASTE_SCHEMA, Taste
+from app import reconcile
+from app.reconcile import RECON_SCHEMA, Reconciliations
 from app.planner import (
     Plan,
     Settings,
@@ -230,8 +232,9 @@ class Context:
     history: History | None = None
     # products from the last "Ander product" searches: a choice must be one of these
     found: dict[int, Product] = field(default_factory=dict)
-    # v1.0: duim omlaag and "nooit meer" per recipe
+    # v1.0: duim omlaag and "nooit meer" per recipe, and "Besparing nagerekend"
     taste: Taste | None = None
+    reconciliations: Reconciliations | None = None
 
     def __post_init__(self):
         data = self.ledger.root.parent
@@ -241,6 +244,8 @@ class Context:
             self.history = History(data / "history.json")
         if self.taste is None:
             self.taste = Taste(data / "taste.json")
+        if self.reconciliations is None:
+            self.reconciliations = Reconciliations(data / "reconciliation.json")
         own = getattr(self.client, "health", None)
         if isinstance(own, ApiHealth):
             self.health = own  # one object: the client counts, the writer and web read
@@ -310,7 +315,8 @@ def scan_too_new(ctx: Context) -> None:
     away = getattr(ctx.hass, "_away_path", None)
     files = [(ctx.total_path, TOTAL_SCHEMA), (ctx.state_path, STATE_SCHEMA),
              (away, AWAY_SCHEMA), (ctx.overrides.path, OVERRIDES_SCHEMA),
-             (ctx.history.path, HISTORY_SCHEMA), (ctx.taste.path, TASTE_SCHEMA)]
+             (ctx.history.path, HISTORY_SCHEMA), (ctx.taste.path, TASTE_SCHEMA),
+             (ctx.reconciliations.path, RECON_SCHEMA)]
     for path, known in files:
         if path is not None and too_new(path, known):
             note_too_new(ctx, path)
@@ -1089,6 +1095,11 @@ async def remind_order(ctx: Context, now: datetime) -> None:
     await guard(ctx.hass.notify("Weekmenu", REMINDER, ctx.ingress_url), "melding")
 
 
+async def reconcile_due(ctx: Context, now: datetime) -> None:
+    """v1.0: recount the savings of a delivered menu week (see app/reconcile.py)."""
+    await reconcile.reconcile_due(ctx, now)
+
+
 # --- schedule, state and stdin ----------------------------------------------------------
 
 
@@ -1176,8 +1187,9 @@ async def tick(ctx: Context, now: datetime) -> None:
     try:
         await _slot(ctx, now)
     finally:
-        # v0.8, after the menu look: none of these may ever keep a menu from being made
-        for extra in (republish, notify_tonight, remind_order):
+        # v0.8, after the menu look: none of these may ever keep a menu from being made;
+        # v1.0: "Besparing nagerekend" (read only, at most once per menu week)
+        for extra in (republish, notify_tonight, remind_order, reconcile_due):
             try:
                 await extra(ctx, now)
             except Exception as e:

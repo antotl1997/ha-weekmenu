@@ -137,17 +137,18 @@ def held_note(week: date) -> str:
 
 
 async def _destination(client, week: date):
-    """The active order (or None: the list) and, when it may not be written, why."""
+    """The active order (or None: the list), when it may not be written why, and its
+    delivery day (only when it lies in the menu week)."""
     order = await client.active_order()
     if order is None:
-        return None, None
+        return None, None, None
     day = await client.order_delivery_date(order)
     if day is None:
-        return order, f"bezorgdatum van bestelling {order.id} onbekend"
+        return order, f"bezorgdatum van bestelling {order.id} onbekend", None
     if not week <= day <= week + timedelta(days=6):
         return order, (f"bestelling {order.id} wordt {day.isoformat()} bezorgd, "
-                       f"buiten de menuweek van {week.isoformat()}")
-    return order, None
+                       f"buiten de menuweek van {week.isoformat()}"), None
+    return order, None, day
 
 
 def _title(plan: Plan, replaced: Plan | None, pid: int) -> str:
@@ -229,7 +230,9 @@ async def _settle(client, ledger: Ledger, log: WeekLog) -> None:
                     else log.offers_added if kind == OFFER else log.added)
             into[pid] = into.get(pid, 0) + delta
             if kind == OFFER:
-                log.offers_savings = round(log.offers_savings + float(entry.get("savings") or 0), 2)
+                gain = float(entry.get("savings") or 0)
+                log.offers_savings = round(log.offers_savings + gain, 2)
+                log.offers_saved[pid] = round(log.offers_saved.get(pid, 0.0) + gain, 2)
             del log.pending[pid]
         elif cur <= before:
             del log.pending[pid]
@@ -337,7 +340,9 @@ async def _write_each(
                 await client.add_to_shopping_list({pid: qty}, on_before=before_write)
             into[pid] = into.get(pid, 0) + qty
             if kind == OFFER:
-                log.offers_savings = round(log.offers_savings + (gain or {}).get(pid, 0.0), 2)
+                g = (gain or {}).get(pid, 0.0)
+                log.offers_savings = round(log.offers_savings + g, 2)
+                log.offers_saved[pid] = round(log.offers_saved.get(pid, 0.0) + g, 2)
             log.pending.pop(pid, None)
             result.added[pid] = qty
             ledger.save(log)
@@ -363,7 +368,7 @@ async def apply(
     await _settle(client, ledger, log)
     # what the add-on put out there, plus what the user took off again (never re-added)
     delta = missing(log, plan)
-    order, why = await _destination(client, log.week)
+    order, why, day = await _destination(client, log.week)
     target: Literal["order", "list"] = "order" if order is not None else "list"
     dest = _dest(target, order)
     cuts: dict[int, int] = {}
@@ -397,6 +402,8 @@ async def apply(
     log.savings = plan.savings
     if why is None:  # nothing to write into another week's order: keep the old target
         log.target = target
+        if day is not None:
+            log.delivery = day  # v1.0: "Besparing nagerekend" the day after
     elif log.target is not None:
         target = log.target
     if delta:
@@ -474,8 +481,10 @@ async def apply_extras(
         p: n for p, n in adds.items()
         if n > 0 and p not in into and p not in log.pending and p not in log.unknown
     }
-    order, why = await _destination(client, log.week)
+    order, why, day = await _destination(client, log.week)
     result = WriteResult(target="order" if order is not None else "list")
+    if day is not None:
+        log.delivery = day  # saved with the first write below
     if why is not None and delta:  # another week's order: nothing written, the caller says so
         log_.info("%s: niets geschreven, %s",
                   "Losse aanbieding" if kind == OFFER else "Vaste boodschappen", why)

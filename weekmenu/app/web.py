@@ -40,6 +40,7 @@ from app.ingredients import KINDS, PRODUCT, override_key
 from app.ledger import leftovers, new_folder_available
 from app.overrides import make_entry
 from app.taste import KINDS as TASTE_KINDS
+from app.reconcile import metrics as savings_metrics
 from app.planner import Dish, Plan
 from app.deals import qty_for_deal, savings as deal_savings
 from app.diag import diagnose
@@ -685,6 +686,17 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         except Exception as e:
             log.warning("history.json niet bijgewerkt (%s)", type(e).__name__)
 
+    async def note_correction(week: date, d: Dish, key: str) -> None:
+        """v1.0: a "Klopt niet" in its week, for the share of lines without a correction
+        (also when it is taken back later). Never in the way of the choice itself."""
+        try:
+            await asyncio.to_thread(ctx.history.record, week, d.date, d.recipe.id,
+                                    d.recipe.title, "correct", ctx.clock(), key=key)
+        except SchemaTooNew as e:
+            main.note_too_new(ctx, e.path)
+        except Exception as e:
+            log.warning("history.json niet bijgewerkt (%s)", type(e).__name__)
+
     async def _write(day: date, change, action: str | None = None) -> web.Response:
         """Load, change and apply under the lock; `change` returns the new plan or a Response.
 
@@ -842,6 +854,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             await asyncio.to_thread(ctx.overrides.put, key,
                                     make_entry(kind, text, product, ctx.clock()))
             log.info("Correctie bewaard (%s)", kind)
+            await note_correction(wlog.week, d, key)
             new = await main.apply_override(plan, key, ctx.overrides.load(), product)
             ended = ctx.clock().date() > wlog.week + timedelta(days=6)
             if new is plan or ended:  # nothing on this menu to change (or the week is over)
@@ -1111,12 +1124,24 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         weeks = [w for w in ctx.ledger.weeks() if w.plan]
         month = sum(w.savings + w.extras_total for w in weeks
                     if w.counted and (w.week.year, w.week.month) == (today.year, today.month))
+        recon = ctx.reconciliations.load()
+
+        def checked(iso: str):
+            """v1.0: "Echt bespaard (nagerekend)", next to the estimate (never in it)."""
+            e = recon.get(iso)
+            if not e or e.get("status") not in ("ok", "niet_na_te_rekenen"):
+                return None
+            return {k: e.get(k) for k in ("status", "bought_share", "realised_savings",
+                                          "reason")}
+
         return web.json_response({
             "month": round(month, 2),
             "total": round(load_total(ctx.total_path), 2),
             "weeks": [{"week": w.week.isoformat(),
                        "savings": round(w.savings + w.extras_total, 2),
-                       "counted": w.counted} for w in weeks],
+                       "counted": w.counted,
+                       "reconciled": checked(w.week.isoformat())} for w in weeks],
+            "metrics": savings_metrics(ctx, today),
         })
 
     async def get_settings(request):

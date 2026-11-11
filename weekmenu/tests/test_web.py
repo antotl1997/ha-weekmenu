@@ -256,7 +256,8 @@ async def test_api_savings(aiohttp_client, ctx):
     client = await aiohttp_client(make_app(ctx))
     body = await (await client.get("api/savings")).json()
     assert body["total"] == 12.5 and body["month"] == 3.0  # only the November week
-    assert {"week": "2026-10-28", "savings": 4.0, "counted": True} in body["weeks"]
+    assert {"week": "2026-10-28", "savings": 4.0, "counted": True,
+            "reconciled": None} in body["weeks"]
 
 
 async def test_api_login_expired_is_reported(aiohttp_client, ctx, swaps):

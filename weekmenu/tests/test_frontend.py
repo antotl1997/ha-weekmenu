@@ -589,7 +589,7 @@ def test_app_v10_cooking_screen_taste_and_never_list_in_chrome(tmp_path):
     static = tmp_path / "static"
     shutil.copytree(STATIC_DIR, static)
     with Server(ctx, static) as base:
-        dom = render(base, "#gerecht/2026-11-04", tmp_path, "gerecht", size=PHONE_LONG)
+        dom = render(base, "#gerecht/2026-11-04", tmp_path, "gerecht-koken", size=PHONE_LONG)
         assert "data-cook" in dom and "Koken" in dom
         assert 'data-taste="down"' in dom and 'data-taste="never"' in dom
         assert dom.index("Koken") < dom.index("Ingrediënten")
@@ -614,4 +614,41 @@ def test_app_v10_cooking_screen_taste_and_never_list_in_chrome(tmp_path):
         assert dom.index("Mijn correcties") < dom.index("Nooit meer") < dom.index("Diagnose")
         assert dom.count('data-unnever="') == 2 and "Lasagne met spinazie" in dom
         assert TITLES[0] not in dom.split("Nooit meer", 1)[1]  # a thumb is not listed
+        assert "—" not in dom
+
+
+@pytest.mark.slow
+def test_app_v10_savings_with_recounted_weeks_and_numbers_in_chrome(tmp_path):
+    """v1.0: Besparing keeps the estimate (month, total, bars) and adds "Echt bespaard
+    (nagerekend)" per delivered week, "niet na te rekenen" when there was no order, and
+    the two numbers over the last four weeks."""
+    from app.ingredients import SKIP
+    from app.overrides import make_entry
+    from app.reconcile import OK, UNCHECKABLE
+
+    ctx = build_ctx(tmp_path)
+    log = ctx.ledger.load(W)
+    for x in log.plan["dishes"]:  # the recipe lines, as AH gives them
+        x["recipe"]["ingredients"] = ([[ln["from_ingredient"], ""] for ln in x["lines"]]
+                                      + [[t, ""] for t in x["pantry"] + x["not_found"]])
+    ctx.ledger.save(log)
+    ctx.overrides.put("snufje nootmuskaat", make_entry(SKIP, "snufje nootmuskaat", None, NOW))
+    r = ctx.reconciliations
+    r.put("2026-10-14", {"status": UNCHECKABLE, "reason": "Geen bezorgde bestelling "
+                         "gevonden in de menuweek. Gekocht in de winkel is niet na te rekenen."})
+    r.put("2026-10-21", {"status": OK, "bought_share": {"bought": 16, "added": 18},
+                         "realised_savings": 9.85})
+    r.put("2026-10-28", {"status": OK, "bought_share": {"bought": 17, "added": 19},
+                         "realised_savings": 8.40})
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "#besparing", tmp_path, "besparing-nagerekend", size=PHONE_LONG)
+        assert "€ 57,15" in dom  # the total stays the estimate
+        assert dom.count("Echt bespaard (nagerekend)") == 3
+        assert "€ 8,40" in dom and "17 van 19 toegevoegde producten echt gekocht" in dom
+        assert "niet na te rekenen" in dom and "Gekocht in de winkel" in dom
+        assert "Meetgetallen, laatste 4 weken" in dom
+        assert "Ingrediëntregels zonder ingreep" in dom and "(25 van 26)" in dom
+        assert "Toegevoegd en echt gekocht" in dom and "89%" in dom and "(33 van 37)" in dom
         assert "—" not in dom

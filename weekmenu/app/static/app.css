@@ -267,5 +267,7 @@ textarea::placeholder,input::placeholder{color:#6b655c;opacity:1}
 .csteps li:last-child{border:0}
 .cstep{display:flex;gap:14px;width:100%;text-align:left;padding:16px 0;font-size:20px;line-height:1.5;min-height:44px}
 .cstep .n{flex:none;width:36px;height:36px;border-radius:50%;background:#e3f1e4;color:#2f6b3a;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;margin-top:2px}
-.cstep.done .t{color:#9a948a;text-decoration:line-through}
+.cstep.done .t{color:#6b655c;text-decoration:line-through}
 .cstep.done .n{background:#2f6b3a;color:#fff}
+.row.chk .nm b{display:block;font-size:15px;font-weight:600;margin:2px 0}
+.row.chk .nm small:first-child{margin:0 0 1px}
