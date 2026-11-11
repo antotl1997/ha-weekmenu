@@ -246,3 +246,15 @@ async def test_remove_override_does_not_wait_for_a_menu_round(aiohttp_client, tm
     r = await client.post("api/overrides/remove", json={"key": "kipfilet"})
     assert r.status == 409 and (await r.json())["error"] == BUSY
     assert "kipfilet" in ctx.overrides.load()
+
+
+# --- M7: no order id in the log or the diagnose ring ---------------------------------
+
+
+def test_short_error_hides_numeric_path_segments():
+    e = AhApiError("GET /mobile-services/order/v1/123456789/details-grouped-by-taxonomy: "
+                   "HTTP 500", 500)
+    assert main.short_error(e) == ("GET /mobile-services/order/v1/<id>/"
+                                   "details-grouped-by-taxonomy: HTTP 500")
+    assert main.short_error(AhApiError("GET /x/v2/items failed: ReadTimeout")) == \
+        "GET /x/v2/items failed: ReadTimeout"

@@ -34,6 +34,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 import sys
 import time as _time
 from dataclasses import dataclass, field
@@ -284,10 +285,15 @@ async def guard(awaitable, what: str) -> bool:
         return False
 
 
+_ID_SEGMENT = re.compile(r"/\d+(?=[/?:\s]|$)")
+
+
 def short_error(e: BaseException) -> str:
-    """A description without secrets: AhClient errors never carry bodies or tokens."""
+    """A description without secrets: AhClient errors never carry bodies or tokens, and
+    a numeric path segment (an order id) becomes <id>, so none goes into the log or the
+    diagnose."""
     if isinstance(e, AhApiError):
-        return str(e)[:200]
+        return _ID_SEGMENT.sub("/<id>", str(e))[:200]
     return type(e).__name__
 
 
