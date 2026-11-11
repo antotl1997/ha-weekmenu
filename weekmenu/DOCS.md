@@ -89,11 +89,11 @@ Met Duim omlaag komt een gerecht minder vaak terug: in de rangschikking telt het
 
 ## Besparing nagerekend
 
-De besparing in de app en in `sensor.weekmenu_besparing_totaal` is een schatting: wat de bonus scheelt op wat de add-on toevoegde. De dag na de bezorging leest de add-on één keer je bezorgde bestelling bij AH en zet die ernaast. In Besparing staat dan per week "Echt bespaard (nagerekend)" met hoeveel van de toegevoegde producten echt gekocht zijn. Die regel telt niet mee in de totalen; die blijven de schatting.
+De besparing in de app en in `sensor.weekmenu_besparing_totaal` is een schatting: wat de bonus scheelt op wat de add-on toevoegde. De dag na de bezorging leest de add-on je bezorgde bestelling bij AH en zet die ernaast. In Besparing staat dan per week "Echt bespaard (nagerekend)" met hoeveel van de toegevoegde producten echt gekocht zijn. Die regel telt niet mee in de totalen; die blijven de schatting.
 
 - Alleen lezen: de add-on vraagt de bestelgegevens op en schrijft niets naar AH. Niet zolang schrijven stilstaat (Diagnose) of de login verlopen is; dan later.
-- Hooguit één keer per menuweek, ook als het lezen mislukt (dan staat er "niet na te rekenen").
-- Welke bestelling: de bestelling waar de add-on die week in schreef, anders elke bezorgde bestelling met een bezorgdag in de menuweek. Geen bestelling gevonden, bijvoorbeeld omdat je in de winkel kocht: "niet na te rekenen".
+- Hooguit één keer per dag. Is de bestelling nog niet bezorgd, is er (nog) geen bestelling te vinden of lukt het lezen niet (AH even onbereikbaar, login verlopen), dan kijkt hij de volgende dag opnieuw, tot een week na die dag. Lukt het dan nog niet, of is de bestelling geannuleerd, dan staat er "niet na te rekenen".
+- Welke bestelling: de bestelling waar de add-on die week in schreef, anders elke bezorgde bestelling met een bezorgdag in de menuweek. Geen bestelling gevonden, bijvoorbeeld omdat je in de winkel kocht: na een week "niet na te rekenen".
 - Wanneer: de dag na de bezorgdag die de add-on las toen hij in de bestelling schreef. Kent hij die niet (je bestelde vanaf de lijst), dan de woensdag na de menuweek. Weken van meer dan vijf weken geleden worden niet meer gelezen.
 - De uitkomsten staan in `reconciliation.json` in de datamap.
 

@@ -174,10 +174,18 @@ class Recipe:
 
 @dataclass
 class DeliveredOrder:
-    """v1.0: a delivered order (read only): webshop id -> quantity really delivered."""
+    """v1.0: a delivered order (read only): webshop id -> quantity really delivered.
+
+    `state` is AH's orderState. Anything but "DELIVERED" (and not cancelled) means the
+    order is not delivered yet: no items, and `day` may be unknown."""
     id: int
-    day: date
+    day: date | None
     items: dict[int, int] = field(default_factory=dict)
+    state: str = "DELIVERED"
+
+    @property
+    def delivered(self) -> bool:
+        return self.state == "DELIVERED"
 
 
 @dataclass
@@ -748,8 +756,13 @@ class AhClient:
     def _delivered_from(self, order_id: int, body: Any, day: date | None) -> DeliveredOrder | None:
         if not isinstance(body, dict):
             raise AhShapeError("bestelling: geen object", 200)
-        if body.get("orderState") != DELIVERED:
-            return None
+        state = body.get("orderState")
+        if state != DELIVERED:
+            if isinstance(state, str) and "CANCEL" in state.upper():
+                return None  # cancelled: final, never delivered
+            # open, in delivery, no state at all: not delivered yet, look again later
+            return DeliveredOrder(order_id, _iso(body.get("deliveryDate")) or day, {},
+                                  state=state if isinstance(state, str) else "ONBEKEND")
         groups = body.get("groupedProductsInTaxonomy")
         if groups is not None and not isinstance(groups, list):
             raise AhShapeError("bestelling: groupedProductsInTaxonomy is geen lijst", 200)
@@ -773,13 +786,15 @@ class AhClient:
         return self._delivered_from(int(order_id), body, day)
 
     async def delivered_order(self, order_id: int) -> DeliveredOrder | None:
-        """The order with this id as delivered; None when it is not delivered (yet), for
-        instance cancelled. Only a GET; a changed shape counts for ApiHealth."""
+        """The order with this id as delivered; None when it is cancelled; an order that
+        is not delivered yet has `delivered` False. Only a GET; a changed shape counts
+        for ApiHealth."""
         self._called_ah = False
         return await self._track("bestelling", self._read_delivered(order_id))
 
     async def delivered_orders(self, start: date, end: date) -> list[DeliveredOrder]:
-        """Every delivered order with its delivery slot from `start` to `end`. Only a
+        """Every order with its delivery slot from `start` to `end` that is delivered or
+        not delivered yet (`delivered` False); cancelled ones are left out. Only a
         GraphQL query and GETs."""
         async def read():
             data = await self.graphql(FULFILLMENTS_QUERY, {})

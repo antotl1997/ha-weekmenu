@@ -10,15 +10,20 @@ is paused (AH seems changed) or without a usable login; a changed answer counts 
 ApiHealth like any other read of the order.
 
 The result goes into `/data/reconciliation.json` (schema, durable), one entry per menu
-week, and is never redone: the entry is written before the reads (a crash or a failing
-read leaves "niet na te rekenen", never a second try). Per week:
+week. A marker ("bezig", with the try count) is written before every read, so a crash
+never gives a second read the same day. An order that is not delivered yet, no order in
+the menu week (yet) and a read that fails (5xx, a timeout, the login lost) are not final:
+the entry becomes "wacht" with `tries` and `next` (the next day) and is read again once a
+day, until DEADLINE_DAYS after the due day; the try on or after that day is the last
+one. A marker left by a crash counts as a failed try. Per week, final:
 
 - "ok": `bought_share` {"bought": x, "added": y}, x of the y products the add-on added
   that were really delivered, and `realised_savings`, the deal saving (deals.savings,
   with the bonus price of the week) over what was really bought, at most what was
   added; `estimated` is the week's own estimate, for the screen;
-- "niet_na_te_rekenen" with a reason: no delivered order in the menu week (a till
-  receipt cannot be matched), or AH could not be read.
+- "niet_na_te_rekenen" with a reason: the order was cancelled (final at once), or after
+  the last try: no delivered order in the menu week (a till receipt cannot be matched),
+  the order still not delivered, or AH could not be read.
 
 Neither the week logs nor totaal.json are ever written here: the cumulative total stays
 the estimate the spec defines.
@@ -47,13 +52,16 @@ __all__ = ["DeliveredOrder", "Reconciliations", "compute", "due_day", "reconcile
 RECON_SCHEMA = 1
 OK = "ok"
 UNCHECKABLE = "niet_na_te_rekenen"
-BUSY = "bezig"  # the marker written before the reads
+BUSY = "bezig"  # the marker written before the reads, with the try count
+WAIT = "wacht"  # not final yet: read again on `next`, once a day
+DEADLINE_DAYS = 7  # the last try: this many days after the due day
 WINDOW_DAYS = 35  # weeks whose delivery is longer ago are not read any more
 LAST_WEEKS = 4  # the two numbers: over the last four weeks
 NO_ORDER = ("Geen bezorgde bestelling gevonden in de menuweek. Gekocht in de winkel "
             "is niet na te rekenen.")
 NOT_DELIVERED = "De bestelling van deze week is niet (of nog niet) bezorgd."
 UNREADABLE = "De bestelling was niet te lezen bij AH."
+CANCELLED = "De bestelling van deze week is geannuleerd."
 
 
 class Reconciliations:
@@ -205,35 +213,71 @@ def metrics(ctx, today: date) -> dict:
 # --- the hourly look ---------------------------------------------------------------------
 
 
+def _day(value) -> date | None:
+    try:
+        return date.fromisoformat(str(value)[:10])
+    except ValueError:
+        return None
+
+
+def retry_day(entry: dict | None) -> date | None:
+    """When a week may be read (again): None for a final entry (or none at all).
+
+    "wacht": its `next`; "bezig" (a crash between the marker and the result): the day
+    after the marker, as a failed try."""
+    if not entry:
+        return None
+    status = entry.get("status")
+    if status == WAIT:
+        return _day(entry.get("next")) or date.min
+    if status == BUSY:
+        at = _day(entry.get("at"))
+        return at + timedelta(days=1) if at is not None else date.min
+    return None
+
+
+def tries(entry: dict | None) -> int:
+    n = (entry or {}).get("tries", 0)
+    return n if isinstance(n, int) and n >= 0 else 0
+
+
 def week_to_check(ledger, entries: dict[str, dict], today: date):
-    """The oldest menu week that is due and not recounted yet (or None)."""
+    """The oldest menu week that is due and not recounted yet, or waits for a next try
+    that is due (or None)."""
     for w in ledger.weeks():
-        if (w.too_new or not w.plan or w.week.isoformat() in entries
-                or not added_products(w)):
+        if w.too_new or not w.plan or not added_products(w):
             continue
+        entry = entries.get(w.week.isoformat())
+        if entry is not None:
+            again = retry_day(entry)
+            if again is None or again > today:
+                continue
         due = due_day(w)
         if due <= today and today - w.week <= timedelta(days=WINDOW_DAYS):
             return w
     return None
 
 
-async def _bought(ctx, wlog) -> tuple[dict[int, int] | None, str | None]:
-    """What was delivered for this week, or None and why not."""
+async def _bought(ctx, wlog) -> tuple[dict[int, int] | None, str | None, bool]:
+    """What was delivered for this week, or None, why not and whether that is final."""
     dest = wlog.added_to or ""
     if dest.startswith("order:") and dest[6:].isdigit():
         got = await ctx.client.delivered_order(int(dest[6:]))
         if got is None:
-            return None, NOT_DELIVERED
+            return None, CANCELLED, True
+        if not got.delivered:
+            return None, NOT_DELIVERED, False
         orders = [got]
     else:
-        orders = await ctx.client.delivered_orders(wlog.week, wlog.week + timedelta(days=6))
-        if not orders:
-            return None, NO_ORDER
+        found = await ctx.client.delivered_orders(wlog.week, wlog.week + timedelta(days=6))
+        orders = [o for o in found if o.delivered]
+        if not orders:  # an order may still be delivered, or show up as closed later
+            return None, (NOT_DELIVERED if found else NO_ORDER), False
     bought: dict[int, int] = {}
     for o in orders:
         for pid, n in o.items.items():
             bought[pid] = bought.get(pid, 0) + n
-    return bought, None
+    return bought, None, True
 
 
 async def reconcile_due(ctx, now: datetime) -> None:
@@ -264,6 +308,7 @@ async def reconcile_due(ctx, now: datetime) -> None:
         if wlog is None:
             return
         iso = wlog.week.isoformat()
+        n = tries(entries.get(iso)) + 1
         try:
             await ctx.client.ensure_fresh()  # an expired login does not use up the week
         except AhLoginExpired:
@@ -274,8 +319,8 @@ async def reconcile_due(ctx, now: datetime) -> None:
             log.warning("Nagerekende besparing: login niet ververst (%s)", short_error(e))
             return
         try:
-            # the marker first: whatever happens next, this week is read only once
-            await asyncio.to_thread(recon.put, iso, {"status": BUSY,
+            # the marker first: whatever happens next, this week is read once today
+            await asyncio.to_thread(recon.put, iso, {"status": BUSY, "tries": n,
                                                      "at": now.isoformat(timespec="minutes")})
         except SchemaTooNew as e:
             note_too_new(ctx, e.path)
@@ -284,21 +329,30 @@ async def reconcile_due(ctx, now: datetime) -> None:
             log.warning("reconciliation.json niet geschreven (%s)", type(e).__name__)
             return
         try:
-            bought, why = await _bought(ctx, wlog)
+            bought, why, final = await _bought(ctx, wlog)
         except AhLoginExpired:
             ctx.login_expired = True
-            bought, why = None, UNREADABLE
+            bought, why, final = None, UNREADABLE, False
         except Exception as e:
             log.warning("Nagerekende besparing: bestelling niet te lezen (%s)", short_error(e))
-            bought, why = None, UNREADABLE
-        entry = (compute(wlog, bought, now) if bought is not None
-                 else uncheckable(why, wlog, now))
+            bought, why, final = None, UNREADABLE, False
+        last = now.date() >= due_day(wlog) + timedelta(days=DEADLINE_DAYS)
+        if bought is not None:
+            entry = compute(wlog, bought, now)
+        elif final or last:
+            entry = {**uncheckable(why, wlog, now), "tries": n}
+        else:
+            entry = {"status": WAIT, "tries": n, "reason": why,
+                     "next": (now.date() + timedelta(days=1)).isoformat(),
+                     "at": now.isoformat(timespec="minutes")}
         try:
             await asyncio.to_thread(recon.put, iso, entry)
         except Exception as e:
             log.warning("reconciliation.json niet geschreven (%s)", type(e).__name__)
             return
-        if entry["status"] == OK:
+        if entry["status"] == WAIT:
+            log.info("Week %s nog niet na te rekenen, morgen opnieuw (poging %d)", iso, n)
+        elif entry["status"] == OK:
             share = entry["bought_share"]
             log.info("Week %s nagerekend: %d van %d producten gekocht, echt bespaard %.2f",
                      iso, share["bought"], share["added"], entry["realised_savings"])

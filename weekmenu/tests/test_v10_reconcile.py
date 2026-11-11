@@ -207,6 +207,9 @@ async def test_no_order_or_a_till_receipt_is_niet_na_te_rekenen(tmp_path):
     now = datetime(2026, 11, 11, 9, 0)
     ctx = ctx_with_week(tmp_path, now, [], added_to="list")
     await reconcile.reconcile_due(ctx, now)
+    assert ctx.reconciliations.load()[W.isoformat()]["status"] == "wacht"  # final review I3
+    now = datetime(2026, 11, 18, 9, 0)  # the last try: 7 days after the due day
+    await reconcile.reconcile_due(ctx, now)
     got = ctx.reconciliations.load()[W.isoformat()]
     assert got["status"] == UNCHECKABLE and got["reason"]
     assert "bought_share" not in got and "realised_savings" not in got
@@ -232,16 +235,18 @@ async def test_an_expired_login_found_on_the_way_does_not_use_up_the_week(tmp_pa
     assert ctx.login_expired is True and ctx.reconciliations.load() == {}
 
 
-async def test_a_failing_read_is_marked_and_not_repeated(tmp_path):
+async def test_a_failing_read_is_marked_and_read_again_the_next_day(tmp_path):
     now = datetime(2026, 11, 11, 9, 0)
     ctx = ctx_with_week(tmp_path, now, [], added_to="list")
     ctx.client.raise_on["delivered_orders"] = AhApiError("boom", 500)
     await reconcile.reconcile_due(ctx, now)
     got = ctx.reconciliations.load()[W.isoformat()]
-    assert got["status"] == UNCHECKABLE
+    assert got["status"] == "wacht" and got["tries"] == 1  # final review I3
     del ctx.client.raise_on["delivered_orders"]
+    await reconcile.reconcile_due(ctx, datetime(2026, 11, 11, 15, 0))
+    assert ctx.client.calls.count("delivered_orders") == 1  # not twice a day
     await reconcile.reconcile_due(ctx, datetime(2026, 11, 12, 9, 0))
-    assert ctx.client.calls.count("delivered_orders") == 1
+    assert ctx.client.calls.count("delivered_orders") == 2
 
 
 async def test_old_weeks_and_weeks_without_products_are_left_alone(tmp_path):

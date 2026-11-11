@@ -1,6 +1,8 @@
 """1.0.0 final review fixes: I1 (writes left over from a pause), I2 (honest repick
 text), I3 (the recount retries once a day), M6 (notify_tonight logs at most hourly)."""
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
+
+import pytest
 
 from app import main
 from app.health import PAUSED_NOTE
@@ -86,3 +88,124 @@ async def test_pause_swap_in_the_running_week_resume_the_card_is_not_ok(
     msgs = [n["message"] for n in ctx.hass.notifications()]
     assert manual_note(["AH Kippendijen"]) in msgs
     assert ctx.ledger.load(W).held_notified
+
+
+# --- I3: the recount looks again once a day until due_day + 7 ---------------------------
+
+from app import reconcile  # noqa: E402
+from app.ahclient import AhApiError, AhLoginExpired  # noqa: E402
+from app.reconcile import (  # noqa: E402
+    BUSY,
+    CANCELLED,
+    NO_ORDER,
+    NOT_DELIVERED,
+    OK,
+    UNCHECKABLE,
+    UNREADABLE,
+    WAIT,
+    DeliveredOrder,
+)
+from tests.test_staples import history_routes, make_client, no_delay  # noqa: E402,F401
+from tests.test_v10_reconcile import ctx_with_week  # noqa: E402
+
+DUE = date(2026, 11, 7)  # delivery on Friday 6 November: recounted from Saturday
+
+
+def at(day: date, hour: int = 9) -> datetime:
+    return datetime(day.year, day.month, day.day, hour, 0)
+
+
+def entry(ctx):
+    return ctx.reconciliations.load()[W.isoformat()]
+
+
+async def test_ahclient_tells_not_yet_delivered_from_cancelled(respx_mock, tmp_path, no_delay):
+    respx_mock.get(url__regex=r".*/order/v1/7/details-grouped-by-taxonomy").respond(
+        json={"orderState": "SUBMITTED", "deliveryDate": "2026-11-06"})
+    history_routes(respx_mock)
+    client = make_client(tmp_path)
+    got = await client.delivered_order(7)
+    assert got is not None and not got.delivered and got.state == "SUBMITTED"
+    assert got.items == {} and client.health.fails["bestelling"] == 0
+    assert await client.delivered_order(900004) is None  # cancelled: final
+    assert (await client.delivered_order(900002)).delivered
+
+
+async def test_not_yet_delivered_waits_a_day_and_then_counts(tmp_path):
+    ctx = ctx_with_week(tmp_path, at(DUE), [DeliveredOrder(5, None, {}, state="SUBMITTED")],
+                        added_to="order:5", delivery=date(2026, 11, 6))
+    await reconcile.reconcile_due(ctx, at(DUE))
+    got = entry(ctx)
+    assert got["status"] == WAIT and got["tries"] == 1 and got["reason"] == NOT_DELIVERED
+    assert got["next"] == (DUE + timedelta(days=1)).isoformat()
+    for hour in (10, 15, 22):  # not again the same day
+        await reconcile.reconcile_due(ctx, at(DUE, hour))
+    assert ctx.client.reads == [("order", 5)]
+    ctx.client.delivered[5] = DeliveredOrder(5, date(2026, 11, 7), {1: 2, 2: 1})
+    await reconcile.reconcile_due(ctx, at(DUE + timedelta(days=1)))
+    got = entry(ctx)
+    assert got["status"] == OK and got["bought_share"] == {"bought": 2, "added": 5}
+    assert len(ctx.client.reads) == 2
+    await reconcile.reconcile_due(ctx, at(DUE + timedelta(days=2)))
+    assert len(ctx.client.reads) == 2  # final
+
+
+async def test_a_cancelled_order_is_final_at_once(tmp_path):
+    ctx = ctx_with_week(tmp_path, at(DUE), [], added_to="order:5",
+                        delivery=date(2026, 11, 6))
+    await reconcile.reconcile_due(ctx, at(DUE))
+    got = entry(ctx)
+    assert got["status"] == UNCHECKABLE and got["reason"] == CANCELLED
+    await reconcile.reconcile_due(ctx, at(DUE + timedelta(days=1)))
+    assert len(ctx.client.reads) == 1
+
+
+@pytest.mark.parametrize("error", [AhApiError("boom", 503), AhApiError("timeout"),
+                                   AhLoginExpired("weg", 401)])
+async def test_a_transient_error_is_retried_once_a_day(tmp_path, error):
+    ctx = ctx_with_week(tmp_path, at(DUE), [], added_to="list", delivery=date(2026, 11, 6))
+    ctx.client.raise_on["delivered_orders"] = error
+    await reconcile.reconcile_due(ctx, at(DUE))
+    got = entry(ctx)
+    assert got["status"] == WAIT and got["reason"] == UNREADABLE and got["tries"] == 1
+    ctx.login_expired = False  # logged in again
+    del ctx.client.raise_on["delivered_orders"]
+    ctx.client.delivered[8] = DeliveredOrder(8, date(2026, 11, 6), {1: 2})
+    await reconcile.reconcile_due(ctx, at(DUE, 23))
+    assert ctx.client.calls.count("delivered_orders") == 1  # once a day
+    await reconcile.reconcile_due(ctx, at(DUE + timedelta(days=1)))
+    assert entry(ctx)["status"] == OK
+
+
+async def test_no_order_is_retried_until_seven_days_after_due_then_final(tmp_path):
+    ctx = ctx_with_week(tmp_path, at(DUE), [], added_to="list", delivery=date(2026, 11, 6))
+    for i in range(7):
+        await reconcile.reconcile_due(ctx, at(DUE + timedelta(days=i)))
+        got = entry(ctx)
+        assert got["status"] == WAIT and got["tries"] == i + 1 and got["reason"] == NO_ORDER
+    await reconcile.reconcile_due(ctx, at(DUE + timedelta(days=7)))
+    got = entry(ctx)
+    assert got["status"] == UNCHECKABLE and got["reason"] == NO_ORDER and got["tries"] == 8
+    for i in (8, 9, 20):
+        await reconcile.reconcile_due(ctx, at(DUE + timedelta(days=i)))
+    assert ctx.client.calls.count("delivered_orders") == 8
+
+
+async def test_a_busy_marker_left_by_a_crash_counts_as_a_failed_try(tmp_path):
+    """Review M1: a crash between the marker and the result is retried the next day."""
+    ctx = ctx_with_week(tmp_path, at(DUE), [DeliveredOrder(8, date(2026, 11, 6), {1: 2})],
+                        added_to="list", delivery=date(2026, 11, 6))
+    ctx.reconciliations.put(W.isoformat(), {"status": BUSY, "tries": 1,
+                                            "at": at(DUE).isoformat(timespec="minutes")})
+    await reconcile.reconcile_due(ctx, at(DUE, 15))
+    assert ctx.client.calls.count("delivered_orders") == 0  # same day: not yet
+    await reconcile.reconcile_due(ctx, at(DUE + timedelta(days=1)))
+    assert entry(ctx)["status"] == OK
+
+
+async def test_waiting_weeks_stay_hidden_in_the_savings_api(aiohttp_client, tmp_path):
+    ctx = ctx_with_week(tmp_path, at(DUE), [], added_to="list", delivery=date(2026, 11, 6))
+    await reconcile.reconcile_due(ctx, at(DUE))
+    client = await aiohttp_client(make_app(ctx))
+    weeks = (await (await client.get("api/savings")).json())["weeks"]
+    assert next(w for w in weeks if w["week"] == W.isoformat())["reconciled"] is None
