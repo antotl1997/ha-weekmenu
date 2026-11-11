@@ -928,6 +928,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         key = (await body_of(request)).get("key")
         if not isinstance(key, str) or not key:
             return _err(400, "key is nodig")
+        if ctx.busy or ctx.in_round:  # never wait a whole menu round (like the other taps)
+            return _err(409, BUSY)
         done = {"removed": 0, "held": None, "target": None, "warning": None}
         touched: list[date] = []
         try:

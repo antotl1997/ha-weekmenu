@@ -231,3 +231,18 @@ async def test_tonight_warns_at_most_once_an_hour_and_still_sends_later(tmp_path
     ctx.hass.read_settings = real  # HA back: the next minute still sends
     await main.notify_tonight(ctx, datetime(2026, 11, 4, 17, 30))
     assert any("Vanavond" in m for _, m in tonights(ctx))
+
+
+# --- M5: Terugdraaien in Mijn correcties does not wait a whole menu round ----------------
+
+
+async def test_remove_override_does_not_wait_for_a_menu_round(aiohttp_client, tmp_path):
+    from app.hass import BUSY
+    ctx = await planned(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    await client.post(f"api/dish/{WO}/correct",
+                      json={"ingredient": "300 g kipfilet", "kind": "pantry"})
+    ctx.in_round = True
+    r = await client.post("api/overrides/remove", json={"key": "kipfilet"})
+    assert r.status == 409 and (await r.json())["error"] == BUSY
+    assert "kipfilet" in ctx.overrides.load()
