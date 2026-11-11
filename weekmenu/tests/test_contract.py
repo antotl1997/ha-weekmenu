@@ -106,3 +106,13 @@ async def test_check_reports_a_renamed_field(respx_mock, tokens, capsys):
     out = capsys.readouterr().out
     assert "shoppinglist__items.json: $.items: ontbreekt" in out
     assert "shoppinglist__items.json: $.entries: nieuw" in out
+
+
+async def test_check_never_refreshes_an_expiring_login(respx_mock, tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(rf, "DELAY", 0)
+    path = tmp_path / "tokens.json"
+    TokenStore(path).save(Tokens("a", "r", time.time() + 10))
+    refresh = respx_mock.post(BASE + "/mobile-auth/v1/auth/token/refresh").respond(200)
+    assert await check(path) == 2
+    assert refresh.call_count == 0 and not respx_mock.calls
+    assert "verlopen" in capsys.readouterr().out

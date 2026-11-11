@@ -355,7 +355,7 @@ async def test_retry_switches_writing_on_and_clears_the_mark(aiohttp_client, tmp
     assert not ctx.health.writes_paused and not ctx.health_notified
     state = json.loads((tmp_path / "state.json").read_text(encoding="utf-8"))
     assert state["api"] == {"writes_paused": False, "paused_by": None, "paused_at": None,
-                            "notified": False}
+                            "notified": False, "last_ok": None}
 
 
 async def test_context_shares_one_health_object_with_the_client(tmp_path):
@@ -368,3 +368,115 @@ async def test_context_shares_one_health_object_with_the_client(tmp_path):
     fake = FakeAh(tmp_path)
     c2 = make_ctx(tmp_path, ah=fake)
     assert fake.health is c2.health
+
+
+# --- fix round 1 (Ruling 48) ---------------------------------------------------------------
+
+
+async def test_refused_writes_pause_with_one_push(respx_mock, tmp_path):
+    respx_mock.get(LIST_URL).respond(json=fx("handmade-shoppinglist__items.json")["body"])
+    absent = fx("order-active__default.json")
+    respx_mock.get(ORDER_GET).respond(absent["status"], json=absent["body"])
+    patch = respx_mock.patch(LIST_URL).respond(400)
+    http = httpx.AsyncClient()
+    ctx = real_ctx(tmp_path, http)
+    for pid in (7, 8):  # two taps on two staples
+        with pytest.raises(ahclient.AhApiError):
+            await apply_extras(ctx.client, ctx.ledger, ctx.ledger.load(W), {pid: 1})
+        await main.sync_health(ctx)
+    assert ctx.health.writes_paused and patch.call_count == 2
+    res = await apply_extras(ctx.client, ctx.ledger, ctx.ledger.load(W), {9: 1})
+    assert res.held == PAUSED_NOTE and patch.call_count == 2
+    await main.sync_health(ctx)
+    assert [n["message"] for n in ctx.hass.notifications()] == [PAUSED_MESSAGE]
+    await http.aclose()
+
+
+async def test_two_concurrent_syncs_send_one_push(tmp_path):
+    hass = FakeHass(tmp_path / "totaal.json")
+    real_post = hass._post
+
+    async def slow_post(path, payload):
+        await asyncio.sleep(0.05)
+        await real_post(path, payload)
+
+    hass._post = slow_post
+    ctx = make_ctx(tmp_path, hass=hass)
+    paused(ctx)
+    await asyncio.gather(main.sync_health(ctx), main.sync_health(ctx))
+    assert len(hass.notifications()) == 1
+
+
+def test_the_ring_keeps_only_the_add_ons_own_lines_and_scrubs_ingress_paths():
+    from app.diag import RingHandler, scrub
+    ring = RingHandler()
+    for name in ("aiohttp.access", "httpx", "httpcore.http11", "weekmenu.web", "app.planner"):
+        rec = logging.LogRecord(name, logging.INFO, __file__, 1,
+                                '172.30.32.2 "GET /api/week" 200 "https://ha.local/api/'
+                                'hassio_ingress/AbCdEfGh123/" from %s', (name,), None)
+        ring.handle(rec)
+    assert [line.rsplit(" ", 1)[-1] for line in ring.lines] == ["weekmenu.web", "app.planner"]
+    assert "AbCdEfGh123" not in scrub("x /api/hassio_ingress/AbCdEfGh123/api/week", [])
+
+
+async def test_diagnose_drops_an_access_log_line_with_an_ingress_referer(aiohttp_client, tmp_path):
+    ctx = make_ctx(tmp_path)
+    install_ring()
+    logging.getLogger("aiohttp.access").warning(
+        '172.30.32.2 "GET /api/week HTTP/1.1" 200 "https://ha.local/api/hassio_ingress/'
+        'Ingr3ssT0ken42/" "Mozilla"')
+    logging.getLogger("weekmenu.test").warning("pad /api/hassio_ingress/Ingr3ssT0ken42/x")
+    text = await (await (await aiohttp_client(make_app(ctx))).get("api/diagnose")).text()
+    assert "Ingr3ssT0ken42" not in text and "Mozilla" not in text
+
+
+async def test_probe_accepts_the_order_when_the_list_is_locked_by_it(tmp_path):
+    from app.ahclient import ActiveOrder, AhOrderMode
+    ah = FakeAh(tmp_path, order=ActiveOrder(5, {}))
+    ctx = make_ctx(tmp_path, ah=ah)
+
+    async def locked():
+        raise AhOrderMode("order mode", 400)
+
+    ah.shopping_list = locked
+    # like AhClient: a successful read reports itself to ApiHealth
+    real_periods, real_order = ah.bonus_periods, ah.active_order
+
+    async def periods():
+        out = await real_periods()
+        ctx.health.ok("bonus")
+        return out
+
+    async def order():
+        out = await real_order()
+        ctx.health.ok("bestelling")
+        return out
+
+    ah.bonus_periods, ah.active_order = periods, order
+    paused(ctx, "lijst")
+    await main.probe_health(ctx)
+    assert not ctx.health.writes_paused
+
+
+async def test_last_ah_sync_survives_a_restart(tmp_path):
+    ctx = make_ctx(tmp_path)
+    ctx.health.ok("bonus")
+    main._save_state(ctx)
+    again = make_ctx(tmp_path)
+    main.load_state(again)
+    assert again.health.last_ok == ctx.health.last_ok
+
+
+async def test_logout_waits_for_a_running_refresh(aiohttp_client, tmp_path):
+    ctx = make_ctx(tmp_path)
+    ctx.store.save(Tokens(ACCESS, REFRESH, 9e9))
+
+    async def refresh_late():
+        await asyncio.sleep(0.05)
+        ctx.store.save(Tokens("new-a", "new-r", 9e9))  # what a refresh would write
+
+    ctx.client._refresh_task = asyncio.create_task(refresh_late())
+    client = await aiohttp_client(make_app(ctx))
+    assert (await client.post("api/logout")).status == 200
+    await asyncio.sleep(0.1)
+    assert not (tmp_path / "tokens.json").exists()

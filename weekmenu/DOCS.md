@@ -72,7 +72,7 @@ In de app onder Instellingen staat bij AH-login de knop Uitloggen bij AH. Na bev
 
 De add-on controleert of de antwoorden van AH de vorm hebben die hij verwacht, voor de bonus, de recepten, de producten, je lijst en je bestelling. Gaat het op hetzelfde onderdeel twee keer achter elkaar mis, dan schrijft hij niets meer naar je bestelling of lijst. Je krijgt dan één melding, en de app toont bovenaan dat schrijven stilstaat. Het menu wordt wel gewoon gemaakt en bewaard.
 
-Elk uur probeert de add-on of AH weer normaal antwoordt. Lukt dat, dan gaat schrijven vanzelf weer aan en vult de volgende ronde aan wat bleef liggen. In Instellingen, Diagnose kun je ook zelf op Opnieuw proberen tikken; tik daarna op Nu maken om aan te vullen.
+Elk uur probeert de add-on of AH weer normaal antwoordt. Lukt dat, dan gaat schrijven vanzelf weer aan en vult de volgende ronde aan wat bleef liggen. Weigerde AH juist het schrijven zelf, dan gaat het alleen met de hand weer aan, want dat is niet te testen zonder iets te schrijven. In Instellingen, Diagnose kun je ook zelf op Opnieuw proberen tikken; tik daarna op Nu maken om aan te vullen.
 
 Met Kopieer diagnose zet je de gegevens voor een melding op je klembord: de versies, de status per onderdeel, de laatste logregels en een samenvatting per week. Er staat geen login, code of antwoord van AH in.
 

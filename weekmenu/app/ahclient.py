@@ -81,7 +81,7 @@ def health_kind(endpoint: str, e: BaseException) -> str | None:
     if isinstance(e, AhNotJson):
         return "geen JSON"
     if isinstance(e, AhApiError) and 400 <= e.status < 500:
-        if e.status == 404 and endpoint == "bestelling":
+        if e.status == 404 and endpoint.startswith("bestelling"):
             return None
         return f"HTTP {e.status}"
     return None
@@ -857,7 +857,7 @@ class AhClient:
             items.append(_list_item(pid, current.get(pid, 0) + qty))
         if on_before is not None:
             on_before({pid: current.get(pid, 0) for pid in adds})
-        await self._track("lijst", self.request(
+        await self._track("lijst:schrijven", self.request(
             "PATCH", "/mobile-services/shoppinglist/v2/items", json={"items": items}
         ))
 
@@ -889,7 +889,7 @@ class AhClient:
         if on_before is not None:
             on_before({pid: current.get(pid, 0) for pid in todo})
         if items:
-            await self._track("lijst", self.request(
+            await self._track("lijst:schrijven", self.request(
                 "PATCH", "/mobile-services/shoppinglist/v2/items", json={"items": items}
             ))
         return skipped
@@ -973,7 +973,7 @@ class AhClient:
             items.append(_order_item(pid, fresh.items.get(pid, 0) + qty))
         if on_before is not None:
             on_before({pid: fresh.items.get(pid, 0) for pid in adds})
-        await self._track("bestelling", self.request(
+        await self._track("bestelling:schrijven", self.request(
             "PUT",
             "/mobile-services/order/v1/items?sortBy=DEFAULT",
             json={"items": items},
@@ -1006,7 +1006,7 @@ class AhClient:
         if on_before is not None:
             on_before({pid: fresh.items.get(pid, 0) for pid in reductions})
         if items:
-            await self._track("bestelling", self.request(
+            await self._track("bestelling:schrijven", self.request(
                 "PUT",
                 "/mobile-services/order/v1/items?sortBy=DEFAULT",
                 json={"items": items},

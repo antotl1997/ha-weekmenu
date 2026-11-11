@@ -9,7 +9,8 @@
 - **AH-appversie als instelling** (`ah_app_version`, standaard 9.28). Weigert AH een oude app-versie, dan pas je dit aan zonder op een nieuwe versie van de add-on te wachten.
 - **Watchdog.** Home Assistant start de add-on opnieuw als hij niet meer reageert.
 - De melding "werk de add-on bij" komt nu echt één keer, ook na een herstart. Staat de AH-login in een bestand van een nieuwere versie, dan toont de app die melding in plaats van het inlogscherm.
-- Voor ontwikkelaars: `python -m tools.record_fixtures --check <tokens.json>` vergelijkt een verse, alleen-lezen opname met de opgeslagen voorbeeldantwoorden en noemt de verschillen.
+- Voor ontwikkelaars: `python -m tools.record_fixtures --check <tokens.json>` vergelijkt een verse, alleen-lezen opname met de opgeslagen voorbeeldantwoorden en noemt de verschillen. Gebruik daarvoor een eigen login, niet een kopie van die van de add-on; de check ververst nooit.
+- Zet je terug naar 0.6, dan vergeet die versie een lopende pauze van het schrijven (en de melding daarover) zodra hij `state.json` bijwerkt.
 
 ## 0.6.0
 

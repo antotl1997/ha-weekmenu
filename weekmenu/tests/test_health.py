@@ -116,7 +116,8 @@ def test_view_has_no_bodies_only_kinds_and_counts():
     v = h.view()
     assert v["endpoints"]["bestelling"] == {"fouten_achter_elkaar": 1, "laatste_fout": "HTTP 403"}
     assert v["writes_paused"] is False and set(v["endpoints"]) == {
-        "bonus", "recept", "product", "lijst", "bestelling"}
+        "bonus", "recept", "product", "lijst", "bestelling",
+        "lijst:schrijven", "bestelling:schrijven"}
 
 
 @pytest.mark.parametrize("endpoint,exc,kind", [
@@ -311,3 +312,35 @@ async def test_default_app_version_is_928(tmp_path):
     assert client.app_version == "9.28"
     assert client._headers()["x-client-version"] == "9.28"
     await http.aclose()
+
+
+# --- fix round 1 (Ruling 48) ---------------------------------------------------------------
+
+
+async def test_two_refused_list_writes_pause_although_the_reads_succeed(respx_mock, tmp_path):
+    respx_mock.get(LIST_URL).respond(json={"items": []})
+    patch = respx_mock.patch(LIST_URL).respond(400, json={"message": "nope"})
+    client, http = make(tmp_path)
+    for pid in (1, 2):  # two separate write attempts, each read first
+        with pytest.raises(AhApiError):
+            await client.add_to_shopping_list({pid: 1})
+    assert patch.call_count == 2
+    assert client.health.writes_paused and client.health.paused_by == "lijst:schrijven"
+    assert client.health.fails["lijst"] == 0  # the reads were fine
+    await http.aclose()
+
+
+def test_a_pause_caused_by_writes_only_ends_by_hand():
+    h = ApiHealth()
+    h.failed("bestelling:schrijven", "HTTP 400")
+    h.failed("bestelling:schrijven", "HTTP 400")
+    for e in ("bonus", "lijst", "bestelling"):
+        h.ok(e)
+    assert h.writes_paused
+    h.resume("knop")
+    assert not h.writes_paused
+
+
+def test_404_on_an_order_write_does_not_count():
+    assert health_kind("bestelling:schrijven", AhApiError("x", 404)) is None
+    assert health_kind("lijst:schrijven", AhApiError("x", 400)) == "HTTP 400"

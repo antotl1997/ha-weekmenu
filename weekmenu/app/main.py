@@ -43,7 +43,15 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
-from app.ahclient import APP_VERSION, AhApiError, AhClient, AhLoginExpired, BonusPeriod, Product
+from app.ahclient import (
+    APP_VERSION,
+    AhApiError,
+    AhClient,
+    AhLoginExpired,
+    AhOrderMode,
+    BonusPeriod,
+    Product,
+)
 from app.health import PAUSED_MESSAGE, ApiHealth
 from app.hass import (
     AWAY_SCHEMA,
@@ -186,6 +194,8 @@ class Context:
     health_notified: bool = False
     app_version: str = APP_VERSION
     _saved_marks: tuple | None = None  # what state.json holds of the marks above
+    # one sync_health at a time: two requests at once must not both send the push
+    _sync_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
 
     def __post_init__(self):
         own = getattr(self.client, "health", None)
@@ -293,15 +303,16 @@ async def sync_health(ctx: Context) -> None:
     an HA failure tries again next time; when writing is on again the mark is cleared,
     so a later pause tells it again.
     """
-    h = ctx.health
-    if h.writes_paused and not ctx.health_notified:
-        if await guard(ctx.hass.notify("Weekmenu", PAUSED_MESSAGE, ctx.ingress_url),
-                       "melding"):
-            ctx.health_notified = True
-    elif not h.writes_paused and ctx.health_notified:
-        ctx.health_notified = False
-    if _marks(ctx) != ctx._saved_marks:
-        _save_state(ctx)
+    async with ctx._sync_lock:
+        h = ctx.health
+        if h.writes_paused and not ctx.health_notified:
+            if await guard(ctx.hass.notify("Weekmenu", PAUSED_MESSAGE, ctx.ingress_url),
+                           "melding"):
+                ctx.health_notified = True
+        elif not h.writes_paused and ctx.health_notified:
+            ctx.health_notified = False
+        if _marks(ctx) != ctx._saved_marks:
+            _save_state(ctx)
 
 
 def health_needs_sync(ctx: Context) -> bool:
@@ -321,7 +332,12 @@ async def probe_health(ctx: Context) -> None:
             await ctx.client.bonus_periods()
             order = await ctx.client.active_order()
             if order is None or h.paused_by == "lijst":
-                await ctx.client.shopping_list()
+                try:
+                    await ctx.client.shopping_list()
+                except AhOrderMode:
+                    # the list is locked by the order that just read fine: not failing,
+                    # and the order read stands in for it
+                    h.ok("lijst")
             if h.writes_paused and h.paused_by == "recept":
                 await ctx.client.search_recipes("pasta", 1)
             if h.writes_paused and h.paused_by == "product":
@@ -903,6 +919,7 @@ def load_state(ctx: Context) -> None:
             ctx.health.restore(api.get("writes_paused") is True, api.get("paused_by"),
                                api.get("paused_at"))
             ctx.health_notified = api.get("notified") is True
+            ctx.health.restore_last_ok(api.get("last_ok"))
         ctx._saved_marks = _marks(ctx)
         if isinstance(waiting, dict):
             exp = waiting.get("expected")
@@ -922,7 +939,8 @@ def _save_state(ctx: Context) -> None:
             "week": w.week.isoformat(),
             "expected": w.expected.isoformat() if w.expected else None},
         "too_new_notified": ctx.too_new_notified,
-        "api": {**ctx.health.persisted(), "notified": ctx.health_notified},
+        "api": {**ctx.health.persisted(), "notified": ctx.health_notified,
+                "last_ok": ctx.health.last_ok},
     }
     try:
         write_json(Path(ctx.state_path), data, STATE_SCHEMA)
@@ -1076,7 +1094,9 @@ async def amain() -> None:
         )
         load_state(ctx)
         scan_too_new(ctx)  # the message goes out with the first look of the schedule
-        runner = web.AppRunner(make_app(ctx, allowed_remotes={INGRESS_PROXY}))
+        # no access log: its Referer carries the ingress token, and it adds nothing
+        runner = web.AppRunner(make_app(ctx, allowed_remotes={INGRESS_PROXY}),
+                               access_log=None)
         await runner.setup()
         await web.TCPSite(runner, "0.0.0.0", PORT).start()
         log.info("Weekmenu AH gestart, kijkt elke dag vanaf %s elk uur of de folder er is",

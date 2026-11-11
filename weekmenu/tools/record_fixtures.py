@@ -4,7 +4,11 @@ Read-only: GET requests and GraphQL queries only. Writes to
 %APPDATA%\\weekmenu-test\\raw\\. Request headers are never written.
 
 Contract check (v0.7, local only, never in CI: CI has no AH login and no AH data):
-python -m tools.record_fixtures --check <path to tokens.json> makes a fresh read-only
+python -m tools.record_fixtures --check <path to tokens.json>. Use a login of your own
+(log in once for the tool), never a copy of the add-on's tokens.json: AH rotates the
+refresh token, so a refresh here would log the add-on out. The check never refreshes:
+with an access token that has (almost) expired it stops and asks for a fresh login.
+It makes a fresh read-only
 recording of the critical endpoints, keeps it in memory, and compares its shape (keys and
 types, recursively, lists on their first element) with the stored fixtures. It prints
 the differences, never a value, and exits 1 when there are any.
@@ -15,12 +19,13 @@ import sys
 import json
 import os
 import re
+import time
 from pathlib import Path
 from urllib.parse import quote, urlencode
 
 import httpx
 
-from app.ahclient import BASE_URL, AhClient
+from app.ahclient import BASE_URL, REFRESH_MARGIN, AhClient
 from app.tokens import TokenStore
 
 ROOT = Path(os.environ.get("APPDATA", ".")) / "weekmenu-test"
@@ -65,15 +70,17 @@ def slug(s: str) -> str:
 
 
 class Recorder:
-    def __init__(self, client: AhClient):
+    def __init__(self, client: AhClient, refresh: bool = True):
         self.c = client
+        self.refresh = refresh  # False: never rotate the tokens (the contract check)
         self.calls = 0
         self.log: list[str] = []
 
     async def fetch(self, method: str, path: str, json_body=None):
         """Returns (status, parsed body or text). Never raises on HTTP status."""
         await asyncio.sleep(DELAY)
-        await self.c.ensure_fresh()
+        if self.refresh:
+            await self.c.ensure_fresh()
         headers = self.c._headers()
         headers["Authorization"] = f"Bearer {self.c.store.load().access_token}"
         r = await self.c.http.request(
@@ -276,12 +283,18 @@ def check_one(name: str, status: int, body, stored_status: int, stored) -> list[
 
 async def check(tokens_path: Path) -> int:
     store = TokenStore(Path(tokens_path))
-    if store.load() is None:
+    t = store.load()
+    if t is None:
         print("Geen bruikbare tokens in", Path(tokens_path).name)
+        return 2
+    if t.expires_at - time.time() < REFRESH_MARGIN:
+        # never refresh here: that could rotate a login someone else still uses
+        print("Access token (bijna) verlopen: log opnieuw in voor de check, "
+              "verversen doet de check niet")
         return 2
     diffs: list[str] = []
     async with httpx.AsyncClient(timeout=30) as http:
-        rec = Recorder(AhClient(store, http))
+        rec = Recorder(AhClient(store, http), refresh=False)
 
         async def rest(name, path):
             status, body = await rec.fetch("GET", path)

@@ -417,6 +417,14 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         """Uitloggen bij AH: tokens.json (and its .bak) gone, the app shows the login.
         Under the lock: a round may be refreshing the tokens right now."""
         async with ctx.lock:
+            # a refresh still running (shielded, maybe from a cancelled caller) would
+            # write new tokens after the clear: let it finish first
+            task = getattr(ctx.client, "_refresh_task", None)
+            if task is not None and not task.done():
+                try:
+                    await asyncio.shield(task)
+                except Exception:
+                    pass  # an expired login is fine here: it is about to go anyway
             await asyncio.to_thread(ctx.store.clear)
         ctx.login_expired = True
         log.info("Uitgelogd bij AH: login verwijderd")

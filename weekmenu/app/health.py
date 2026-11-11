@@ -1,14 +1,18 @@
 """ApiHealth: notice when AH changed its API before the add-on writes nonsense.
 
 Per critical endpoint (bonus, recept, product, lijst, bestelling) the failures in a
-row are counted. A failure is a shape error (a field missing or of the wrong type, or
+row are counted, the writes to the list and the order on keys of their own
+("lijst:schrijven", "bestelling:schrijven"): the read right before a write succeeds,
+and must not reset the count of the write. A failure is a shape error (a field missing or of the wrong type, or
 no JSON) or a 4xx other than 401, and other than 404 on the order (no active order).
 The AhClient decides what counts (`ahclient.health_kind`); this object only counts.
 
 After PAUSE_AFTER failures in a row on one endpoint `writes_paused` is set: the writer
 then sends nothing to AH. A success resets that endpoint's count. Writing resumes after
 a successful full read round (the bonus, the list or the order, and the endpoint that
-paused it) or by hand ("Opnieuw proberen" in the app). Never holds a body or a token:
+paused it) or by hand ("Opnieuw proberen" in the app). A pause caused by writes only
+ends by hand: a read cannot show that a write works again, and nothing may be written
+to find out. Never holds a body or a token:
 only counts and the kind of the last failure ("vorm", "HTTP 403").
 """
 import logging
@@ -17,7 +21,8 @@ from datetime import datetime
 
 log = logging.getLogger("weekmenu.health")
 
-CRITICAL = ("bonus", "recept", "product", "lijst", "bestelling")
+CRITICAL = ("bonus", "recept", "product", "lijst", "bestelling",
+            "lijst:schrijven", "bestelling:schrijven")
 PAUSE_AFTER = 2
 PAUSED_NOTE = "Schrijven staat stil omdat AH iets veranderd lijkt te hebben"
 PAUSED_MESSAGE = ("AH lijkt iets veranderd te hebben, schrijven naar je bestelling staat "
@@ -45,6 +50,8 @@ class ApiHealth:
         if not self.writes_paused:
             return
         self._seen.add(endpoint)
+        if self.paused_by is not None and self.paused_by.endswith(":schrijven"):
+            return  # only "Opnieuw proberen" ends a pause caused by writes
         if ("bonus" in self._seen and self._seen & _TARGETS
                 and (self.paused_by is None or self.paused_by in self._seen)):
             self.resume("geslaagde leesronde")
@@ -77,6 +84,10 @@ class ApiHealth:
         self.writes_paused = bool(paused)
         self.paused_by = paused_by if paused_by in CRITICAL else None
         self.paused_at = paused_at if isinstance(paused_at, str) else None
+
+    def restore_last_ok(self, stamp) -> None:
+        if isinstance(stamp, str) and self.last_ok is None:
+            self.last_ok = stamp
 
     def persisted(self) -> dict:
         return {"writes_paused": self.writes_paused, "paused_by": self.paused_by,

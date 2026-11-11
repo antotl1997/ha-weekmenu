@@ -20,6 +20,16 @@ RING_SIZE = 50
 WEEKS_SHOWN = 8
 _BEARER = re.compile(r"(?i)bearer\s+[^\s\"']+")
 _CODE = re.compile(r"code=[A-Za-z0-9._~-]+")
+_INGRESS = re.compile(r"hassio_ingress/[^/\s\"'?#]+")
+# only the add-on's own loggers: an access log or httpx line may carry an ingress
+# token (Referer) or a URL with a query
+OWN_LOGGERS = ("weekmenu", "app")
+
+
+class OwnLogs(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        name = record.name
+        return any(name == p or name.startswith(p + ".") for p in OWN_LOGGERS)
 
 
 class RingHandler(logging.Handler):
@@ -27,6 +37,7 @@ class RingHandler(logging.Handler):
 
     def __init__(self, size: int = RING_SIZE):
         super().__init__(level=logging.INFO)
+        self.addFilter(OwnLogs())
         self.lines: deque[str] = deque(maxlen=size)
         self.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
 
@@ -62,6 +73,7 @@ def scrub(text: str, secrets: list[str]) -> str:
     for v in secrets:
         text = text.replace(v, "***")
     text = _BEARER.sub("Bearer ***", text)
+    text = _INGRESS.sub("hassio_ingress/***", text)
     return _CODE.sub("code=***", text)
 
 
