@@ -321,7 +321,7 @@ def test_app_screens_in_chrome(tmp_path):
         assert 'aria-label="Toegevoegd"' in dom and 'data-staple="' not in dom
         assert "Lurpak &lt;i&gt;ongezouten&lt;/i&gt;" in dom and "<i>ongezouten" not in dom
         assert "waarvan vaste boodschappen € 1,48" in dom and "€ 16,33" in dom
-        assert "Over van het vorige gerecht" in dom and "1× AH Kipdijfilet" in dom
+        assert "Over van het vorige menu" in dom and "1× AH Kipdijfilet" in dom
         assert "Nog niet zeker of dit in je bestelling staat" in dom
         assert "Onzeker" not in dom and "AH Gehaktballetjes" in dom
         assert "Status onbekend" in dom and "De Cecco Penne rigate" in dom
@@ -514,3 +514,64 @@ def test_app_v08_tonight_login_and_welcome_in_chrome(tmp_path):
         dom = render(base, "#inloggen", tmp_path, "login-stappen")
         assert "Op een computer:" in dom and "Druk F12 en kies Console." in dom
         assert "via WhatsApp naar jezelf" in dom and "<summary>Hoe werkt dit?</summary>" in dom
+
+
+@pytest.mark.slow
+def test_app_v09_check_card_klopt_niet_and_corrections_in_chrome(tmp_path):
+    """v0.9: "Check voor je bestelt" under the order line (an action per product not
+    found, "Alles staat klaar" when nothing is left), "Klopt niet" on every ingredient
+    line and its screen with three choices, and Mijn correcties in Instellingen."""
+    from app.ingredients import PRODUCT, SKIP
+    from app.overrides import make_entry
+
+    ctx = build_ctx(tmp_path)
+    log = ctx.ledger.load(W)
+    for x in log.plan["dishes"]:
+        if x["date"] == "2026-11-06":
+            x["lines"][0]["check"] = True  # gehaktballetjes per 100 gram: 1 piece
+    ctx.ledger.save(log)
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "", tmp_path, "week-check", size=PHONE_LONG)
+        order = "Voor de bestelling van woensdag 4 november"
+        assert dom.index(order) < dom.index("Check voor je bestelt") < dom.index("Bonus bespaard")
+        assert "1 niet gevonden · 1 hoeveelheid controleren" in dom
+        assert 'data-fixday="2026-11-06" data-fix="snufje nootmuskaat"' in dom
+        assert "Zoek product" in dom and 'data-skip="snufje nootmuskaat"' in dom
+        assert "Hoeveelheid controleren" in dom and "AH Gehaktballetjes (300 g gehaktballetjes)" in dom
+        assert "Alles staat klaar" not in dom and "Goed om te weten" not in dom
+
+        dom = render(base, "#gerecht/2026-11-06", tmp_path, "gerecht-klopt-niet")
+        # every line: 4 products, 2 pantry, 1 not found
+        assert dom.count('class="fixbtn"') == 7 and "hoeveelheid controleren" in dom
+
+        dom = render(base, "#klopt/2026-11-06/snufje%20nootmuskaat", tmp_path, "klopt-niet")
+        assert "<h1>Klopt niet</h1>" in dom and "Nu: Niet gevonden bij AH" in dom
+        assert 'id="fixq"' in dom and 'value="snufje nootmuskaat"' in dom
+        assert "Hoeft niet" in dom and "Hebben we al" in dom and "Mijn correcties" in dom
+        assert 'id="nav" class="nav" hidden' in dom  # no bottom bar here
+        dom = chrome(base + "#klopt/2026-11-06/400%20g%20onbekend", tmp_path / "profile-gone")
+        assert "staat niet meer in het gerecht" in dom
+
+        log = ctx.ledger.load(W)
+        for x in log.plan["dishes"]:
+            x["not_found"] = []
+            for ln in x["lines"]:
+                ln["check"] = False
+        log.plan["not_found"] = []
+        ctx.ledger.save(log)
+        dom = render(base, "", tmp_path, "week-alles-klaar")
+        assert "Alles staat klaar" in dom and "19 producten in je bestelling" in dom
+        assert "Check voor je bestelt" not in dom
+
+        ctx.overrides.put("nootmuskaat", make_entry(SKIP, "snufje nootmuskaat", None, NOW))
+        ctx.overrides.put("rode ui", make_entry(
+            PRODUCT, "1 rode ui", Product(31, "AH Rode uien", "1 kg", 1.5, 1.5, False, None,
+                                          True, None), NOW))
+        dom = render(base, "#instellingen", tmp_path, "instellingen-correcties",
+                     size=PHONE_LONG)
+        assert dom.index("Mijn correcties") < dom.index("Diagnose")
+        assert "Ander product: AH Rode uien" in dom and "Hoeft niet" in dom
+        assert dom.count('data-unfix="') == 2 and "Terugdraaien" in dom
+        assert "—" not in dom

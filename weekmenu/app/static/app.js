@@ -18,7 +18,7 @@ const BUSY_TEXT = "Het menu wordt nu gemaakt, even geduld";
 
 const state = { status: null, week: null, weekParam: null, savings: null, settings: null,
   staples: [], dishes: {}, open: {}, polling: false, offers: null, offersNote: "", offerQ: "",
-  welcomed: false };
+  welcomed: false, overrides: null, fix: null };
 
 // --- helpers ---------------------------------------------------------------------------
 
@@ -232,6 +232,15 @@ async function loadDish(day) {
   state.dishes[day] = await api(`api/dish/${encodeURIComponent(day)}`);
 }
 
+async function loadSettings() {
+  state.settings = await api("api/settings");
+  try {
+    state.overrides = (await api("api/overrides")).items;
+  } catch (e) {
+    state.overrides = [];  // the settings still show
+  }
+}
+
 async function loadStatus() {
   state.status = await api("api/status");
 }
@@ -273,33 +282,68 @@ function notesHtml(w, soft) {
   if (soft) return softNotes(w, note, out);
   if (w.writes_paused) note("bad", w.writes_paused, "Kijk bij Instellingen, Diagnose.", []);
   if (w.period_warning) note("", w.period_warning, "", []);
-  if (w.held) note("", w.held, "", []);
   if (w.short_by > 0) {
     note("", `${plural(w.short_by, "avond", "avonden")} zonder menu`,
       "Er waren te weinig recepten die binnen de regels passen.", []);
-  }
-  if (w.pending && w.pending.length) {
-    note("bad", w.target === "list" ? "Nog niet zeker of dit op je lijst staat"
-      : "Nog niet zeker of dit in je bestelling staat", "Controleer in de AH-app.", w.pending);
-  }
-  if (w.unknown && w.unknown.length) {
-    note("bad", "Status onbekend", "Controleer in de AH-app.", w.unknown);
   }
   return out.join("");
 }
 
 function softNotes(w, note, out) {
-  if (w.leftovers && w.leftovers.length) {
-    note("soft", "Over van het vorige gerecht", "Haal weg in de AH-app als je wilt.",
-      w.leftovers.map((l) => `${l.qty}× ${l.product}`));
-  }
   if (w.budget_exhausted) {
     note("soft", "Snel gekozen", "Het zoeken duurde lang; dit menu klopt, maar is misschien niet het allerbeste.", []);
   }
-  if (w.not_found && w.not_found.length) {
-    note("soft", "Niet gevonden bij AH", "Koop dit zelf als je het nodig hebt.", w.not_found);
-  }
   return out.length ? `<div class="sec">Goed om te weten</div>${out.join("")}` : "";
+}
+
+/* "Check voor je bestelt": everything that needs a look before ordering, in one card,
+ * with the numbers per kind. A product not found is an action, not a footnote. */
+function checkCard(w) {
+  const c = w.check;
+  if (!c) return "";
+  const where = w.target === "order" ? "in je bestelling" : "op je lijst";
+  if (c.ok) {
+    return `<div class="card check ok"><span class="tick">${ICON.check}</span><div>
+      <b>Alles staat klaar</b><span class="muted">${esc(plural(w.products, "product", "producten"))} ${where}. Niets om na te kijken.</span></div></div>`;
+  }
+  const n = c.counts || {};
+  const parts = [];
+  if (n.not_found) parts.push(`${n.not_found} niet gevonden`);
+  if (n.unsure) parts.push(`${n.unsure} nog niet zeker`);
+  if (n.leftovers) parts.push(`${n.leftovers} over`);
+  if (n.weigh) parts.push(`${n.weigh} hoeveelheid controleren`);
+  if (n.held) parts.push("nog niet toegevoegd");
+  const list = (items) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
+  let body = "";
+  if (c.held) {
+    body += `<div class="ck"><b>Nog niet toegevoegd</b><span class="muted">${esc(c.held)}</span></div>`;
+  }
+  if (c.not_found && c.not_found.length) {
+    body += `<div class="ck"><b>Niet gevonden bij AH</b><span class="muted">Zoek zelf een product, of tik op Hoeft niet.</span>
+      ${c.not_found.map((x) => `<div class="ck-row"><span class="nm">${esc(x.ingredient)}<small>${esc(cap(x.dag))} · ${esc(x.title)}</small></span>
+        <span class="ck-btns"><button class="btn sec2 sm" data-fixday="${esc(x.date)}" data-fix="${esc(x.ingredient)}">Zoek product</button>
+        <button class="btn sec2 sm" data-skipday="${esc(x.date)}" data-skip="${esc(x.ingredient)}">Hoeft niet</button></span></div>`).join("")}</div>`;
+  }
+  if (c.pending && c.pending.length) {
+    body += `<div class="ck bad"><b>${w.target === "list" ? "Nog niet zeker of dit op je lijst staat"
+      : "Nog niet zeker of dit in je bestelling staat"}</b><span class="muted">Controleer in de AH-app.</span>${list(c.pending)}</div>`;
+  }
+  if (c.unknown && c.unknown.length) {
+    body += `<div class="ck bad"><b>Status onbekend</b><span class="muted">Controleer in de AH-app.</span>${list(c.unknown)}</div>`;
+  }
+  if (c.weigh && c.weigh.length) {
+    body += `<div class="ck"><b>Hoeveelheid controleren</b><span class="muted">Dit product heeft een prijs per gewicht. Er staat 1 stuk in; pas het aan in de AH-app als dat te weinig is.</span>
+      ${list(c.weigh.map((x) => `${x.product} (${x.ingredient})`))}</div>`;
+  }
+  if (c.leftovers && c.leftovers.length) {
+    body += `<div class="ck"><b>Over van het vorige menu</b><span class="muted">Haal weg in de AH-app als je wilt.</span>
+      ${list(c.leftovers.map((l) => `${l.qty}× ${l.product}`))}</div>`;
+  }
+  if (!body && c.blocked) {
+    body = `<div class="ck"><span class="muted">Er gaat nu niets naar AH. Kijk bij de melding hierboven.</span></div>`;
+  }
+  return `<div class="card check"><div class="ck-head"><b>Check voor je bestelt</b>
+    ${parts.length ? `<span class="muted">${esc(parts.join(" · "))}</span>` : ""}</div>${body}</div>`;
 }
 
 function dayCard(d) {
@@ -373,6 +417,7 @@ function weekScreen() {
     ${order ? `<div class="full order">${esc(order)}</div>` : ""}
     <div class="full sub">${shortDate(start)} – ${shortDate(end)}${w.target === "order" ? " · bezorging woensdag" : ""}</div></header>`;
 
+  if (w.days.length && !running) html += checkCard(w);
   html += loginCard(w.login, false);
   if (w.vanavond) {
     html += `<div class="card tonight"><b>Vanavond</b><span>${esc(String(w.vanavond).replace(/^Vanavond: /, ""))}</span></div>`;
@@ -441,19 +486,70 @@ function loginCard(l, bottom) {
 
 // --- screens: one dish -----------------------------------------------------------------
 
+/* "Klopt niet" on every ingredient line: another product, not needed, or at home. */
+function fixButton(text) {
+  return `<button class="fixbtn" data-fix="${esc(text)}" aria-label="Klopt niet: ${esc(text)}">Klopt niet</button>`;
+}
+
 function ingredientRows(d) {
+  const mine = (l) => l.override ? `<small class="mine">jouw keuze</small>` : "";
   const rows = d.lines.map((l) => {
-    if (l.pantry) {
-      return `<div class="row home"><span class="q">–</span><span class="nm">${esc(l.product)} · in huis</span></div>`;
+    if (l.pantry || l.skipped) {
+      return `<div class="row home"><span class="q">–</span><span class="nm">${esc(l.product)} · ${l.skipped ? "hoeft niet" : "in huis"}${mine(l)}</span>${fixButton(l.ingredient)}</div>`;
     }
     const sub = l.ingredient && l.ingredient !== l.product ? `<small>${esc(l.ingredient)}</small>` : "";
-    const pill = l.bonus && l.mechanism ? `<span class="pill green b">${esc(l.mechanism)}</span>` : "";
-    return `<div class="row"><span class="q">${l.qty}×</span><span class="nm">${esc(l.product)}${sub}</span>${pill}</div>`;
+    const pill = l.check ? `<span class="pill warn b">hoeveelheid controleren</span>`
+      : l.bonus && l.mechanism ? `<span class="pill green b">${esc(l.mechanism)}</span>` : "";
+    return `<div class="row"><span class="q">${esc(l.qty)}×</span><span class="nm">${esc(l.product)}${sub}${mine(l)}${pill ? `<span class="pills">${pill}</span>` : ""}</span>${fixButton(l.ingredient)}</div>`;
   });
   for (const text of d.not_found || []) {
-    rows.push(`<div class="row missing"><span class="q">?</span><span class="nm">${esc(text)}</span><span class="pill warn b">niet gevonden</span></div>`);
+    rows.push(`<div class="row missing"><span class="q">?</span><span class="nm">${esc(text)}<span class="pills"><span class="pill warn b">niet gevonden</span></span></span>${fixButton(text)}</div>`);
   }
   return rows.join("");
+}
+
+/* The "Klopt niet" screen of one ingredient line: three choices. */
+function fixLine(d, text) {
+  const l = (d.lines || []).find((x) => x.ingredient === text);
+  if (l) return l;
+  const m = (d.missing || []).find((x) => x.ingredient === text);
+  return m ? Object.assign({ missing: true }, m) : null;
+}
+
+function fixScreen(day, text) {
+  const d = state.dishes[day];
+  const l = d && fixLine(d, text);
+  if (!l) {
+    return `<header class="top"><div><h1>Klopt niet</h1></div></header>
+      <div class="card empty"><b>Dit ingrediënt staat niet meer in het gerecht</b>Ga terug naar het gerecht.</div>
+      <button class="btn sec2 full" data-fixback>Terug</button>`;
+  }
+  const f = state.fix && state.fix.day === day && state.fix.text === text ? state.fix
+    : (state.fix = { day, text, q: l.query || text, results: null });
+  const now = l.missing ? "Niet gevonden bij AH" : l.skipped ? "Hoeft niet"
+    : l.pantry ? "In huis" : `${l.qty}× ${l.product}`;
+  const results = f.results === null ? ""
+    : !f.results.length ? `<p class="foot">Niets gevonden. Probeer een ander woord.</p>`
+    : `<div class="card ing">${f.results.map((i) => {
+        const src = safeUrl(i.image);
+        const img = src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+        const pill = i.mechanism ? `<span class="pill green b">${esc(i.mechanism)}</span>` : "";
+        return `<div class="row offer"><div class="thumb">${img}</div>
+          <span class="nm">${esc(i.title)}<small>${pill}<span class="price"><b>${eur(i.price_now)}</b></span>${i.unit_size ? `<span class="unit">${esc(i.unit_size)}</span>` : ""}</small></span>
+          <button class="btn pri sm" data-pick="${esc(i.id)}" aria-label="Kies ${esc(i.title)}">Kies</button></div>`;
+      }).join("")}</div>`;
+  return `<header class="top fixtop"><button class="back inline" data-fixback aria-label="Terug naar het gerecht">${ICON.back}</button>
+    <div><h1>Klopt niet</h1><div class="sub">${esc(cap(d.dag))} · ${esc(d.recipe.title)}</div></div></header>
+    <div class="card fixnow"><small>Ingrediënt</small><b>${esc(text)}</b><small>Nu: ${esc(now)}</small></div>
+    <div class="sec">Ander product</div>
+    <div class="search fixsearch"><input id="fixq" type="search" value="${esc(f.q)}" autocomplete="off" aria-label="Zoek een AH-product">
+      <button class="btn pri sm" data-fixsearch>Zoeken</button></div>
+    ${results}
+    <div class="sec">Of</div>
+    <div class="btnrow col">
+      <button class="btn sec2" data-fixkind="skip"><span><b>Hoeft niet</b><small>Nooit meer kopen voor dit ingrediënt</small></span></button>
+      <button class="btn sec2" data-fixkind="pantry"><span><b>Hebben we al</b><small>Telt voortaan als in huis</small></span></button></div>
+    <p class="foot">Je keuze geldt voor dit ingrediënt in elke week. Terugdraaien kan bij Instellingen, Mijn correcties.</p>`;
 }
 
 function dishScreen(day) {
@@ -614,9 +710,23 @@ function settingsScreen() {
     <div class="btnrow"><button class="btn sec2" data-run="nieuw_menu">${ICON.refresh} Nieuw menu</button>
       <button class="btn pri" data-run="nu_maken">Nu maken</button></div>
     <p class="foot">Nu maken vult aan wat nog ontbreekt. Nieuw menu kiest andere gerechten.</p>
+    ${correctionsHtml()}
     ${diagnoseHtml()}
     <p class="foot"><a href="#inloggen">Opnieuw inloggen</a> bij AH, als de add-on de login kwijt is.</p>
     <p class="foot"><a href="gids">Lees de gids</a>: waar je ziet wat jullie eten.</p>`;
+}
+
+/* Instellingen, Mijn correcties: every "Klopt niet" choice, each one can be taken back. */
+function correctionsHtml() {
+  const items = state.overrides || [];
+  const what = (x) => x.kind === "product" ? `Ander product: ${x.product || "?"}`
+    : x.kind === "skip" ? "Hoeft niet" : "Hebben we al";
+  const rows = items.map((x) => `<div class="row"><span class="nm">${esc(x.text)}<small>${esc(what(x))}</small></span>
+    <button class="btn sec2 sm" data-unfix="${esc(x.key)}" aria-label="Terugdraaien: ${esc(x.text)}">Terugdraaien</button></div>`);
+  return `<div class="sec">Mijn correcties</div>
+    ${rows.length ? `<div class="card ing">${rows.join("")}</div>
+      <p class="foot">Terugdraaien geldt vanaf het volgende menu of Ander gerecht; wat nu al in je bestelling of op je lijst staat, blijft.</p>`
+      : `<div class="card note soft"><span class="dot"></span><div>Nog geen correcties. Tik bij een ingrediënt op Klopt niet.</div></div>`}`;
 }
 
 /* "2026-11-11T09:30:12" as "11 november 09:30" (empty when unknown). */
@@ -725,6 +835,15 @@ function errorScreen(msg) {
 function route() {
   const h = location.hash.replace(/^#/, "");
   if (h.startsWith("gerecht/")) return { tab: "week", dish: h.slice(8) };
+  if (h.startsWith("klopt/")) {
+    const rest = h.slice(6);
+    const i = rest.indexOf("/");
+    if (i > 0) {
+      let text = "";
+      try { text = decodeURIComponent(rest.slice(i + 1)); } catch (e) { text = ""; }
+      return { tab: "week", fix: { day: rest.slice(0, i), text } };
+    }
+  }
   if (h === "aanbiedingen" || h === "besparing" || h === "instellingen" || h === "inloggen") return { tab: h };
   return { tab: "week" };
 }
@@ -736,21 +855,23 @@ async function render() {
   const r = route();
   const loggedIn = state.status && state.status.logged_in;
   const relogin = r.tab === "inloggen";  // "Opnieuw inloggen" in Instellingen
-  nav.hidden = !loggedIn || !!r.dish || relogin;
-  app.classList.toggle("bare", !loggedIn || !!r.dish || relogin);
+  const inner = !!r.dish || !!r.fix;  // a dish or its "Klopt niet": no bottom bar
+  nav.hidden = !loggedIn || inner || relogin;
+  app.classList.toggle("bare", !loggedIn || inner || relogin);
   for (const a of nav.querySelectorAll("a")) a.classList.toggle("on", a.dataset.tab === r.tab);
   if (!state.status) return;
   if (!loggedIn && state.status.update_needed) { app.innerHTML = updateScreen(state.status.update_needed); return; }
   if (!loggedIn && !relogin && state.status.first_start && !state.welcomed) { app.innerHTML = welcomeScreen(); return; }
   if (!loggedIn || relogin) { app.innerHTML = loginScreen(loggedIn && relogin); return; }
 
-  const need = r.dish ? (state.dishes[r.dish] ? null : () => loadDish(r.dish))
+  const need = r.fix ? (state.dishes[r.fix.day] ? null : () => loadDish(r.fix.day))
+    : r.dish ? (state.dishes[r.dish] ? null : () => loadDish(r.dish))
     : r.tab === "aanbiedingen" ? (state.offers && state.week ? null : async () => {
         if (!state.week) await loadWeek();
         await loadOffers();
       })
     : r.tab === "besparing" ? (state.savings ? null : () => api("api/savings").then((x) => { state.savings = x; }))
-    : r.tab === "instellingen" ? (state.settings ? null : () => api("api/settings").then((x) => { state.settings = x; }))
+    : r.tab === "instellingen" ? (state.settings && state.overrides ? null : loadSettings)
     : (state.week ? null : loadWeek);
   if (need) {
     app.innerHTML = `<div class="loading"><span class="spin dark"></span></div>`;
@@ -765,7 +886,8 @@ async function render() {
     }
     if (seq !== renderSeq) return;
   }
-  app.innerHTML = r.dish ? dishScreen(r.dish)
+  app.innerHTML = r.fix ? fixScreen(r.fix.day, r.fix.text)
+    : r.dish ? dishScreen(r.dish)
     : r.tab === "aanbiedingen" ? offersScreen()
     : r.tab === "besparing" ? savingsScreen()
     : r.tab === "instellingen" ? settingsScreen()
@@ -778,8 +900,8 @@ async function refreshQuietly(what) {
     if (what === "week") await loadWeek();
     if (what === "aanbiedingen") { if (!state.week) await loadWeek(); await loadOffers(); }
     if (what === "besparing") state.savings = await api("api/savings");
-    if (what === "instellingen") { state.settings = await api("api/settings"); await loadStatus(); }
-    if (route().tab === what && !route().dish) render();
+    if (what === "instellingen") { await loadSettings(); await loadStatus(); }
+    if (route().tab === what && !route().dish && !route().fix) render();
   } catch (e) { /* the cached view stays */ }
 }
 
@@ -790,6 +912,26 @@ async function afterDishWrite(day, data) {
   state.savings = null;
   render();
   try { await loadWeek(); } catch (e) { /* week refreshes on the next visit */ }
+}
+
+/* After a "Klopt niet" choice: what changed at AH, in one line. */
+function fixToast(kind, data, title) {
+  const gone = removedText(data);
+  if (data && data.held) return data.held;
+  const what = kind === "product" ? `Voortaan: ${title}` : kind === "skip"
+    ? "Hoeft niet: wordt niet meer gekocht" : "Staat voortaan als in huis";
+  return what + (gone ? ". " + gone : "");
+}
+
+async function correct(day, text, kind, productId, title) {
+  const body = { ingredient: text, kind };
+  if (productId !== undefined) body.product_id = productId;
+  const data = await api(`api/dish/${encodeURIComponent(day)}/correct`, body);
+  state.dishes[day] = data;
+  state.savings = null;
+  state.overrides = null;  // Mijn correcties: read again
+  try { await loadWeek(); } catch (e) { /* the week refreshes on the next visit */ }
+  toast(fixToast(kind, data, title));
 }
 
 async function setSetting(entity, value) {
@@ -824,6 +966,50 @@ app.addEventListener("click", async (ev) => {
   const r = route();
 
   if (t.dataset.dish) { location.hash = "#gerecht/" + t.dataset.dish; return; }
+  // the check card: a product not found is an action
+  if (t.dataset.fixday) {
+    location.hash = "#klopt/" + t.dataset.fixday + "/" + encodeURIComponent(t.dataset.fix);
+    return;
+  }
+  if (t.dataset.skipday) {
+    await busy(t, async () => {
+      await correct(t.dataset.skipday, t.dataset.skip, "skip");
+      render();
+    });
+    return;
+  }
+  if (r.fix) {
+    const { day, text } = r.fix;
+    if ("fixback" in t.dataset) { state.fix = null; location.hash = "#gerecht/" + day; return; }
+    if ("fixsearch" in t.dataset) {
+      const q = (document.getElementById("fixq") || {}).value || "";
+      await busy(t, async () => {
+        const res = await api(`api/products?q=${encodeURIComponent(q.trim())}`);
+        state.fix = { day, text, q, results: res.items };
+        render();
+      });
+      return;
+    }
+    if (t.dataset.pick) {
+      const id = Number(t.dataset.pick);
+      const item = ((state.fix && state.fix.results) || []).find((i) => i.id === id);
+      await busy(t, async () => {
+        await correct(day, text, "product", id, item ? item.title : "");
+        state.fix = null;
+        location.hash = "#gerecht/" + day;
+      });
+      return;
+    }
+    if (t.dataset.fixkind) {
+      const kind = t.dataset.fixkind;
+      await busy(t, async () => {
+        await correct(day, text, kind);
+        state.fix = null;
+        location.hash = "#gerecht/" + day;
+      });
+      return;
+    }
+  }
   if ("welcome" in t.dataset) { state.welcomed = true; render(); return; }
   if ("back" in t.dataset) { location.hash = "#week"; return; }
   if ("retry" in t.dataset) { state.week = state.savings = state.settings = state.offers = null; state.dishes = {}; boot(); return; }
@@ -886,6 +1072,11 @@ app.addEventListener("click", async (ev) => {
   if (r.dish) {
     const day = r.dish;
     if ("steps" in t.dataset) { state.open[day] = !state.open[day]; render(); return; }
+    if (t.dataset.fix) {
+      state.fix = null;
+      location.hash = "#klopt/" + day + "/" + encodeURIComponent(t.dataset.fix);
+      return;
+    }
     if (t.dataset.persons) {
       const n = Number(t.dataset.persons);
       const fewer = n < state.dishes[day].persons;
@@ -935,6 +1126,18 @@ app.addEventListener("click", async (ev) => {
       });
       return;
     }
+  }
+
+  // settings: Mijn correcties
+  if (t.dataset.unfix) {
+    await busy(t, async () => {
+      const res = await api("api/overrides/remove", { key: t.dataset.unfix });
+      state.overrides = res.items;
+      state.dishes = {};  // the "jouw keuze" marks
+      toast("Teruggedraaid. Vanaf het volgende menu kiest de add-on zelf weer.");
+    });
+    render();
+    return;
   }
 
   // settings: diagnose and logging out
@@ -1010,7 +1213,15 @@ app.addEventListener("click", async (ev) => {
   }
 });
 
+app.addEventListener("keydown", (ev) => {
+  if (ev.target.id !== "fixq" || ev.key !== "Enter") return;
+  ev.preventDefault();
+  const btn = app.querySelector("[data-fixsearch]");
+  if (btn) btn.click();
+});
+
 app.addEventListener("input", (ev) => {
+  if (ev.target.id === "fixq" && state.fix) { state.fix.q = ev.target.value; return; }
   if (ev.target.id !== "offerq") return;
   state.offerQ = ev.target.value;
   const list = document.getElementById("offerlist");
@@ -1021,7 +1232,7 @@ window.addEventListener("hashchange", () => {
   const r = route();
   window.scrollTo(0, 0);
   render();
-  if (!r.dish) refreshQuietly(r.tab);
+  if (!r.dish && !r.fix) refreshQuietly(r.tab);
 });
 
 async function boot() {
