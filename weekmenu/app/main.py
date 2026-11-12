@@ -72,7 +72,7 @@ from app.hass import (
 from app.catalog import Catalog
 from app.foldercache import load_folders, remember, save_folders
 from app.history import HISTORY_SCHEMA, History
-from app.recipes import RecipeStore
+from app.recipes import RECIPES_SCHEMA, RecipeStore
 from app.ledger import Ledger, WeekLog, new_folder_available
 from app.overrides import OVERRIDES_SCHEMA, Overrides
 from app.taste import TASTE_SCHEMA, Taste
@@ -339,7 +339,7 @@ def scan_too_new(ctx: Context) -> None:
     files = [(ctx.total_path, TOTAL_SCHEMA), (ctx.state_path, STATE_SCHEMA),
              (away, AWAY_SCHEMA), (ctx.overrides.path, OVERRIDES_SCHEMA),
              (ctx.history.path, HISTORY_SCHEMA), (ctx.taste.path, TASTE_SCHEMA),
-             (ctx.reconciliations.path, RECON_SCHEMA)]
+             (ctx.reconciliations.path, RECON_SCHEMA), (ctx.recipes.path, RECIPES_SCHEMA)]
     for path, known in files:
         if path is not None and too_new(path, known):
             note_too_new(ctx, path)
@@ -505,6 +505,12 @@ def make_settings(ctx: Context, raw: RawSettings, start: date, exclude=()) -> Se
     return Settings(days, persons, list(ctx.pantry), recent, leftovers,
                     overrides=ctx.overrides.load(), never=ctx.taste.never(),
                     down=ctx.taste.down())
+
+
+async def week_settings(ctx: Context, start: date) -> Settings:
+    """The cook evenings, persons and leftover nights of the menu week `start` from the
+    HA helpers, for a draft filled by hand. An HA failure is raised (httpx.HTTPError)."""
+    return make_settings(ctx, await ctx.hass.read_settings(), start)
 
 
 def settings_from_plan(ctx: Context, plan: Plan, start: date) -> Settings:

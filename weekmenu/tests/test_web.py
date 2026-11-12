@@ -190,7 +190,9 @@ async def test_api_week_shows_running_week_if_planned(aiohttp_client, tmp_path):
     ctx = make_ctx(tmp_path, now=datetime(2026, 11, 8, 12, 0))  # Sunday in the week of W
     client = await aiohttp_client(make_app(ctx))
     body = await (await client.get("api/week")).json()
-    assert body["week"] == "2026-11-11" and body["days"] == []  # nothing yet: next week
+    # nothing yet: next week, its evenings to choose for (v1.1)
+    assert body["week"] == "2026-11-11" and body["draft"] is True
+    assert not any(d["recipe"] for d in body["days"])
     await planned_ctx(ctx)
     body = await (await client.get("api/week")).json()
     assert body["week"] == W.isoformat()
@@ -488,7 +490,9 @@ async def test_api_week_without_a_menu_says_when_nobody_eats_at_home(aiohttp_cli
         ctx.hass.states[eid] = "0"
     client = await aiohttp_client(make_app(ctx))
     body = await (await client.get("api/week")).json()
-    assert body["days"] == [] and body["geen_avonden"] is True
+    assert body["geen_avonden"] is True
+    # v1.1: the seven evenings, all away, none to choose for
+    assert all(d["niet_thuis"] and not d.get("kies") for d in body["days"])
     assert len(body["niet_thuis"]) == 7
 
 

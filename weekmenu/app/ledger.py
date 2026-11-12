@@ -89,6 +89,9 @@ class WeekLog:
     delivery: date | None = None
     # v1.0: pid -> the saving of each loose offer, to recount it against the delivery
     offers_saved: dict[int, float] = field(default_factory=dict)
+    # v1.1: the week being filled evening by evening (Plan.to_dict), before it is
+    # confirmed; nothing in it was written to AH. None once confirmed (plan is set then).
+    draft: dict | None = None
     # not stored: the file was written by a newer add-on. Shown, never written (v0.6).
     too_new: bool = field(default=False, compare=False, repr=False)
 
@@ -130,6 +133,7 @@ class WeekLog:
             "removed_by_user": {str(k): v for k, v in self.removed_by_user.items()},
             "delivery": _iso(self.delivery),
             "offers_saved": {str(k): v for k, v in self.offers_saved.items()},
+            "draft": self.draft,
         }
 
     @classmethod
@@ -168,6 +172,7 @@ class WeekLog:
                              for k, v in (d.get("removed_by_user") or {}).items()},
             delivery=_date(d.get("delivery")),
             offers_saved={int(k): float(v) for k, v in (d.get("offers_saved") or {}).items()},
+            draft=d.get("draft"),
         )
 
 

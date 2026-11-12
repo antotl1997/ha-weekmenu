@@ -426,6 +426,8 @@ function weekScreen() {
   const end = new Date(start); end.setDate(end.getDate() + 6);
   const where = w.target === "order" ? "in bestelling" : w.target === "list" ? "op de lijst" : "";
   const waiting = w.waiting_for_folder;
+  // v1.1: a draft week (not confirmed) shows as no menu until the choose screen is built
+  const days = w.draft ? [] : w.days;
   const order = waiting
     ? `Volgende bestelling: ${longDate(w.week)}. ` +
       (waiting.expected ? `De folder komt vanaf ${longDate(waiting.expected)}.` : "De folder is er nog niet.")
@@ -436,7 +438,7 @@ function weekScreen() {
     ${order ? `<div class="full order">${esc(order)}</div>` : ""}
     <div class="full sub">${shortDate(start)} – ${shortDate(end)}${w.target === "order" ? " · bezorging woensdag" : ""}</div></header>`;
 
-  if (w.days.length && !running) html += checkCard(w);
+  if (days.length && !running) html += checkCard(w);
   html += loginCard(w.login, false);
   if (w.vanavond) {
     html += `<div class="card tonight"><b>Vanavond</b><span>${esc(String(w.vanavond).replace(/^Vanavond: /, ""))}</span></div>`;
@@ -453,14 +455,14 @@ function weekScreen() {
       <span class="muted">${esc(sub)} Werk het bij voor de prijzen van nu.</span></div>
       <button class="btn pri full" data-run="bijwerken">${ICON.refresh} Menu bijwerken</button></div>`;
   }
-  if (!w.days.length && w.geen_avonden) {
+  if (!days.length && w.geen_avonden) {
     html += `<div class="card empty"><b>Alle avonden niet thuis</b>
       Er wordt geen menu gemaakt. Tik bij Instellingen een dag weer uit bij Niet thuis eten om een menu te krijgen.</div>`;
-  } else if (!w.days.length && w.enabled === false) {
+  } else if (!days.length && w.enabled === false) {
     html += `<div class="card empty"><b>Het weekmenu staat uit</b>
       Er wordt nu geen menu gemaakt. Zet het aan bij Instellingen, of tik op Nu maken.</div>
       <button class="btn pri full" data-run="nu_maken">Nu maken</button>`;
-  } else if (!w.days.length) {
+  } else if (!days.length) {
     const now = waiting
       ? "Wil je niet wachten, tik dan op Nu maken. Het menu komt dan met de huidige folder, en je krijgt een melding zodra de nieuwe er is."
       : "Wil je niet wachten, tik dan op Nu maken.";
@@ -476,7 +478,7 @@ function weekScreen() {
       ${loose > 0 ? `<div class="lbl">waarvan losse aanbiedingen ${eur(loose)}</div>` : ""}</div>
       <div class="right">${plural(w.products, "product", "producten")}<br>${w.bonus_products} in de bonus</div></div>`;
     html += notesHtml(w, false);
-    html += w.days.map(dayCard).join("");
+    html += days.map(dayCard).join("");
     html += staplesHtml(w);
     html += notesHtml(w, true);
   }
