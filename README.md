@@ -1,15 +1,16 @@
 # Weekmenu AH
 
-Home Assistant add-on that builds a weekly dinner menu from Allerhande recipes around the current Albert Heijn bonus, puts the groceries on your AH list or in your open delivery order, and shows the menu and the estimated savings in Home Assistant.
+Home Assistant add-on where you pick a weekly dinner menu from Allerhande recipes (with the current Albert Heijn bonus first) and your own recipes, puts the groceries on your AH list or in your open delivery order, and shows the menu and the estimated savings in Home Assistant.
 
 This uses the unofficial API of the Albert Heijn app. It is not affiliated with or endorsed by Albert Heijn, and it can break whenever AH changes that API. It never checks out. The only things it ever removes from your list or order are products it added itself for a menu and no dish needs any more (see Cleaning up); what you put there yourself stays. It keeps your AH login only inside the add-on.
 
 ## What it does
 
-- Makes a menu of Allerhande dishes around the bonus, one dish per cooking moment, and puts the groceries on your AH list or in your open delivery order. Nothing is ever checked out.
+- You choose the menu yourself: per evening a dish from a list with the bonus dishes first, with search and a kind filter, and "Zoek bij AH" for more. The week stays a draft (kept in the week log, field `draft`) until you tap "Zet in bestelling" or "Zet op lijst"; then the groceries go to your open delivery order or AH list in one go. Nothing is ever checked out, and there is no automatic menu.
+- Keeps your own recipes (`/data/recipes.json`) and imports a recipe from a link (recipe-scrapers, about 575 sites, and most sites with schema.org recipe data; links to the home network are refused). The choice list is kept in `/data/catalog.json`.
 - With more eat days than cooking moments, the extra eat days become leftover nights ("restjes van <dish>"): the dish is cooked for both evenings and nothing extra is bought.
-- Cleans up after itself: when you swap a dish, remove one, lower the persons or make a new menu, it takes the products it added itself and no dish needs any more off the list or out of the order.
-- Makes the menu early: Nu maken works before the new folder is out, and when the folder then appears the app offers Menu bijwerken ("Nieuwe folder is er").
+- Cleans up after itself: when you swap a dish, remove one, lower the persons or update the menu, it takes the products it added itself and no dish needs any more off the list or out of the order.
+- When the new folder is out after you confirmed, the app offers Menu bijwerken ("Nieuwe folder is er"): the same dishes on the new prices.
 - Shows the whole bonus folder of the week in the Aanbiedingen tab, per category with search, and adds an offer with one tap.
 - Shows the estimated savings per week, per month and in total in the app and in Home Assistant, and after the delivery what was really bought and saved.
 - Has a cooking screen (amounts big, numbered steps, the screen stays on) and per dish a thumb down or "Nooit meer".
@@ -24,13 +25,13 @@ Then install "Weekmenu AH" from the store.
 
 ## When it runs
 
-The menu is made as soon as the AH bonus folder of the delivery week is out, usually on the Friday before. From `schedule_time` (default 08:00) until 18:00 the add-on checks once an hour, as long as there is no menu for that week yet. If the folder is still not out on Sunday at 18:00, it uses the current folder and says so in the message. You get one push message, when the menu is made. A Dutch one-page user guide for everyone in the house is in [`weekmenu/GIDS.md`](weekmenu/GIDS.md) and in the app under "Lees de gids".
+The add-on never makes a menu by itself. From `schedule_time` (default 08:00) until 18:00 it checks once an hour: it fills the choice list with recipes, completes a confirmed menu and checks for a new folder. On Sunday from 17:00 you get one reminder to choose the menu (`input_boolean.weekmenu_aan` only switches that reminder). A Dutch one-page user guide for everyone in the house is in [`weekmenu/GIDS.md`](weekmenu/GIDS.md) and in the app under "Lees de gids".
 
 ## Tonight, the reminder and the dashboard card
 
 Every day at 16:00 the targets in `notify_today` get one short push, "Vanavond: <dish>, begin om <time>" (the start is `dinner_time` minus cooking, oven and waiting time, rounded down to a quarter) or "Vanavond: restjes van <dish>"; nothing when nobody eats at home, there is no dish or no cooking moment. The same line is the `vanavond` attribute of `sensor.weekmenu`. All other pushes go to `notify_owner`, among them one reminder on Sunday from 17:00 when the menu for the coming week is ready but no order is delivered in that week yet. Both are sent at most once a day, also over a restart. `sensor.weekmenu` also carries `login_ok` and `login_refreshed`; when the AH login expired (AH refused it, also on a refresh) the app asks to log in again and the dashboard card shows it in red. [`weekmenu/dashboard/weekmenu-card.yaml`](weekmenu/dashboard/weekmenu-card.yaml) is a Lovelace card (Mushroom and markdown, no template conditions) with tonight, the week, the savings, the login and an "Open weekmenu" button.
 
-Nu maken (in the app or through `hassio.addon_stdin`) does not wait: before the folder is out it makes the menu with the current folder, with the same warning. When the folder of the delivery week then comes out, the hourly check sends one push message "De nieuwe folder is er" and sets `new_folder_available: true` on `sensor.weekmenu` and in the app. It never changes the menu by itself. The app shows "Nieuwe folder is er" at the top of the Week tab with the button Menu bijwerken, which makes a new menu from the new folder for the same evenings, persons (also those changed per dish) and leftover nights, keeps removed dishes removed, and takes off what only the old menu needed (`POST api/run` with `{"mode": "bijwerken"}`). The check runs up to and including the Sunday before delivery. A folder that only comes out on the Monday or Tuesday is not signalled: by then the add-on works on the week after, and a flag still standing is cleared.
+The stdin commands `nu_maken` and `nieuw_menu` and the old buttons do nothing any more (they are logged and ignored); `bijwerken` still works. When the folder of the delivery week comes out after you confirmed, the hourly check sends one push message "De nieuwe folder is er" and sets `new_folder_available: true` on `sensor.weekmenu` and in the app. It never changes the menu by itself. The app shows "Nieuwe folder is er" at the top of the Week tab with the button Menu bijwerken, which makes a new menu from the new folder for the same evenings, persons (also those changed per dish) and leftover nights, keeps removed dishes removed, and takes off what only the old menu needed (`POST api/run` with `{"mode": "bijwerken"}`). The check runs up to and including the Sunday before delivery. A folder that only comes out on the Monday or Tuesday is not signalled: by then the add-on works on the week after, and a flag still standing is cleared.
 
 ## Not eating at home
 
@@ -42,7 +43,7 @@ The days you do eat at home are the eat days. Under Settings you choose the numb
 
 ## Cleaning up
 
-When you pick Ander gerecht, Nieuw menu, Menu bijwerken, fewer persons or Gerecht weghalen (a new button on the dish screen: the evening gets no dish, and its leftover night goes too), the add-on lowers what it added itself and the new menu no longer needs. The new quantity is the current quantity minus what the add-on added and is no longer needed, never lower than what is on there besides the add-on. Products you ticked off on the list are left alone, and so are Vaste boodschappen and Aanbiedingen you tapped yourself: those are never cleaned up. Every lowering goes through the same write-ahead log as adding: noted first, then written, and after a crash first checked whether it arrived, never blindly repeated. A menu that is not for a coming week any more (the week has started) is not cleaned up. Whatever a lowering finds you already took off yourself is remembered, and that week no later step (Terug, Ander gerecht, Nieuw menu, Menu bijwerken) adds it back. The app tells you how many products went ("2 producten uit je bestelling gehaald"). The add-on never checks out.
+When you pick Ander gerecht, Menu bijwerken, fewer persons or Gerecht weghalen (a new button on the dish screen: the evening gets no dish, and its leftover night goes too), the add-on lowers what it added itself and the new menu no longer needs. The new quantity is the current quantity minus what the add-on added and is no longer needed, never lower than what is on there besides the add-on. Products you ticked off on the list are left alone, and so are Vaste boodschappen and Aanbiedingen you tapped yourself: those are never cleaned up. Every lowering goes through the same write-ahead log as adding: noted first, then written, and after a crash first checked whether it arrived, never blindly repeated. A menu that is not for a coming week any more (the week has started) is not cleaned up. Whatever a lowering finds you already took off yourself is remembered, and that week no later step (Terug, Ander gerecht, Menu bijwerken) adds it back. The app tells you how many products went ("2 producten uit je bestelling gehaald"). The add-on never checks out.
 
 ## Check and corrections
 
@@ -68,9 +69,11 @@ The day after the delivery (the delivery day the add-on read when it wrote to th
 
 Besparing and the diagnose also show two numbers over the last four weeks: the share of ingredient lines without a correction (no Klopt niet for that line in that week, also one taken back later) and the share of added products that were really bought.
 
-## Status 1.0
+## Status
 
-This is version 1.0: everything on the roadmap up to and including 1.0 is built and covered by the test suite (cooking screen, thumb down and Nooit meer, the recounted savings and both numbers). The roadmap also sets a usage criterion for 1.0: four weeks in a row without manual work from us, without double products, with both numbers in the app. That can only be measured in real use, and it is counted from the first real week the add-on runs in Home Assistant with a real order. At the time of this release that count has not started: no real week is recorded as done, so 1.0 here means "complete and tested", not yet "proven four weeks in a row". The two numbers in Besparing are the way to follow it.
+Version 2.0 changes the menu from automatic to chosen by you; the 1.0 state is described below.
+
+Version 1.0: everything on the roadmap up to and including 1.0 is built and covered by the test suite (cooking screen, thumb down and Nooit meer, the recounted savings and both numbers). The roadmap also sets a usage criterion for 1.0: four weeks in a row without manual work from us, without double products, with both numbers in the app. That can only be measured in real use, and it is counted from the first real week the add-on runs in Home Assistant with a real order. At the time of this release that count has not started: no real week is recorded as done, so 1.0 here means "complete and tested", not yet "proven four weeks in a row". The two numbers in Besparing are the way to follow it.
 
 ## License
 

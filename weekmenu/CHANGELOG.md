@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.0
+
+- **Je kiest het menu zelf.** De add-on maakt geen menu meer voor je. Je kiest per avond een gerecht uit een keuzelijst en bouwt zo een concept voor de week. Het concept bewaart de add-on in het logboek van die week (veld `draft`). Er gaat niets naar AH zolang je niet bevestigt.
+- **Keuzelijst met de bonus eerst.** Recepten met producten uit de folder van de week staan bovenaan. Je kunt zoeken en filteren op soort (zoals Aziatisch of Italiaans). Staat het niet in de lijst, tik dan op "Zoek bij AH" om recepten bij AH op te zoeken. De lijst bewaart de add-on in `/data/catalog.json`.
+- **Eén keer bevestigen.** Als de week naar wens is, tik je op "Zet in bestelling" (of "Zet op lijst" als er geen bestelling openstaat). Pas dan gaan de boodschappen naar AH, in één keer. Klopt niet en de duimen werken zodra het menu bevestigd is.
+- **Eigen recepten.** Je kunt zelf een recept toevoegen, aanpassen en verwijderen. Ze staan in `/data/recipes.json`. Zit een eigen recept al in een menu, dan houdt dat menu de versie van toen je het koos, ook als je het recept daarna aanpast of weghaalt.
+- **Importeren via een link.** Plak de link van een recept en de app vult het formulier in; jij kijkt na en bewaart. Het werkt op de sites die recipe-scrapers kent (ongeveer 575, zoals Leukerecepten, 24Kitchen en Jumbo) en op de meeste sites met schema.org-receptgegevens. Links naar je thuisnetwerk worden geweigerd.
+- **Menu bijwerken houdt je keuzes.** Komt er een nieuwe folder, dan zet Menu bijwerken dezelfde gerechten op de nieuwe prijzen. Je gerechten blijven staan.
+- **Geen automatisch menu meer.** Het menu van zondag om 18:00 en de uurlijkse controle die een menu maakte zijn weg. De zondagherinnering vraagt nu om het menu te kiezen. `input_boolean.weekmenu_aan` schakelt alleen nog die herinnering. De knoppen Nu maken en Nieuw menu doen niets meer, en de stdin-commando's `nu_maken` en `nieuw_menu` worden genegeerd (met een regel in het logboek).
+- Zet je terug naar 1.0.x, dan negeert die versie `draft`, `recipes.json` en `catalog.json`. Een bevestigd menu met een eigen recept blijft gewoon zichtbaar, maar daar het aantal personen wijzigen lukt in 1.0.x niet. De bestanden blijven bewaard.
+
 ## 1.0.1
 
 - **Aanbiedingen laadt snel.** De bonusfolder wordt per week één keer bij AH opgehaald (dat zijn zo'n 340 vragen achter elkaar, minuten werk) en daarna bewaard in `/data/folder.json`, ook over een herstart. Eerder hield de add-on maar één folder vast, alleen in het geheugen: na elke herstart of update, en elke keer dat de app de lopende week toonde terwijl het menu al met de folder van volgende week werkte, werd de hele folder opnieuw opgehaald. Bij het opstarten laadt de add-on de folder van de getoonde week alvast op de achtergrond.
