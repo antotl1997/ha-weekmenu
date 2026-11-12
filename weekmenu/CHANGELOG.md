@@ -9,7 +9,7 @@
 - **Importeren via een link.** Plak de link van een recept en de app vult het formulier in; jij kijkt na en bewaart. Het werkt op de sites die recipe-scrapers kent (ruim 600, zoals Leukerecepten, 24Kitchen en Jumbo) en op de meeste sites met schema.org-receptgegevens. Links naar je thuisnetwerk worden geweigerd.
 - **Menu bijwerken houdt je keuzes.** Komt er een nieuwe folder, dan zet Menu bijwerken dezelfde gerechten op de nieuwe prijzen. Je gerechten blijven staan.
 - **Geen automatisch menu meer.** Het menu van zondag om 18:00 en de uurlijkse controle die een menu maakte zijn weg. De zondagherinnering vraagt nu om het menu te kiezen. `input_boolean.weekmenu_aan` schakelt alleen nog die herinnering. De knoppen Nu maken en Nieuw menu doen niets meer, en de stdin-commando's `nu_maken` en `nieuw_menu` worden genegeerd (met een regel in het logboek).
-- Zet je terug naar 1.0.x, dan negeert die versie `draft`, `recipes.json` en `catalog.json`. Een bevestigd menu met een eigen recept blijft gewoon zichtbaar, maar daar het aantal personen wijzigen lukt in 1.0.x niet. De bestanden blijven bewaard.
+- Zet je terug naar 1.0.x, dan negeert die versie `draft`, `recipes.json` en `catalog.json`. Een bevestigd menu met een eigen recept blijft gewoon zichtbaar, maar daar het aantal personen wijzigen lukt in 1.0.x niet, en Menu bijwerken mislukt in 1.0.x op een week met een eigen gerecht. Een week met alleen een concept heeft voor 1.0.x geen menu: die maakt weer zelf een menu (zodra de folder er is, uiterlijk zondag om 18:00) en zet dat in je bestelling of op je lijst. Als 1.0.x het weeklogboek dan opnieuw schrijft, is het concept weg. De bestanden blijven bewaard.
 
 ## 1.0.1
 
