@@ -4,7 +4,8 @@
 negative id so it never meets an AH id. `LocalFirst` wraps the AH client: a negative id
 is answered from this store, everything else goes to AH. A file that cannot be read, or
 one from a newer add-on, loads as empty; saving over a newer file raises SchemaTooNew
-(like History.record), and an unreadable file is set aside before the first save. Callers write under `ctx.lock`.
+(like History.record), and an unreadable file is set aside before the first save.
+Callers write under `ctx.lock`.
 """
 
 from __future__ import annotations
