@@ -9,7 +9,7 @@ from app.catalog import KEEP, Catalog, Entry, choose_view, fill, search_ah
 from app.ledger import WeekLog
 from app.recipes import OwnRecipe
 from app.taste import DOWN, NEVER
-from tests.fakes import NEXT, W, FakeAh, dish, make_ctx, make_plan
+from tests.fakes import CURRENT, NEXT, W, FakeAh, dish, make_ctx, make_plan
 
 GEHAKT = Product(11, "AH Rundergehakt", "500 g", 6.0, 6.0, True, "1+1 gratis", True, "Vlees")
 KIP = Product(12, "AH Kipfilet", "500 g", 4.0, 4.0, True, "1+1 gratis", True, "Kip")
@@ -84,10 +84,10 @@ async def test_fill_respects_budget_and_never(tmp_path):
 async def test_choose_view_orders_by_savings_and_merges_own(tmp_path):
     ctx, ah = ctx_with_folder(tmp_path)
     await fill(ctx, W)
-    own = ctx.recipes.save(OwnRecipe(0, "Oma's gehaktschotel", 4, ["1000 g rundergehakt"]))
+    own = ctx.recipes.save(OwnRecipe(0, "Oma's gehaktschotel", 4, ["1 kg rundergehakt"]))
     ctx.taste.put(105, DOWN, "Lasagne al forno", datetime(2026, 11, 1, 8, 0))
     calls = list(ah.calls)
-    view = choose_view(ctx, W, None)
+    view = await choose_view(ctx, W, None)
     assert ah.calls == calls  # the list itself never asks AH
     assert view["catalog_ready"] is True
     assert "pasta en Italiaans" in view["kinds"] and "Hollandse pot" in view["kinds"]
@@ -112,30 +112,30 @@ async def test_choose_view_filters_and_marks(tmp_path):
     plan = make_plan([dish(week_before, 102, [1])])
     ctx.ledger.save(WeekLog(week=week_before, plan=plan.to_dict()))
 
-    view = choose_view(ctx, W, TUESDAY, q="PASTA")
+    view = await choose_view(ctx, W, TUESDAY, q="PASTA")
     assert [x["title"] for x in view["items"]] == ["Pasta bolognese", "Pasta van de buren"]
     assert view["items"][1]["source"] == "Leukerecepten"
 
-    kinds = choose_view(ctx, W, TUESDAY, kind="pasta en Italiaans")["items"]
+    kinds = (await choose_view(ctx, W, TUESDAY, kind="pasta en Italiaans"))["items"]
     assert {x["title"] for x in kinds} == {"Pasta bolognese", "Lasagne al forno",
                                           "Pasta van de buren"}
 
-    tuesday = by_id(choose_view(ctx, W, TUESDAY))
+    tuesday = by_id(await choose_view(ctx, W, TUESDAY))
     assert tuesday[101]["long"] is True  # 60 minutes on a weekday
     assert tuesday[105]["long"] is True and tuesday[103]["long"] is False
-    assert by_id(choose_view(ctx, W, SATURDAY))[101]["long"] is False
-    assert by_id(choose_view(ctx, W, None))[101]["long"] is False
+    assert by_id(await choose_view(ctx, W, SATURDAY))[101]["long"] is False
+    assert by_id(await choose_view(ctx, W, None))[101]["long"] is False
     assert tuesday[102]["eaten_weeks_ago"] == 1
     assert tuesday[101]["eaten_weeks_ago"] is None
 
 
 async def test_search_ah_adds_to_the_catalog(tmp_path):
     ctx, ah = ctx_with_folder(tmp_path)
-    assert choose_view(ctx, W, None, q="stamppot")["items"] == []
+    assert (await choose_view(ctx, W, None, q="stamppot"))["items"] == []
     found = await search_ah(ctx, W, "stamppot")
     assert [e.id for e in found] == [104]
     assert found[0].title == "Stamppot andijvie"
-    assert [x["id"] for x in choose_view(ctx, W, None, q="stamppot")["items"]] == [104]
+    assert [x["id"] for x in (await choose_view(ctx, W, None, q="stamppot"))["items"]] == [104]
     calls = ah.calls.count("get_recipe")
     assert [e.id for e in await search_ah(ctx, W, "stamppot")] == [104]  # known: no fetch
     assert ah.calls.count("get_recipe") == calls
@@ -146,7 +146,7 @@ async def test_empty_catalog_still_lists_own_recipes(tmp_path):
     ctx = make_ctx(tmp_path, ah=ah)
     own = ctx.recipes.save(OwnRecipe(0, "Hachee", 4, ["1 kg rundergehakt"],
                                      kind="Hollandse pot"))
-    view = choose_view(ctx, W, TUESDAY)
+    view = await choose_view(ctx, W, TUESDAY)
     assert view["catalog_ready"] is False
     assert [(x["id"], x["savings"], x["cuisine"]) for x in view["items"]] == \
         [(own.id, 0, "Hollandse pot")]
@@ -164,3 +164,53 @@ def test_catalog_dedupes_and_keeps_the_newest_periods(tmp_path):
         cat.add(s, [e])
     assert not cat.has(starts[0]) and all(cat.has(s) for s in starts[1:])
     assert Catalog(None).entries(W) == []  # no file: memory only
+
+
+async def test_own_recipe_in_kilos_or_pieces_scores_against_the_folder(tmp_path):
+    ctx, _ = ctx_with_folder(tmp_path)
+    kilo = ctx.recipes.save(OwnRecipe(0, "Gehaktbrood", 4, ["1 kg rundergehakt"]))
+    stuks = ctx.recipes.save(OwnRecipe(0, "Burgers", 4, ["2 stuks rundergehakt"]))
+    got = by_id(await choose_view(ctx, W, None))
+    assert got[kilo.id]["savings"] > 0 and got[stuks.id]["savings"] > 0
+
+
+async def test_fill_with_the_current_folder_shows_in_the_menu_week(tmp_path):
+    """Sunday, next week's folder not out: the list is filled and scored with the current
+    folder, and the menu week's list shows it."""
+    ah = Ah(tmp_path, periods=(CURRENT,))
+    ah.recipe_hits = {"gehakt": [101, 103], "kipfilet": [102], "stamppot": [104]}
+    ctx = make_ctx(tmp_path, ah=ah, catalog_path=tmp_path / "catalog.json")
+    ctx.bonus_cache = {CURRENT.start: list(BONUS)}
+    own = ctx.recipes.save(OwnRecipe(0, "Gehaktbrood", 4, ["1 kg rundergehakt"]))
+    assert await fill(ctx, W) == 3
+    assert ctx.catalog.periods() == [CURRENT.start]
+    assert [e.id for e in await search_ah(ctx, W, "stamppot")] == [104]
+    calls = list(ah.calls)
+    view = await choose_view(ctx, W, None)
+    assert ah.calls == calls
+    assert view["catalog_ready"] is True
+    got = by_id(view)
+    assert set(got) == {101, 102, 103, 104, own.id}
+    assert got[own.id]["savings"] == 6.0  # scored with the same (current) folder
+
+
+async def test_an_old_period_does_not_stand_in(tmp_path):
+    ctx, _ = ctx_with_folder(tmp_path)
+    ctx.bonus_cache = {}
+    old = date(2026, 10, 12)  # three weeks before the menu week
+    ctx.catalog.add(old, [Entry(1, "Oud", None, 30, None, None, None, 1.0, False)])
+    view = await choose_view(ctx, W, None)
+    assert view["items"] == [] and view["catalog_ready"] is False
+
+
+async def test_entries_get_the_cuisine_of_their_search_term(tmp_path):
+    ctx, _ = ctx_with_folder(tmp_path)
+    plain = rec(106, "Kip uit de pan", "kipfilet")  # no cuisine from title or lines
+    RECIPES[106] = plain
+    try:
+        assert await planner.score_recipe(plain, BONUS, []) == (2.0, None, False)
+        ctx.client.recipe_hits = {"pasta": [106]}
+        await search_ah(ctx, W, "pasta")
+        assert {e.id: e.cuisine for e in ctx.catalog.entries(W)}[106] == "pasta en Italiaans"
+    finally:
+        del RECIPES[106]

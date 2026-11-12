@@ -76,10 +76,18 @@ def parse_ingredient(text: str, name: str) -> Amount:
     A range ('2-3 el', '2 à 3', '2 tot 3') gives its top; '1 1/2' is 1.5.
     """
     name = (name or "").strip()
-    t = html.unescape(text or "").strip()
+    qty, unit, _ = _lead(html.unescape(text or "").strip())
+    if qty is None:
+        return Amount(None, None, name)
+    return Amount(qty, unit or "stuks", name)
+
+
+def _lead(t: str) -> tuple[float | None, str | None, int]:
+    """The leading quantity of `t` (a range: its top), its unit (None: no unit word),
+    and where they end. No usable number: (None, None, 0)."""
     got = _number(t)
     if got is None:
-        return Amount(None, None, name)
+        return None, None, 0
     qty, end = got
     r = _RANGE.match(t, end)
     if r:
@@ -87,10 +95,17 @@ def parse_ingredient(text: str, name: str) -> Amount:
         if top is not None and top[0] is not None:
             qty, end = top
     if qty is None:
-        return Amount(None, None, name)
+        return None, None, 0
     w = _WORD.match(t[end:])
     unit = UNITS.get(w.group(1).lower()) if w else None
-    return Amount(qty, unit or "stuks", name)
+    return qty, unit, end + w.end() if unit else end
+
+
+def ingredient_name(text: str) -> str:
+    """'1 kg kruimige aardappelen' -> 'kruimige aardappelen': a recipe line without its
+    leading quantity and unit, the name AH gives next to its own lines."""
+    t = html.unescape(text or "").strip()
+    return t[_lead(t)[2]:].strip() or t
 
 
 # --- pantry ------------------------------------------------------------------

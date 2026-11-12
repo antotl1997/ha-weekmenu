@@ -17,6 +17,7 @@ from pathlib import Path
 
 from app.ahclient import AhApiError, Recipe
 from app.durable import schema_of, too_new, write_json
+from app.ingredients import ingredient_name
 
 log = logging.getLogger(__name__)
 
@@ -151,7 +152,8 @@ def to_recipe(r: OwnRecipe, persons: int) -> Recipe:
     factor = persons / r.servings if r.servings else 1.0
     return Recipe(r.id, r.title, r.url or "", r.cook, None, None, ["hoofdgerecht"],
                   [r.kind] if r.kind else [], persons,
-                  [(scale_text(t, factor), "") for t in r.ingredients], list(r.steps),
+                  [(scale_text(t, factor), ingredient_name(t)) for t in r.ingredients],
+                  list(r.steps),
                   r.image)
 
 

@@ -48,9 +48,24 @@ def test_scale_text(text, factor, want):
 
 def test_to_recipe_scales_to_persons():
     r = to_recipe(own(), 2)
-    assert r.ingredients[0] == ("200 g pasta", "")
+    assert r.ingredients[0] == ("200 g pasta", "pasta")
     assert r.servings == 2 and r.courses == ["hoofdgerecht"] and r.cuisines == ["Italiaans"]
     assert r.url == ""
+
+
+@pytest.mark.parametrize("line,name", [
+    ("1 kg kruimige aardappelen", "kruimige aardappelen"),
+    ("zout", "zout"),
+    ("2 stuks rundergehakt", "rundergehakt"),
+    ("1 kilo rundergehakt", "rundergehakt"),
+    ("2-3 el olijfolie", "olijfolie"),
+    ("1 1/2 ui", "ui"),
+    ("½ bosje peterselie", "peterselie"),
+    ("4", "4"),
+])
+def test_to_recipe_names_each_line_without_its_quantity(line, name):
+    r = to_recipe(OwnRecipe(-1, "x", 2, [line]), 2)
+    assert r.ingredients[0][1] == name
 
 
 async def test_local_first_dispatches_on_sign(tmp_path):

@@ -71,7 +71,7 @@ async def test_pick_an_own_recipe_scales_without_ah(tmp_path):
     plan = await pick_dish(client, empty_plan(PANTRY), W, r.id, [pasta(30)], 2, None)
     assert "get_recipe" not in ah.calls
     d = plan.dishes[0]
-    assert d.recipe.ingredients == [("200 g pasta", "")]
+    assert d.recipe.ingredients == [("200 g pasta", "pasta")]
     assert d.persons == 2 and d.recipe.id == r.id
     assert d.cuisine == "pasta en Italiaans" and d.is_fish is False and d.cook == 20
     assert plan.basket == {30: 1}
@@ -118,7 +118,7 @@ async def test_deleted_own_recipe_keeps_the_menu_and_rescales_from_the_snapshot(
     calls = ah.calls.count("get_recipe")
     bigger = await rescale_dish(client, new, W, 4)
     d = next(d for d in bigger.dishes if d.date == W)
-    assert d.recipe.ingredients == [("400 g pasta", "")] and d.persons == 4
+    assert d.recipe.ingredients == [("400 g pasta", "pasta")] and d.persons == 4
     assert d.recipe.servings == 4 and [ln.product.id for ln in d.lines] == [31]
     assert ah.calls.count("get_recipe") == calls
 
@@ -133,7 +133,7 @@ async def test_edited_own_recipe_does_not_change_the_dish(tmp_path):
     assert new.dishes[0].recipe == plan.dishes[0].recipe
     bigger = await rescale_dish(client, new, W, 3)
     assert bigger.dishes[0].recipe.title == "Pasta van oma"
-    assert bigger.dishes[0].recipe.ingredients == [("300 g pasta", "")]
+    assert bigger.dishes[0].recipe.ingredients == [("300 g pasta", "pasta")]
 
 
 async def test_rebuild_keeps_an_ah_dish_whose_recipe_is_gone(tmp_path):

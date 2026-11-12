@@ -77,6 +77,9 @@ class Catalog:
     def has(self, start: date) -> bool:
         return bool(self.entries(start))
 
+    def periods(self) -> list[date]:
+        return sorted(self._periods)
+
     def add(self, start: date, entries: list[Entry]) -> None:
         """Add to the period starting at `start` (one entry per id, the last one wins),
         keep the newest KEEP periods, and save when there is a file."""
@@ -119,9 +122,9 @@ class Catalog:
             log.warning("%s niet te bewaren (%s)", self.path.name, type(e).__name__)
 
 
-def _entry(summ: RecipeSummary, recipe: Recipe, bonus: list[Product], pantry: list[str],
-           overrides: dict) -> Entry:
-    score, cuisine, fish = score_recipe(recipe, bonus, pantry, overrides)
+async def _entry(summ: RecipeSummary, term: str, recipe: Recipe, bonus: list[Product],
+                 pantry: list[str], overrides: dict) -> Entry:
+    score, cuisine, fish = await score_recipe(recipe, bonus, pantry, overrides, term)
     return Entry(
         id=recipe.id, title=recipe.title, image=recipe.image or summ.image,
         cook=recipe.cook if recipe.cook is not None else summ.cook,
@@ -131,21 +134,22 @@ def _entry(summ: RecipeSummary, recipe: Recipe, bonus: list[Product], pantry: li
     )
 
 
-async def _fetch(ctx, wanted: list[RecipeSummary], bonus: list[Product], period: date,
-                 limit: int) -> list[Entry]:
-    """get_recipe and score the first `limit` of `wanted`, and add them to `period`.
+async def _fetch(ctx, wanted: list[tuple[str, RecipeSummary]], bonus: list[Product],
+                 period: date, limit: int) -> list[Entry]:
+    """get_recipe and score the first `limit` of `wanted` (search term, summary), and
+    add them to `period`, the period of the folder `bonus` they are scored against.
     What was fetched before a blocking AH error is kept; the error goes on."""
     pantry, overrides = list(ctx.pantry), ctx.overrides.load()
     new: list[Entry] = []
     try:
-        for summ in wanted[:limit]:
+        for term, summ in wanted[:limit]:
             try:
                 recipe = await ctx.client.get_recipe(summ.id, servings=SCORE_SERVINGS)
             except AhApiError as e:
                 if is_blocking(e):
                     raise
                 continue
-            new.append(_entry(summ, recipe, bonus, pantry, overrides))
+            new.append(await _entry(summ, term, recipe, bonus, pantry, overrides))
     finally:
         if new:
             await asyncio.to_thread(ctx.catalog.add, period, new)
@@ -172,12 +176,12 @@ async def fill(ctx, start: date, budget: int = 60) -> int:
     bonus, _warning, period = got  # fallback=True never gives Waiting
     known = {e.id for e in ctx.catalog.entries(period)}
     never = ctx.taste.never()
-    lists = [await _search(ctx, term) for term in search_terms(bonus)]
+    lists = [(term, await _search(ctx, term)) for term in search_terms(bonus)]
     # round robin over the searches, so the best product does not take every call
     seen: set[int] = set()
-    wanted: list[RecipeSummary] = []
-    for i in range(max((len(x) for x in lists), default=0)):
-        for found in lists:
+    wanted: list[tuple[str, RecipeSummary]] = []
+    for i in range(max((len(x) for _, x in lists), default=0)):
+        for term, found in lists:
             if i >= len(found):
                 continue
             r = found[i]
@@ -186,7 +190,7 @@ async def fill(ctx, start: date, budget: int = 60) -> int:
             seen.add(r.id)
             if any(x in _fold(r.title) for x in EXCLUDE_TITLES):
                 continue
-            wanted.append(r)
+            wanted.append((term, r))
     return len(await _fetch(ctx, wanted, bonus, period, budget))
 
 
@@ -201,16 +205,24 @@ async def search_ah(ctx, start: date, q: str, limit: int = 12) -> list[Entry]:
     found = await _search(ctx, q)
     known = {e.id: e for e in ctx.catalog.entries(period)}
     never = ctx.taste.never()
-    wanted = [r for r in found if r.id not in known and r.id not in never]
+    wanted = [(q, r) for r in found if r.id not in known and r.id not in never]
     for e in await _fetch(ctx, wanted, bonus, period, limit):
         known[e.id] = e
     return [known[r.id] for r in found if r.id in known]
 
 
-def _cached_folder(ctx, start: date) -> list[Product] | None:
-    """The folder of the period holding `start`, when it is read already (no AH call)."""
-    key = _holding(ctx.bonus_cache, start)
-    return ctx.bonus_cache[key] if key is not None else None
+def period_for(ctx, start: date) -> date | None:
+    """The folder period the choice list of the menu week `start` uses, without AH calls:
+    its own period when its folder or list is there; else the current folder standing in
+    for it (offers_fallback, or the newest period starting at most 13 days before)."""
+    keys = set(ctx.bonus_cache) | set(ctx.catalog.periods())
+    own = _holding(keys, start)
+    if own is not None:
+        return own
+    known = ctx.offers_fallback.get(start)
+    if known is not None and known[0] in keys:
+        return known[0]
+    return max((k for k in keys if start - timedelta(days=13) <= k <= start), default=None)
 
 
 def _item(id, title, image, cook, cuisine, score, source, day, weeks_ago) -> dict:
@@ -222,21 +234,24 @@ def _item(id, title, image, cook, cuisine, score, source, day, weeks_ago) -> dic
     }
 
 
-def choose_view(ctx, start: date, day: date | None, q: str = "", kind: str = "") -> dict:
+async def choose_view(ctx, start: date, day: date | None, q: str = "",
+                      kind: str = "") -> dict:
     """The choice list for the menu week `start` (and the evening `day`, for the cooking
     time mark): kept AH recipes and own recipes, best saving first. No AH call."""
     never, down = ctx.taste.never(), ctx.taste.down()
     weeks_ago = ctx.ledger.recent_recipe_weeks(start)
+    period = period_for(ctx, start)
+    entries = ctx.catalog.entries(period) if period is not None else []
     items = [
         _item(e.id, e.title, e.image, e.cook, e.cuisine, e.score, "ah", day, weeks_ago)
-        for e in ctx.catalog.entries(start)
+        for e in entries
     ]
-    folder = _cached_folder(ctx, start) or []
+    folder = ctx.bonus_cache.get(period) or []
     pantry, overrides = list(ctx.pantry), ctx.overrides.load()
     for r in ctx.recipes.all():
         recipe = to_recipe(r, r.servings)
         if folder:
-            score, cuisine, _fish = score_recipe(recipe, folder, pantry, overrides)
+            score, cuisine, _fish = await score_recipe(recipe, folder, pantry, overrides)
         else:
             score, cuisine = 0.0, cuisine_of(recipe)
         items.append(_item(r.id, r.title, r.image, r.cook, r.kind or cuisine, score,
@@ -255,4 +270,4 @@ def choose_view(ctx, start: date, day: date | None, q: str = "", kind: str = "")
         out.append(x)
     out.sort(key=lambda x: (-x["savings"], x["title"].casefold()))
     return {"items": out, "kinds": [k["naam"] for k in CUISINES],
-            "catalog_ready": ctx.catalog.has(start)}
+            "catalog_ready": bool(entries)}
