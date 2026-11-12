@@ -34,7 +34,7 @@ Op een computer, in Chrome of Edge:
 
 Op de Week staat "AH-login in orde, laatst ververst <datum>". Is de login verlopen (AH weigert hem, ook bij het verversen), dan vraagt de app je opnieuw in te loggen en is de regel op de dashboardkaart rood. Dezelfde informatie staat op `sensor.weekmenu` als `login_ok` en `login_refreshed`.
 
-Het AH-account mag gedeeld blijven: jullie AH-apps blijven gewoon werken. Raakt de add-on de login kwijt of weigert AH hem, dan toont de app het inlogscherm weer, en krijg je een melding "AH-login verlopen" als hij op dat moment iets voor je menu wilde schrijven. Wat nog niet in je bestelling of op je lijst stond, komt er na opnieuw inloggen alsnog bij.
+Het AH-account mag gedeeld blijven: jullie AH-apps blijven gewoon werken. Raakt de add-on de login kwijt of weigert AH hem, dan toont de app het inlogscherm weer, en krijg je één melding "AH-login verlopen" zodra de add-on dat merkt bij het schrijven of bij zijn uurlijkse controle. Wat nog niet in je bestelling of op je lijst stond, komt er na opnieuw inloggen alsnog bij.
 
 ## Instellingen
 

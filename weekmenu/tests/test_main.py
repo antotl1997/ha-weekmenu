@@ -461,7 +461,7 @@ async def test_non_http_settings_error_tries_again_next_hour(tmp_path):
     assert ctx.client.held() == {1: 1, 2: 2, 3: 1}
 
 
-async def test_expired_login_in_the_hourly_look_is_noted_not_pushed(tmp_path):
+async def test_expired_login_in_the_hourly_look_is_noted_and_pushed_once(tmp_path):
     ah = FakeAh(tmp_path, periods=[CUR, NXT])
     ah.raise_on["bonus_periods"] = AhLoginExpired("login expired", 401)
     ctx = make_ctx(tmp_path, ah=ah)
@@ -471,7 +471,9 @@ async def test_expired_login_in_the_hourly_look_is_noted_not_pushed(tmp_path):
     await tick(ctx, at(FRI, 10, 0))
     assert ctx.login_expired  # the app and the dashboard card show it
     assert ah.calls == ["bonus_periods"]  # not tried again with an expired login
-    assert ctx.hass.notifications() == [] and ah.writes == []
+    # final review: the one "AH-login verlopen" push, on the first look that found it
+    assert [n["message"] for n in ctx.hass.notifications()] == [main.LOGIN_EXPIRED]
+    assert ah.writes == []
 
 
 def test_check_slots():

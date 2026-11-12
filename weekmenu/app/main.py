@@ -253,6 +253,10 @@ class Context:
     # catalog_path over a restart when that is set (catalog.py)
     catalog_path: Path | None = None
     catalog: Catalog | None = None
+    # not kept: folder period -> the day its choice list was last filled from the
+    # hourly look or at start; a folder that never reaches CATALOG_TARGET is searched
+    # at most once a day, not every hour
+    catalog_tried: dict[date, date] = field(default_factory=dict)
     reconciliations: Reconciliations | None = None
     recon_checked: datetime | None = None  # not kept: the hour "nagerekend" last looked
 
@@ -304,6 +308,14 @@ async def guard(awaitable, what: str) -> bool:
     except httpx.HTTPError as e:
         log.warning("Home Assistant: %s mislukt (%s)", what, type(e).__name__)
         return False
+
+
+def mark_login_expired(ctx: "Context") -> bool:
+    """AH said the login is gone: note it. True when it was not known yet, so a look
+    that reports it pushes once, not every hour."""
+    fresh = not ctx.login_expired
+    ctx.login_expired = True
+    return fresh
 
 
 _ID_SEGMENT = re.compile(r"/\d+(?=[/?:\s]|$)")
@@ -603,12 +615,23 @@ async def warm_folder(ctx: Context) -> None:
                 _bonus, _warning, period = await folder_for_week(ctx, start, now,
                                                                  fallback=True)
                 log.info("Folder voor de week van %s voorgeladen", start)
-            if len(ctx.catalog.entries(period)) < CATALOG_TARGET:
+            if _fill_due(ctx, period, now.date()):
                 added = await catalog.fill(ctx, start)
                 log.info("Keuzelijst voor de week van %s: %d recepten erbij", start, added)
     except Exception as e:
         log.info("Folder of keuzelijst voorladen lukte niet (%s); de app haalt het later op",
                  type(e).__name__)
+
+
+def _fill_due(ctx: Context, period: date, day: date) -> bool:
+    """Whether the choice list of folder `period` is to be filled now: short of
+    CATALOG_TARGET and not tried yet on `day`. Marks it tried when it is."""
+    if len(ctx.catalog.entries(period)) >= CATALOG_TARGET:
+        return False
+    if ctx.catalog_tried.get(period) == day:
+        return False
+    ctx.catalog_tried[period] = day
+    return True
 
 
 async def fill_catalog(ctx: Context, now: datetime, start: date) -> None:
@@ -618,6 +641,7 @@ async def fill_catalog(ctx: Context, now: datetime, start: date) -> None:
     raises (logged)."""
     if not login_view(ctx, now)["login_ok"]:
         return
+    got_period = None
     try:
         async with ctx.lock:
             got = await folder_for_week(ctx, start, now, fallback=False)
@@ -626,13 +650,17 @@ async def fill_catalog(ctx: Context, now: datetime, start: date) -> None:
                     ctx.waiting = got
                     _save_state(ctx)
                 return
-            if len(ctx.catalog.entries(got[2])) >= CATALOG_TARGET:
+            if not _fill_due(ctx, got[2], now.date()):
                 return
+            got_period = got[2]
             added = await catalog.fill(ctx, start)
         log.info("Keuzelijst voor de week van %s: %d recepten erbij", start, added)
     except AhLoginExpired:
-        ctx.login_expired = True
+        ctx.catalog_tried.pop(got_period, None)  # after logging in again: the next look
         log.warning("Keuzelijst niet gevuld: AH-login verlopen")
+        if mark_login_expired(ctx):  # the push once, like a round
+            await guard(ctx.hass.notify("Weekmenu", LOGIN_EXPIRED, ctx.ingress_url),
+                        "melding")
     except Exception as e:
         log.warning("Keuzelijst niet gevuld: %s", short_error(e))
 
@@ -743,8 +771,7 @@ async def _round(ctx: Context, now: datetime, mode: str, start: date, raw: RawSe
             wlog.round_done = wlog.completion_tried = wlog.notified = False
         result = await apply(ctx.client, ctx.ledger, wlog, plan, replaced, today=now.date())
     except AhLoginExpired:
-        known = ctx.login_expired
-        ctx.login_expired = True
+        fresh = mark_login_expired(ctx)
         log.warning("AH-login verlopen")
         if completing:  # not a real try: after logging in again the next look completes
             wlog.completion_tried = False
@@ -752,7 +779,7 @@ async def _round(ctx: Context, now: datetime, mode: str, start: date, raw: RawSe
                 await save_log(ctx, wlog)
             except Exception as e:
                 log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
-        if not completing or not known:  # the hourly look reports it once
+        if not completing or fresh:  # the hourly look reports it once
             text = LOGIN_EXPIRED_COMPLETION if completing else LOGIN_EXPIRED
             await guard(ctx.hass.notify("Weekmenu", text, ctx.ingress_url), "melding")
         return RoundOutcome("login_expired", start, error=LOGIN_EXPIRED)

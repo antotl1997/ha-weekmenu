@@ -765,6 +765,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         try:
             target = await destination(ctx.client, start)
         except (AhApiError, httpx.HTTPError) as e:
+            if isinstance(e, AhLoginExpired):  # noted for the app; a read never pushes
+                ctx.login_expired = True
             log.info("Bestelling of lijst voor het concept niet bekend: %s",
                      main.short_error(e))
             return None

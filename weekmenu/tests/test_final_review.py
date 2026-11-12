@@ -1,0 +1,60 @@
+"""2.0.0 final review: the choice list fill, the expired login, broken recipes.json."""
+
+from datetime import datetime, timedelta
+
+from app import main
+from app.ahclient import AhLoginExpired
+from app.tokens import Tokens
+from app.web import make_app
+from tests.fakes import NEXT, W, make_ctx
+from tests.test_catalog import BONUS, Ah
+
+LOOK = datetime(2026, 11, 1, 9, 0)
+
+
+def small_folder(tmp_path):
+    """NEXT is out and AH finds only a few recipes: the list never reaches 60."""
+    ah = Ah(tmp_path)
+    ah.recipe_hits = {"gehakt": [101, 103], "kipfilet": [102]}
+    ctx = make_ctx(tmp_path, ah=ah, now=LOOK, catalog_path=tmp_path / "catalog.json")
+    ctx.bonus_cache = {NEXT.start: list(BONUS)}
+    ah.store.save(Tokens("secret-access-token", "secret-refresh-token", 9e9))
+    return ctx, ah
+
+
+async def test_a_small_folder_is_filled_once_a_day(tmp_path):
+    ctx, ah = small_folder(tmp_path)
+    await main.fill_catalog(ctx, LOOK, W)
+    first = ah.calls.count("search_recipes")
+    assert first > 0 and len(ctx.catalog.entries(W)) == 3
+    await main.fill_catalog(ctx, LOOK + timedelta(hours=1), W)
+    assert ah.calls.count("search_recipes") == first  # the next hour: no searches
+    await main.warm_folder(ctx)  # a restart the same day neither
+    assert ah.calls.count("search_recipes") == first
+    nxt = LOOK + timedelta(days=1)
+    ctx.clock = lambda: nxt
+    await main.fill_catalog(ctx, nxt, W)  # the next day it may try again
+    assert ah.calls.count("search_recipes") == 2 * first
+
+
+async def test_an_expired_login_in_the_fill_pushes_once(tmp_path):
+    ctx, ah = small_folder(tmp_path)
+    ah.raise_on["search_recipes"] = AhLoginExpired("verlopen", 401)
+    await main.fill_catalog(ctx, LOOK, W)
+    assert ctx.login_expired is True
+    pushes = [n for n in ctx.hass.notifications() if n.get("message") == main.LOGIN_EXPIRED]
+    assert len(pushes) == 1
+    assert W not in ctx.catalog_tried and NEXT.start not in ctx.catalog_tried
+    await main.fill_catalog(ctx, LOOK + timedelta(hours=1), W)  # still expired: no new push
+    assert [n for n in ctx.hass.notifications()
+            if n.get("message") == main.LOGIN_EXPIRED] == pushes
+
+
+async def test_draft_target_notes_an_expired_login_without_a_push(aiohttp_client, tmp_path):
+    ctx, ah = small_folder(tmp_path)
+    ah.raise_on["active_order"] = AhLoginExpired("verlopen", 401)
+    client = await aiohttp_client(make_app(ctx))
+    week = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+    assert week["target"] is None
+    assert ctx.login_expired is True
+    assert ctx.hass.notifications() == []
