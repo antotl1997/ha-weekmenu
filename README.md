@@ -7,7 +7,7 @@ This uses the unofficial API of the Albert Heijn app. It is not affiliated with 
 ## What it does
 
 - You choose the menu yourself: per evening a dish from a list with the bonus dishes first, with search and a kind filter, and "Zoek bij AH" for more. The week stays a draft (kept in the week log, field `draft`) until you tap "Zet in bestelling" or "Zet op lijst"; then the groceries go to your open delivery order or AH list in one go. Nothing is ever checked out, and there is no automatic menu.
-- Keeps your own recipes (`/data/recipes.json`) and imports a recipe from a link (recipe-scrapers, about 575 sites, and most sites with schema.org recipe data; links to the home network are refused). The choice list is kept in `/data/catalog.json`.
+- Keeps your own recipes (`/data/recipes.json`) and imports a recipe from a link (recipe-scrapers, more than 600 sites, and most sites with schema.org recipe data; links to the home network are refused). The choice list is kept in `/data/catalog.json`.
 - With more eat days than cooking moments, the extra eat days become leftover nights ("restjes van <dish>"): the dish is cooked for both evenings and nothing extra is bought.
 - Cleans up after itself: when you swap a dish, remove one, lower the persons or update the menu, it takes the products it added itself and no dish needs any more off the list or out of the order.
 - When the new folder is out after you confirmed, the app offers Menu bijwerken ("Nieuwe folder is er"): the same dishes on the new prices.
@@ -25,7 +25,7 @@ Then install "Weekmenu AH" from the store.
 
 ## When it runs
 
-The add-on never makes a menu by itself. From `schedule_time` (default 08:00) until 18:00 it checks once an hour: it fills the choice list with recipes, completes a confirmed menu and checks for a new folder. On Sunday from 17:00 you get one reminder to choose the menu (`input_boolean.weekmenu_aan` only switches that reminder). A Dutch one-page user guide for everyone in the house is in [`weekmenu/GIDS.md`](weekmenu/GIDS.md) and in the app under "Lees de gids".
+The add-on never makes a menu by itself. From `schedule_time` (default 08:00) until 18:00 it checks once an hour: it completes a confirmed menu whose round did not finish, looks for the new folder when the menu was made with an older one, and fills the choice list with recipes once the folder of the week is out. On Sunday from 17:00 you get one reminder to choose the menu (`input_boolean.weekmenu_aan` only switches that reminder). A Dutch one-page user guide for everyone in the house is in [`weekmenu/GIDS.md`](weekmenu/GIDS.md) and in the app under "Lees de gids".
 
 ## Tonight, the reminder and the dashboard card
 
