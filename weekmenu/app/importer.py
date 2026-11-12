@@ -42,6 +42,8 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; weekmenu-ah)",
     "Accept": "text/html,application/xhtml+xml",
     "Connection": "close",
+    # no gzip: one compressed chunk could inflate far past max_bytes before the check
+    "Accept-Encoding": "identity",
 }
 
 BAD_LINK = "Plak een link die begint met http:// of https://"
@@ -54,6 +56,7 @@ TOO_BIG = "Deze pagina is te groot om te lezen"
 TIMEOUT = "De site reageert niet op tijd"
 UNREACHABLE = "De site is niet bereikbaar"
 NO_RECIPE = "Op deze pagina staat geen recept dat ik kan lezen"
+TOO_HARD = "Deze pagina is te lastig om te lezen"
 
 _NAT64 = ipaddress.ip_network("64:ff9b::/96")
 
@@ -137,7 +140,11 @@ async def _read(response: httpx.Response, max_bytes: int) -> str:
         if total > max_bytes:
             raise RecipeImportError(TOO_BIG)
         chunks.append(chunk)
-    return b"".join(chunks).decode(response.charset_encoding or "utf-8", errors="replace")
+    body = b"".join(chunks)
+    try:
+        return body.decode(response.charset_encoding or "utf-8", errors="replace")
+    except LookupError:  # a charset Python does not know: "text/html; charset=bogus"
+        return body.decode("utf-8", errors="replace")
 
 
 async def fetch_page(http: httpx.AsyncClient, url: str,

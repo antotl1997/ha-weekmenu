@@ -90,6 +90,7 @@ MAX_RECIPE_SERVINGS = 20
 MAX_LINES = 100  # ingredient or step lines kept of one own recipe
 MAX_TEXT = 500  # characters kept of one title or line
 MAX_LINK = 2000  # characters in a link (the recipe page, its photo)
+PARSE_LIMIT = 20  # seconds to read a recipe out of a fetched page
 
 FALLBACK_HTML = """<!doctype html>
 <html lang="nl"><head><meta charset="utf-8">
@@ -1546,6 +1547,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
 
     # --- v1.1: own recipes, and "Van een link" (importer.py) ---
 
+    import_slot = asyncio.Semaphore(1)  # "Van een link": one fetch and parse at a time
+
     def recipes_payload() -> dict:
         items = sorted(ctx.recipes.all(), key=lambda r: r.title.casefold())
         return {"items": [asdict(r) for r in items], "kinds": catalog.kind_names()}
@@ -1625,6 +1628,31 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         log.info("Eigen recept %s verwijderd", rid)
         return web.json_response(recipes_payload())
 
+    async def read_link(url: str) -> OwnRecipe:
+        """Fetch and parse one link; one at a time, a second request waits. A parse that
+        takes longer than PARSE_LIMIT is answered as too hard, but its thread cannot be
+        stopped: the slot stays taken until that thread ends, so they never pile up."""
+        await import_slot.acquire()
+        handed_over = False
+        try:
+            final, page = await importer.fetch_page(ctx.web_http, url)
+            job = asyncio.ensure_future(asyncio.to_thread(importer.parse, page, final))
+
+            def done(j):
+                import_slot.release()
+                if not j.cancelled():
+                    j.exception()  # retrieved: a late failure is not logged as unhandled
+
+            job.add_done_callback(done)
+            handed_over = True
+            try:
+                return await asyncio.wait_for(asyncio.shield(job), PARSE_LIMIT)
+            except TimeoutError:
+                raise importer.RecipeImportError(importer.TOO_HARD) from None
+        finally:
+            if not handed_over:
+                import_slot.release()
+
     async def import_recipe(request):
         """"Van een link": the recipe on that page, filled in for the form; not saved.
         Nothing is written, so no lock."""
@@ -1634,8 +1662,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         if ctx.web_http is None:
             return _err(503, "Een recept van een link lezen kan nu niet")
         try:
-            final, page = await importer.fetch_page(ctx.web_http, url)
-            r = await asyncio.to_thread(importer.parse, page, final)
+            r = await read_link(url)
         except importer.RecipeImportError as e:
             # never the link itself in the log: a path or query may carry something private
             log.info("Recept van een link niet gelezen: %s", e.message)

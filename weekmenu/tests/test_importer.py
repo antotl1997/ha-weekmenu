@@ -169,3 +169,36 @@ async def test_fetch_has_one_deadline_for_everything(monkeypatch):
         with pytest.raises(RecipeImportError) as e:
             await fetch_page(http, "http://recepten.example.com/traag")
     assert e.value.message == importer.TIMEOUT
+
+
+async def test_fetch_survives_an_unknown_charset_and_asks_for_no_compression():
+    async with respx.mock() as mock, httpx.AsyncClient() as http:
+        route = mock.get(f"http://{PUBLIC}/x").respond(
+            200, content="<p>café</p>".encode(),
+            headers={"Content-Type": "text/html; charset=bogus"})
+        _, html = await fetch_page(http, "http://recepten.example.com/x")
+    assert html == "<p>café</p>"
+    assert route.calls.last.request.headers["accept-encoding"] == "identity"
+
+
+async def test_a_redirect_without_location_is_a_plain_error():
+    async with respx.mock() as mock, httpx.AsyncClient() as http:
+        mock.get(f"http://{PUBLIC}/x").respond(302)
+        with pytest.raises(RecipeImportError) as e:
+            await fetch_page(http, "http://recepten.example.com/x")
+    assert e.value.message == "De site gaf de pagina niet (HTTP 302)"
+
+
+@pytest.mark.parametrize("location,message", [
+    ("file:///etc/passwd", importer.BAD_LINK),
+    ("ftp://recepten.example.com/x", importer.BAD_LINK),
+    ("//127.0.0.1/", importer.INWARD),
+    ("//supervisor/core/api", importer.INWARD),
+])
+async def test_a_redirect_to_another_scheme_or_inward_is_refused(location, message):
+    async with respx.mock(assert_all_called=False) as mock, httpx.AsyncClient() as http:
+        mock.get(f"http://{PUBLIC}/r").respond(302, headers={"Location": location})
+        with pytest.raises(RecipeImportError) as e:
+            await fetch_page(http, "http://recepten.example.com/r")
+        assert len(mock.calls) == 1
+    assert e.value.message == message

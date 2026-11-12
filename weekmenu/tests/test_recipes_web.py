@@ -102,3 +102,39 @@ async def test_import_route_returns_unsaved_recipe(aiohttp_client, tmp_path, fak
         r = await client.post("api/recipes/import", json={"url": 5})
         assert r.status == 400
         assert len(mock.calls) == 2
+
+
+async def test_import_has_a_time_limit_and_runs_one_at_a_time(aiohttp_client, tmp_path,
+                                                             fake_dns, monkeypatch):
+    import asyncio
+    import threading
+    import time
+
+    from app import web as webmod
+
+    monkeypatch.setattr(webmod, "PARSE_LIMIT", 0.2)
+    running, most = 0, 0
+    guard = threading.Lock()
+
+    def slow_parse(html, url):
+        nonlocal running, most
+        with guard:
+            running += 1
+            most = max(most, running)
+        time.sleep(0.4)
+        with guard:
+            running -= 1
+        raise importer.RecipeImportError(importer.NO_RECIPE)
+
+    monkeypatch.setattr(importer, "parse", slow_parse)
+    async with respx.mock() as mock, httpx.AsyncClient() as http:
+        mock.get(f"https://{PUBLIC}/r/").respond(200, text="<html></html>")
+        client = await aiohttp_client(make_app(make_ctx(tmp_path, web_http=http)))
+        link = {"url": "https://www.leukerecepten.nl/r/"}
+        a, b = await asyncio.gather(client.post("api/recipes/import", json=link),
+                                    client.post("api/recipes/import", json=link))
+        for r in (a, b):
+            assert r.status == 422
+            assert (await r.json())["error"] == "Deze pagina is te lastig om te lezen"
+        await asyncio.sleep(0.5)  # let the last parse thread end
+    assert most == 1
