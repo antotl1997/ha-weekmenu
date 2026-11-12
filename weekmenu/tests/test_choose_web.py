@@ -564,3 +564,22 @@ async def test_confirmed_on_the_old_folder_offers_menu_bijwerken_later(aiohttp_c
     log = ctx.ledger.load(W)
     from app.ledger import new_folder_available
     assert new_folder_available(log) is True
+
+
+async def test_a_past_evening_cannot_be_picked_and_is_dropped_on_confirm(aiohttp_client,
+                                                                        tmp_path):
+    ctx, ah = make(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, W, 101)).status == 200
+    assert (await pick(client, DO, 102)).status == 200
+    ctx.clock = lambda: SUNDAY + timedelta(days=4)  # Thursday: Wednesday is past
+    r = await pick(client, W, 103)
+    assert r.status == 400
+    assert (await r.json())["error"] == "Deze avond is al geweest"
+    assert [d.recipe.id for d in Plan.from_dict(ctx.ledger.load(W).draft).dishes] == [101, 102]
+    r = await client.post(f"api/week/confirm?week={W.isoformat()}")
+    assert r.status == 200, await r.text()
+    assert (await r.json())["dropped"] == [W.isoformat()]
+    assert ah.held() == {12: 1}  # only Thursday's kip, nothing for Wednesday
+    plan = Plan.from_dict(ctx.ledger.load(W).plan)
+    assert [d.date for d in plan.dishes] == [DO]

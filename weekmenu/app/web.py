@@ -77,6 +77,7 @@ REPICK_FAILED = ("Je keuze is weg, maar het menu is nog niet aangepast. "
 NOT_HOME = "Op deze avond eten jullie niet thuis"
 LEFTOVER_NIGHT = "Op deze avond eten jullie restjes"
 NO_COOKING = "Op deze avond staat geen kookmoment"
+PAST_EVENING = "Deze avond is al geweest"
 HA_UNREADABLE = "Home Assistant is nu niet te lezen; probeer het zo opnieuw"
 OWN_GONE = "Dit eigen recept bestaat niet meer; kies een ander gerecht"
 AH_GONE = "Dit recept bestaat niet meer bij AH; kies een ander gerecht"
@@ -958,6 +959,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         check_offer_week(main.week_of(day))
 
         async def edit(wlog):
+            if day < ctx.clock().date():  # a draft is for the evenings still to come
+                return _err(400, PAST_EVENING)
             draft = Plan.from_dict(wlog.draft) if wlog.draft else empty_plan(list(ctx.pantry))
             got = await evening(wlog.week, day, draft)
             if isinstance(got, web.Response):
@@ -1116,8 +1119,11 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             settings = await evening_settings(start)
             if isinstance(settings, web.Response):
                 return settings
-            # an evening that is no longer a cook evening (away now) is left out
-            gone = [x for x in plan.dishes if x.date not in settings.evenings]
+            # an evening that is no longer a cook evening (away now) or already past
+            # is left out
+            today = ctx.clock().date()
+            gone = [x for x in plan.dishes
+                    if x.date not in settings.evenings or x.date < today]
             for x in gone:
                 plan = main.remove_dish(plan, x.date)
                 plan.removed_days = [r for r in plan.removed_days
@@ -1125,8 +1131,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             if not plan.dishes:
                 return _err(400, NO_DRAFT)
             if gone:
-                log.info("Week %s: %d gerecht(en) op een avond niet thuis weggelaten",
-                         start, len(gone))
+                log.info("Week %s: %d gerecht(en) op een avond niet thuis of al geweest "
+                         "weggelaten", start, len(gone))
             now = ctx.clock()
             bonus, warning, period_start = await main.folder_for_week(ctx, start, now,
                                                                       fallback=True)
