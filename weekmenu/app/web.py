@@ -90,7 +90,8 @@ MAX_RECIPE_SERVINGS = 20
 MAX_LINES = 100  # ingredient or step lines kept of one own recipe
 MAX_TEXT = 500  # characters kept of one title or line
 MAX_LINK = 2000  # characters in a link (the recipe page, its photo)
-PARSE_LIMIT = 20  # seconds to read a recipe out of a fetched page
+PARSE_LIMIT = 20  # seconds to read a recipe out of a fetched page; also the wait for a turn
+IMPORT_BUSY = "Er loopt nog een import; probeer het zo nog eens"
 
 FALLBACK_HTML = """<!doctype html>
 <html lang="nl"><head><meta charset="utf-8">
@@ -1628,11 +1629,15 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         log.info("Eigen recept %s verwijderd", rid)
         return web.json_response(recipes_payload())
 
-    async def read_link(url: str) -> OwnRecipe:
+    async def read_link(url: str) -> OwnRecipe | None:
         """Fetch and parse one link; one at a time, a second request waits. A parse that
         takes longer than PARSE_LIMIT is answered as too hard, but its thread cannot be
-        stopped: the slot stays taken until that thread ends, so they never pile up."""
-        await import_slot.acquire()
+        stopped: the slot stays taken until that thread ends, so they never pile up.
+        None when no turn came within PARSE_LIMIT (a parse that never ends holds it)."""
+        try:
+            await asyncio.wait_for(import_slot.acquire(), PARSE_LIMIT)
+        except TimeoutError:
+            return None
         handed_over = False
         try:
             final, page = await importer.fetch_page(ctx.web_http, url)
@@ -1667,6 +1672,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             # never the link itself in the log: a path or query may carry something private
             log.info("Recept van een link niet gelezen: %s", e.message)
             return _err(422, e.message)
+        if r is None:
+            return _err(503, IMPORT_BUSY)
         log.info("Recept gelezen van %s", _printable(r.source))
         return web.json_response(asdict(r))
 

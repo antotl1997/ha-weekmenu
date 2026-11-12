@@ -104,7 +104,7 @@ async def test_import_route_returns_unsaved_recipe(aiohttp_client, tmp_path, fak
         assert len(mock.calls) == 2
 
 
-async def test_import_has_a_time_limit_and_runs_one_at_a_time(aiohttp_client, tmp_path,
+async def test_imports_run_one_at_a_time(aiohttp_client, tmp_path,
                                                              fake_dns, monkeypatch):
     import asyncio
     import threading
@@ -112,7 +112,7 @@ async def test_import_has_a_time_limit_and_runs_one_at_a_time(aiohttp_client, tm
 
     from app import web as webmod
 
-    monkeypatch.setattr(webmod, "PARSE_LIMIT", 0.2)
+    monkeypatch.setattr(webmod, "PARSE_LIMIT", 2)
     running, most = 0, 0
     guard = threading.Lock()
 
@@ -121,7 +121,7 @@ async def test_import_has_a_time_limit_and_runs_one_at_a_time(aiohttp_client, tm
         with guard:
             running += 1
             most = max(most, running)
-        time.sleep(0.4)
+        time.sleep(0.2)
         with guard:
             running -= 1
         raise importer.RecipeImportError(importer.NO_RECIPE)
@@ -135,6 +135,36 @@ async def test_import_has_a_time_limit_and_runs_one_at_a_time(aiohttp_client, tm
                                     client.post("api/recipes/import", json=link))
         for r in (a, b):
             assert r.status == 422
-            assert (await r.json())["error"] == "Deze pagina is te lastig om te lezen"
-        await asyncio.sleep(0.5)  # let the last parse thread end
+            assert (await r.json())["error"] == importer.NO_RECIPE
     assert most == 1
+
+
+async def test_a_parse_that_never_ends_does_not_hang_the_next_import(
+        aiohttp_client, tmp_path, fake_dns, monkeypatch):
+    import threading
+
+    from app import web as webmod
+
+    monkeypatch.setattr(webmod, "PARSE_LIMIT", 0.2)
+    release = threading.Event()
+
+    def stuck_parse(html, url):
+        release.wait(5)  # "never" within the test's patience
+        raise importer.RecipeImportError(importer.NO_RECIPE)
+
+    monkeypatch.setattr(importer, "parse", stuck_parse)
+    async with respx.mock() as mock, httpx.AsyncClient() as http:
+        mock.get(f"https://{PUBLIC}/r/").respond(200, text="<html></html>")
+        client = await aiohttp_client(make_app(make_ctx(tmp_path, web_http=http)))
+        link = {"url": "https://www.leukerecepten.nl/r/"}
+        try:
+            first = await client.post("api/recipes/import", json=link)
+            assert first.status == 422  # the parse limit answered; its thread still runs
+            assert (await first.json())["error"] == "Deze pagina is te lastig om te lezen"
+            second = await client.post("api/recipes/import", json=link)
+            assert second.status == 503
+            assert (await second.json())["error"] == \
+                "Er loopt nog een import; probeer het zo nog eens"
+            assert len(mock.calls) == 1  # the second never fetched
+        finally:
+            release.set()
