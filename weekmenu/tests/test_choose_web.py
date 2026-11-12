@@ -461,3 +461,33 @@ async def test_pick_on_an_evening_without_a_cooking_moment(aiohttp_client, tmp_p
     assert (await r.json())["error"] == "Op deze avond staat geen kookmoment"
     r = await pick(client, DO, 101)
     assert (await r.json())["error"] == "Op deze avond eten jullie restjes"
+
+
+async def test_draft_says_where_confirming_would_write(aiohttp_client, tmp_path):
+    """Fix round 1: a draft's "target" is where confirming would write now (an active
+    order: "order", else "list"), asked of AH at most every 5 minutes, and null without
+    a login or when AH does not answer (the app then shows a neutral button)."""
+    from app.ahclient import ActiveOrder
+    from app.web import DRAFT_TARGET_TTL
+
+    ctx, ah = make(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+
+    async def target():
+        week = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+        assert week["draft"] is True
+        return week["target"]
+
+    assert await target() is None  # not logged in: never asked
+    login(ah)
+    assert await target() == "list"
+    ah.order = ActiveOrder(7, {}, W + timedelta(days=1))
+    assert await target() == "list"  # kept for a while: no AH read on every look
+    stamp, kept = ctx.draft_targets[W]
+    ctx.draft_targets[W] = (stamp - DRAFT_TARGET_TTL - 1, kept)
+    assert await target() == "order"
+    ctx.draft_targets.clear()
+    ah.raise_on["active_order"] = AhApiError("boom", 500)
+    assert await target() is None
+    assert W not in ctx.draft_targets  # an error is not kept: the next look asks again
+    assert ah.writes == []

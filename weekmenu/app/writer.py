@@ -154,6 +154,14 @@ async def _destination(client, week: date):
     return order, None, day
 
 
+async def destination(client, week: date) -> Literal["order", "list"]:
+    """Where apply would write the menu of `week` now: "order" when AH has an active
+    order (apply also holds a write to an order outside the menu week there), else
+    "list". An AH read; it may raise like _destination."""
+    order, _why, _day = await _destination(client, week)
+    return "order" if order is not None else "list"
+
+
 def _title(plan: Plan, replaced: Plan | None, pid: int) -> str:
     for src in (plan, replaced):
         if src is not None and pid in src.products:

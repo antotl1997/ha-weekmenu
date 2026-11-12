@@ -448,6 +448,13 @@ function staplesHtml(w) {
   return html + `<div class="card ing">${rows.join("")}</div>`;
 }
 
+/* The confirm button: where it writes, or neutral when the add-on could not ask AH
+ * (no login, AH did not answer): target null. */
+function confirmLabel(target) {
+  return target === "order" ? "Zet in bestelling" : target === "list" ? "Zet op lijst"
+    : "Menu bevestigen";
+}
+
 /* A week without a confirmed menu: the concept card, then the evenings to choose. */
 function draftHtml(w, waiting) {
   const days = w.days || [];
@@ -477,7 +484,7 @@ function conceptCard(w, when) {
   const filled = days.filter((d) => d.recipe).length;
   const total = filled + days.filter((d) => d.kies && !d.recipe).length;
   const saving = days.reduce((a, d) => a + (Number(d.savings) || 0), 0);
-  const label = w.target === "order" ? "Zet in bestelling" : "Zet op lijst";
+  const label = confirmLabel(w.target);
   const sub = !filled ? `Kies per avond een gerecht. ${when}`
     : saving > 0 ? `Bonus bespaard ${eur(saving)}, geschat.` : "";
   return `<div class="card concept"><b>Concept: nog niets in je bestelling</b>
@@ -1001,7 +1008,7 @@ function settingsScreen() {
     <div class="sub">dezelfde instellingen als in Home Assistant</div></div></header>
     ${note}
     <div class="card set">
-      <div class="srow">Elke week vanzelf een menu maken
+      <div class="srow">Herinnering op zondag als het menu nog niet gekozen is
         <button class="toggle ${s.enabled ? "on" : "off"}" data-toggle>${s.enabled ? "● aan" : "○ uit"}</button></div>
       <div class="srow k">Kookmomenten <div class="stp">
         <button data-avonden="${k - 1}" aria-label="Minder kookmomenten" ${k <= 1 ? "disabled" : ""}>−</button>
@@ -1129,7 +1136,7 @@ function welcomeScreen() {
       <ol>
         <li><span>Log één keer in bij AH. Daarvoor heb je even een computer nodig.</span></li>
         <li><span>Kies bij Instellingen hoe vaak je kookt en wie er mee-eet.</span></li>
-        <li><span>Het menu komt vanzelf zodra de nieuwe folder er is, meestal op vrijdag. Je krijgt een melding.</span></li>
+        <li><span>Kies je menu zodra de nieuwe folder er is, meestal vanaf vrijdag. Op zondag krijg je een herinnering als het nog niet gekozen is.</span></li>
       </ol>
       <div class="btnrow"><button class="btn pri" data-welcome>Inloggen bij AH</button></div>
     </div>
@@ -1292,18 +1299,19 @@ async function startRound(btn, mode) {
  * can take a few seconds (AH, then the staples): the button shows that and stays off. */
 async function confirmWeek(btn) {
   const w = state.week;
-  const where = w.target === "order" ? "in je bestelling" : "op je AH-lijst";
-  const label = w.target === "order" ? "Zet in bestelling" : "Zet op lijst";
-  const ok = await confirmSheet(`De week ${where} zetten?`,
-    "De boodschappen van alle gekozen gerechten gaan in één keer naar AH. Wat je daarna per avond wijzigt, past de add-on meteen aan.",
-    label);
+  const where = w.target === "order" ? "in je bestelling" : w.target === "list" ? "op je AH-lijst" : "";
+  const ok = await confirmSheet(where ? `De week ${where} zetten?` : "Het menu van deze week bevestigen?",
+    (where ? "De boodschappen van alle gekozen gerechten gaan in één keer naar AH."
+      : "De boodschappen van alle gekozen gerechten gaan in één keer naar AH: in je open bestelling als die er is, anders op je AH-lijst.")
+      + " Wat je daarna per avond wijzigt, past de add-on meteen aan.",
+    confirmLabel(w.target));
   if (!ok) return;
   await busy(btn, async () => {
     const res = await api(`api/week/confirm?week=${encodeURIComponent(w.week)}`, {});
     state.week = res;
     state.dishes = {};
     state.savings = null;
-    await loadStaples();
+    try { await loadStaples(); } catch (e) { /* the menu is in; staples show on the next visit */ }
     const n = (res.dropped || []).length;
     const dropped = !n ? ""
       : n === 1 ? " Het gerecht op een avond dat jullie niet thuis eten, is weggelaten."
@@ -1379,7 +1387,8 @@ async function chooseClick(t, day) {
         i.long = dow >= 1 && dow <= 5 && (Number(i.cook) || 0) > 45;
         c.items.push(i);
       }
-      c.items.sort((a, b) => b.savings - a.savings || String(a.title).localeCompare(String(b.title), "nl"));
+      c.items.sort((a, b) => (Number(b.savings) || 0) - (Number(a.savings) || 0)
+        || String(a.title).localeCompare(String(b.title), "nl"));
       c.found = res.items.map((i) => i.id);
       toast(res.items.length ? `${plural(res.items.length, "recept", "recepten")} gevonden bij AH`
         : "Niets gevonden bij AH. Probeer een ander woord.");

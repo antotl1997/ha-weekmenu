@@ -514,6 +514,7 @@ def test_app_v08_tonight_login_and_welcome_in_chrome(tmp_path):
         dom = render(base, "", tmp_path, "welkom")
         assert "Welkom bij Weekmenu" in dom and "data-welcome" in dom
         assert dom.count("<li>") == 3 and 'href="gids"' in dom
+        assert "vanzelf" not in dom and "Op zondag krijg je een herinnering" in dom
         assert "appie://login-exit" not in dom and "—" not in dom
         dom = render(base, "#inloggen", tmp_path, "login-stappen")
         assert "Op een computer:" in dom and "Druk F12 en kies Console." in dom
@@ -914,3 +915,36 @@ def test_recipe_form_in_chrome(tmp_path):
         assert "<h1>Mijn recepten</h1>" in got and "Pannenkoeken" in got
         saved = next(r for r in ctx.recipes.all() if r.title == "Pannenkoeken")
         assert saved.ingredients == ["250 g bloem", "3 eieren", "500 ml melk"]
+
+
+@pytest.mark.slow
+def test_draft_confirm_label_follows_the_order_in_chrome(tmp_path):
+    """Fix round 1: with an open order in the menu week the concept says "Zet in
+    bestelling"; when AH does not answer it says "Menu bevestigen" and its sheet
+    promises neither the order nor the list."""
+    from app.ahclient import ActiveOrder, AhApiError
+    from app.recipes import OwnRecipe
+    from tests.fakes import FakeAh
+
+    ah = FakeAh(tmp_path, order=ActiveOrder(7, {}, date(2026, 11, 4)))
+    ctx = make_ctx(tmp_path, ah=ah)
+    ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
+    own = ctx.recipes.save(OwnRecipe(0, "Soep van oma", 2, ["500 g uien"], ["Kook."]))
+    # no copy left that promises a menu made by itself (welcome, Instellingen)
+    js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
+    assert "vanzelf" not in js and "Herinnering op zondag als het menu nog niet gekozen is" in js
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        post(base, "api/dish/2026-11-04/pick", {"recipe_id": own.id})
+        dom = render(base, "", tmp_path, "concept-bestelling")
+        assert "Zet in bestelling" in dom and "Zet op lijst" not in dom
+
+        ctx.draft_targets.clear()
+        ah.raise_on["active_order"] = AhApiError("boom", 500)
+        got = act(base, "", tmp_path, "concept-neutraal", [{"sel": "[data-confirm]"}])
+        assert "Menu bevestigen" in got
+        assert "Zet in bestelling" not in got and "Zet op lijst" not in got
+        assert "Het menu van deze week bevestigen?" in got
+        assert "in je open bestelling als die er is, anders op je AH-lijst" in got
+        assert ctx.ledger.load(W).plan is None  # only the sheet: nothing confirmed

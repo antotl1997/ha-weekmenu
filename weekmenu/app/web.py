@@ -57,7 +57,8 @@ from app.week import (
     eat_days,
     menu_week_start,
 )
-from app.writer import OFFER, apply, apply_extras, held_note, manual_note, missing
+from app.writer import (OFFER, apply, apply_extras, destination, held_note, manual_note,
+                        missing)
 
 log = logging.getLogger("weekmenu.web")
 
@@ -87,6 +88,7 @@ RECIPE_SERVINGS = "Aantal personen moet tussen 1 en 20 liggen"
 RECIPE_INGREDIENTS = "Zet er minstens één ingrediënt in"
 RECIPE_GONE = "Dit recept bestaat niet (meer)"
 MAX_RECIPE_SERVINGS = 20
+DRAFT_TARGET_TTL = 300  # seconds an answer to "order or list?" for a draft is kept
 MAX_LINES = 100  # ingredient or step lines kept of one own recipe
 MAX_TEXT = 500  # characters kept of one title or line
 MAX_LINK = 2000  # characters in a link (the recipe page, its photo)
@@ -722,6 +724,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 wlog, Plan.from_dict(wlog.draft) if wlog.draft else None, start,
                 raw.away if raw is not None else (),
                 main.make_settings(ctx, raw, start) if raw is not None else None)
+            out["target"] = await draft_target(start)
         else:
             out = week_view(wlog, plan, start,
                             raw.away if raw is not None else (),
@@ -747,6 +750,26 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             out["check"]["ok"] = False  # nothing reaches AH now: the card above says why
             out["check"]["blocked"] = True
         return out
+
+    async def draft_target(start: date) -> str | None:
+        """Where "Zet in bestelling" / "Zet op lijst" would write the draft of `start`,
+        by the same rule as apply (writer.destination). An AH read, never under the
+        lock, kept DRAFT_TARGET_TTL seconds per week. None without a login or when AH
+        does not answer: the app then shows a neutral button."""
+        if not main.login_view(ctx)["login_ok"]:
+            return None
+        now = main._time.monotonic()
+        hit = ctx.draft_targets.get(start)
+        if hit is not None and now - hit[0] < DRAFT_TARGET_TTL:
+            return hit[1]
+        try:
+            target = await destination(ctx.client, start)
+        except (AhApiError, httpx.HTTPError) as e:
+            log.info("Bestelling of lijst voor het concept niet bekend: %s",
+                     main.short_error(e))
+            return None
+        ctx.draft_targets[start] = (now, target)
+        return target
 
     def load_dish(day: date, allow_empty: bool = False):
         """The week log, menu and dish of `day`; with `allow_empty` the dish may be None

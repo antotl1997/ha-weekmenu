@@ -246,6 +246,9 @@ class Context:
     recipes: RecipeStore | None = None  # v1.1: own recipes (negative ids)
     # v1.1: the httpx client for "Van een link" (importer.py); None: import is off
     web_http: Any = None
+    # v1.1: menu week -> (monotonic time, "order" | "list"): where confirming a draft
+    # would write, asked of AH at most every DRAFT_TARGET_TTL seconds (web.py)
+    draft_targets: dict[date, tuple[float, str]] = field(default_factory=dict)
     # v1.1: scored AH recipes per folder period for the choice list, kept in
     # catalog_path over a restart when that is set (catalog.py)
     catalog_path: Path | None = None
