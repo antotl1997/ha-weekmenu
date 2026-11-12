@@ -254,7 +254,7 @@ async def choose_view(ctx, start: date, day: date | None, q: str = "",
     folder = ctx.bonus_cache.get(period) or []
     pantry, overrides = list(ctx.pantry), ctx.overrides.load()
     for r in ctx.recipes.all():
-        recipe = to_recipe(r, r.servings)
+        recipe = to_recipe(r, SCORE_SERVINGS)  # like AH's: a saving for the same persons
         if folder:
             score, cuisine, _fish = await score_recipe(recipe, folder, pantry, overrides)
         else:

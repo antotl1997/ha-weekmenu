@@ -83,3 +83,14 @@ def test_a_recipes_file_with_a_wrong_shape_is_set_aside_too(tmp_path):
     path.write_text('{"schema": 1, "recipes": {"-1": "x"}}', encoding="utf-8")
     RecipeStore(path).save(OwnRecipe(0, "Soep", 2, []))
     assert len(list(tmp_path.glob("recipes.json.broken-*"))) == 1
+
+
+async def test_an_own_recipe_scores_like_the_same_ah_recipe(tmp_path):
+    from app.catalog import choose_view, fill
+    from app.recipes import OwnRecipe
+    ctx, ah = small_folder(tmp_path)
+    await fill(ctx, W)
+    # AH's Pasta bolognese (101): 500 g rundergehakt for 2; the own copy is for 4
+    own = ctx.recipes.save(OwnRecipe(0, "Bolognese van oma", 4, ["1000 g rundergehakt"]))
+    items = {x["id"]: x for x in (await choose_view(ctx, W, None))["items"]}
+    assert items[own.id]["savings"] == items[101]["savings"] == 3.0

@@ -84,7 +84,7 @@ async def test_fill_respects_budget_and_never(tmp_path):
 async def test_choose_view_orders_by_savings_and_merges_own(tmp_path):
     ctx, ah = ctx_with_folder(tmp_path)
     await fill(ctx, W)
-    own = ctx.recipes.save(OwnRecipe(0, "Oma's gehaktschotel", 4, ["1 kg rundergehakt"]))
+    own = ctx.recipes.save(OwnRecipe(0, "Oma's gehaktschotel", 2, ["1 kg rundergehakt"]))
     ctx.taste.put(105, DOWN, "Lasagne al forno", datetime(2026, 11, 1, 8, 0))
     calls = list(ah.calls)
     view = await choose_view(ctx, W, None)
@@ -93,7 +93,7 @@ async def test_choose_view_orders_by_savings_and_merges_own(tmp_path):
     assert "pasta en Italiaans" in view["kinds"] and "Hollandse pot" in view["kinds"]
     items = view["items"]
     assert items[0]["id"] == own.id and items[0]["source"] == "eigen"
-    assert items[0]["savings"] == 6.0  # two packs of gehakt for 4 persons
+    assert items[0]["savings"] == 6.0  # two packs of gehakt for 2 persons
     savings = [x["savings"] for x in items]
     assert savings == sorted(savings, reverse=True)
     assert [x["id"] for x in items[1:3]] == [103, 101]  # equal savings: by title
@@ -191,7 +191,8 @@ async def test_fill_with_the_current_folder_shows_in_the_menu_week(tmp_path):
     assert view["catalog_ready"] is True
     got = by_id(view)
     assert set(got) == {101, 102, 103, 104, own.id}
-    assert got[own.id]["savings"] == 6.0  # scored with the same (current) folder
+    # scored with the same (current) folder, for 2 persons like AH's: one pack
+    assert got[own.id]["savings"] == 3.0
 
 
 async def test_an_old_period_does_not_stand_in(tmp_path):
