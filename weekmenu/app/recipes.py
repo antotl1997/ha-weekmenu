@@ -70,21 +70,40 @@ class RecipeStore:
     def too_new(self) -> bool:
         return too_new(self.path, RECIPES_SCHEMA)
 
-    def _write(self, recipes: list[OwnRecipe]) -> None:
-        write_json(self.path, {"recipes": [asdict(x) for x in recipes]}, RECIPES_SCHEMA)
+    def _next_id(self, recipes: list[OwnRecipe]) -> int:
+        """The next id to hand out: never one that was used before (taste, history and
+        plans are keyed on the id). Kept in the file; derived from the lowest id when
+        the file has none."""
+        derived = min((x.id for x in recipes), default=0) - 1
+        try:
+            data = json.loads(self.path.read_bytes().decode("utf-8"))
+            stored = data.get("next_id") if isinstance(data, dict) else None
+        except (OSError, ValueError):
+            stored = None
+        if isinstance(stored, int) and not isinstance(stored, bool) and stored < 0:
+            return min(stored, derived)
+        return derived
+
+    def _write(self, recipes: list[OwnRecipe], next_id: int) -> None:
+        write_json(self.path, {"recipes": [asdict(x) for x in recipes],
+                               "next_id": next_id}, RECIPES_SCHEMA)
 
     def save(self, r: OwnRecipe) -> OwnRecipe:
-        """Store `r` (id 0: the next free negative id). Raises SchemaTooNew."""
+        """Store `r` (id 0: a new, never used negative id). Raises SchemaTooNew;
+        ValueError for a positive id (those are AH's)."""
+        if r.id > 0:
+            raise ValueError("eigen recepten hebben een negatief id")
         recipes = self.all()
+        next_id = self._next_id(recipes)
         if r.id == 0:
-            r = OwnRecipe(**{**asdict(r), "id": min((x.id for x in recipes), default=0) - 1})
+            r = OwnRecipe(**{**asdict(r), "id": next_id})
         for i, x in enumerate(recipes):
             if x.id == r.id:
                 recipes[i] = r
                 break
         else:
             recipes.append(r)
-        self._write(recipes)
+        self._write(recipes, min(next_id, r.id - 1))
         return r
 
     def remove(self, id: int) -> bool:
@@ -92,12 +111,12 @@ class RecipeStore:
         kept = [r for r in recipes if r.id != id]
         if len(kept) == len(recipes):
             return False
-        self._write(kept)
+        self._write(kept, self._next_id(recipes))
         return True
 
 
 _NUM = r"\d+(?:[.,]\d+)?"
-_LEAD = re.compile(rf"^(?:({_NUM})\s*-\s*({_NUM})|(\d+)/(\d+)|({_NUM}))")
+_LEAD = re.compile(rf"^(?:(\d+)\s+(\d+)/(\d+)|({_NUM})\s*-\s*({_NUM})|(\d+)/(\d+)|({_NUM}))")
 
 
 def _fmt(x: float) -> str:
@@ -113,14 +132,18 @@ def scale_text(text: str, factor: float) -> str:
     m = _LEAD.match(text)
     if not m:
         return text
-    if m.group(1) is not None:
-        new = f"{_fmt(_num(m.group(1)) * factor)}-{_fmt(_num(m.group(2)) * factor)}"
-    elif m.group(3) is not None:
-        if int(m.group(4)) == 0:
+    if m.group(1) is not None:  # mixed number: 1 1/2
+        if int(m.group(3)) == 0:
             return text
-        new = _fmt(int(m.group(3)) / int(m.group(4)) * factor)
+        new = _fmt((int(m.group(1)) + int(m.group(2)) / int(m.group(3))) * factor)
+    elif m.group(4) is not None:
+        new = f"{_fmt(_num(m.group(4)) * factor)}-{_fmt(_num(m.group(5)) * factor)}"
+    elif m.group(6) is not None:
+        if int(m.group(7)) == 0:
+            return text
+        new = _fmt(int(m.group(6)) / int(m.group(7)) * factor)
     else:
-        new = _fmt(_num(m.group(5)) * factor)
+        new = _fmt(_num(m.group(8)) * factor)
     return new + text[m.end():]
 
 
@@ -148,4 +171,6 @@ class LocalFirst:
         return await self._client.get_recipe(id, servings)
 
     def __getattr__(self, name):
+        if name.startswith("_"):
+            raise AttributeError(name)
         return getattr(self._client, name)

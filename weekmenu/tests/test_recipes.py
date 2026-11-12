@@ -40,6 +40,7 @@ def test_remove_and_unknown(tmp_path):
     ("zout", 2, "zout"),
     ("peper naar smaak", 0.5, "peper naar smaak"),
     ("1 ui", 0.5, "0,5 ui"),
+    ("1 1/2 el olie", 2, "3 el olie"),
 ])
 def test_scale_text(text, factor, want):
     assert scale_text(text, factor) == want
@@ -77,3 +78,32 @@ def test_broken_or_newer_file_loads_empty(tmp_path):
     assert store.all() == [] and store.too_new()
     with pytest.raises(SchemaTooNew):
         store.save(own())
+
+
+def test_ids_are_never_reused_and_the_counter_survives_a_reload(tmp_path):
+    path = tmp_path / "recipes.json"
+    store = RecipeStore(path)
+    store.save(own("A"))
+    b = store.save(own("B"))
+    assert store.remove(b.id) is True
+    c = RecipeStore(path).save(own("C"))
+    assert c.id == -3
+    assert RecipeStore(path).save(own("D")).id == -4
+
+
+def test_next_id_derives_from_a_file_without_the_counter(tmp_path):
+    path = tmp_path / "recipes.json"
+    path.write_text(json.dumps({"schema": 1, "recipes": [
+        {"id": -5, "title": "x", "servings": 2}]}), encoding="utf-8")
+    assert RecipeStore(path).save(own()).id == -6
+
+
+def test_positive_id_is_rejected(tmp_path):
+    with pytest.raises(ValueError):
+        RecipeStore(tmp_path / "recipes.json").save(OwnRecipe(5, "x", 2))
+
+
+def test_local_first_without_client_does_not_recurse():
+    lf = LocalFirst.__new__(LocalFirst)
+    with pytest.raises(AttributeError):
+        lf.anything_else
