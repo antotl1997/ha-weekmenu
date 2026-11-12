@@ -279,8 +279,8 @@ def test_app_screens_in_chrome(tmp_path):
         assert "€ 57,15" in dom and "€ 14,85" in dom and "wk 45" in dom
 
         dom = render(base, "#instellingen", tmp_path, "instellingen")
-        assert "Kookmomenten" in dom and "Kookavonden" not in dom and "Niet thuis eten" in dom and "ouders" not in dom and "Nieuw menu" in dom
-        assert "Nu maken" in dom
+        assert "Kookmomenten" in dom and "Kookavonden" not in dom and "Niet thuis eten" in dom and "ouders" not in dom
+        assert "Nieuw menu" not in dom and "Nu maken" not in dom  # v1.1: chosen in the app
         assert 'class="box away"' in dom and "Personen op dinsdag: niet thuis" in dom
         assert "6 eetdagen, 5 kookmomenten, 1 keer restjes" in dom
         assert 'aria-label="Meer kookmomenten" disabled' not in dom  # 5 of 6: + still works
@@ -357,10 +357,10 @@ def test_app_waiting_for_folder_in_chrome(tmp_path):
         off = chrome(base, tmp_path / "profile-wachten-uit")
     line = "Volgende bestelling: woensdag 11 november. De folder komt vanaf vrijdag 6 november."
     assert dom.index("<h1>Weekmenu</h1>") < dom.index(line)
-    # v0.4 C: no waiting card any more; Nu maken works, with the current folder
+    # v1.1: no Nu maken any more; the week is chosen evening by evening
     assert "De folder van volgende week is er nog niet" not in dom
-    assert "Nog geen menu voor deze week" in dom and 'data-run="nu_maken"' in dom
-    assert "met de huidige folder" in dom
+    assert 'data-run="nu_maken"' not in dom and "Nu maken" not in dom
+    assert "Nog geen menu voor deze week" in dom and "Kies per avond een gerecht" in dom
     assert "Voor de bestelling van" not in dom and "\u2014" not in dom
     assert "Het weekmenu staat uit" in off and "vanzelf" not in off
 

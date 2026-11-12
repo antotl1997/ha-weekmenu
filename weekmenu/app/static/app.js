@@ -444,7 +444,7 @@ function weekScreen() {
     html += `<div class="card tonight"><b>Vanavond</b><span>${esc(String(w.vanavond).replace(/^Vanavond: /, ""))}</span></div>`;
   }
   if (running) {
-    html += `<div class="card note"><span class="spin dark"></span><div><b>Er wordt een menu gemaakt</b>
+    html += `<div class="card note"><span class="spin dark"></span><div><b>Het menu wordt bijgewerkt</b>
       <span class="muted">Dit duurt meestal een minuut.</span></div></div>`;
   } else if (w.new_folder_available) {
     // the menu of the next order is from an older folder and the new one is out
@@ -457,18 +457,16 @@ function weekScreen() {
   }
   if (!days.length && w.geen_avonden) {
     html += `<div class="card empty"><b>Alle avonden niet thuis</b>
-      Er wordt geen menu gemaakt. Tik bij Instellingen een dag weer uit bij Niet thuis eten om een menu te krijgen.</div>`;
+      Er is deze week geen avond om te kiezen. Tik bij Instellingen een dag weer uit bij Niet thuis eten.</div>`;
   } else if (!days.length && w.enabled === false) {
     html += `<div class="card empty"><b>Het weekmenu staat uit</b>
-      Er wordt nu geen menu gemaakt. Zet het aan bij Instellingen, of tik op Nu maken.</div>
-      <button class="btn pri full" data-run="nu_maken">Nu maken</button>`;
+      Je krijgt op zondag geen herinnering om het menu te kiezen. Zet het aan bij Instellingen.</div>`;
   } else if (!days.length) {
-    const now = waiting
-      ? "Wil je niet wachten, tik dan op Nu maken. Het menu komt dan met de huidige folder, en je krijgt een melding zodra de nieuwe er is."
-      : "Wil je niet wachten, tik dan op Nu maken.";
+    const when = waiting
+      ? "De recepten met de prijzen van die week staan klaar zodra de folder uit is, meestal op vrijdag."
+      : "";
     html += `<div class="card empty"><b>Nog geen menu voor deze week</b>
-      Het menu wordt vanzelf gemaakt zodra de folder van die week uit is, meestal op vrijdag. ${now}</div>
-      <button class="btn pri full" data-run="nu_maken">Nu maken</button>`;
+      Kies per avond een gerecht. ${when}</div>`;
   } else {
     const extras = Number(w.extras_savings) || 0;
     const loose = Number(w.offers_savings) || 0;
@@ -812,9 +810,6 @@ function settingsScreen() {
       <div class="lbl2">Personen per avond <span class="hint">· tik om te wijzigen</span></div>
       <div class="days">${boxes}</div>
     </div>
-    <div class="btnrow"><button class="btn sec2" data-run="nieuw_menu">${ICON.refresh} Nieuw menu</button>
-      <button class="btn pri" data-run="nu_maken">Nu maken</button></div>
-    <p class="foot">Nu maken vult aan wat nog ontbreekt. Nieuw menu kiest andere gerechten.</p>
     ${correctionsHtml()}
     ${neverHtml()}
     ${diagnoseHtml()}
@@ -925,7 +920,7 @@ function loginScreen(again) {
 function welcomeScreen() {
   return `<header class="top"><div><h1>Welkom bij Weekmenu</h1><div class="sub">elke week een menu rond de AH-bonus</div></div></header>
     <div class="card login welcome">
-      <p>Weekmenu kiest elke week gerechten rond de bonus van Albert Heijn en zet de boodschappen in je bestelling of op je AH-lijst. Bestellen en betalen doe je zelf.</p>
+      <p>Met Weekmenu kies je elke week gerechten rond de bonus van Albert Heijn. De add-on zet de boodschappen in je bestelling of op je AH-lijst. Bestellen en betalen doe je zelf.</p>
       <ol>
         <li><span>Log één keer in bij AH. Daarvoor heb je even een computer nodig.</span></li>
         <li><span>Kies bij Instellingen hoe vaak je kookt en wie er mee-eet.</span></li>
@@ -1061,22 +1056,14 @@ async function setSetting(entity, value) {
 }
 
 async function startRound(btn, mode) {
-  if (mode === "nieuw_menu") {
-    const ok = await confirmSheet("Een nieuw menu kiezen?",
-      "Wat alleen voor het oude menu was, gaat eruit als dat nog kan. Wat je zelf hebt toegevoegd, blijft staan.",
-      "Nieuw menu");
-    if (!ok) return;
-  }
-  if (mode === "bijwerken") {
-    const ok = await confirmSheet("Het menu bijwerken met de nieuwe folder?",
-      "Er komt een nieuw menu voor dezelfde eetdagen en personen. Wat alleen voor het oude menu was, gaat eruit als dat nog kan. Wat je zelf hebt toegevoegd, blijft staan.",
-      "Menu bijwerken");
-    if (!ok) return;
-  }
+  if (mode !== "bijwerken") return;  // the only round left (v1.1): the menu is chosen here
+  const ok = await confirmSheet("Het menu bijwerken met de nieuwe folder?",
+    "Je gekozen gerechten blijven staan en krijgen de producten en prijzen van de nieuwe folder. Wat alleen voor het oude menu was, gaat eruit als dat nog kan. Wat je zelf hebt toegevoegd, blijft staan.",
+    "Menu bijwerken");
+  if (!ok) return;
   await busy(btn, async () => {
     await api("api/run", { mode });
-    toast(mode === "nieuw_menu" ? "Er wordt een nieuw menu gekozen…"
-      : mode === "bijwerken" ? "Het menu wordt bijgewerkt…" : "Het menu wordt gemaakt…");
+    toast("Het menu wordt bijgewerkt…");
     state.status = Object.assign({}, state.status, { running: true });
     pollRound();
   });
@@ -1237,18 +1224,8 @@ app.addEventListener("click", async (ev) => {
       });
       return;
     }
-    if ("swap" in t.dataset) {
-      const where = state.week && state.week.target === "list" ? "op je lijst" : "in je bestelling";
-      const ok = await confirmSheet("Een ander gerecht voor deze avond?",
-        `De producten voor het nieuwe gerecht komen direct ${where}. Wat alleen voor dit gerecht was, gaat eruit als dat nog kan. Wat je zelf hebt toegevoegd, blijft staan.`,
-        "Ander gerecht");
-      if (!ok) return;
-      await busy(t, async () => {
-        const data = await api(`api/dish/${encodeURIComponent(day)}/swap`, {});
-        await afterDishWrite(day, data);
-        const gone = removedText(data);
-        toast("Nieuw gerecht: " + data.recipe.title + (gone ? ". " + gone : ""));
-      });
+    if ("swap" in t.dataset) {  // v1.1: Ander gerecht opens the choice list
+      location.hash = "#kies/" + day;
       return;
     }
     if ("undo" in t.dataset) {
@@ -1318,7 +1295,7 @@ app.addEventListener("click", async (ev) => {
     await busy(t, async () => {
       await api("api/diagnose/retry", {});
       await loadStatus();
-      toast("Schrijven staat weer aan. Tik op Nu maken om aan te vullen wat bleef liggen.");
+      toast("Schrijven staat weer aan. Wat bleef liggen, voegt de add-on binnen een uur toe.");
     });
     render();
     return;

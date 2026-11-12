@@ -1,17 +1,14 @@
-"""Choose the week's dinners around the AH bonus.
+"""The week's dinners: dishes made from the recipes the user picks, matched to AH
+products around the bonus, and the basket and savings of the whole menu.
 
-Candidates come from Allerhande searches for the best bonus products. Every candidate
-is scored on the bonus euros it saves for 2 persons, then a menu is picked that keeps
-the rules: at most 45 minutes active cooking on weekdays, at least three cuisines
-(or as many as there are evenings), at most one fish evening, nothing from the last
-four menu weeks. Too few candidates: fewer evenings, never looser rules.
+The add-on never chooses a menu by itself (v1.1). What is left of choosing: the search
+terms for the best bonus products and the bonus score of a recipe, which fill the
+choice list (catalog.py).
 """
 
 from __future__ import annotations
 
-import asyncio
 import dataclasses
-import itertools
 import logging
 import math
 import re
@@ -23,10 +20,9 @@ from pathlib import Path
 
 import yaml
 
-from app.ahclient import AhApiError, Product, Recipe, RecipeSummary, is_blocking
+from app.ahclient import AhApiError, Product, Recipe
 from app.recipes import is_own, scale_recipe
 from app.deals import parse_mechanism, qty_for_deal, savings
-from app.taste import DOWN_FACTOR
 from app.ingredients import (
     PRODUCT,
     SKIP,
@@ -42,19 +38,12 @@ from app.ingredients import (
     parse_unit_size,
     weight_priced,
 )
-from app.week import is_weekend
 
 MAX_COOK_WEEKDAY = 45
-MIN_CUISINES = 3
-MAX_FISH = 1
 TOP_BONUS = 25
 MAX_RECIPE_SEARCHES = 25
-MAX_RECIPE_DETAILS = 40  # get_recipe calls per build_plan, the per-person scaling included
 SCORE_SERVINGS = 2  # default persons when an evening has none
 MAIN_COURSE = "hoofdgerecht"
-# Backtracking budget for picking the menu (nodes over all attempts of one build).
-# Spent: the best valid partial menu found so far is used and Plan.budget_exhausted set.
-_SEARCH_BUDGET = 500_000  # about 1.2 s of searching on a desktop when it is all spent
 
 log = logging.getLogger(__name__)
 
@@ -85,9 +74,6 @@ CUISINES: list[dict] = [
 ]
 FISH_WORDS = _flist("vis")
 FISH_EXCEPTIONS = _flist("vis_uitzonderingen")
-CHICKEN_WORDS = _flist("kip")
-CHICKEN_EXCEPTIONS = _flist("kip_uitzonderingen")
-SHELF_STABLE = _flist("houdbaar")
 EXCLUDE_TITLES = _flist("uitsluiten_titel")
 BONUS_CATEGORIES = _flist("bonus_categorieen")
 CORE_WORDS = sorted(_flist("kernwoorden"), key=len, reverse=True)
@@ -151,10 +137,8 @@ class Plan:
     not_found: list[str]
     short_by: int
     pantry: list[str] = field(default_factory=list)  # the pantry list the plan was made with
-    budget_exhausted: bool = False  # the menu search ran out of budget: maybe not the best
+    budget_exhausted: bool = False  # before v1.1: the menu search ran out of budget
     removed_days: list[date] = field(default_factory=list)  # "Gerecht weghalen": no dish
-    # not stored: seconds the menu search of build_plan took (for the status, v0.6)
-    search_seconds: float | None = field(default=None, compare=False, repr=False)
 
     def to_dict(self) -> dict:
         return {
@@ -281,10 +265,6 @@ def is_fishy(text: str) -> bool:
     return _has_word(text, FISH_WORDS, FISH_EXCEPTIONS, stem="vis")
 
 
-def _is_chicken(text: str) -> bool:
-    return _has_word(text, CHICKEN_WORDS, CHICKEN_EXCEPTIONS)
-
-
 def core_word(title: str) -> str:
     """The Allerhande search term for a bonus product."""
     words = [w for w in (_words(" ".join(keywords(title)))) if w not in _TITLE_NOISE]
@@ -319,28 +299,7 @@ def search_terms(bonus: list[Product]) -> list[str]:
     return terms[:MAX_RECIPE_SEARCHES]
 
 
-def _fresh_count(recipe: Recipe, pantry: list[str], overrides: dict | None = None) -> int:
-    n = 0
-    for text, name in recipe.ingredients:
-        if is_pantry(name or text, pantry, overrides):
-            continue
-        if not any(w in _fold(name or text) for w in SHELF_STABLE):
-            n += 1
-    return n
-
-
-def _fits(day: date, cook: int | None) -> bool:
-    if is_weekend(day):
-        return True
-    return cook is not None and cook <= MAX_COOK_WEEKDAY
-
-
-def _blocking(e: Exception) -> bool:
-    """AH refuses us (expired login, no JSON, 403, 429): stop the round at once."""
-    return is_blocking(e)
-
-
-# --- candidates ----------------------------------------------------------------------
+# --- scoring -------------------------------------------------------------------------
 
 
 class _BonusOnly:
@@ -348,27 +307,6 @@ class _BonusOnly:
 
     async def search_products(self, query, size=20):
         return []
-
-
-@dataclass
-class _Cand:
-    summary: RecipeSummary
-    recipe: Recipe
-    term: str
-    cuisine: str
-    is_fish: bool
-    is_chicken: bool
-    fresh: int
-    score: float
-    order: int
-
-    @property
-    def id(self) -> int:
-        return self.recipe.id
-
-    @property
-    def cook(self) -> int | None:
-        return self.recipe.cook if self.recipe.cook is not None else self.summary.cook
 
 
 async def _score(
@@ -414,205 +352,6 @@ def _potential(p: Product, n: int) -> float:
     """
     full = qty_for_deal(p, n)
     return savings(p, full) * n / full if full else 0.0
-
-
-async def _gather(
-    client,
-    bonus: list[Product],
-    s: Settings,
-    exclude: set[int],
-    days: list[date],
-    detail_budget: int,
-    servings: int = SCORE_SERVINGS,
-) -> tuple[list[_Cand], int]:
-    """Scored candidates, and the number of get_recipe calls it took."""
-    lists: list[tuple[str, list[RecipeSummary]]] = []
-    for term in search_terms(bonus):
-        try:
-            found = await client.search_recipes(term)
-        except AhApiError as e:
-            if _blocking(e):
-                raise
-            continue
-        lists.append((term, [r for r in found if MAIN_COURSE in (r.courses or [])]))
-
-    # round robin over the searches, so the best product does not take every slot
-    seen: set[int] = set()
-    ordered: list[tuple[str, RecipeSummary]] = []
-    longest = max((len(rs) for _, rs in lists), default=0)
-    for i in range(longest):
-        for term, rs in lists:
-            if i >= len(rs):
-                continue
-            r = rs[i]
-            if (r.id in seen or r.id in exclude or r.id in s.recent_recipe_ids
-                    or r.id in s.never):
-                continue
-            seen.add(r.id)
-            if any(x in _fold(r.title) for x in EXCLUDE_TITLES):
-                continue
-            ordered.append((term, r))
-    # titles that already name a cuisine first: their get_recipe call is rarely wasted
-    ordered.sort(key=lambda tr: title_cuisine(tr[1].title) is None)
-
-    any_weekend = any(is_weekend(d) for d in days)
-    cands: list[_Cand] = []
-    calls = 0
-    for term, summ in ordered:
-        if calls >= detail_budget:
-            break
-        if not any_weekend and not _fits(days[0], summ.cook):
-            continue  # cannot be cooked on any of these evenings: do not fetch it
-        calls += 1
-        try:
-            recipe = await client.get_recipe(summ.id, servings=servings)
-        except AhApiError as e:
-            if _blocking(e):
-                raise
-            continue
-        cuisine = cuisine_of(recipe, term)
-        if cuisine is None:
-            continue
-        score, _, fish = await score_recipe(recipe, bonus, s.pantry, s.overrides, term)
-        if recipe.id in s.down or summ.id in s.down:  # duim omlaag: a soft penalty
-            score = round(score * DOWN_FACTOR, 2)
-        names = " ".join(n or t for t, n in recipe.ingredients)
-        cands.append(
-            _Cand(
-                summary=summ, recipe=recipe, term=term, cuisine=cuisine, is_fish=fish,
-                is_chicken=_is_chicken(recipe.title) or _is_chicken(names),
-                fresh=_fresh_count(recipe, s.pantry, s.overrides), score=score,
-                order=len(cands),
-            )
-        )
-    return cands, calls
-
-
-# --- picking the menu ------------------------------------------------------------------
-
-
-class _OutOfBudget(Exception):
-    pass
-
-
-def _rank(day: date):
-    if is_weekend(day):  # weekend cooking: on equal savings the longer recipe wins
-        return lambda c: (-c.score, -(c.cook or 0), c.order)
-    return lambda c: (-c.score, c.order)
-
-
-def _allowed(day: date, c: _Cand, no_fish) -> bool:
-    """Cooking time fits, and no fish on a cook day with a leftover night."""
-    return _fits(day, c.cook) and not (c.is_fish and day in no_fish)
-
-
-def _pick(
-    cands: list[_Cand], days: list[date], budget: list[int], best: list,
-    no_fish=frozenset(),
-) -> list[_Cand] | None:
-    """Greedy in date order with backtracking; the first full menu found.
-
-    `budget` is shared over all attempts; when it runs out _OutOfBudget is raised.
-    `best[0]` keeps the longest valid partial menu seen, as (days, chosen).
-    `no_fish`: cook days with a leftover night, where fish is not allowed.
-    """
-    need = min(MIN_CUISINES, len(days))
-    if len({c.cuisine for c in cands}) < need:
-        return None
-    per_day = [sorted((c for c in cands if _allowed(d, c, no_fish)), key=_rank(d))
-               for d in days]
-    # cuisines still on offer from evening i on, from non-fish and from fish recipes
-    plain: list[set] = [set() for _ in range(len(days) + 1)]
-    fishy: list[set] = [set() for _ in range(len(days) + 1)]
-    for i in range(len(days) - 1, -1, -1):
-        plain[i] = plain[i + 1] | {c.cuisine for c in per_day[i] if not c.is_fish}
-        fishy[i] = fishy[i + 1] | {c.cuisine for c in per_day[i] if c.is_fish}
-    at_day = [{c.cuisine for c in cs} for cs in per_day]
-
-    def rec(i: int, path: list[_Cand], fish: int) -> list[_Cand] | None:
-        distinct = {c.cuisine for c in path}
-        valid = len(distinct) >= min(MIN_CUISINES, len(path))
-        if path and valid and len(path) > len(best[0][1]):
-            best[0] = (days[: len(path)], list(path))
-        if i == len(days):
-            return []
-        new_plain = plain[i] - distinct
-        new_fish = fishy[i] - distinct - new_plain
-        reachable = len(new_plain) + min(len(new_fish), MAX_FISH - fish)
-        missing = need - len(distinct)
-        if reachable < missing:
-            return None  # this week can no longer reach enough cuisines
-        if missing > 0 and sum(1 for j in range(i, len(days)) if at_day[j] - distinct) < missing:
-            return None  # not enough evenings left that can take a new cuisine
-        only_new = missing >= len(days) - i
-        used = {c.id for c in path}
-        for c in per_day[i]:
-            if c.id in used or (c.is_fish and fish >= MAX_FISH):
-                continue
-            if only_new and c.cuisine in distinct:
-                continue
-            budget[0] -= 1
-            if budget[0] < 0:
-                raise _OutOfBudget
-            rest = rec(i + 1, path + [c], fish + c.is_fish)
-            if rest is not None:
-                return [c] + rest
-        return None
-
-    return rec(0, [], 0)
-
-
-def _arrange(chosen: list[_Cand], days: list[date], evenings: list[date],
-             no_fish=frozenset()) -> list[_Cand]:
-    """Fish and chicken on the first two evenings, Monday and Tuesday the least fresh
-    recipes, the longest recipes in the weekend. Weekday cooking time stays <= 45."""
-    first_two = set(evenings[:2])
-
-    def key(perm):
-        early = sum(
-            1 for d, c in zip(days, perm) if d in first_two and (c.is_fish or c.is_chicken)
-        )
-        late_fresh = sum(c.fresh for d, c in zip(days, perm) if d.weekday() in (0, 1))
-        weekend_cook = sum(c.cook or 0 for d, c in zip(days, perm) if is_weekend(d))
-        return (early, -late_fresh, weekend_cook)
-
-    best, best_key = chosen, key(chosen)
-    for perm in itertools.permutations(chosen):
-        if not all(_allowed(d, c, no_fish) for d, c in zip(days, perm)):
-            continue
-        k = key(perm)
-        if k > best_key:
-            best, best_key = list(perm), k
-    return best
-
-
-def _choose_menu(
-    cands: list[_Cand], evenings: list[date], no_fish=frozenset()
-) -> tuple[dict[date, _Cand], bool]:
-    """Fill as many evenings as the rules allow; drop the latest evenings first.
-
-    Returns the menu and whether the search budget ran out. Then the longest valid
-    partial menu found so far is used: the rules hold, but it may not be the best menu.
-    """
-    budget = [_SEARCH_BUDGET]
-    best: list = [((), [])]
-    try:
-        for k in range(len(evenings), 0, -1):
-            for days in itertools.combinations(evenings, k):
-                chosen = _pick(cands, list(days), budget, best, no_fish)
-                if chosen:
-                    return dict(zip(days, _arrange(chosen, list(days), evenings,
-                                                   no_fish))), False
-    except _OutOfBudget:
-        days, chosen = best[0]
-        log.warning(
-            "menu search budget spent: using the best partial menu (%d of %d evenings)",
-            len(chosen), len(evenings),
-        )
-        if not chosen:
-            return {}, True
-        return dict(zip(days, _arrange(chosen, list(days), evenings, no_fish))), True
-    return {}, False
 
 
 # --- building dishes and the basket ------------------------------------------------------
@@ -663,31 +402,6 @@ def _resolver(client, bonus: list[Product], pantry: list[str], cache: dict,
         return "product", await choose_product(client, amount, bonus, cache, overrides)
 
     return resolve
-
-
-async def _make_dish(
-    client, c: _Cand, day: date, persons: int, resolve, budget: list[int] | None = None,
-    leftover_date: date | None = None,
-) -> Dish:
-    recipe = c.recipe
-    if persons != recipe.servings:
-        if budget is None or budget[0] > 0:
-            if budget is not None:
-                budget[0] -= 1
-            try:
-                recipe = await client.get_recipe(c.id, servings=persons)
-            except AhApiError as e:
-                if _blocking(e):
-                    raise
-        if recipe is c.recipe:
-            persons = recipe.servings  # could not scale: say honestly for how many it is
-    lines, pantry, not_found, skipped = await _lines(client, recipe, resolve)
-    return Dish(
-        date=day, recipe=recipe, cuisine=c.cuisine, is_fish=c.is_fish, lines=lines,
-        savings=0.0, persons=persons, cook=c.cook, oven=c.summary.oven, wait=c.summary.wait,
-        pantry=pantry, not_found=not_found, search_term=c.term, leftover_date=leftover_date,
-        skipped=skipped,
-    )
 
 
 def _finish(
@@ -753,81 +467,7 @@ def _weight(ln: Line) -> float:
     return ln.fraction if ln.fraction is not None else float(ln.qty)
 
 
-def score_servings(s: Settings, days: list[date]) -> int:
-    """The most common number of persons over the evenings (ties: the higher one)."""
-    counts: dict[int, int] = {}
-    for d in days:
-        n = s.persons.get(d, SCORE_SERVINGS)
-        counts[n] = counts.get(n, 0) + 1
-    return max(counts, key=lambda n: (counts[n], n)) if counts else SCORE_SERVINGS
-
-
 # --- public API -----------------------------------------------------------------------------
-
-
-async def build_plan(client, bonus: list[Product], s: Settings) -> Plan:
-    """Async for the AH calls; the menu search itself (CPU only, up to _SEARCH_BUDGET
-    nodes) runs in a worker thread, so the web app stays responsive meanwhile."""
-    started = time.perf_counter()
-    evenings = sorted(s.evenings)
-    detail_budget = max(MAX_RECIPE_DETAILS - len(evenings), 0)
-    cands, used = await _gather(
-        client, bonus, s, set(), evenings, detail_budget, score_servings(s, evenings)
-    )
-    t0 = time.perf_counter()
-    menu, exhausted = await asyncio.to_thread(
-        _choose_menu, cands, evenings, frozenset(s.leftovers))
-    searched = time.perf_counter() - t0
-    budget = [MAX_RECIPE_DETAILS - used]  # what is left for scaling to the persons
-    resolve = _resolver(client, bonus, s.pantry, {}, s.overrides)
-    dishes = [
-        await _make_dish(client, c, day, s.persons.get(day, SCORE_SERVINGS), resolve, budget,
-                         s.leftovers.get(day))
-        for day, c in sorted(menu.items())
-    ]
-    plan = _finish(dishes, len(evenings) - len(dishes), s.pantry, exhausted)
-    plan.search_seconds = searched
-    log.info("Planner: menu in %.2f s (zoeken %.2f s over %d kandidaten%s)",
-             time.perf_counter() - started, searched, len(cands),
-             ", zoekbudget op" if exhausted else "")
-    return plan
-
-
-async def swap_dish(
-    client, plan: Plan, day: date, bonus: list[Product], s: Settings, exclude: set[int]
-) -> Plan:
-    """Best other recipe for `day` under the same rules; the rest of the week stays."""
-    started = time.perf_counter()
-    old = next((d for d in plan.dishes if d.date == day), None)
-    others = [d for d in plan.dishes if d.date != day]
-    skip = set(exclude) | {d.recipe.id for d in others} | ({old.recipe.id} if old else set())
-    persons = old.persons if old else s.persons.get(day, SCORE_SERVINGS)
-    # the leftover night and the persons stay: the new dish feeds the same evenings
-    leftover = old.leftover_date if old else s.leftovers.get(day)
-    no_fish = {day} if leftover else set()
-    cands, _ = await _gather(client, bonus, s, skip, [day], MAX_RECIPE_DETAILS - 1, persons)
-    need = min(MIN_CUISINES, len(others) + 1)
-    other_cuisines = {d.cuisine for d in others}
-    other_fish = sum(d.is_fish for d in others)
-    ok = [
-        c for c in cands
-        if _allowed(day, c, no_fish)
-        and not (c.is_fish and other_fish >= MAX_FISH)
-        and len(other_cuisines | {c.cuisine}) >= need
-    ]
-    if not ok:
-        log.info("Planner: geen ander gerecht, %.2f s", time.perf_counter() - started)
-        return dataclasses.replace(plan, short_by=1)
-    best = min(ok, key=_rank(day))
-    resolve = _resolver(client, bonus, s.pantry, {}, s.overrides)
-    dish = await _make_dish(client, best, day, persons, resolve, leftover_date=leftover)
-    dishes = others + [dish]
-    filled = {d.date for d in dishes}
-    log.info("Planner: ander gerecht in %.2f s", time.perf_counter() - started)
-    return _finish(
-        dishes, sum(1 for e in s.evenings if e not in filled), s.pantry, plan.budget_exhausted,
-        plan.removed_days,
-    )
 
 
 async def rescale_dish(client, plan: Plan, day: date, persons: int,

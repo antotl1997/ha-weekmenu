@@ -24,7 +24,6 @@ from app.ahclient import AhApiError, Product, Recipe, RecipeSummary, is_blocking
 from app.durable import schema_of, write_json
 from app.planner import (
     CUISINES,
-    DOWN_FACTOR,
     EXCLUDE_TITLES,
     MAIN_COURSE,
     MAX_COOK_WEEKDAY,
@@ -35,6 +34,7 @@ from app.planner import (
     search_terms,
 )
 from app.recipes import to_recipe
+from app.taste import DOWN_FACTOR
 
 log = logging.getLogger(__name__)
 

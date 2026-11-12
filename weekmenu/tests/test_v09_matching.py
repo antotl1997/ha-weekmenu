@@ -1,14 +1,13 @@
 """v0.9: the fixed matching errors (rondetafel 4), each a wrong product in a real order."""
 
-from datetime import date
 from pathlib import Path
 
 import pytest
 import yaml
 
-from app.ahclient import Product, Recipe
+from app.ahclient import Product
 from app.ingredients import Amount, choose_product, parse_ingredient, weight_priced
-from app.planner import _fresh_count, _is_chicken, _line, core_word
+from app.planner import _line, core_word
 
 KEUKENS = Path(__file__).parent.parent / "app" / "keukens.yaml"
 
@@ -121,19 +120,6 @@ async def test_compound_still_matches_its_tail():
     assert (await choose_product(client, Amount(1, "stuks", "tomaten"), [])).id == 3
 
 
-# --- kip ---------------------------------------------------------------------------
-
-
-@pytest.mark.parametrize("text", ["2 tl kipkruiden", "500 ml kippenbouillon",
-                                  "1 blokje kipbouillon"])
-def test_kip_seasoning_and_stock_are_not_chicken(text):
-    assert not _is_chicken(text)
-
-
-def test_chicken_is_still_chicken():
-    assert _is_chicken("400 g kipdijfilet") and _is_chicken("kip")
-
-
 # --- distinguishing adjectives ------------------------------------------------------
 
 
@@ -179,12 +165,6 @@ def test_room_and_pot_are_no_loose_core_words():
     assert "room" not in conf["kernwoorden"] and "pot" not in conf["houdbaar"]
     assert core_word("AH Roomboter ongezouten") != "room"
     assert core_word("AH Kookroom") == "kookroom"
-
-
-def test_hutspot_is_fresh():
-    r = Recipe(1, "Hutspot", "", 30, None, None, ["hoofdgerecht"], [], 2,
-               [("1 kg hutspotgroente", "hutspotgroente")], [], None)
-    assert _fresh_count(r, []) == 1
 
 
 async def test_a_form_suffix_keeps_the_compound():

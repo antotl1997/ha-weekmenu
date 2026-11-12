@@ -537,8 +537,4 @@ def format_message(
         lines.append(f"{unsure(result.target)}: " + ", ".join(t for t, _ in result.pending))
     if result.unknown:
         lines.append("Controleer in de AH-app: " + ", ".join(t for t, _ in result.unknown))
-    if plan.short_by > 0:
-        lines.append("Te weinig recepten voor " + _plural(plan.short_by, "avond", "avonden"))
-    if plan.budget_exhausted:
-        lines.append("Snel gekozen: misschien niet het allerbeste menu")
     return title, "\n".join(lines)

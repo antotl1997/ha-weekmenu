@@ -195,12 +195,9 @@ def test_message_extra_lines():
     result = WriteResult("order", unknown=[("Kaas", 1), ("Pesto", 2)])
     _, text = format_message(plan, result, None)
     assert "Controleer in de AH-app: Kaas, Pesto" in text
-    assert "Te weinig recepten voor 2 avonden" in text
-    assert "Snel gekozen" in text
     assert "snufje nootmuskaat" in text
-    _, one = format_message(_plan(short_by=1), WriteResult("order"), None)
-    assert "Te weinig recepten voor 1 avond" in one
-    assert "1 avonden" not in one
+    # v1.1: no menu is chosen by the add-on, so an old log's search notes are not said
+    assert "Te weinig recepten" not in text and "Snel gekozen" not in text
 
 
 def test_message_opens_with_the_order_sentence():

@@ -4,16 +4,13 @@ import json
 from datetime import datetime
 
 from app import main
-from app.planner import build_plan, swap_dish
-from app.taste import DOWN, DOWN_FACTOR, NEVER, TASTE_SCHEMA, Taste
+from app.taste import DOWN, NEVER, TASTE_SCHEMA, Taste
 from app.tokens import Tokens
 from app.web import make_app
 from app.writer import apply
 from tests.fakes import W, dish, make_ctx, make_plan
-from tests.test_planner import GEHAKT, KIP, WO, DO, VR, FakeClient, R, bonus, dish_on, settings
 
 AT = datetime(2026, 11, 1, 9, 30)
-HAAS = bonus(5, "AH Varkenshaas", regular=6.0, now=3.5)  # saves 2.50 per pack
 
 
 # --- the file ---------------------------------------------------------------------------
@@ -47,51 +44,7 @@ def test_taste_file_broken_or_newer(tmp_path):
     assert Taste(path).too_new() is True
 
 
-# --- the planner --------------------------------------------------------------------------
-
-
-async def test_never_is_left_out_of_the_menu():
-    client = FakeClient([
-        R(60, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
-        R(61, "Stamppot met kip", [(500, "g", "scharrelkipfilet")]),
-    ])
-    s = settings([WO])
-    s.never = {60}
-    plan = await build_plan(client, [GEHAKT, KIP], s)
-    assert [d.recipe.id for d in plan.dishes] == [61]
-    assert all(i != 60 for i, _ in client.recipe_calls)
-
-
-async def test_thumb_down_costs_a_quarter_of_the_score():
-    recipes = [R(60, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
-               R(62, "Stamppot met varkenshaas", [(500, "g", "varkenshaas")])]
-    plan = await build_plan(FakeClient(recipes), [GEHAKT, HAAS], settings([WO]))
-    assert [d.recipe.id for d in plan.dishes] == [60]  # 3.00 against 2.50
-    s = settings([WO])
-    s.down = {60}
-    plan = await build_plan(FakeClient(recipes), [GEHAKT, HAAS], s)
-    assert DOWN_FACTOR == 0.75
-    assert [d.recipe.id for d in plan.dishes] == [62]  # 2.25 against 2.50
-    # a thumb is a soft penalty: alone it still gets cooked
-    plan = await build_plan(FakeClient(recipes[:1]), [GEHAKT], s)
-    assert [d.recipe.id for d in plan.dishes] == [60]
-
-
-async def test_ander_gerecht_never_picks_a_never_recipe():
-    client = FakeClient([
-        R(120, "Curry met kip", [(1000, "g", "scharrelkipfilet")]),
-        R(122, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
-        R(123, "Pasta met gehakt", [(500, "g", "rundergehakt")]),
-        R(124, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
-    ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO, DO, VR]))
-    old = dish_on(plan, WO)
-    s = settings([WO, DO, VR])
-    others = {d.recipe.id for d in plan.dishes if d.date != WO}
-    left = {120, 122, 123, 124} - others - {old.recipe.id}
-    s.never = set(left)
-    new = await swap_dish(client, plan, WO, [GEHAKT, KIP], s, exclude={old.recipe.id})
-    assert dish_on(new, WO).recipe.id not in left
+# --- the settings --------------------------------------------------------------------------
 
 
 def test_make_settings_carries_the_taste(tmp_path):
@@ -100,8 +53,6 @@ def test_make_settings_carries_the_taste(tmp_path):
     ctx.taste.put(61, DOWN, "b", AT)
     raw = main.RawSettings(True, 3, {d: 2 for d in main.WEEKDAGEN})
     s = main.make_settings(ctx, raw, W)
-    assert s.never == {60} and s.down == {61}
-    s = main.settings_from_plan(ctx, make_plan([dish(W, 1, [1])]), W)
     assert s.never == {60} and s.down == {61}
 
 

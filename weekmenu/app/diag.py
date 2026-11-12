@@ -116,7 +116,6 @@ def diagnose(ctx, ring: RingHandler = RING) -> dict:
         "last_round": ctx.last_round,
         "error": ctx.error,
         "login_expired": ctx.login_expired,
-        "planner_seconds": ctx.planner_seconds,
         "schemas": {
             "code": {"weeklogboek": LEDGER_SCHEMA, "totaal.json": TOTAL_SCHEMA,
                      "niet_thuis.json": AWAY_SCHEMA, "state.json": STATE_SCHEMA,

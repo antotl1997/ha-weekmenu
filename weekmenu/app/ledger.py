@@ -81,7 +81,7 @@ class WeekLog:
     # the products that push named; held again with another set resets held_notified
     held_notified_items: list[int] = field(default_factory=list)
     # Ruling 43: pid -> what a lowering found already gone (the user took it off in the
-    # AH app). Never added again that week: Terug, a swap, Nieuw menu or bijwerken
+    # AH app). Never added again that week: Terug, another dish or Menu bijwerken
     # count it as if the add-on still had it out there.
     removed_by_user: dict[int, int] = field(default_factory=dict)
     # v1.0: the delivery day of the order this week was written to (when the add-on read

@@ -8,17 +8,8 @@ import pytest
 
 import app.ahclient as ahclient
 from app import planner
-from app.ahclient import AhApiError, AhClient, AhLoginExpired, Product, Recipe, RecipeSummary
-from app.planner import (
-    Plan,
-    Settings,
-    build_plan,
-    core_word,
-    cuisine_of,
-    rescale_dish,
-    swap_dish,
-)
-from app.week import is_weekend
+from app.ahclient import AhApiError, AhClient, Product, Recipe, RecipeSummary
+from app.planner import Plan, core_word, cuisine_of, empty_plan, pick_dish, rescale_dish
 
 PANTRY = ["olie", "zout", "peper", "suiker", "bloem", "azijn"]
 
@@ -98,15 +89,6 @@ class FakeClient:
         return [Product(pid, query.capitalize(), "per stuk", 1.0, 1.0, False, None, True, None)]
 
 
-def settings(evenings, persons=None, recent=()):
-    return Settings(
-        evenings=list(evenings),
-        persons={d: 2 for d in evenings} | (persons or {}),
-        pantry=PANTRY,
-        recent_recipe_ids=set(recent),
-    )
-
-
 GEHAKT = bonus(1, "AH Rundergehakt", regular=6.0, now=3.0)  # saves 3.00 per pack
 KIP = bonus(2, "AH Scharrelkipfilet", regular=5.0, now=3.5)  # saves 1.50
 ZALM = bonus(3, "AH Zalmfilet", regular=8.0, now=5.0, cat="Vis")  # saves 3.00
@@ -117,74 +99,17 @@ def dish_on(plan, day):
     return next(d for d in plan.dishes if d.date == day)
 
 
-# --- the brief's tests -----------------------------------------------------------
+async def menu(client, bonus_list, picks, persons=None, leftovers=None):
+    """The menu of `picks` ({day: recipe id}), made the way the app makes it: one
+    picked dish after the other on an empty week (v1.1: the add-on never chooses)."""
+    plan = empty_plan(PANTRY)
+    for day, rid in sorted(picks.items()):
+        plan = await pick_dish(client, plan, day, rid, bonus_list,
+                               (persons or {}).get(day, 2), (leftovers or {}).get(day))
+    return plan
 
 
-async def test_highest_savings_wins_when_constraints_allow():
-    client = FakeClient([
-        R(10, "Stamppot met kip",
-          [(500, "g", "scharrelkipfilet"), (1, "kg", "kruimige aardappel")]),
-        R(11, "Stamppot met gehakt",
-          [(500, "g", "rundergehakt"), (1, "kg", "kruimige aardappel")]),
-    ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO]))
-    assert [d.recipe.id for d in plan.dishes] == [11]
-    assert plan.dishes[0].savings == 3.0
-    assert plan.savings == 3.0
-    assert plan.short_by == 0
-
-
-async def test_weekday_rejects_cook_over_45_weekend_accepts():
-    client = FakeClient([
-        R(20, "Lasagne met gehakt", [(500, "g", "rundergehakt")], cook=60),
-        R(21, "Nasi met kip", [(500, "g", "scharrelkipfilet")], cook=30),
-    ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO, VR]))
-    assert dish_on(plan, WO).recipe.id == 21
-    assert dish_on(plan, VR).recipe.id == 20
-    assert dish_on(plan, VR).cook == 60
-
-
-async def test_at_least_three_cuisines_in_five_evenings():
-    gehakt = [
-        R(30 + i, f"Stamppot {i} met gehakt", [(500, "g", "rundergehakt")]) for i in range(5)
-    ]
-    client = FakeClient(gehakt + [
-        R(40, "Pasta met kip", [(500, "g", "scharrelkipfilet")]),
-        R(41, "Curry met kip", [(500, "g", "scharrelkipfilet")]),
-    ])
-    evenings = [WO, DO, VR, ZA, ZO]
-    plan = await build_plan(client, [GEHAKT, KIP], settings(evenings))
-    assert len(plan.dishes) == 5 and plan.short_by == 0
-    cuisines = [d.cuisine for d in plan.dishes]
-    assert len(set(cuisines)) == 3
-    assert cuisines.count("Hollandse pot") == 3
-    assert {"pasta en Italiaans", "Aziatisch"} <= set(cuisines)
-
-
-async def test_at_most_one_fish():
-    client = FakeClient([
-        R(50, "Pasta met zalm", [(400, "g", "zalmfilet")]),
-        R(51, "Curry met zalm", [(400, "g", "zalmfilet")]),
-        R(52, "Wraps met zalm", [(400, "g", "zalmfilet")]),
-        R(53, "Stamppot met rookworst", [(1, "stuks", "rookworst")]),
-        R(54, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
-        R(55, "Taco's met kip", [(500, "g", "scharrelkipfilet")]),
-    ])
-    plan = await build_plan(client, [ZALM, KIP, WORST], settings([WO, DO, VR]))
-    assert len(plan.dishes) == 3
-    assert sum(d.is_fish for d in plan.dishes) == 1
-    assert len({d.cuisine for d in plan.dishes}) == 3
-
-
-async def test_recent_recipes_excluded():
-    client = FakeClient([
-        R(60, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
-        R(61, "Stamppot met kip", [(500, "g", "scharrelkipfilet")]),
-    ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO], recent={60}))
-    assert [d.recipe.id for d in plan.dishes] == [61]
-    assert all(i != 60 for i, _ in client.recipe_calls)
+# --- the basket of a menu ------------------------------------------------------------
 
 
 async def test_pantry_items_not_in_basket():
@@ -194,7 +119,7 @@ async def test_pantry_items_not_in_basket():
             (None, "", "versgemalen peper"),
         ]),
     ])
-    plan = await build_plan(client, [GEHAKT], settings([WO]))
+    plan = await menu(client, [GEHAKT], {WO: 70})
     assert set(plan.basket) == {1}
     assert client.product_calls == []  # pantry is never searched
     assert plan.dishes[0].pantry == ["2 el milde olijfolie", "zout", "versgemalen peper"]
@@ -206,12 +131,11 @@ async def test_shared_product_merged_once():
         R(81, "Curry met kip", [(500, "g", "scharrelkipfilet"), (1, "stuks", "ui")]),
         R(82, "Pasta met zalm", [(400, "g", "zalmfilet"), (1, "stuks", "ui")]),
     ])
-    plan = await build_plan(client, [GEHAKT, KIP, ZALM], settings([WO, DO, VR]))
+    plan = await menu(client, [GEHAKT, KIP, ZALM], {WO: 80, DO: 81, VR: 82})
     assert len(plan.dishes) == 3
     ui = [pid for pid, p in plan.products.items() if p.title == "Ui"]
     assert len(ui) == 1
     assert plan.basket[ui[0]] == 3
-    assert client.product_calls.count("ui") == 1  # cached per name
 
 
 async def test_smart_topup_only_when_shared():
@@ -219,7 +143,7 @@ async def test_smart_topup_only_when_shared():
     one = FakeClient([
         R(90, "Curry met kip", [(500, "g", "scharrelkipfilet")]),
     ])
-    plan = await build_plan(one, [kip11], settings([WO]))
+    plan = await menu(one, [kip11], {WO: 90})
     assert plan.basket[2] == 1
     assert plan.savings == 0.0  # the deal is not reached, so it saves nothing
 
@@ -227,7 +151,7 @@ async def test_smart_topup_only_when_shared():
         R(90, "Curry met kip", [(500, "g", "scharrelkipfilet")]),
         R(91, "Pasta met kip", [(500, "g", "scharrelkipfilet")]),
     ])
-    plan = await build_plan(shared, [kip11], settings([WO, DO]))
+    plan = await menu(shared, [kip11], {WO: 90, DO: 91})
     assert plan.basket[2] == 2
     assert plan.savings == 4.0
     assert [d.savings for d in plan.dishes] == [2.0, 2.0]
@@ -236,7 +160,7 @@ async def test_smart_topup_only_when_shared():
         R(90, "Curry met kip", [(500, "g", "scharrelkipfilet")]),
         R(91, "Pasta met kip", [(1000, "g", "scharrelkipfilet")]),
     ])
-    plan = await build_plan(three, [kip11], settings([WO, DO]))
+    plan = await menu(three, [kip11], {WO: 90, DO: 91})
     assert plan.basket[2] == 4  # 3 needed, shared: top up to the next 1+1
     assert plan.savings == 8.0
     by_id = {d.recipe.id: d.savings for d in plan.dishes}
@@ -248,7 +172,7 @@ async def test_smart_topup_only_when_shared():
         R(90, "Curry met kip", [(500, "g", "scharrelkipfilet")]),
         R(91, "Pasta met kip", [(1000, "g", "scharrelkipfilet")]),
     ])
-    plan = await build_plan(paid, [kip_half], settings([WO, DO]))
+    plan = await menu(paid, [kip_half], {WO: 90, DO: 91})
     assert plan.basket[2] == 3  # 3 needed: no 4th at half price
     assert plan.savings == 2.0  # one pair reaches the deal
 
@@ -259,7 +183,7 @@ async def test_half_price_second_not_topped_up_when_merged_need_fits_one_pack():
         R(360, "Curry met kip", [(200, "g", "scharrelkipfilet")]),
         R(361, "Pasta met kip", [(200, "g", "scharrelkipfilet")]),
     ])
-    plan = await build_plan(client, [kip_half], settings([WO, DO]))
+    plan = await menu(client, [kip_half], {WO: 360, DO: 361})
     assert len(plan.dishes) == 2
     assert plan.basket[2] == 1
     assert plan.savings == 0.0
@@ -270,28 +194,16 @@ async def test_free_unit_deal_tops_up_when_shared_even_if_one_pack_is_enough():
         R(370, "Curry met kip", [(200, "g", "scharrelkipfilet")]),
         R(371, "Pasta met kip", [(200, "g", "scharrelkipfilet")]),
     ])
-    plan = await build_plan(client, [KIP11], settings([WO, DO]))
+    plan = await menu(client, [KIP11], {WO: 370, DO: 371})
     assert plan.basket[2] == 2  # the second one is free
     assert plan.savings == 4.0
-
-
-async def test_too_few_candidates_sets_short_by():
-    client = FakeClient([
-        R(100, "Stamppot met gehakt", [(500, "g", "rundergehakt")], cook=30),
-        R(101, "Lasagne met gehakt", [(500, "g", "rundergehakt")], cook=60),
-        R(102, "Curry met kip", [(500, "g", "scharrelkipfilet")], cook=90),
-    ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO, DO, MA]))
-    assert [d.recipe.id for d in plan.dishes] == [100]
-    assert plan.short_by == 2
-    assert all(d.cook <= 45 for d in plan.dishes)
 
 
 async def test_persons_per_evening_scale_recipe():
     client = FakeClient([
         R(110, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
     ])
-    plan = await build_plan(client, [GEHAKT], settings([DO], persons={DO: 4}))
+    plan = await menu(client, [GEHAKT], {DO: 110}, persons={DO: 4})
     assert (110, 4) in client.recipe_calls
     d = plan.dishes[0]
     assert d.persons == 4
@@ -300,76 +212,13 @@ async def test_persons_per_evening_scale_recipe():
     assert d.savings == 6.0
 
 
-async def test_swap_keeps_other_dishes_and_rules():
-    client = FakeClient([
-        R(120, "Curry met kip", [(1000, "g", "scharrelkipfilet")]),  # Wednesday (kip)
-        R(121, "Pasta met zalm", [(400, "g", "zalmfilet")]),  # the week's fish
-        R(122, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
-        R(123, "Wraps met worst", [(1, "stuks", "rookworst")]),
-        R(124, "Stamppot met worst", [(1, "stuks", "rookworst")]),
-    ])
-    evenings = [WO, DO, VR, ZA, ZO]
-    plan = await build_plan(client, [GEHAKT, KIP, ZALM, WORST], settings(evenings))
-    assert len(plan.dishes) == 5
-    old = dish_on(plan, WO)
-    assert not old.is_fish
-    before = {d.date: d.recipe.id for d in plan.dishes}
-
-    client.add(
-        R(130, "Curry met garnalen", [(400, "g", "zalmfilet")], cook=20),  # second fish
-        R(131, "Nasi met gehakt", [(1000, "g", "rundergehakt")], cook=90),  # too long
-        R(132, "Nasi met kip", [(500, "g", "scharrelkipfilet")], cook=30),
-    )
-    new = await swap_dish(client, plan, WO, [GEHAKT, KIP, ZALM, WORST], settings(evenings),
-                          exclude={old.recipe.id})
-    assert dish_on(new, WO).recipe.id == 132
-    assert {d.date: d.recipe.id for d in new.dishes if d.date != WO} == {
-        k: v for k, v in before.items() if k != WO
-    }
-    assert sum(d.is_fish for d in new.dishes) == 1
-    assert dish_on(new, WO).cook <= 45
-    # basket follows the new menu
-    assert new.basket[2] == 1 and new.short_by == 0
-
-
-async def test_swap_respects_cuisine_rule_for_week():
-    client = FakeClient([
-        R(140, "Pasta met gehakt", [(500, "g", "rundergehakt")]),
-        R(141, "Curry met kip", [(500, "g", "scharrelkipfilet")]),
-        R(142, "Stamppot met worst", [(1, "stuks", "rookworst")]),
-    ])
-    evenings = [WO, DO, VR]
-    plan = await build_plan(client, [GEHAKT, KIP, WORST], settings(evenings))
-    assert len({d.cuisine for d in plan.dishes}) == 3
-    day = next(d.date for d in plan.dishes if d.recipe.id == 140)
-    client.add(
-        R(150, "Hutspot met gehakt", [(1000, "g", "rundergehakt")]),  # would leave 2 cuisines
-        R(151, "Taco's met gehakt", [(500, "g", "rundergehakt")]),
-    )
-    new = await swap_dish(client, plan, day, [GEHAKT, KIP, WORST], settings(evenings),
-                          exclude={140})
-    assert dish_on(new, day).recipe.id == 151
-    assert len({d.cuisine for d in new.dishes}) == 3
-
-
-async def test_swap_without_candidate_returns_unchanged():
-    client = FakeClient([
-        R(160, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
-    ])
-    plan = await build_plan(client, [GEHAKT], settings([WO]))
-    new = await swap_dish(client, plan, WO, [GEHAKT], settings([WO]), exclude={160})
-    assert [d.recipe.id for d in new.dishes] == [160]
-    assert new.basket == plan.basket and new.savings == plan.savings
-    assert new.short_by == 1
-
-
 async def test_rescale_recomputes_basket_and_savings():
     client = FakeClient([
         R(170, "Stamppot met gehakt", [
             (500, "g", "rundergehakt"), (1, "stuks", "ui"), (2, "el", "olijfolie"),
         ]),
     ])
-    plan = await build_plan(client, [GEHAKT], settings([WO]))
+    plan = await menu(client, [GEHAKT], {WO: 170})
     assert plan.basket[1] == 1 and plan.savings == 3.0
     calls = len(client.product_calls)
     new = await rescale_dish(client, plan, WO, 4)
@@ -389,107 +238,16 @@ async def test_rescale_recomputes_basket_and_savings():
 # --- extra coverage ----------------------------------------------------------------
 
 
-async def test_ah_calls_are_bounded():
-    def name(i):  # 60 different words, no core word among them
-        return "quux" + chr(97 + i // 26) + chr(97 + i % 26)
-
-    bonuses = [bonus(1000 + i, f"AH {name(i)}", regular=5.0 + i, now=1.0) for i in range(60)]
-    kinds = ["Stamppot", "Pasta", "Curry", "Wraps"]
-    recipes = [
-        R(2000 + i, f"{kinds[i % 4]} {i}", [(500, "g", name(i % 60))]) for i in range(200)
-    ]
-    client = FakeClient(recipes)
-    plan = await build_plan(client, bonuses, settings([WO, DO, VR, ZA, ZO, MA, DI],
-                                                       persons={ZA: 4, ZO: 3}))
-    assert len(client.search_calls) <= planner.MAX_RECIPE_SEARCHES == 25
-    assert len(client.recipe_calls) <= planner.MAX_RECIPE_DETAILS == 40
-    assert plan is not None
-
-
-async def test_unknown_cuisine_is_excluded():
-    client = FakeClient([
-        R(180, "Shakshuka met feta", [(500, "g", "rundergehakt")]),
-        R(181, "Stamppot met kip", [(500, "g", "scharrelkipfilet")]),
-    ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO]))
-    assert [d.recipe.id for d in plan.dishes] == [181]
-
-
-async def test_only_main_courses():
-    client = FakeClient([
-        R(190, "Stamppot met gehakt", [(500, "g", "rundergehakt")], courses=("lunch",)),
-        R(191, "Stamppot met kip", [(500, "g", "scharrelkipfilet")]),
-    ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO]))
-    assert [d.recipe.id for d in plan.dishes] == [191]
-
-
-async def test_failing_recipe_is_skipped_but_login_error_stops():
-    client = FakeClient([
-        R(200, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
-        R(201, "Stamppot met kip", [(500, "g", "scharrelkipfilet")]),
-    ])
-    client.fail_ids = {200}
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO]))
-    assert [d.recipe.id for d in plan.dishes] == [201]
-
-    class Expired(FakeClient):
-        async def search_recipes(self, text, size=30):
-            raise AhLoginExpired("verlopen", 401)
-
-    with pytest.raises(AhLoginExpired):
-        await build_plan(Expired([]), [GEHAKT], settings([WO]))
-
-
 async def test_ingredient_without_product_goes_to_not_found():
     client = FakeClient(
         [R(210, "Stamppot met gehakt", [(500, "g", "rundergehakt"),
                                         (None, "", "snufje nootmuskaat")])],
         missing={"snufje nootmuskaat"},
     )
-    plan = await build_plan(client, [GEHAKT], settings([WO]))
+    plan = await menu(client, [GEHAKT], {WO: 210})
     assert plan.not_found == ["snufje nootmuskaat"]
     assert plan.dishes[0].not_found == ["snufje nootmuskaat"]
     assert len(plan.dishes) == 1
-
-
-async def test_fish_and_chicken_first_two_evenings_and_long_recipe_in_weekend():
-    client = FakeClient([
-        R(220, "Stamppot met gehakt", [(1000, "g", "rundergehakt")], cook=30),
-        R(221, "Pasta met zalm", [(400, "g", "zalmfilet")], cook=30),
-        R(222, "Curry met kip", [(500, "g", "scharrelkipfilet")], cook=30),
-        R(223, "Wraps met worst", [(1, "stuks", "rookworst")], cook=40),
-        R(224, "Stoofvlees uit de oven", [(1, "stuks", "rookworst")], cook=120),
-    ])
-    plan = await build_plan(client, [GEHAKT, KIP, ZALM, WORST],
-                            settings([WO, DO, VR, ZA, ZO]))
-    first_two = {dish_on(plan, WO).recipe.id, dish_on(plan, DO).recipe.id}
-    assert first_two == {221, 222}
-    assert dish_on(plan, VR).recipe.id in (220, 223, 224)
-    assert next(d for d in plan.dishes if d.recipe.id == 224).date in (VR, ZA, ZO)
-
-
-async def test_monday_gets_least_fresh_recipe():
-    client = FakeClient([
-        R(230, "Stamppot met gehakt", [(500, "g", "rundergehakt"), (1, "stuks", "verse prei"),
-                                       (1, "stuks", "verse peterselie")]),
-        R(231, "Nasi uit de diepvries", [(500, "g", "rundergehakt"),
-                                         (1, "zak", "diepvries nasi-bamigroente"),
-                                         (1, "pak", "witte snelkookrijst")]),
-        R(232, "Pasta met kip", [(500, "g", "scharrelkipfilet"), (1, "stuks", "verse basilicum")]),
-    ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO, DO, MA]))
-    assert dish_on(plan, MA).recipe.id == 231
-
-
-async def test_dish_keeps_summary_times_and_image():
-    client = FakeClient([
-        R(240, "Ovenschotel met gehakt", [(500, "g", "rundergehakt")], cook=20, oven=40, wait=5),
-    ])
-    plan = await build_plan(client, [GEHAKT], settings([WO]))
-    d = plan.dishes[0]
-    assert (d.cook, d.oven, d.wait) == (20, 40, 5)
-    assert d.recipe.image and d.recipe.url and d.recipe.steps
 
 
 async def test_plan_round_trips_through_json():
@@ -498,7 +256,7 @@ async def test_plan_round_trips_through_json():
                                        (None, "", "nootmuskaat")], oven=10),
         R(251, "Pasta met zalm", [(400, "g", "zalmfilet"), (1, "stuks", "ui")]),
     ], missing={"nootmuskaat"})
-    plan = await build_plan(client, [GEHAKT, ZALM], settings([WO, DO]))
+    plan = await menu(client, [GEHAKT, ZALM], {WO: 250, DO: 251})
     text = json.dumps(plan.to_dict())
     back = Plan.from_dict(json.loads(text))
     assert back == plan
@@ -614,27 +372,20 @@ class FixtureAhClient(AhClient):
         raise AssertionError(f"unexpected call {method} {path}")
 
 
-async def recorded_plan(evenings=(WO, DO, VR, ZA, ZO)):
+async def test_picked_dishes_on_recorded_fixtures(monkeypatch):
+    """The recorded folder gives search terms for the choice list, and recorded recipes
+    picked on five evenings become a menu with AH products."""
+    monkeypatch.setattr(ahclient, "CALL_DELAY", 0)
     client = FixtureAhClient()
     periods = await client.bonus_periods()
     bonus_list = await client.bonus_offers(periods[1])
-    plan = await build_plan(client, bonus_list, settings(list(evenings)))
-    return client, bonus_list, plan
-
-
-async def test_build_plan_on_recorded_fixtures(monkeypatch):
-    monkeypatch.setattr(ahclient, "CALL_DELAY", 0)
-    client, bonus_list, plan = await recorded_plan()
-    assert bonus_list
-    assert plan.dishes, "the recorded week must give at least one dinner"
-    assert len(plan.dishes) + plan.short_by == 5
-    for d in plan.dishes:
-        assert d.cuisine
-        assert is_weekend(d.date) or (d.cook is not None and d.cook <= 45)
-    assert sum(d.is_fish for d in plan.dishes) <= 1
-    assert len({d.cuisine for d in plan.dishes}) >= min(3, len(plan.dishes))
-    graphql = [c for c in client.calls if c[1] == "/graphql"]
-    assert len(graphql) < 25 + 40 + 130  # searches + details + bonus groups
+    assert bonus_list and planner.search_terms(bonus_list)
+    ids = sorted({int(f.name.split("__")[1].split("-")[0])
+                  for f in FIX.glob("graphql-recipe__*-s2.json")})[:5]
+    plan = await menu(client, bonus_list, dict(zip((WO, DO, VR, ZA, ZO), ids)))
+    assert [d.recipe.id for d in plan.dishes] == ids
+    assert plan.basket and set(plan.basket) <= set(plan.products)
+    assert all(d.cuisine for d in plan.dishes)
 
 
 # --- fix round 1 -----------------------------------------------------------------------
@@ -647,68 +398,9 @@ async def test_multibuy_deal_scores_its_potential_for_one_pack():
                [("500 g scharrelkipfilet", "scharrelkipfilet")], [], None)
     score, _ = await planner._score(r, [KIP11], PANTRY)
     assert score == 2.0  # half of the 1+1 deal: another dish may complete it
-    client = FakeClient([
-        R(300, "Stamppot met kalkoen", [(500, "g", "kalkoenfilet")]),  # same, no bonus
-        R(301, "Stamppot met kip", [(500, "g", "scharrelkipfilet")]),
-    ])
-    plan = await build_plan(client, [KIP11], settings([WO]))
-    assert [d.recipe.id for d in plan.dishes] == [301]
+    client = FakeClient([R(301, "Stamppot met kip", [(500, "g", "scharrelkipfilet")])])
+    plan = await menu(client, [KIP11], {WO: 301})
     assert plan.savings == 0.0  # what is really saved is still decided by the basket
-
-
-async def test_scoring_uses_most_common_persons():
-    client = FakeClient([R(310, "Stamppot met gehakt", [(500, "g", "rundergehakt")])])
-    await build_plan(client, [GEHAKT], settings([WO, DO, VR], persons={WO: 4, DO: 4}))
-    assert client.recipe_calls[0] == (310, 4)
-    assert planner.score_servings(settings([WO, DO], persons={WO: 3, DO: 4}), [WO, DO]) == 4
-
-
-def _late_failing(fish_variant):
-    """40 candidates over 7 evenings where the third cuisine is hard to place.
-
-    The two odd ones come first in the search results, so they are fetched, but they
-    score lowest, so the menu search only reaches them after trying the others."""
-    if fish_variant:  # the only other cuisines are both fish: at most one may be used
-        rs = [R(450, "Pasta met zalm", [(1, "stuks", "ui"), (1, "stuks", "zalm")]),
-              R(451, "Curry met zalm", [(1, "stuks", "ui"), (1, "stuks", "zalm")])]
-    else:  # the other two cuisines only fit the weekend
-        rs = [R(450, "Pasta lang", [(1, "stuks", "ui")], cook=90),
-              R(451, "Curry lang", [(1, "stuks", "ui")], cook=90)]
-    return rs + [R(400 + i, f"Stamppot {i}", [(500, "g", "rundergehakt")]) for i in range(38)]
-
-
-@pytest.mark.parametrize("fish_variant", [True, False])
-async def test_menu_search_is_fast_on_late_failing_week(fish_variant):
-    import time
-    week = [WO, DO, VR, ZA, ZO, MA, DI]
-    client = FakeClient(_late_failing(fish_variant))
-    cands, _ = await planner._gather(client, [GEHAKT], settings(week), set(), week, 40)
-    assert len(cands) == 40
-    t = time.perf_counter()
-    menu, _ = planner._choose_menu(cands, week)
-    assert time.perf_counter() - t < 5
-    assert menu
-
-    t = time.perf_counter()
-    plan = await build_plan(FakeClient(_late_failing(fish_variant)), [GEHAKT],
-                            settings(week))
-    assert time.perf_counter() - t < 5
-    assert plan.dishes
-    assert sum(d.is_fish for d in plan.dishes) <= 1
-    assert len({d.cuisine for d in plan.dishes}) >= min(3, len(plan.dishes))
-    assert all(is_weekend(d.date) or d.cook <= 45 for d in plan.dishes)
-
-
-async def test_spent_search_budget_gives_best_partial_menu(monkeypatch, caplog):
-    monkeypatch.setattr(planner, "_SEARCH_BUDGET", 5)
-    client = FakeClient(_late_failing(False))
-    plan = await build_plan(client, [GEHAKT], settings([WO, DO, VR, ZA, ZO, MA, DI]))
-    assert plan.budget_exhausted is True
-    assert "budget" in caplog.text
-    assert plan.dishes  # not "no menu possible"
-    assert len({d.cuisine for d in plan.dishes}) >= min(3, len(plan.dishes))
-    assert plan.short_by == 7 - len(plan.dishes)
-    assert Plan.from_dict(json.loads(json.dumps(plan.to_dict()))).budget_exhausted is True
 
 
 async def test_rescale_never_buys_pantry_items():
@@ -716,7 +408,7 @@ async def test_rescale_never_buys_pantry_items():
         R(320, "Stamppot met gehakt", [(500, "g", "rundergehakt"), (2, "el", "olijfolie")]),
     ])
     client.noname = {"olijfolie"}  # name missing: only the text says what it is
-    plan = await build_plan(client, [GEHAKT], settings([WO]))
+    plan = await menu(client, [GEHAKT], {WO: 320})
     assert plan.dishes[0].pantry == ["2 el olijfolie"]
     new = await rescale_dish(client, plan, WO, 4)
     assert new.dishes[0].pantry == ["4 el olijfolie"]
@@ -724,20 +416,10 @@ async def test_rescale_never_buys_pantry_items():
     assert not any("olie" in q for q in client.product_calls)
 
 
-async def test_zero_saving_offer_is_not_searched():
+def test_zero_saving_offer_is_not_searched():
     biefstuk = Product(5, "AH Biefstuk 2 stuks", None, 9.29, 2.69, True,
                        "100 GRAM VOOR 2.69", True, "Vlees")
-    client = FakeClient([R(330, "Stamppot met gehakt", [(500, "g", "rundergehakt")])])
-    await build_plan(client, [biefstuk, GEHAKT], settings([WO]))
-    assert client.search_calls == ["gehakt"]
-
-
-async def test_titles_with_a_cuisine_are_fetched_first():
-    odd = [R(500 + i, f"Bowl {i}", [(500, "g", "rundergehakt")]) for i in range(50)]
-    client = FakeClient(odd + [R(600, "Stamppot met gehakt", [(500, "g", "rundergehakt")])])
-    plan = await build_plan(client, [GEHAKT], settings([WO]))
-    assert client.recipe_calls[0] == (600, 2)
-    assert [d.recipe.id for d in plan.dishes] == [600]
+    assert planner.search_terms([biefstuk, GEHAKT]) == ["gehakt"]
 
 
 async def test_amounts_are_merged_before_rounding_to_packs():
@@ -746,7 +428,7 @@ async def test_amounts_are_merged_before_rounding_to_packs():
         R(340, "Stamppot met gehakt", [(200, "g", "rundergehakt")]),
         R(341, "Pasta met gehakt", [(200, "g", "rundergehakt")]),
     ])
-    plan = await build_plan(client, [GEHAKT], settings([WO, DO]))
+    plan = await menu(client, [GEHAKT], {WO: 340, DO: 341})
     assert len(plan.dishes) == 2
     assert [d.lines[0].qty for d in plan.dishes] == [1, 1]  # each dish alone: one pack
     assert plan.basket[1] == 1
@@ -761,7 +443,7 @@ async def test_pack_size_from_title_when_card_has_none():
         R(350, "Stamppot met prei", [(800, "g", "kruimige aardappelen")]),
         R(351, "Curry met aardappel", [(800, "g", "kruimige aardappelen")]),
     ])
-    plan = await build_plan(client, [aardappel], settings([WO, DO]))
+    plan = await menu(client, [aardappel], {WO: 350, DO: 351})
     assert len(plan.dishes) == 2
     assert plan.basket[9] == 1
 
@@ -771,7 +453,7 @@ async def test_restore_dish_brings_back_the_previous_recipe():
         R(180, "Stamppot met gehakt", [(500, "g", "rundergehakt"), (1, "stuks", "ui")]),
         R(181, "Curry met kip", [(500, "g", "scharrelkipfilet")]),
     ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO, DO], persons={WO: 3}))
+    plan = await menu(client, [GEHAKT, KIP], {WO: 180, DO: 181}, persons={WO: 3})
     wo = dish_on(plan, WO)
     swapped = await rescale_dish(client, plan, WO, 3)  # stand-in for a swap: same shape
     back = await planner.restore_dish(client, swapped, WO, wo.recipe.id, [GEHAKT, KIP])
@@ -792,7 +474,7 @@ async def test_remove_dish_leaves_no_dish_and_keeps_the_rest():
         R(120, "Curry met kip", [(1000, "g", "scharrelkipfilet")]),
         R(122, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
     ])
-    plan = await build_plan(client, [GEHAKT, KIP], settings([WO, DO]))
+    plan = await menu(client, [GEHAKT, KIP], {WO: 120, DO: 122})
     gone = dish_on(plan, WO)
     new = remove_dish(plan, WO)
     assert [d.date for d in new.dishes] == [DO]
@@ -815,23 +497,14 @@ async def test_remove_dish_leaves_no_dish_and_keeps_the_rest():
 # --- restjes (v0.4) ----------------------------------------------------------------
 
 
-def leftover_settings(cook_days, leftovers, persons=None):
-    """Settings like make_settings builds them: a cook day with a leftover night
-    cooks for the persons of both days."""
-    persons = persons or {}
-    per = {d: persons.get(d, 2) + (persons.get(leftovers[d], 2) if d in leftovers else 0)
-           for d in cook_days}
-    return Settings(evenings=list(cook_days), persons=per, pantry=PANTRY,
-                    recent_recipe_ids=set(), leftovers=dict(leftovers))
-
-
 async def test_cook_day_with_leftovers_cooks_for_both_days():
     client = FakeClient([
         R(200, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
         R(201, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
     ])
-    s = leftover_settings([WO, VR], {WO: DO}, persons={WO: 2, DO: 3})
-    plan = await build_plan(client, [GEHAKT, KIP], s)
+    # a cook day with a leftover night cooks for the persons of both days (2 + 3)
+    plan = await menu(client, [GEHAKT, KIP], {WO: 200, VR: 201}, persons={WO: 5},
+                      leftovers={WO: DO})
     assert [d.date for d in plan.dishes] == [WO, VR]
     wo = dish_on(plan, WO)
     assert wo.leftover_date == DO and wo.persons == 5
@@ -846,50 +519,14 @@ async def test_cook_day_with_leftovers_cooks_for_both_days():
     assert all(d.leftover_date is None for d in Plan.from_dict(old).dishes)
 
 
-async def test_fish_never_on_a_cook_day_with_leftovers():
-    client = FakeClient([
-        R(210, "Pasta met zalm", [(400, "g", "zalmfilet")]),  # best saving, fish
-        R(211, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
-        R(212, "Stamppot met worst", [(1, "stuks", "rookworst")]),
-    ])
-    s = leftover_settings([WO, VR, ZA], {WO: DO})
-    plan = await build_plan(client, [ZALM, KIP, WORST], s)
-    assert len(plan.dishes) == 3
-    assert not dish_on(plan, WO).is_fish
-    assert sum(d.is_fish for d in plan.dishes) == 1  # the fish moved to another day
-    # only fish left for the leftover day: it stays without a dish
-    client2 = FakeClient([R(220, "Curry met zalm", [(400, "g", "zalmfilet")])])
-    plan2 = await build_plan(client2, [ZALM], leftover_settings([WO], {WO: DO}))
-    assert plan2.dishes == [] and plan2.short_by == 1
-
-
-async def test_swap_keeps_the_leftover_night_and_persons():
-    client = FakeClient([
-        R(230, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
-        R(231, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
-        R(232, "Pasta met worst", [(1, "stuks", "rookworst")]),
-    ])
-    s = leftover_settings([WO, VR, ZA], {WO: DO}, persons={WO: 2, DO: 3})
-    plan = await build_plan(client, [GEHAKT, KIP, WORST], s)
-    old = dish_on(plan, WO)
-    client.add(
-        R(240, "Curry met zalm", [(400, "g", "zalmfilet")], cook=20),  # fish: not here
-        R(241, "Wraps met kip", [(500, "g", "scharrelkipfilet")], cook=30),
-    )
-    new = await swap_dish(client, plan, WO, [GEHAKT, KIP, WORST, ZALM], s,
-                          exclude={old.recipe.id})
-    nd = dish_on(new, WO)
-    assert nd.recipe.id != old.recipe.id and not nd.is_fish
-    assert nd.leftover_date == DO and nd.persons == 5
-
-
 async def test_remove_dish_drops_its_leftover_night_too():
     from app.planner import put_dish, remove_dish
     client = FakeClient([
         R(250, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
         R(251, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
     ])
-    plan = await build_plan(client, [GEHAKT, KIP], leftover_settings([WO, VR], {WO: DO}))
+    plan = await menu(client, [GEHAKT, KIP], {WO: 250, VR: 251}, persons={WO: 4},
+                      leftovers={WO: DO})
     gone = dish_on(plan, WO)
     new = remove_dish(plan, WO)
     assert [d.date for d in new.dishes] == [VR]
@@ -902,109 +539,8 @@ async def test_rescale_keeps_the_leftover_night():
         R(260, "Stamppot met gehakt", [(500, "g", "rundergehakt")]),
         R(261, "Nasi met kip", [(500, "g", "scharrelkipfilet")]),
     ])
-    plan = await build_plan(client, [GEHAKT, KIP], leftover_settings([WO, VR], {WO: DO}))
+    plan = await menu(client, [GEHAKT, KIP], {WO: 260, VR: 261}, persons={WO: 4},
+                      leftovers={WO: DO})
     new = await rescale_dish(client, plan, WO, 10)
     assert dish_on(new, WO).leftover_date == DO and dish_on(new, WO).persons == 10
 
-
-# --- v0.6: the planner off the event loop ---------------------------------------------
-
-
-async def _heavy_cands():
-    """30 candidates over 5 cuisines but only 6 different recipes: 7 evenings can never
-    be filled, and no cuisine rule prunes it, so the search runs until its budget."""
-    import dataclasses
-    week = [WO, DO, VR, ZA, ZO, MA, DI]
-    client = FakeClient([R(400 + i, f"Stamppot {i}", [(500, "g", "rundergehakt")])
-                         for i in range(6)])
-    cands, _ = await planner._gather(client, [GEHAKT], settings(week), set(), week, 40)
-    return week, [dataclasses.replace(c, cuisine=cu, order=k * 10 + j)
-                  for k, cu in enumerate("abcde") for j, c in enumerate(cands)]
-
-
-@pytest.mark.slow
-async def test_event_loop_stays_responsive_during_a_heavy_menu_search(monkeypatch, caplog):
-    """While _choose_menu searches for at least a second, sleep(0.01) tasks on the loop
-    keep coming back within 0.2 s. A probe only counts when it came back while the search
-    was still running: with the search on the loop itself no probe would.
-
-    The median is checked, not every probe: on Windows a busy worker thread makes an
-    occasional loop wake-up take 0.2 to 0.3 s (GIL hand-off and the 15.6 ms timer), also
-    with a thread that does nothing but count."""
-    import asyncio
-    import statistics
-    import threading
-    import time
-    week, many = await _heavy_cands()
-    # a fake search budget for about 2.5 s of searching at this machine's fastest (the
-    # quickest of three calibrations: a slow moment only makes the real search longer)
-    monkeypatch.setattr(planner, "_SEARCH_BUDGET", 20_000)
-    per_node = float("inf")
-    for _ in range(3):
-        t = time.perf_counter()
-        planner._choose_menu(many, week)
-        per_node = min(per_node, (time.perf_counter() - t) / 20_000)
-    monkeypatch.setattr(planner, "_SEARCH_BUDGET", max(400_000, int(2.5 / per_node)))
-
-    async def gather(*a, **k):
-        return many, 6
-
-    started, finished = threading.Event(), threading.Event()
-    real = planner._choose_menu
-
-    def watched(*a, **k):
-        started.set()
-        try:
-            return real(*a, **k)
-        finally:
-            finished.set()
-
-    monkeypatch.setattr(planner, "_gather", gather)
-    monkeypatch.setattr(planner, "_choose_menu", watched)
-    caplog.set_level("INFO", logger="app.planner")
-    client = FakeClient([R(400 + i, f"Stamppot {i}", [(500, "g", "rundergehakt")])
-                         for i in range(6)])
-    task = asyncio.create_task(build_plan(client, [GEHAKT], settings(week)))
-    while not started.is_set():
-        await asyncio.sleep(0.001)
-    probes = []
-    while not finished.is_set():
-        t = time.perf_counter()
-        await asyncio.sleep(0.01)
-        if not finished.is_set():  # came back while the search still ran
-            probes.append(time.perf_counter() - t)
-    plan = await task
-    assert plan.budget_exhausted and plan.dishes
-    assert plan.search_seconds >= 1.0  # _choose_menu really ran that long
-    assert len(probes) >= 5, probes  # the loop answered all along
-    assert statistics.median(probes) < 0.2, probes
-    assert "Planner: menu in" in caplog.text
-
-
-async def test_menu_search_never_runs_on_the_event_loop_thread(monkeypatch):
-    """Deterministic: _choose_menu runs in a worker thread, never on the main thread."""
-    import threading
-    week, many = await _heavy_cands()
-    threads = []
-    real = planner._choose_menu
-
-    def watched(*a, **k):
-        threads.append(threading.current_thread() is threading.main_thread())
-        return real(*a, **k)
-
-    async def gather(*a, **k):
-        return many, 6
-
-    monkeypatch.setattr(planner, "_SEARCH_BUDGET", 2_000)
-    monkeypatch.setattr(planner, "_gather", gather)
-    monkeypatch.setattr(planner, "_choose_menu", watched)
-    client = FakeClient([R(400 + i, f"Stamppot {i}", [(500, "g", "rundergehakt")])
-                         for i in range(6)])
-    await build_plan(client, [GEHAKT], settings(week))
-    assert threads == [False]
-
-
-def test_search_seconds_is_not_stored():
-    p = Plan([], {}, {}, 0.0, [], 0, search_seconds=1.5)
-    assert "search_seconds" not in p.to_dict()
-    assert Plan.from_dict(p.to_dict()) == p  # not compared either

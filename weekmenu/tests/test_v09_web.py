@@ -5,8 +5,6 @@ import asyncio
 import json
 from datetime import date, datetime
 
-import pytest
-
 from app import main
 from app.ahclient import ActiveOrder, Product, Recipe
 from app.health import PAUSED_NOTE
@@ -108,7 +106,7 @@ async def test_ander_product_goes_through_apply_on_every_dish(aiohttp_client, tm
     do = await (await client.get(f"api/dish/{DO}")).json()
     assert do["lines"][0]["product_id"] == 7
     # the next menus use it too, without a search
-    s = main.settings_from_plan(ctx, menu(), W)
+    s = await main.week_settings(ctx, W)
     assert s.overrides["rode ui"]["product"]["id"] == 7
 
 
@@ -223,21 +221,13 @@ async def test_overrides_file_from_a_newer_add_on(aiohttp_client, tmp_path):
     assert r.status == 409
 
 
-@pytest.fixture
-def swaps(monkeypatch):
-    async def fake_swap(client, plan, day, bonus, s, exclude):
-        new = dish(day, 301, [1, 9], 1.5)
-        return make_plan([d for d in plan.dishes if d.date != day] + [new])
-
-    monkeypatch.setattr(main, "swap_dish", fake_swap)
-
-
-async def test_swaps_and_removals_go_into_history(aiohttp_client, tmp_path, swaps):
+async def test_swaps_and_removals_go_into_history(aiohttp_client, tmp_path):
     ctx = make_ctx(tmp_path)
     await apply(ctx.client, ctx.ledger, WeekLog(W), make_plan(
         [dish(WO, 101, [1, 2], 2.0), dish(DO, 102, [2, 3], 3.0)]))
     client = await aiohttp_client(make_app(ctx))
-    assert (await client.post(f"api/dish/{WO}/swap")).status == 200
+    # v1.1: "Ander gerecht" is a pick from the choice list
+    assert (await client.post(f"api/dish/{WO}/pick", json={"recipe_id": 301})).status == 200
     assert (await client.post(f"api/dish/{WO}/back")).status == 200
     assert (await client.post(f"api/dish/{DO}/remove")).status == 200
     events = ctx.history.load()["2026-11-04"]
@@ -247,12 +237,12 @@ async def test_swaps_and_removals_go_into_history(aiohttp_client, tmp_path, swap
     assert events[0]["title"] == "Recept 101" and events[0]["at"] == "2026-11-01T08:00"
 
 
-async def test_a_broken_history_never_stops_the_swap(aiohttp_client, tmp_path, swaps):
+async def test_a_broken_history_never_stops_the_swap(aiohttp_client, tmp_path):
     ctx = make_ctx(tmp_path)
     await apply(ctx.client, ctx.ledger, WeekLog(W), make_plan([dish(WO, 101, [1, 2], 2.0)]))
     ctx.history.path.write_text('{"schema": 7}', encoding="utf-8")
     client = await aiohttp_client(make_app(ctx))
-    r = await client.post(f"api/dish/{WO}/swap")
+    r = await client.post(f"api/dish/{WO}/pick", json={"recipe_id": 301})
     assert r.status == 200 and (await r.json())["recipe"]["id"] == 301
     assert "history.json" in ctx.too_new
 

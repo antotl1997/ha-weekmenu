@@ -254,7 +254,8 @@ async def test_no_reminder_on_other_days_or_without_a_menu(tmp_path):
     (tmp_path / "b").mkdir()
     ctx = reminder_ctx(tmp_path / "b", plan=False)
     await main.tick(ctx, datetime(2026, 11, 8, 17, 0))
-    assert reminders(ctx) == []
+    assert reminders(ctx) == []  # v1.1: the push asks to choose the menu instead
+    assert [n["message"] for n in ctx.hass.notifications()] == [main.REMINDER_CHOOSE]
 
 
 @pytest.mark.parametrize("delivery, want", [
@@ -488,7 +489,7 @@ async def test_busy_and_unsure_texts_from_the_api(tmp_path, aiohttp_client):
     ctx = make_ctx(tmp_path)
     ctx.busy = True
     client = await aiohttp_client(make_app(ctx))
-    r = await client.post("api/run", json={"mode": "nu_maken"})
+    r = await client.post("api/run", json={"mode": "bijwerken"})
     assert r.status == 409 and (await r.json())["error"] == BUSY
     assert BUSY == "Het menu wordt nu gemaakt, even geduld"
 
@@ -632,24 +633,24 @@ async def test_a_failing_extra_never_keeps_the_slot_round_from_running(tmp_path,
     for name in ("republish", "notify_tonight", "remind_order"):
         monkeypatch.setattr(main, name, boom if name == broken else await fine(name))
 
-    async def round_(ctx, now, mode):
-        order.append("round")
-    monkeypatch.setattr(main, "run_round", round_)
+    async def look(ctx, now, start):
+        order.append("look")
+    monkeypatch.setattr(main, "fill_catalog", look)
     await main.tick(ctx, datetime(2026, 11, 1, 17, 0))  # Sunday: a slot, no menu yet
-    # the slot round first, then all three extras, also after one of them raised
-    assert order == ["round", "republish", "notify_tonight", "remind_order"]
+    # the hourly look first, then all three extras, also after one of them raised
+    assert order == ["look", "republish", "notify_tonight", "remind_order"]
 
 
 async def test_a_failing_slot_still_runs_the_extras(tmp_path, monkeypatch):
     ctx = make_ctx(tmp_path, now=datetime(2026, 11, 1, 17, 0))
     seen = []
 
-    async def round_(ctx, now, mode):
+    async def look(ctx, now, start):
         raise RuntimeError("stuk")
 
     async def extra(ctx, now):
         seen.append(1)
-    monkeypatch.setattr(main, "run_round", round_)
+    monkeypatch.setattr(main, "fill_catalog", look)
     monkeypatch.setattr(main, "republish", extra)
     with pytest.raises(RuntimeError):
         await main.tick(ctx, datetime(2026, 11, 1, 17, 0))
@@ -672,14 +673,17 @@ async def test_republish_waits_for_the_lock_and_posts_the_newest_menu(tmp_path):
     assert [d["titel"] for d in sensor["attributes"]["dishes"]] == ["Recept 999"]
 
 
-async def test_reminder_comes_for_a_menu_made_at_1800_and_stops_at_2300(tmp_path):
+async def test_one_reminder_a_day_and_none_after_2300(tmp_path):
+    """v1.1: no menu yet asks to choose it; a menu confirmed later that evening gets no
+    second push the same day."""
     ctx = reminder_ctx(tmp_path, plan=False)
-    await main.tick(ctx, datetime(2026, 11, 8, 17, 0))  # no menu yet: nothing, not done
-    assert reminders(ctx) == [] and ctx.reminder_done is None
+    await main.tick(ctx, datetime(2026, 11, 8, 17, 0))
+    assert [n["message"] for n in ctx.hass.notifications()] == [main.REMINDER_CHOOSE]
+    assert ctx.reminder_done == date(2026, 11, 8)
     ctx.ledger.save(WeekLog(NOV11, plan=make_plan([dish(NOV11, 301, [6])]).to_dict(),
-                            target="list", round_done=True))  # the 18:00 fallback
+                            target="list", round_done=True))  # confirmed at 18:00
     await main.tick(ctx, datetime(2026, 11, 8, 18, 5))
-    assert len(reminders(ctx)) == 1
+    assert reminders(ctx) == [] and len(ctx.hass.notifications()) == 1
 
     (tmp_path / "late").mkdir()
     late = reminder_ctx(tmp_path / "late", plan=False)

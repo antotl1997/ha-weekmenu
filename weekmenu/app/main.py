@@ -1,20 +1,23 @@
-"""The add-on process: one round tied together, the schedule, stdin commands.
+"""The add-on process: the rounds, the schedule, stdin commands.
 
-A round: read the helpers, take the bonus period of the menu Wednesday, build the
-whole menu (or reuse the week's menu from the log), then write the delta to AH,
-publish the sensors and send the push message.
+The add-on never makes a menu by itself (v1.1): the user picks a dish per evening in
+the app and confirms the week once (web.py). Two rounds are left, both on the menu in
+the log, never a new one:
 
-The schedule: every day from `schedule_time` to 18:00, once an hour, as long as the
-log has no menu for the next menu week, look whether its bonus period is out
-(`bonus_periods`, nothing more) and make the menu when it is. Only on the Sunday
-before that Wednesday, at 18:00, fall back to the current folder. The plan in the
-log is the source of truth for "done"; state.json only remembers the last hour
-looked at and when the folder is expected.
+- "bijwerken" (Menu bijwerken, the app or stdin): the menu was confirmed with an older
+  folder and the week's own folder is out (`new_folder_available`). The same recipes,
+  evenings and persons are matched again against the new folder (`rebuild_plan`) and
+  the difference is written.
+- the completion (`complete_round`, only the hourly look): a confirmed menu whose write
+  stopped halfway (a crash, an AH error) is completed once from the log, and a held
+  menu (Ruling 42) is tried again every hour until its order or list is usable.
 
-The buttons (Nu maken, Nieuw menu, stdin) always make a menu: before the folder is out
-with the current one, and the warning. Once a menu exists the schedule never changes
-it; when it was made with an older folder, the hourly look only tells, once, that the
-week's own folder is out (`check_new_folder`). "Menu bijwerken" then remakes it.
+The schedule: every day from `schedule_time` to 18:00, once an hour: the completion,
+whether the week's own folder is out for a menu made with an older one
+(`check_new_folder`), and whether the folder of the next menu week is out; when it is,
+its choice list is filled in the background (`catalog.fill`). The plan in the log is
+the source of truth for "done"; state.json only remembers the last hour looked at and
+when the folder is expected.
 
 ApiHealth (v0.7): two failures in a row on a critical AH endpoint pause every write
 (the writer checks it). One push says so (`sync_health`), marked in state.json so it
@@ -69,6 +72,7 @@ from app.hass import (
     plan_view,
     vanavond,
 )
+from app import catalog
 from app.catalog import Catalog
 from app.foldercache import load_folders, remember, save_folders
 from app.history import HISTORY_SCHEMA, History
@@ -82,7 +86,7 @@ from app.planner import (
     Plan,
     Settings,
     apply_override,
-    build_plan,
+    rebuild_plan,
     reresolve,
     dish_from_dict,
     dish_to_dict,
@@ -90,8 +94,8 @@ from app.planner import (
     remove_dish,
     rescale_dish,
     restore_dish,
-    swap_dish,
 )
+from app.recipes import LocalFirst
 from app import staples
 from app.durable import UPDATE_MESSAGE, SchemaTooNew, migrate, schema_of, too_new, write_json
 from app.tokens import TokenStore
@@ -105,26 +109,25 @@ from app.week import (
 from app import writer
 from app.writer import WriteResult, apply
 
-# swap_dish, rescale_dish, restore_dish and remove_dish are looked up here by the web API
-__all__ = ["run_round", "swap_dish", "rescale_dish", "restore_dish", "put_dish", "remove_dish",
-           "build_plan", "dish_to_dict", "dish_from_dict", "apply_override",
-           "reresolve"]
+# rescale_dish, restore_dish and remove_dish are looked up here by the web API
+__all__ = ["run_round", "complete_round", "rescale_dish", "restore_dish", "put_dish",
+           "remove_dish", "dish_to_dict", "dish_from_dict", "apply_override", "reresolve"]
 
 log = logging.getLogger("weekmenu")
 
-Mode = Literal["schema", "nu_maken", "nieuw_menu", "bijwerken"]
-MODES = ("schema", "nu_maken", "nieuw_menu", "bijwerken")
-BUTTONS = ("nu_maken", "nieuw_menu", "bijwerken")
-REBUILD = ("nieuw_menu", "bijwerken")  # throw the week's menu away and choose again
+Mode = Literal["bijwerken"]
+MODES = ("bijwerken",)
+BUTTONS = ("bijwerken",)
+OLD_BUTTONS = ("nu_maken", "nieuw_menu")  # before v1.1: they made a menu by themselves
+COMPLETE = "aanvullen"  # the hourly completion of a confirmed menu (no button)
 
 DATA = Path("/data")
 OPTIONS_PATH = DATA / "options.json"
 DEFAULT_PANTRY = ["olie", "zout", "peper", "suiker", "bloem", "azijn"]
 DEFAULT_SCHEDULE = time(8, 0)
 DEFAULT_DINNER = time(18, 30)
-LAST_CHECK = time(18, 0)  # the last look of the day; on the Sunday the fallback
-LAST_FALLBACK_TRY = time(23, 0)  # on the fallback Sunday: keep trying a failing round
-FALLBACK_DAYS = 3  # the fallback is on the Sunday, three days before the menu Wednesday
+LAST_CHECK = time(18, 0)  # the last look of the day
+CATALOG_TARGET = 60  # the hourly look fills the choice list up to this many AH recipes
 PERIOD_WARNING = (
     "De folder van volgende week was er nog niet: "
     "prijzen gelden woensdag waarschijnlijk niet meer"
@@ -133,17 +136,17 @@ NEW_FOLDER = "De nieuwe folder is er. Open de Weekmenu-app om je menu bij te wer
 LOGIN_EXPIRED = "AH-login verlopen, log opnieuw in"
 LOGIN_EXPIRED_COMPLETION = ("AH-login verlopen. Log opnieuw in via de Weekmenu-app; "
                             "daarna wordt het menu vanzelf afgemaakt.")
-FINAL_FAILURE = ("Weekmenu kon niet gemaakt worden: Home Assistant/AH niet bereikbaar. "
-                 "Tik op Nu maken in de Weekmenu-app.")
-ALL_AWAY = ("Alle avonden van deze week staan op niet thuis (0 personen). "
-            "Er is geen menu gemaakt.")
-WRITE_FAILED_HINT = "Tik op Nu maken in de Weekmenu-app om de rest toe te voegen."
+WRITE_FAILED_HINT = ("Wat nog ontbreekt staat in de Weekmenu-app op het scherm Week, "
+                     "bij Check voor je bestelt.")
+OLD_BUTTON = "Het menu kies je nu zelf in de app"
 # v0.8: the daily "Vanavond" push to notify_today, and the Sunday order reminder
 TONIGHT_AT = time(16, 0)
 TONIGHT_LAST = time(20, 0)  # not after this (a start late in the day sends nothing)
 REMINDER_AT = time(17, 0)
 REMINDER_LAST = time(23, 0)
 REMINDER = "Het menu staat klaar, maar er is nog geen bezorgmoment gekozen."
+REMINDER_CHOOSE = "Kies het menu voor volgende week in de app"
+REMINDER_DRAFT = "Het menu voor volgende week is nog niet bevestigd"
 LOGIN_CACHE = 300  # seconds: tokens.json is read again at most this often (or on change)
 STAPLES_TIMEOUT = 60  # seconds for the whole purchase-history step before the message
 PORT = 8099
@@ -196,13 +199,12 @@ class Context:
     error: str | None = None
     login_expired: bool = False
     busy: bool = False  # a round started from the web API, not finished yet
-    in_round: bool = False  # a menu round holds the lock (not the hourly new-folder look)
+    in_round: bool = False  # a menu round holds the lock (not the other hourly looks)
     rounds: int = 0  # menu rounds that ended done, in error or with an expired login
     # schedule: the last hourly slot looked at, and the folder that is not out yet
     checked: datetime | None = None
     waiting: Waiting | None = None
     error_kind: str | None = None  # "read": a read that failed; a waiting result clears it
-    away_notified: date | None = None  # menu week of the last "all evenings away" push
     total_day: date | None = None
     # bonus offers per period start: the folder is the same all week. Several periods
     # (the tab may show this week's folder while the round reads next week's), kept in
@@ -217,7 +219,6 @@ class Context:
     # "werk de add-on bij" message went out
     too_new: set[str] = field(default_factory=set)
     too_new_notified: bool = False
-    planner_seconds: float | None = None  # the menu search of the last build_plan
     # v0.7: AH API health (shared with the client), and whether its one push went out
     health: ApiHealth = field(default_factory=ApiHealth)
     health_notified: bool = False
@@ -495,7 +496,7 @@ def persons_on(raw: RawSettings, d: date) -> int:
     return max(1, raw.persons.get(WEEKDAGEN[d.weekday()], 2))
 
 
-def make_settings(ctx: Context, raw: RawSettings, start: date, exclude=()) -> Settings:
+def make_settings(ctx: Context, raw: RawSettings, start: date) -> Settings:
     """Cook days from the eat days and the cooking moments (raw.aantal, bounded by
     plan_days). A cook day with a leftover night cooks for the persons of both days."""
     pairs = plan_days(eat_days(start, raw.away), raw.aantal)
@@ -503,7 +504,7 @@ def make_settings(ctx: Context, raw: RawSettings, start: date, exclude=()) -> Se
     leftovers = {cook: rest for cook, rest in pairs if rest is not None}
     persons = {cook: persons_on(raw, cook) + (persons_on(raw, rest) if rest else 0)
                for cook, rest in pairs}
-    recent = ctx.ledger.recent_recipe_ids(start) | set(exclude)
+    recent = ctx.ledger.recent_recipe_ids(start)
     return Settings(days, persons, list(ctx.pantry), recent, leftovers,
                     overrides=ctx.overrides.load(), never=ctx.taste.never(),
                     down=ctx.taste.down())
@@ -515,34 +516,15 @@ async def week_settings(ctx: Context, start: date) -> Settings:
     return make_settings(ctx, await ctx.hass.read_settings(), start)
 
 
-def settings_from_plan(ctx: Context, plan: Plan, start: date) -> Settings:
-    """The cook days, persons (also changed per dish) and leftover nights of an existing
-    menu, for a new menu over the same evenings ("Ander gerecht", "Menu bijwerken")."""
-    return Settings(
-        evenings=sorted(x.date for x in plan.dishes),
-        persons={x.date: x.persons for x in plan.dishes},
-        leftovers={x.date: x.leftover_date for x in plan.dishes if x.leftover_date},
-        pantry=list(plan.pantry or ctx.pantry),
-        recent_recipe_ids=ctx.ledger.recent_recipe_ids(start),
-        overrides=ctx.overrides.load(),
-        never=ctx.taste.never(),
-        down=ctx.taste.down(),
-    )
-
-
 def _period_for(periods: list[BonusPeriod], day: date) -> BonusPeriod | None:
     return next((p for p in periods if p.start <= day <= p.end), None)
-
-
-def last_check(ctx: Context) -> time:
-    return max(LAST_CHECK, ctx.schedule_time)
 
 
 def check_slot(now: datetime, at: time, last: time = LAST_CHECK) -> datetime | None:
     """The hourly look `now` belongs to: `at`, then every full hour, the last at 18:00.
 
     None before `at`. After the last look of the day, the last look itself: a start
-    at 20:00 still gets the 18:00 look (on the Sunday: the fallback).
+    at 20:00 still gets the 18:00 look.
     """
     last = max(last, at)
     day = now.date()
@@ -551,26 +533,6 @@ def check_slot(now: datetime, at: time, last: time = LAST_CHECK) -> datetime | N
     if now.time() >= last:
         return datetime.combine(day, last)
     return max(now.replace(minute=0, second=0, microsecond=0), datetime.combine(day, at))
-
-
-def is_fallback_day(day: date, start: date) -> bool:
-    return day == start - timedelta(days=FALLBACK_DAYS)
-
-
-def last_try(ctx: Context, now: datetime, start: date) -> bool:
-    """The last automatic try for this menu week: the fallback Sunday, 23:00."""
-    return (is_fallback_day(now.date(), start)
-            and now.time() >= max(LAST_FALLBACK_TRY, ctx.schedule_time))
-
-
-def fallback_due(ctx: Context, now: datetime, start: date) -> bool:
-    """The Sunday before the menu Wednesday, from 18:00: the current folder may be used."""
-    return is_fallback_day(now.date(), start) and now.time() >= last_check(ctx)
-
-
-def auto_done(wlog: WeekLog) -> bool:
-    """Nothing left for the automatic round: a finished round, or its one completion."""
-    return bool(wlog.plan) and (wlog.round_done or wlog.completion_tried)
 
 
 async def bonus_for_week(
@@ -621,62 +583,90 @@ def app_week(ctx: Context, now: datetime) -> date:
 
 async def warm_folder(ctx: Context) -> None:
     """At start, in the background: read the folder the Aanbiedingen tab will show when
-    it is not kept yet, so opening the tab does not wait minutes. Only with a usable
-    login; a failure is left to the tab itself (which then reads it as it always did)."""
+    it is not kept yet, so opening the tab does not wait minutes, then fill the choice
+    list of that week when it is short. Only with a usable login; a failure is left to
+    the tab itself (which then reads it as it always did) and to the hourly look."""
     now = ctx.clock()
     if not login_view(ctx, now)["login_ok"]:
         return
     try:
         start = app_week(ctx, now)
         async with ctx.lock:
-            if any(first <= start <= first + timedelta(days=6) for first in ctx.bonus_cache):
-                return
-            await folder_for_week(ctx, start, now, fallback=True)
-        log.info("Folder voor de week van %s voorgeladen", start)
+            period = next((first for first in ctx.bonus_cache
+                           if first <= start <= first + timedelta(days=6)), None)
+            if period is None:
+                _bonus, _warning, period = await folder_for_week(ctx, start, now,
+                                                                 fallback=True)
+                log.info("Folder voor de week van %s voorgeladen", start)
+            if len(ctx.catalog.entries(period)) < CATALOG_TARGET:
+                added = await catalog.fill(ctx, start)
+                log.info("Keuzelijst voor de week van %s: %d recepten erbij", start, added)
     except Exception as e:
-        log.info("Folder voorladen lukte niet (%s); de tab haalt hem zelf op",
+        log.info("Folder of keuzelijst voorladen lukte niet (%s); de app haalt het later op",
                  type(e).__name__)
+
+
+async def fill_catalog(ctx: Context, now: datetime, start: date) -> None:
+    """The hourly look: when the folder of the menu week `start` is out, fill its choice
+    list up to CATALOG_TARGET AH recipes. Not out yet: noted as waiting. Only reads AH
+    (also while writes are paused), only with a usable login, under the lock; never
+    raises (logged)."""
+    if not login_view(ctx, now)["login_ok"]:
+        return
+    try:
+        async with ctx.lock:
+            got = await folder_for_week(ctx, start, now, fallback=False)
+            if isinstance(got, Waiting):
+                if ctx.waiting != got:
+                    ctx.waiting = got
+                    _save_state(ctx)
+                return
+            if len(ctx.catalog.entries(got[2])) >= CATALOG_TARGET:
+                return
+            added = await catalog.fill(ctx, start)
+        log.info("Keuzelijst voor de week van %s: %d recepten erbij", start, added)
+    except AhLoginExpired:
+        ctx.login_expired = True
+        log.warning("Keuzelijst niet gevuld: AH-login verlopen")
+    except Exception as e:
+        log.warning("Keuzelijst niet gevuld: %s", short_error(e))
 
 
 # --- the round --------------------------------------------------------------------------
 
 
-async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
-    """One round for the next menu week.
+async def run_round(ctx: Context, now: datetime, mode: Mode = "bijwerken") -> RoundOutcome:
+    """"Menu bijwerken" for the next menu week: only when its menu was confirmed with an
+    older folder and the week's own folder is out (new_folder_available); else it skips.
+    The same dishes are matched again against the new folder and the difference is
+    written. Never makes a menu."""
+    if mode not in MODES:
+        raise ValueError(f"onbekende ronde: {mode}")
+    return await _run(ctx, now, mode)
 
-    "schema" is the automatic hourly look: it does nothing once the log has a menu
-    for that week, and before the Sunday 18:00 fallback a failure that wrote nothing
-    is left for the next hour, without a message. The buttons nu_maken and nieuw_menu
-    always make a menu, with the current folder while next week's is not out.
-    "bijwerken" is nieuw_menu with the week's own folder, and only when the menu is
-    from an older folder and that folder is out (new_folder_available); else it skips.
-    """
+
+async def complete_round(ctx: Context, now: datetime) -> RoundOutcome:
+    """The hourly look: a confirmed menu of the next menu week whose round did not end
+    (a write stopped halfway, or it is held for an order of another week) is completed
+    from the log, once (a held menu: every hour). Never makes or changes a menu."""
+    return await _run(ctx, now, COMPLETE)
+
+
+async def _run(ctx: Context, now: datetime, mode: str) -> RoundOutcome:
     start = menu_week_start(now)
-    fallback = (mode in ("nu_maken", "nieuw_menu")
-                or (mode == "schema" and fallback_due(ctx, now, start)))
     try:
         raw = await ctx.hass.read_settings()
     except Exception as e:  # not only HTTP: nothing may stop the schedule silently
         msg = f"Home Assistant-instellingen niet te lezen ({type(e).__name__})"
         ctx.error, ctx.error_kind = msg, "read"
         ctx.rounds += 1  # a round that ended in an error, for the app
-        if mode != "schema":
-            log.warning(msg)
-        elif last_try(ctx, now, start):
-            log.error("%s; geen menu voor de week van %s", msg, start)
-            await guard(ctx.hass.notify("Weekmenu mislukt", FINAL_FAILURE, ctx.ingress_url),
-                        "melding")
-        else:
-            log.warning("%s, volgend uur opnieuw", msg)
+        log.warning("%s%s", msg, ", volgend uur opnieuw" if mode == COMPLETE else "")
         return RoundOutcome("error", start, error=msg)
-    if mode == "schema" and not raw.enabled:
-        log.info("Weekmenu staat uit: geen automatische ronde")
-        return RoundOutcome("skipped", start)
 
     async with ctx.lock:
         ctx.in_round = True
         try:
-            outcome = await _round(ctx, now, mode, start, raw, fallback)
+            outcome = await _round(ctx, now, mode, start, raw)
         finally:
             ctx.in_round = False
     if outcome.status in ("done", "error", "login_expired"):
@@ -685,31 +675,22 @@ async def run_round(ctx: Context, now: datetime, mode: Mode) -> RoundOutcome:
     if outcome.status == "done":
         ctx.error = ctx.error_kind = None
         ctx.login_expired = False
-        if ctx.waiting is not None and ctx.waiting.week == start:
-            ctx.waiting = None
-    elif outcome.status == "waiting_for_folder":
-        if ctx.error_kind == "read":  # HA and AH answered now; other errors stay
-            ctx.error = ctx.error_kind = None
-        ctx.waiting = Waiting(start, outcome.expected)
     elif outcome.status == "login_expired":
         ctx.error, ctx.error_kind = outcome.error, "login"
     elif outcome.status == "error":
         ctx.error, ctx.error_kind = outcome.error, outcome.kind
     if outcome.status != "skipped":
         log.info("Ronde %s voor week %s: %s", mode, start, outcome.status)
-    if outcome.status in ("done", "waiting_for_folder"):
+    if outcome.status == "done":
         _save_state(ctx)
     await update_total(ctx, now.date())
     await sync_health(ctx)
     return outcome
 
 
-async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawSettings,
-                 fallback: bool):
+async def _round(ctx: Context, now: datetime, mode: str, start: date, raw: RawSettings):
     warning = None
-    had_error = ctx.error is not None
-    reused = False
-    completing = False
+    completing = mode == COMPLETE
     wlog = None
     try:
         wlog = ctx.ledger.load(start)
@@ -719,96 +700,65 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
                          if wlog.too_new else ctx.store.path)
             await notify_too_new(ctx)
             return RoundOutcome("error", start, error=UPDATE_MESSAGE, kind="schema")
-        if mode == "schema" and auto_done(wlog):
-            return RoundOutcome("skipped", start)  # the log says done: never again
-        if mode == "bijwerken" and not new_folder_available(wlog):
-            log.info("Geen nieuwe folder voor de week van %s: menu niet bijgewerkt", start)
-            return RoundOutcome("skipped", start)
-        if mode == "schema" and wlog.plan:
+        if completing:
+            if not wlog.plan or wlog.round_done or wlog.completion_tried:
+                return RoundOutcome("skipped", start)  # nothing open: never again
             # a round stopped halfway (crash or write error): complete it once, from the
             # log (pending is settled first, so no write is ever repeated blind)
-            completing = True
             wlog.completion_tried = True
             await save_log(ctx, wlog)
             log.info("Ronde voor week %s was niet afgemaakt: één keer aanvullen", start)
-        if mode not in REBUILD and wlog.plan:
-            reused = True
             plan, replaced = Plan.from_dict(wlog.plan), None  # same menu, only fill gaps
+            warning = wlog.period_warning
         else:
-            replaced = Plan.from_dict(wlog.plan) if wlog.plan else None
-            if mode == "bijwerken":
-                # the same evenings, persons, leftover nights and removed days: only the
-                # folder changes (spec: "houdt de eetdagen en personen aan")
-                settings = settings_from_plan(ctx, replaced, start)
-                if not settings.evenings:  # every dish was removed: nothing to update
-                    log.info("Geen gerechten in de week van %s: niets bij te werken", start)
-                    return RoundOutcome("skipped", start)
-            elif not make_settings(ctx, raw, start).evenings:  # nobody eats at home
-                log.info("Alle avonden van de week van %s zijn niet thuis: geen menu", start)
-                if mode != "schema" or ctx.away_notified != start:
-                    ctx.away_notified = start
-                    await guard(ctx.hass.notify("Weekmenu", ALL_AWAY, ctx.ingress_url), "melding")
+            if not new_folder_available(wlog):
+                log.info("Geen nieuwe folder voor de week van %s: menu niet bijgewerkt", start)
                 return RoundOutcome("skipped", start)
-            got = await folder_for_week(ctx, start, now, fallback=fallback)
-            if isinstance(got, Waiting):
-                log.info("Folder voor de week van %s nog niet uit (verwacht %s)",
-                         start, got.expected or "onbekend")
-                return RoundOutcome("waiting_for_folder", start, expected=got.expected)
+            replaced = Plan.from_dict(wlog.plan)
+            if not replaced.dishes:  # every dish was removed: nothing to update
+                log.info("Geen gerechten in de week van %s: niets bij te werken", start)
+                return RoundOutcome("skipped", start)
+            got = await folder_for_week(ctx, start, now, fallback=False)
+            if isinstance(got, Waiting):  # AH no longer shows the new folder
+                log.info("Folder voor de week van %s niet meer te zien: niet bijgewerkt",
+                         start)
+                return RoundOutcome("skipped", start)
             bonus, warning, period_start = got
-            if mode == "bijwerken":
-                plan = await build_plan(ctx.client, bonus, settings)
-                # removed evenings stay "geen gerecht": no dish, nothing bought
-                plan.removed_days = sorted(replaced.removed_days)
-            else:
-                # Nieuw menu asks for other dishes
-                old_ids = {d.recipe.id for d in replaced.dishes} if replaced else set()
-                plan = await build_plan(ctx.client, bonus,
-                                        make_settings(ctx, raw, start, old_ids))
-            if plan.search_seconds is not None:
-                ctx.planner_seconds = round(plan.search_seconds, 2)
-            if not plan.dishes:
-                raise AhApiError("geen enkel recept gevonden dat in de regels past")
+            # the same recipes, evenings, persons, leftover nights and removed days:
+            # only the folder changes (spec: "houdt de gekozen gerechten")
+            plan = await rebuild_plan(LocalFirst(ctx.client, ctx.recipes), replaced, bonus,
+                                      ctx.overrides.load())
             wlog.period_warning = warning  # a menu from the right folder clears it
             wlog.folder_period_start = period_start  # and so "new folder available"
-            if replaced is not None:  # a new menu: the swap history was about the old one
-                wlog.swapped_out.clear()
-                wlog.previous.clear()
-                wlog.previous_dish.clear()
-            # a new menu is a new round: apply saves these with the plan, before writing,
-            # so a crash halfway is completed by the next automatic slot
+            # "Terug" would put back a dish matched to the old folder
+            wlog.previous.clear()
+            wlog.previous_dish.clear()
+            # a new round: apply saves these with the plan, before writing, so a crash
+            # halfway is completed by the next hourly look
             wlog.round_done = wlog.completion_tried = wlog.notified = False
         result = await apply(ctx.client, ctx.ledger, wlog, plan, replaced, today=now.date())
     except AhLoginExpired:
         known = ctx.login_expired
         ctx.login_expired = True
         log.warning("AH-login verlopen")
-        if completing:  # not a real try: after logging in again the next slot completes
+        if completing:  # not a real try: after logging in again the next look completes
             wlog.completion_tried = False
             try:
                 await save_log(ctx, wlog)
             except Exception as e:
                 log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
-        if mode != "schema" or not known:  # the hourly look reports it once
+        if not completing or not known:  # the hourly look reports it once
             text = LOGIN_EXPIRED_COMPLETION if completing else LOGIN_EXPIRED
             await guard(ctx.hass.notify("Weekmenu", text, ctx.ingress_url), "melding")
         return RoundOutcome("login_expired", start, error=LOGIN_EXPIRED)
     except Exception as e:
         msg = short_error(e)
-        written = wlog is not None and wlog.plan is not None  # apply saves it first
-        if mode == "schema" and not written:
-            if not last_try(ctx, now, start):
-                log.warning("Ronde mislukt: %s; volgend uur opnieuw", msg)
-                return RoundOutcome("error", start, error=msg, kind="read")
-            log.error("Ronde mislukt: %s; geen menu voor de week van %s", msg, start)
-            await guard(ctx.hass.notify("Weekmenu mislukt", FINAL_FAILURE, ctx.ingress_url),
-                        "melding")
-            return RoundOutcome("error", start, error=msg, kind="read")
         log.error("Ronde mislukt: %s", msg)
         if ctx.health.writes_paused:  # AH changed: the one ApiHealth push says it
             return RoundOutcome("error", start, error=msg)
         text = (f"Er ging iets mis: {msg}. Er is verder niets toegevoegd; "
                 "wat al gelukt was staat in het logboek.")
-        if written:
+        if wlog is not None and wlog.plan is not None:  # apply saves the plan first
             text += " " + WRITE_FAILED_HINT
         await guard(ctx.hass.notify("Weekmenu mislukt", text, ctx.ingress_url), "melding")
         return RoundOutcome("error", start, error=msg)
@@ -835,11 +785,8 @@ async def _round(ctx: Context, now: datetime, mode: Mode, start: date, raw: RawS
     view.update(sensor_extras(ctx, raw.away, now))
     await guard(ctx.hass.publish(view, plan.savings + wlog.extras_total), "sensoren")
     nothing_new = not (result.added or result.removed or result.pending or result.unknown)
-    if completing:  # the message only if it never went out, or something changed
-        send = not (wlog.notified and nothing_new)
-    else:
-        send = not (reused and nothing_new and not had_error)
-    if not send:
+    # a completion: the message only if it never went out, or something changed
+    if completing and wlog.notified and nothing_new:
         log.info("Menu stond er al en alles was al toegevoegd: geen nieuwe melding")
     else:
         # no count when the history failed or took too long (staples_error is set then)
@@ -1120,10 +1067,11 @@ async def notify_tonight(ctx: Context, now: datetime) -> None:
 
 
 async def remind_order(ctx: Context, now: datetime) -> None:
-    """Sunday from 17:00 until 23:00: a menu for the coming menu week but no active
-    order delivered in that week yet: one push to the owner. Only reads AH (the order
-    and its day), at most once an hour, so a menu made at 18:00 (the fallback) still
-    gets its reminder that evening.
+    """Sunday from 17:00 until 23:00, one push to the owner about the coming menu week:
+    no menu yet: choose it in the app (a draft: it is not confirmed yet); a menu but no
+    active order delivered in that week: choose a delivery moment. Only while the
+    add-on is on (input_boolean.weekmenu_aan). Reads Home Assistant and, for a menu,
+    AH (the order and its day), at most once an hour.
 
     At most once a day (saved in state.json before the push). An order whose day is
     unknown counts as chosen (no guess).
@@ -1139,23 +1087,40 @@ async def remind_order(ctx: Context, now: datetime) -> None:
         return
     start = menu_week_start(now)
     wlog = ctx.ledger.load(start)
-    if not wlog.plan or wlog.too_new or ctx.login_expired or ctx.store.load() is None:
+    if wlog.too_new:
+        return
+    if wlog.plan and (ctx.login_expired or ctx.store.load() is None):
         return  # looked again next minute: only the log and the login file, no AH
     ctx.reminder_tried = now
-    async with ctx.lock:
-        try:
-            order = await ctx.client.active_order()
-            day = await ctx.client.order_delivery_date(order) if order is not None else None
-        except Exception as e:
-            log.warning("Bestelherinnering: bestelling niet te lezen (%s)", short_error(e))
-            return
-    if order is not None and (day is None or start <= day <= start + timedelta(days=6)):
-        return  # chosen (or unknown): looked at again an hour later
+    try:
+        enabled = (await ctx.hass.read_settings()).enabled
+    except Exception as e:  # looked at again an hour later
+        log.warning("Herinnering: Home Assistant-instellingen niet te lezen (%s)",
+                    type(e).__name__)
+        return
+    if not enabled:
+        ctx.reminder_done = today  # Weekmenu staat uit: no reminder today
+        return
+    if not wlog.plan:
+        text = REMINDER_DRAFT if wlog.draft else REMINDER_CHOOSE
+    else:
+        async with ctx.lock:
+            try:
+                order = await ctx.client.active_order()
+                day = (await ctx.client.order_delivery_date(order)
+                       if order is not None else None)
+            except Exception as e:
+                log.warning("Bestelherinnering: bestelling niet te lezen (%s)",
+                            short_error(e))
+                return
+        if order is not None and (day is None or start <= day <= start + timedelta(days=6)):
+            return  # chosen (or unknown): looked at again an hour later
+        text = REMINDER
     ctx.reminder_sent = ctx.reminder_done = today
     if not _save_state(ctx):
-        log.warning("Bestelherinnering niet verstuurd: de status kon niet worden opgeslagen")
+        log.warning("Herinnering niet verstuurd: de status kon niet worden opgeslagen")
         return
-    await guard(ctx.hass.notify("Weekmenu", REMINDER, ctx.ingress_url), "melding")
+    await guard(ctx.hass.notify("Weekmenu", text, ctx.ingress_url), "melding")
 
 
 async def reconcile_due(ctx: Context, now: datetime) -> None:
@@ -1237,11 +1202,9 @@ def _save_state(ctx: Context) -> bool:
 
 
 async def tick(ctx: Context, now: datetime) -> None:
-    """One look at the clock: the total once a day, and the hourly look for the menu.
+    """One look at the clock: the total once a day, and the hourly look.
 
-    At most one look per slot, also over a restart (the slot is saved after the
-    round). A menu in the log for the next menu week ends the looking for a menu; a
-    menu from an older folder is then only looked at for the new folder.
+    At most one look per slot, also over a restart (the slot is saved after it).
     """
     if ctx.total_day != now.date():
         await update_total(ctx, now.date())
@@ -1250,7 +1213,7 @@ async def tick(ctx: Context, now: datetime) -> None:
     try:
         await _slot(ctx, now)
     finally:
-        # v0.8, after the menu look: none of these may ever keep a menu from being made;
+        # v0.8, after the hourly look: none of these may ever keep it from running;
         # v1.0: "Besparing nagerekend" (read only, at most once per menu week)
         for extra in (republish, notify_tonight, remind_order, reconcile_due):
             try:
@@ -1259,22 +1222,28 @@ async def tick(ctx: Context, now: datetime) -> None:
                 log.warning("%s mislukt: %s", extra.__name__, short_error(e))
 
 
+def _unfinished(wlog: WeekLog) -> bool:
+    """A confirmed menu whose round did not end and was not completed yet."""
+    return bool(wlog.plan) and not (wlog.round_done or wlog.completion_tried)
+
+
 async def _slot(ctx: Context, now: datetime) -> None:
-    """The hourly look for the menu of the next menu week (at most one per slot)."""
+    """The hourly look at the next menu week (at most one per slot). Never makes a
+    menu: it completes a confirmed one, looks for the new folder of a menu made with an
+    older one, and fills the choice list once the week's folder is out."""
     start = menu_week_start(now)
-    last = LAST_FALLBACK_TRY if is_fallback_day(now.date(), start) else LAST_CHECK
-    slot = check_slot(now, ctx.schedule_time, last)
+    slot = check_slot(now, ctx.schedule_time)
     if slot is None or slot == ctx.checked:
         return
     ctx.checked = slot
     await probe_health(ctx)  # writes paused: one read round may switch them on again
     await close_stale_new_folder(ctx, start)
     await notify_stale_held(ctx, start)
-    if not auto_done(ctx.ledger.load(start)):
-        await run_round(ctx, now, "schema")
-    else:
-        await check_new_folder(ctx, start)
-    _save_state(ctx)  # after the round: a crash halfway looks again after the restart
+    if _unfinished(ctx.ledger.load(start)):
+        await complete_round(ctx, now)
+    await check_new_folder(ctx, start)
+    await fill_catalog(ctx, now, start)
+    _save_state(ctx)  # after the look: a crash halfway looks again after the restart
     await notify_too_new(ctx)
 
 
@@ -1289,7 +1258,8 @@ async def schedule_loop(ctx: Context) -> None:
 
 
 async def handle_command(ctx: Context, line: str) -> RoundOutcome | None:
-    """One stdin line: {"command": "nu_maken"}, "nieuw_menu" or "bijwerken"."""
+    """One stdin line: {"command": "bijwerken"}. The buttons of before v1.1
+    ("nu_maken", "nieuw_menu") made a menu by themselves: they are logged and ignored."""
     line = line.strip()
     if not line:
         return None
@@ -1298,6 +1268,9 @@ async def handle_command(ctx: Context, line: str) -> RoundOutcome | None:
     except ValueError:
         data = None
     cmd = data.get("command") if isinstance(data, dict) else data
+    if cmd in OLD_BUTTONS:
+        log.info("%s: stdin-commando %s genegeerd", OLD_BUTTON, cmd)
+        return None
     if cmd not in BUTTONS:
         log.warning("Onbekend stdin-commando genegeerd")
         return None

@@ -8,6 +8,7 @@ from app import main
 from app.ahclient import AhApiError
 from app.hass import HELPER_AVONDEN, helper_persons
 from app.ledger import WeekLog
+from app import web
 from app.web import make_app
 from tests.fakes import SUNDAY, W, FakeAh, dish, make_ctx, make_plan
 
@@ -36,23 +37,38 @@ async def planned_ctx(ctx):
 
 @pytest.fixture
 def swaps(monkeypatch):
-    """swap_dish/restore_dish without Allerhande: fixed replacement dishes."""
+    """"Ander gerecht" (a pick from the choice list) and restore_dish without
+    Allerhande: fixed replacement dishes, 301 on Wednesday and 302 on Thursday."""
     entered = []
 
-    async def fake_swap(client, plan, day, bonus, s, exclude):
+    async def fake_pick(client, plan, day, recipe_id, bonus, persons, leftover_date,
+                        overrides=None):
         entered.append(day)
         await asyncio.sleep(0.02)
         new = {WO: dish(WO, 301, [1, 9], 1.5), DO: dish(DO, 302, [2, 9], 1.5)}[day]
-        assert new.recipe.id not in exclude
+        assert new.recipe.id == recipe_id
         return make_plan([d for d in plan.dishes if d.date != day] + [new])
 
     async def fake_restore(client, plan, day, recipe_id, bonus, overrides=None):
         old = {101: dish(WO, 101, [1, 2], 2.0), 102: dish(DO, 102, [2, 3], 3.0)}[recipe_id]
         return make_plan([d for d in plan.dishes if d.date != day] + [old])
 
-    monkeypatch.setattr(main, "swap_dish", fake_swap)
+    monkeypatch.setattr(web, "pick_dish", fake_pick)
     monkeypatch.setattr(main, "restore_dish", fake_restore)
     return entered
+
+
+def swap(client, day):
+    """"Ander gerecht" on `day`: the replacement dish of the swaps fixture is picked."""
+    return client.post(f"api/dish/{day.isoformat()}/pick",
+                       json={"recipe_id": {WO: 301, DO: 302}[day]})
+
+
+def with_new_folder(ctx):
+    """The week's menu was confirmed with the current folder; its own folder is out."""
+    ctx.ledger.save(WeekLog(W, plan=week_plan().to_dict(), period_warning=main.PERIOD_WARNING,
+                            folder_period_start=date(2026, 10, 26),
+                            new_folder=date(2026, 11, 2)))
 
 
 # --- the brief's tests -------------------------------------------------------------
@@ -98,7 +114,7 @@ async def test_api_swap_then_back_cleans_up_own_products(aiohttp_client, ctx, sw
     assert ah.held() == {1: 1, 2: 2, 3: 1, 4: 1}
     client = await aiohttp_client(make_app(ctx))
 
-    r = await client.post(f"api/dish/{WO.isoformat()}/swap")
+    r = await swap(client, WO)
     assert r.status == 200, await r.text()
     body = await r.json()
     assert body["recipe"]["id"] == 301
@@ -130,8 +146,8 @@ async def test_api_writes_are_serialized(aiohttp_client, ctx, swaps):
     ah.max_active_writes = 0
     client = await aiohttp_client(make_app(ctx))
     r1, r2 = await asyncio.gather(
-        client.post(f"api/dish/{WO.isoformat()}/swap"),
-        client.post(f"api/dish/{DO.isoformat()}/swap"),
+        swap(client, WO),
+        swap(client, DO),
     )
     assert r1.status == 200 and r2.status == 200
     assert ah.max_active_writes == 1
@@ -221,7 +237,7 @@ async def test_api_back_refused_once_week_started(aiohttp_client, tmp_path, swap
     ctx = make_ctx(tmp_path)
     await planned_ctx(ctx)
     client = await aiohttp_client(make_app(ctx))
-    assert (await client.post(f"api/dish/{WO.isoformat()}/swap")).status == 200
+    assert (await swap(client, WO)).status == 200
     ctx.clock = lambda: datetime(2026, 11, 4, 18, 0)
     r = await client.post(f"api/dish/{WO.isoformat()}/back")
     assert r.status == 409
@@ -236,12 +252,14 @@ async def test_api_run_starts_round_once(aiohttp_client, ctx, monkeypatch):
         await release.wait()
 
     monkeypatch.setattr(main, "run_round", fake_round)
+    with_new_folder(ctx)
     client = await aiohttp_client(make_app(ctx))
-    r = await client.post("api/run", json={"mode": "fout"})
-    assert r.status == 400 and "bijwerken" in (await r.json())["error"]
-    r = await client.post("api/run", json={"mode": "nu_maken"})
+    for mode in ("fout", "nu_maken", "nieuw_menu"):  # v1.1: the menu is chosen in the app
+        r = await client.post("api/run", json={"mode": mode})
+        assert r.status == 400 and "bijwerken" in (await r.json())["error"]
+    r = await client.post("api/run", json={"mode": "bijwerken"})
     assert r.status == 202
-    r = await client.post("api/run", json={"mode": "nieuw_menu"})
+    r = await client.post("api/run", json={"mode": "bijwerken"})
     assert r.status == 409
     await started.wait()
     release.set()
@@ -267,7 +285,7 @@ async def test_api_login_expired_is_reported(aiohttp_client, ctx, swaps):
     await planned_ctx(ctx)
     ctx.client.raise_on["bonus_periods"] = AhLoginExpired("login expired", 401)
     client = await aiohttp_client(make_app(ctx))
-    r = await client.post(f"api/dish/{WO.isoformat()}/swap")
+    r = await swap(client, WO)
     assert r.status == 401
     assert (await (await client.get("api/status")).json())["logged_in"] is False
 
@@ -310,7 +328,7 @@ async def test_api_back_restores_exact_dish_without_ah_reads(aiohttp_client, ctx
     await apply(ctx.client, ctx.ledger, ctx.ledger.load(W), start)
     client = await aiohttp_client(make_app(ctx))
     before = (await (await client.get(f"api/dish/{WO.isoformat()}")).json())
-    assert (await client.post(f"api/dish/{WO.isoformat()}/swap")).status == 200
+    assert (await swap(client, WO)).status == 200
     ah = ctx.client
     reads, writes = list(ah.calls), list(ah.writes)
 
@@ -329,7 +347,7 @@ async def test_api_back_restores_exact_dish_without_ah_reads(aiohttp_client, ctx
 async def test_api_back_falls_back_for_logs_without_saved_dish(aiohttp_client, ctx, swaps):
     await planned_ctx(ctx)
     client = await aiohttp_client(make_app(ctx))
-    assert (await client.post(f"api/dish/{WO.isoformat()}/swap")).status == 200
+    assert (await swap(client, WO)).status == 200
     log = ctx.ledger.load(W)
     log.previous_dish = {}  # a log written before previous_dish existed
     ctx.ledger.save(log)
@@ -365,47 +383,26 @@ async def test_api_week_reports_period_warning(aiohttp_client, ctx):
 # --- schedule change (2 November 2026) ------------------------------------------------
 
 
-async def test_api_run_before_folder_makes_a_menu_with_the_warning(aiohttp_client, tmp_path,
-                                                                   monkeypatch):
-    """v0.4 C: Nu maken before the folder makes the menu with the current folder."""
-    from app.ahclient import BonusPeriod
-
-    async def fake_build(client, bonus, s):
-        return week_plan()
-
-    monkeypatch.setattr(main, "build_plan", fake_build)
-    cur = BonusPeriod(date(2026, 10, 26), date(2026, 11, 1), date(2026, 10, 30), ["Vlees"])
-    ah = FakeAh(tmp_path, periods=[cur])
-    ctx = make_ctx(tmp_path, ah=ah, now=datetime(2026, 10, 29, 10, 0))
-    client = await aiohttp_client(make_app(ctx))
-    assert (await client.post("api/run", json={"mode": "nu_maken"})).status == 202
-    await asyncio.gather(*ctx.tasks)
-    assert ah.offers_for == [cur] and ah.held() == {1: 1, 2: 2, 3: 1}
-    status = await (await client.get("api/status")).json()
-    assert status["waiting_for_folder"] is None
-    assert status["error"] is None and status["running"] is False
-    body = await (await client.get("api/week")).json()
-    assert body["week"] == "2026-11-04" and len(body["days"]) == 7
-    assert body["bestelling"] == "Voor de bestelling van woensdag 4 november"
-    assert body["period_warning"] == main.PERIOD_WARNING
-    assert body["waiting_for_folder"] is None and body["new_folder_available"] is False
-
-
 async def test_api_week_and_run_bijwerken_with_the_new_folder(aiohttp_client, tmp_path,
                                                               monkeypatch):
     from app.ahclient import BonusPeriod
-    plans = [week_plan(), make_plan([dish(WO, 201, [1, 4], 1.0), dish(VR, 202, [5], 2.0)])]
+    rebuilt = []
 
-    async def fake_build(client, bonus, s):
-        return plans.pop(0)
+    async def fake_rebuild(client, plan, bonus, overrides=None):
+        rebuilt.append([d.recipe.id for d in plan.dishes])
+        return make_plan([dish(WO, 101, [1, 4], 1.0), dish(DO, 102, [5], 2.0)])
 
-    monkeypatch.setattr(main, "build_plan", fake_build)
+    monkeypatch.setattr(main, "rebuild_plan", fake_rebuild)
     cur = BonusPeriod(date(2026, 10, 26), date(2026, 11, 1), date(2026, 10, 30), ["Vlees"])
     nxt = BonusPeriod(date(2026, 11, 2), date(2026, 11, 8), date(2026, 11, 6), ["Vlees"])
     ah = FakeAh(tmp_path, periods=[cur])
     ctx = make_ctx(tmp_path, ah=ah, now=datetime(2026, 10, 29, 10, 0))
+    # confirmed on Thursday, with the current folder
+    ah.listed = dict(week_plan().basket)
+    ctx.ledger.save(WeekLog(W, plan=week_plan().to_dict(), added=dict(week_plan().basket),
+                            target="list", added_to="list", round_done=True, notified=True,
+                            period_warning=main.PERIOD_WARNING, folder_period_start=cur.start))
     client = await aiohttp_client(make_app(ctx))
-    await main.run_round(ctx, ctx.clock(), "nu_maken")
     # no new folder yet: nothing to update
     r = await client.post("api/run", json={"mode": "bijwerken"})
     assert r.status == 409 and "nieuwe folder" in (await r.json())["error"]
@@ -419,9 +416,11 @@ async def test_api_week_and_run_bijwerken_with_the_new_folder(aiohttp_client, tm
     await asyncio.gather(*ctx.tasks)
     body = await (await client.get("api/week")).json()
     assert body["new_folder_available"] is False and body["period_warning"] is None
-    assert [d["recipe"]["id"] for d in body["days"] if d.get("recipe")] == [201, 202]
-    assert ah.held() == {1: 1, 4: 1, 5: 1}  # cleaned up like Nieuw menu
-    assert ah.offers_for == [cur, nxt]
+    # the same recipes, matched to the new folder
+    assert rebuilt == [[101, 102]]
+    assert [d["recipe"]["id"] for d in body["days"] if d.get("recipe")] == [101, 102]
+    assert ah.held() == {1: 1, 4: 1, 5: 1}  # what only the old matching needed went off
+    assert ah.offers_for == [nxt]
 
 
 async def test_api_week_flags_the_new_folder_while_the_running_week_shows(aiohttp_client,
@@ -470,7 +469,6 @@ def test_no_em_dash_in_user_texts():
         assert "\u2014" not in text and "\\u2014" not in text, f.name
 
 
-
 async def test_api_week_marks_the_evenings_not_at_home(aiohttp_client, ctx):
     await planned_ctx(ctx)
     ctx.hass.states["input_number.weekmenu_personen_zaterdag"] = "0"
@@ -514,7 +512,6 @@ async def test_api_week_niet_thuis_skips_days_with_a_dish(aiohttp_client, ctx):
     dish_days = {d["date"] for d in body["days"] if d["recipe"]}
     assert "2026-11-05" in dish_days
     assert body["niet_thuis"] == ["2026-11-06", "2026-11-08"]
-
 
 
 # --- Niet thuis eten ---------------------------------------------------------------------
@@ -611,7 +608,7 @@ async def test_api_swap_once_the_week_started_cleans_nothing(aiohttp_client, tmp
     ctx = make_ctx(tmp_path, now=datetime(2026, 11, 5, 9, 0))
     await planned_ctx(ctx)
     client = await aiohttp_client(make_app(ctx))
-    r = await client.post(f"api/dish/{WO.isoformat()}/swap")
+    r = await swap(client, WO)
     body = await r.json()
     assert body["removed"] == 0 and ctx.client.held()[2] == 2
     assert {"product": "Product 2", "qty": 1} in body["leftovers"]
@@ -752,9 +749,10 @@ async def test_api_status_running_is_a_menu_round_not_the_lock(aiohttp_client, c
     async with ctx.lock:  # like check_new_folder
         status = await (await client.get("api/status")).json()
         assert status["running"] is False and status["rounds"] == 0
+    with_new_folder(ctx)
     ctx.in_round = True
     assert (await (await client.get("api/status")).json())["running"] is True
-    assert (await client.post("api/run", json={"mode": "nu_maken"})).status == 409
+    assert (await client.post("api/run", json={"mode": "bijwerken"})).status == 409
     ctx.in_round = False
 
     async def fake_round(c, now, mode):
@@ -762,7 +760,7 @@ async def test_api_status_running_is_a_menu_round_not_the_lock(aiohttp_client, c
 
     monkeypatch.setattr(main, "run_round", fake_round)
     async with ctx.lock:
-        assert (await client.post("api/run", json={"mode": "nu_maken"})).status == 202
+        assert (await client.post("api/run", json={"mode": "bijwerken"})).status == 202
     await asyncio.gather(*ctx.tasks)
     assert (await (await client.get("api/status")).json())["rounds"] == 1
 
@@ -781,7 +779,7 @@ async def test_api_swap_writes_nothing_into_an_order_of_another_week(aiohttp_cli
     ah.order = ActiveOrder(5, {7: 1}, date(2026, 10, 28))  # last week's order, still open
     before = len(ah.writes)
     client = await aiohttp_client(make_app(ctx))
-    r = await client.post(f"api/dish/{WO.isoformat()}/swap")
+    r = await swap(client, WO)
     assert r.status == 200, await r.text()
     body = await r.json()
     assert body["recipe"]["id"] == 301 and body["held"] == HELD_W and body["removed"] == 0
@@ -806,7 +804,7 @@ async def test_api_swap_then_back_never_rebuys_what_the_user_removed(aiohttp_cli
     ah.listed.pop(2)
     n = len(ah.writes)
     client = await aiohttp_client(make_app(ctx))
-    r = await client.post(f"api/dish/{WO.isoformat()}/swap")  # 301: 1 and 9
+    r = await swap(client, WO)  # 301: 1 and 9
     assert r.status == 200, await r.text()
     assert ctx.ledger.load(W).removed_by_user == {2: 1}
     r = await client.post(f"api/dish/{WO.isoformat()}/back")
@@ -824,7 +822,7 @@ async def test_api_swap_in_the_running_week_names_what_to_add_by_hand(aiohttp_cl
     await planned_ctx(ctx)
     ctx.client.order = ActiveOrder(5, {}, date(2026, 11, 11))
     client = await aiohttp_client(make_app(ctx))
-    body = await (await client.post(f"api/dish/{WO.isoformat()}/swap")).json()
+    body = await (await swap(client, WO)).json()
     manual = ("Deze producten konden niet in je bestelling. Voeg ze zelf toe in de "
               "AH-app: Product 9")
     assert body["held"] == manual and ctx.client.order.items == {}
@@ -881,16 +879,9 @@ async def test_api_write_to_a_too_new_week_is_refused_with_the_update_message(
                                  "schema": 9}), encoding="utf-8")
     before, writes = path.read_bytes(), list(ctx.client.writes)
     client = await aiohttp_client(make_app(ctx))
-    r = await client.post(f"api/dish/{WO.isoformat()}/swap")
+    r = await swap(client, WO)
     assert r.status == 409 and (await r.json())["error"] == UPDATE_MESSAGE
     assert ctx.client.writes == writes and path.read_bytes() == before
     assert f"{W.isoformat()}.json" in ctx.too_new
     r = await client.get(f"api/dish/{WO.isoformat()}")  # showing it still works
     assert r.status == 200
-
-
-async def test_api_status_has_planner_seconds(aiohttp_client, ctx):
-    client = await aiohttp_client(make_app(ctx))
-    assert (await (await client.get("api/status")).json())["planner_seconds"] is None
-    ctx.planner_seconds = 1.25
-    assert (await (await client.get("api/status")).json())["planner_seconds"] == 1.25

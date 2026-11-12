@@ -8,7 +8,7 @@ from app.ahclient import Product, Recipe
 from app.catalog import KEEP, Catalog, Entry, choose_view, fill, search_ah
 from app.ledger import WeekLog
 from app.recipes import OwnRecipe
-from app.taste import DOWN, NEVER
+from app.taste import DOWN, DOWN_FACTOR, NEVER
 from tests.fakes import CURRENT, NEXT, W, FakeAh, dish, make_ctx, make_plan
 
 GEHAKT = Product(11, "AH Rundergehakt", "500 g", 6.0, 6.0, True, "1+1 gratis", True, "Vlees")
@@ -97,7 +97,7 @@ async def test_choose_view_orders_by_savings_and_merges_own(tmp_path):
     savings = [x["savings"] for x in items]
     assert savings == sorted(savings, reverse=True)
     assert [x["id"] for x in items[1:3]] == [103, 101]  # equal savings: by title
-    assert by_id(view)[105]["savings"] == round(3.0 * planner.DOWN_FACTOR, 2)
+    assert by_id(view)[105]["savings"] == round(3.0 * DOWN_FACTOR, 2)
     assert {x["source"] for x in items[1:]} == {"ah"}
     assert set(items[0]) == {"id", "title", "image", "cook", "cuisine", "savings",
                              "source", "long", "eaten_weeks_ago"}

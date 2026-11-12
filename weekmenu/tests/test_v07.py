@@ -19,7 +19,7 @@ from app.main import Context
 from app.tokens import Tokens, TokenStore
 from app.web import make_app
 from app.writer import apply, apply_extras
-from tests.fakes import SUNDAY, W, FakeAh, FakeHass, dish, make_ctx, make_plan
+from tests.fakes import CURRENT, NEXT, SUNDAY, W, FakeAh, FakeHass, dish, make_ctx, make_plan
 
 FIX = Path(__file__).parent / "fixtures"
 BASE = "https://api.ah.nl"
@@ -160,9 +160,10 @@ async def test_a_round_while_paused_keeps_the_menu_and_says_why(tmp_path):
     ctx.ledger.save(WeekLog(W))
     wlog = ctx.ledger.load(W)
     wlog.plan = plan_ab().to_dict()
+    wlog.notified = True  # confirmed in the app, its round not ended
     ctx.ledger.save(wlog)
     paused(ctx)
-    out = await main.run_round(ctx, SUNDAY, "nu_maken")
+    out = await main.complete_round(ctx, SUNDAY)
     assert out.status == "done" and out.result.held == PAUSED_NOTE
     assert ctx.client.writes == []
     msgs = [n["message"] for n in ctx.hass.notifications()]
@@ -173,14 +174,14 @@ async def test_a_round_while_paused_keeps_the_menu_and_says_why(tmp_path):
 async def test_a_failing_round_while_paused_sends_no_second_failure_message(tmp_path):
     ah = FakeAh(tmp_path)
     ctx = make_ctx(tmp_path, ah=ah)
-    wlog = WeekLog(W)
+    wlog = WeekLog(W, folder_period_start=CURRENT.start, new_folder=NEXT.start)
     wlog.plan = plan_ab().to_dict()
     ctx.ledger.save(wlog)
     paused(ctx)
     ctx.health_notified = True
     ah.raise_on["get_recipe"] = ahclient.AhShapeError("recept: onverwachte vorm", 200)
     ah.raise_on["bonus_periods"] = ahclient.AhShapeError("bonus: vorm", 200)
-    out = await main.run_round(ctx, SUNDAY, "nieuw_menu")
+    out = await main.run_round(ctx, SUNDAY, "bijwerken")
     assert out.status == "error"
     assert ctx.hass.notifications() == []
 
@@ -314,7 +315,6 @@ async def test_logout_removes_the_tokens_and_shows_the_login(aiohttp_client, tmp
 async def test_diagnose_has_everything_and_no_secret(aiohttp_client, tmp_path):
     ctx = make_ctx(tmp_path, app_version="9.30")
     ctx.store.save(Tokens(ACCESS, REFRESH, 9e9))
-    ctx.planner_seconds = 1.25
     wlog = WeekLog(W)
     wlog.added = {1: 2}
     wlog.pending = {3: {"before": 0, "delta": 1, "target": "list", "order_id": None}}
@@ -333,7 +333,7 @@ async def test_diagnose_has_everything_and_no_secret(aiohttp_client, tmp_path):
     assert body["addon_version"] and body["ah_app_version"] == "9.30"
     assert body["writes_paused"] is False
     assert body["api_health"]["endpoints"]["bestelling"]["laatste_fout"] == "HTTP 403"
-    assert body["planner_seconds"] == 1.25
+    assert "planner_seconds" not in body
     assert body["schemas"]["code"]["tokens.json"] == 1
     assert {"week": W.isoformat(), "added": 1, "pending": 1, "unknown": 0, "held": False,
             "round_done": True, "too_new": False} in body["weeks"]

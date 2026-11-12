@@ -330,19 +330,18 @@ async def test_api_staple_write_failure_is_not_retried(aiohttp_client, tmp_path)
 # --- the round ---------------------------------------------------------------------------
 
 
-@pytest.fixture
-def planned(monkeypatch):
-    async def fake_build(client, bonus, s):
-        return make_plan([dish(W, 101, [1, 2], 2.0)])
+async def confirmed_round(ctx):
+    """A menu confirmed in the app whose round did not end, completed by the hourly look:
+    the staples step runs after the menu is written, before the message."""
+    ctx.ledger.save(WeekLog(W, plan=make_plan([dish(W, 101, [1, 2], 2.0)]).to_dict()))
+    return await main.complete_round(ctx, SUNDAY)
 
-    monkeypatch.setattr(main, "build_plan", fake_build)
 
-
-async def test_history_failure_does_not_break_menu(tmp_path, planned):
+async def test_history_failure_does_not_break_menu(tmp_path):
     ah = FakeAh(tmp_path)
     ah.raise_on["purchases"] = AhApiError("GET orders: HTTP 500", 500)
     ctx = make_ctx(tmp_path, ah=ah)
-    out = await main.run_round(ctx, SUNDAY, "nu_maken")
+    out = await confirmed_round(ctx)
     assert out.status == "done"
     log = ctx.ledger.load(W)
     assert log.added == {1: 1, 2: 1}
@@ -361,10 +360,10 @@ def staples_ah(tmp_path):
     return ah
 
 
-async def test_round_names_staples_count_in_the_message(tmp_path, planned):
+async def test_round_names_staples_count_in_the_message(tmp_path):
     ah = staples_ah(tmp_path)
     ctx = make_ctx(tmp_path, ah=ah)
-    out = await main.run_round(ctx, SUNDAY, "nu_maken")
+    out = await confirmed_round(ctx)
     assert out.status == "done"
     assert ah.history_for == [SUNDAY.date() - timedelta(days=61)]
     log = ctx.ledger.load(W)
@@ -375,7 +374,7 @@ async def test_round_names_staples_count_in_the_message(tmp_path, planned):
     assert "Ook 1 vaste boodschap in de bonus" in ctx.hass.notifications()[0]["message"]
 
 
-async def test_slow_history_message_without_count(tmp_path, planned, monkeypatch):
+async def test_slow_history_message_without_count(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "STAPLES_TIMEOUT", 0.05)
     ah = staples_ah(tmp_path)
     real = ah.purchases
@@ -386,7 +385,7 @@ async def test_slow_history_message_without_count(tmp_path, planned, monkeypatch
 
     ah.purchases = slow
     ctx = make_ctx(tmp_path, ah=ah)
-    out = await main.run_round(ctx, SUNDAY, "nu_maken")
+    out = await confirmed_round(ctx)
     assert out.status == "done" and ctx.error is None
     log = ctx.ledger.load(W)
     assert log.added == {1: 1, 2: 1}  # the menu is unaffected
@@ -409,7 +408,7 @@ def test_message_mentions_staples_count():
     assert "vaste boodschap" not in text
 
 
-async def test_token_refresh_happens_before_the_time_limit(tmp_path, planned, monkeypatch):
+async def test_token_refresh_happens_before_the_time_limit(tmp_path, monkeypatch):
     """A refresh never starts inside the bounded window, so a timeout cannot cut it off."""
     monkeypatch.setattr(main, "STAPLES_TIMEOUT", 0.05)
     ah = staples_ah(tmp_path)
@@ -429,7 +428,7 @@ async def test_token_refresh_happens_before_the_time_limit(tmp_path, planned, mo
     ah.ensure_fresh = slow_fresh
     ah.bonus_periods = periods
     ctx = make_ctx(tmp_path, ah=ah)
-    out = await main.run_round(ctx, SUNDAY, "nu_maken")
+    out = await confirmed_round(ctx)
     assert out.status == "done"
     # the menu's own reads come first; the staples step checks the token, then reads
     assert order[-3:] == ["fresh start", "fresh done", "periods"]
@@ -437,12 +436,12 @@ async def test_token_refresh_happens_before_the_time_limit(tmp_path, planned, mo
     assert log.staples_error is None and [s["product"]["id"] for s in log.staples] == [50]
 
 
-async def test_staples_login_expired_is_reported_not_raised(tmp_path, planned):
+async def test_staples_login_expired_is_reported_not_raised(tmp_path):
     from app.ahclient import AhLoginExpired
     ah = staples_ah(tmp_path)
     ah.raise_on["ensure_fresh"] = AhLoginExpired("login expired", 400)
     ctx = make_ctx(tmp_path, ah=ah)
-    out = await main.run_round(ctx, SUNDAY, "nu_maken")
+    out = await confirmed_round(ctx)
     assert out.status == "done"  # the menu itself is on the list
     log = ctx.ledger.load(W)
     assert log.added == {1: 1, 2: 1} and "login expired" in log.staples_error

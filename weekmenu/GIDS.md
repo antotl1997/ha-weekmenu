@@ -1,6 +1,6 @@
 # Weekmenu: de gids
 
-Weekmenu kiest elke week gerechten rond de bonus van Albert Heijn en zet de boodschappen in je bestelling of op je AH-lijst. Je hoeft er bijna niets voor te doen. Deze pagina zegt waar je wat vindt.
+Met Weekmenu kies je elke week wat jullie eten, met de bonus van Albert Heijn in beeld. Als je de week bevestigt, zet de add-on de boodschappen in je bestelling of op je AH-lijst. Deze pagina zegt waar je wat vindt.
 
 ## Wat eten we vanavond?
 
@@ -18,16 +18,16 @@ Tik op het gerecht en dan op **Koken**. Je ziet de hoeveelheden groot en de stap
 
 ## Iets anders willen
 
-- **Ander gerecht**: tik op het gerecht en kies Ander gerecht. De boodschappen worden meteen aangepast.
+- **Ander gerecht**: tik op het gerecht en kies Ander gerecht. Je kiest zelf een ander recept uit de lijst; is de week al bevestigd, dan worden de boodschappen meteen aangepast.
 - **Minder of meer personen**: tik op het gerecht en gebruik de min en plus.
 - **Niet thuis eten**: kies Instellingen en tik de dag aan bij Niet thuis eten.
 - **Hoe vaak koken**: kies Instellingen, Kookmomenten. Kook je minder vaak dan je thuis eet, dan worden de andere avonden restjesavonden.
-- **Dit gerecht liever niet meer**: tik op het gerecht op Duim omlaag (komt minder vaak terug) of Nooit meer (komt niet meer terug). Terugdraaien kan bij Instellingen, Nooit meer.
+- **Dit gerecht liever niet meer**: tik op het gerecht op Duim omlaag (staat lager in de keuzelijst) of Nooit meer (staat er niet meer in). Terugdraaien kan bij Instellingen, Nooit meer.
 - **Een product klopt niet**: tik in het gerecht bij het ingrediënt op Klopt niet. Kies een ander product, Hoeft niet of Hebben we al. Dat onthoudt de add-on voor altijd; terugdraaien kan bij Instellingen, Mijn correcties.
 
 ## Boodschappen en bestellen
 
-Het menu komt meestal op vrijdag, zodra de nieuwe bonusfolder er is. Kijk voor je bestelt even naar de kaart Check voor je bestelt bovenaan de Week: staat daar een groen vinkje, dan staat alles klaar. De boodschappen staan dan in je open bezorgbestelling, of op je AH-lijst als er nog geen bestelling is. Bestellen en betalen doe je zelf in de AH-app. Staat het menu klaar maar is er op zondag om 17:00 nog geen bezorgmoment gekozen, dan krijg je één herinnering.
+De recepten met de prijzen van de nieuwe bonusfolder staan meestal vanaf vrijdag klaar. Kies per avond een gerecht en bevestig de week; pas dan gaan de boodschappen naar AH. Kijk voor je bestelt even naar de kaart Check voor je bestelt bovenaan de Week: staat daar een groen vinkje, dan staat alles klaar. De boodschappen staan dan in je open bezorgbestelling, of op je AH-lijst als er nog geen bestelling is. Bestellen en betalen doe je zelf in de AH-app. Op zondag om 17:00 krijg je één herinnering als het menu nog niet gekozen of bevestigd is, of als er nog geen bezorgmoment is gekozen. Bevestigde je de week voordat de nieuwe folder er was, dan kun je het menu met Menu bijwerken op de prijzen van die folder zetten; je gerechten blijven staan.
 
 ## Wat heeft het opgeleverd?
 

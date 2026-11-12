@@ -612,7 +612,6 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             # a menu round only: the hourly new-folder look also takes the lock
             "running": ctx.busy or ctx.in_round, "rounds": ctx.rounds,
             "login_url": LOGIN_URL,
-            "planner_seconds": ctx.planner_seconds,
             "waiting_for_folder": None if w is None else {
                 "week": w.week.isoformat(),
                 "expected": w.expected.isoformat() if w.expected else None},
@@ -901,30 +900,10 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         return web.json_response({**dish_view(wlog, new, nd, ctx.clock().date(),
                                              ctx.overrides.load(), taste_of(nd)), **done})
 
-    async def swap(request):
-        day = day_of(request)
-        iso = day.isoformat()
-
-        async def change(wlog, plan, d):
-            bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(), fallback=True)
-            exclude = set(wlog.swapped_out.get(iso, [])) | {d.recipe.id}
-            new = await main.swap_dish(ctx.client, plan, day, bonus,
-                                       main.settings_from_plan(ctx, plan, wlog.week),
-                                       exclude)
-            nd = next((x for x in new.dishes if x.date == day), None)
-            if nd is None or nd.recipe.id == d.recipe.id:
-                return _err(409, "Geen ander gerecht gevonden dat in de regels past")
-            wlog.swapped_out.setdefault(iso, []).append(d.recipe.id)
-            wlog.previous[iso] = d.recipe.id
-            wlog.previous_dish[iso] = main.dish_to_dict(d)  # "Terug" puts exactly this back
-            return new
-
-        return await _write(day, change, "swap")
-
     async def pick(request):
         """The user chose recipe `recipe_id` for this evening. Without a confirmed menu
         it goes into the week's draft (nothing to AH); with one it replaces the dish
-        through the write path, like Ander gerecht (so Terug puts the old one back)."""
+        through the write path (so Terug puts the old one back)."""
         day = day_of(request)
         iso = day.isoformat()
         rid = (await body_of(request)).get("recipe_id")
@@ -1199,7 +1178,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
 
     async def correct(request):
         """"Klopt niet" on one ingredient line: the choice is kept for good (overrides.json)
-        and put on this week's menu through the same apply as Ander gerecht: cleanup
+        and put on this week's menu through the same apply as a picked dish: cleanup
         and adds, one lock, write-ahead, never retried, the order-week check."""
         day = day_of(request)
         body = await body_of(request)
@@ -1280,7 +1259,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     async def remove_override(request):
         """"Terugdraaien" in Mijn correcties: the add-on chooses by itself again, also on
         the menus of this and the next menu week that have not ended. Those go through
-        the same apply as Ander gerecht (cleanup and adds, write-ahead, never retried,
+        the same apply as a picked dish (cleanup and adds, write-ahead, never retried,
         the order-week check, the pause).
 
         The choice is gone once it is taken back. When choosing again fails (an AH
@@ -1343,7 +1322,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     async def run(request):
         mode = (await body_of(request)).get("mode")
         if mode not in main.BUTTONS:
-            return _err(400, "mode moet nu_maken, nieuw_menu of bijwerken zijn")
+            return _err(400, "mode moet bijwerken zijn; het menu kies je zelf in de app")
         if ctx.busy or ctx.in_round:
             return _err(409, BUSY)
         if mode == "bijwerken" and not new_folder_available(
@@ -1569,7 +1548,6 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     app.router.add_get("/api/choose", choose)
     app.router.add_post("/api/choose/search", choose_search)
     app.router.add_get("/api/dish/{day}", dish)
-    app.router.add_post("/api/dish/{day}/swap", swap)
     app.router.add_post("/api/dish/{day}/pick", pick)
     app.router.add_post("/api/dish/{day}/back", back)
     app.router.add_post("/api/dish/{day}/persons", persons)

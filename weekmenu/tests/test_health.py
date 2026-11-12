@@ -282,11 +282,6 @@ async def test_403_stops_the_folder_at_once_and_is_logged(respx_mock, tmp_path, 
     await http.aclose()
 
 
-async def test_planner_stops_at_a_403_on_a_recipe_search(tmp_path):
-    from app.planner import _blocking
-    assert _blocking(AhApiError("x", 403))
-
-
 async def test_shared_health_object(tmp_path):
     h = ApiHealth()
     client, http = make(tmp_path, health=h)
