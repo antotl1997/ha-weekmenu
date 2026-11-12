@@ -948,3 +948,33 @@ def test_draft_confirm_label_follows_the_order_in_chrome(tmp_path):
         assert "Het menu van deze week bevestigen?" in got
         assert "in je open bestelling als die er is, anders op je AH-lijst" in got
         assert ctx.ledger.load(W).plan is None  # only the sheet: nothing confirmed
+
+
+@pytest.mark.slow
+def test_own_dish_links_to_its_own_source_in_chrome(tmp_path):
+    """Final review: an imported recipe links to its site, one typed in links nowhere,
+    and neither sends the reader to Allerhande."""
+    from app.recipes import OwnRecipe
+
+    ctx = make_ctx(tmp_path)
+    ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
+    typed = ctx.recipes.save(OwnRecipe(0, "Soep van oma", 2, ["500 g uien"], []))
+    got = ctx.recipes.save(OwnRecipe(0, "Shakshuka", 2, ["4 eieren"], [],
+                                     source="leukerecepten.nl",
+                                     url="https://www.leukerecepten.nl/shakshuka"))
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        post(base, "api/dish/2026-11-04/pick", {"recipe_id": typed.id})
+        post(base, "api/dish/2026-11-06/pick", {"recipe_id": got.id})
+        dom = chrome(base + "#gerecht/2026-11-06", tmp_path / "profile-eigen-link")
+        assert "Shakshuka" in dom and "Bekijk het recept op leukerecepten.nl" in dom
+        assert 'href="https://www.leukerecepten.nl/shakshuka"' in dom
+        assert "Allerhande" not in dom
+        dom = chrome(base + "#koken/2026-11-06", tmp_path / "profile-eigen-koken")
+        assert "Geen bereiding gevonden. Bekijk het recept op leukerecepten.nl." in dom
+        dom = chrome(base + "#gerecht/2026-11-04", tmp_path / "profile-eigen-zelf")
+        assert "Soep van oma" in dom and "Allerhande" not in dom
+        assert 'class="src"' not in dom
+        dom = chrome(base + "#koken/2026-11-04", tmp_path / "profile-eigen-zelf-koken")
+        assert "Geen bereiding gevonden." in dom and "Bekijk het recept" not in dom

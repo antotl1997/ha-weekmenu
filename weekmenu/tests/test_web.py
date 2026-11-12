@@ -189,7 +189,7 @@ async def test_api_week_and_dish_shape(aiohttp_client, ctx):
     assert all(d.get("geen_kookmoment") for d in days[3:])
     assert days[0]["dag"] == "woensdag" and days[0]["recipe"]["title"] == "Recept 101"
     assert set(days[0]["recipe"]) == {"id", "title", "image", "cook", "oven", "wait",
-                                      "cuisine", "url"}
+                                      "cuisine", "url", "source"}
     assert days[2]["niet_thuis"] is True and days[2]["recipe"] is None
     assert "ouders" not in body and all("ouders" not in d for d in days)
 

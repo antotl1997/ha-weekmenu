@@ -39,6 +39,20 @@ function safeUrl(u) {
   return typeof u === "string" && /^https:\/\/[^\s"'<>]+$/i.test(u) ? u : "";
 }
 
+/* Where the recipe can be read: Allerhande for AH's, the site an imported recipe came
+ * from, nothing for a recipe typed in ("eigen") or one without a usable link. */
+function recipeSite(r) {
+  const url = safeUrl(r && r.url);
+  if (!url || r.source === "eigen") return null;
+  const ah = !r.source || r.source === "ah";
+  return { url, ah, site: ah ? "Allerhande" : r.source };
+}
+
+function noStepsNote(r) {
+  const s = recipeSite(r);
+  return `Geen bereiding gevonden.${s ? ` Bekijk het recept op ${esc(s.site)}.` : ""}`;
+}
+
 function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ""; }
 
 function parseDate(iso) {
@@ -666,7 +680,7 @@ function cookScreen(day) {
     <div class="card cook"><ul class="cing">${ings}</ul></div>
     <div class="sec">Bereiding</div>
     ${steps ? `<div class="card cook"><ol class="csteps">${steps}</ol></div><p class="foot">Tik op een stap als hij klaar is.</p>`
-      : `<div class="card empty">Geen bereiding gevonden. Bekijk het recept op Allerhande.</div>`}
+      : `<div class="card empty">${noStepsNote(d.recipe)}</div>`}
     ${d.draft ? "" : tasteHtml(d)}
     <button class="btn pri full" data-cookdone>Klaar</button>`;
 }
@@ -700,7 +714,8 @@ function dishScreen(day) {
   const open = !!state.open[day];
   const steps = d.steps && d.steps.length
     ? `<ol>${d.steps.map((s) => `<li><span>${esc(s)}</span></li>`).join("")}</ol>`
-    : `<p class="empty">Geen bereiding gevonden. Bekijk het recept op Allerhande.</p>`;
+    : `<p class="empty">${noStepsNote(r)}</p>`;
+  const site = recipeSite(r);
   const left = d.leftovers && d.leftovers.length
     ? `<div class="card note soft"><span class="dot"></span><div><b>Over van het vorige gerecht</b>
        <span class="muted">Haal weg in de AH-app als je wilt.</span>
@@ -726,7 +741,7 @@ function dishScreen(day) {
     ${d.draft ? `<p class="foot">Concept: dit gerecht gaat naar AH zodra je de week bevestigt.</p>` : tasteHtml(d)}
     ${d.can_back ? `<button class="btn sec2 full" data-undo>${ICON.undo} Terug naar het vorige gerecht</button>` : ""}
     <button class="btn sec2 full" data-remove>Gerecht weghalen</button>
-    ${safeUrl(r.url) ? `<a class="src" href="${esc(safeUrl(r.url))}" target="_blank" rel="noopener">Recept op Allerhande</a>` : ""}
+    ${site ? `<a class="src" href="${esc(site.url)}" target="_blank" rel="noopener">${site.ah ? "Recept op Allerhande" : `Bekijk het recept op ${esc(site.site)}`}</a>` : ""}
     </div>`;
 }
 

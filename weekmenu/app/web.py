@@ -21,6 +21,7 @@ from collections.abc import Iterable
 from dataclasses import asdict
 from datetime import date, timedelta
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import httpx
 from aiohttp import web
@@ -227,8 +228,17 @@ def _recipe_view(d: Dish) -> dict:
     return {
         "id": d.recipe.id, "title": d.recipe.title, "image": d.recipe.image,
         "cook": d.cook, "oven": d.oven, "wait": d.wait, "cuisine": d.cuisine,
-        "url": d.recipe.url,
+        "url": d.recipe.url, "source": _source_of(d.recipe),
     }
+
+
+def _source_of(recipe) -> str:
+    """Where the recipe can be read: "ah" (Allerhande), the site an own recipe came
+    from (the host of its link, from the dish's own copy), or "eigen" without a link."""
+    if not is_own(recipe.id):
+        return "ah"
+    host = urlsplit(recipe.url or "").hostname or ""
+    return host.removeprefix("www.") or "eigen"
 
 
 def _title(plan: Plan, pid: int) -> str:

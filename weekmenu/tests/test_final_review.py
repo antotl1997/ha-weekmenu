@@ -94,3 +94,22 @@ async def test_an_own_recipe_scores_like_the_same_ah_recipe(tmp_path):
     own = ctx.recipes.save(OwnRecipe(0, "Bolognese van oma", 4, ["1000 g rundergehakt"]))
     items = {x["id"]: x for x in (await choose_view(ctx, W, None))["items"]}
     assert items[own.id]["savings"] == items[101]["savings"] == 3.0
+
+
+async def test_a_dish_says_where_its_recipe_can_be_read(aiohttp_client, tmp_path):
+    from app.recipes import OwnRecipe
+    from tests.test_choose_web import make as choose_ctx
+    from tests.test_choose_web import pick
+    ctx, ah = choose_ctx(tmp_path)
+    typed = ctx.recipes.save(OwnRecipe(0, "Soep van oma", 2, ["500 g uien"], ["Kook."]))
+    got = ctx.recipes.save(OwnRecipe(0, "Shakshuka", 2, ["4 eieren"], [],
+                                     source="leukerecepten.nl",
+                                     url="https://www.leukerecepten.nl/shakshuka"))
+    client = await aiohttp_client(make_app(ctx))
+    for day, rid in ((W, typed.id), (W + timedelta(days=1), got.id),
+                     (W + timedelta(days=2), 101)):
+        assert (await pick(client, day, rid)).status == 200
+    views = [await (await client.get(f"api/dish/{(W + timedelta(days=i)).isoformat()}")).json()
+             for i in range(3)]
+    assert [v["recipe"]["source"] for v in views] == ["eigen", "leukerecepten.nl", "ah"]
+    assert views[0]["recipe"]["url"] == ""
