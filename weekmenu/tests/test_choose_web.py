@@ -13,7 +13,7 @@ from app.planner import Plan
 from app.recipes import OwnRecipe
 from app.tokens import Tokens
 from app.web import make_app
-from tests.fakes import NEXT, W, FakeAh, FakeHass, make_ctx
+from tests.fakes import NEXT, SUNDAY, W, FakeAh, FakeHass, make_ctx
 
 DO, VR = W + timedelta(days=1), W + timedelta(days=2)
 
@@ -47,7 +47,9 @@ class Ah(FakeAh):
         if id in self.gone:
             raise AhApiError("recept niet gevonden", 404)
         r = RECIPES[id]
-        return dataclasses.replace(r, servings=servings)
+        # like AH: 250 g a person, so the persons show in the packs (500 g each)
+        return dataclasses.replace(r, servings=servings, ingredients=[
+            (f"{250 * servings} g {name}", name) for _, name in r.ingredients])
 
 
 def make(tmp_path, aantal=7, away=()):
@@ -418,3 +420,44 @@ async def test_confirm_with_only_away_dishes_is_an_empty_draft(aiohttp_client, t
     r = await client.post(f"api/week/confirm?week={W.isoformat()}")
     assert r.status == 400
     assert ah.writes == [] and ctx.ledger.load(W).plan is None
+
+
+# --- fix round 2 ------------------------------------------------------------------
+
+
+async def test_a_leftover_night_with_its_own_dish_is_never_claimed(aiohttp_client, tmp_path):
+    """The helpers changed after DO got a dish: W now has DO as its leftover night.
+    Filling W cooks for W alone and leaves DO's dish alone (confirmed and draft)."""
+    ctx, ah = make(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, DO, 102)).status == 200
+    assert (await client.post(f"api/week/confirm?week={W.isoformat()}")).status == 200
+    ctx.hass.states["input_number.weekmenu_avonden"] = "6"  # (W, DO) is a pair now
+    r = await pick(client, W, 101)
+    assert r.status == 200, await r.text()
+    body = await r.json()
+    assert body["persons"] == 2 and body["restjes"] is None
+    assert ah.held() == {12: 1, 11: 1}  # one pack: W's own two persons, not four
+    plan = Plan.from_dict(ctx.ledger.load(W).plan)
+    assert {d.date: d.leftover_date for d in plan.dishes} == {W: None, DO: None}
+
+    # the same in a draft of the next week
+    nxt = W + timedelta(days=7)
+    ctx.clock = lambda: SUNDAY + timedelta(days=7)
+    ctx.hass.states["input_number.weekmenu_avonden"] = "7"
+    assert (await pick(client, nxt + timedelta(days=1), 102)).status == 200
+    ctx.hass.states["input_number.weekmenu_avonden"] = "6"
+    r = await pick(client, nxt, 101)
+    assert r.status == 200, await r.text()
+    body = await r.json()
+    assert body["persons"] == 2 and body["restjes"] is None and body["draft"] is True
+
+
+async def test_pick_on_an_evening_without_a_cooking_moment(aiohttp_client, tmp_path):
+    ctx, ah = make(tmp_path, aantal=2)  # (W, DO), (VR, ZA); ZO, MA and DI get nothing
+    client = await aiohttp_client(make_app(ctx))
+    r = await pick(client, W + timedelta(days=4), 101)
+    assert r.status == 400
+    assert (await r.json())["error"] == "Op deze avond staat geen kookmoment"
+    r = await pick(client, DO, 101)
+    assert (await r.json())["error"] == "Op deze avond eten jullie restjes"

@@ -490,16 +490,18 @@ def week_of(day: date) -> date:
     return day - timedelta(days=(day.weekday() - 2) % 7)
 
 
+def persons_on(raw: RawSettings, d: date) -> int:
+    """The persons eating on `d` by the helpers (at least 1)."""
+    return max(1, raw.persons.get(WEEKDAGEN[d.weekday()], 2))
+
+
 def make_settings(ctx: Context, raw: RawSettings, start: date, exclude=()) -> Settings:
     """Cook days from the eat days and the cooking moments (raw.aantal, bounded by
     plan_days). A cook day with a leftover night cooks for the persons of both days."""
-    def persons_on(d: date) -> int:
-        return max(1, raw.persons.get(WEEKDAGEN[d.weekday()], 2))
-
     pairs = plan_days(eat_days(start, raw.away), raw.aantal)
     days = [cook for cook, _ in pairs]
     leftovers = {cook: rest for cook, rest in pairs if rest is not None}
-    persons = {cook: persons_on(cook) + (persons_on(rest) if rest else 0)
+    persons = {cook: persons_on(raw, cook) + (persons_on(raw, rest) if rest else 0)
                for cook, rest in pairs}
     recent = ctx.ledger.recent_recipe_ids(start) | set(exclude)
     return Settings(days, persons, list(ctx.pantry), recent, leftovers,

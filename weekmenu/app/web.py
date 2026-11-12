@@ -73,6 +73,7 @@ REPICK_FAILED = ("Je keuze is weg, maar het menu is nog niet aangepast. "
 # v1.1: the week filled by hand as a draft, then confirmed once
 NOT_HOME = "Op deze avond eten jullie niet thuis"
 LEFTOVER_NIGHT = "Op deze avond eten jullie restjes"
+NO_COOKING = "Op deze avond staat geen kookmoment"
 HA_UNREADABLE = "Home Assistant is nu niet te lezen; probeer het zo opnieuw"
 OWN_GONE = "Dit eigen recept bestaat niet meer; kies een ander gerecht"
 AH_GONE = "Dit recept bestaat niet meer bij AH; kies een ander gerecht"
@@ -800,21 +801,42 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 raise SchemaTooNew(ctx.ledger.root / f"{start.isoformat()}.json")
             return await edit(wlog)
 
-    async def evening_settings(start: date, day: date | None = None,
-                               plan: Plan | None = None):
-        """The helpers' Settings of the menu week, or the Response that says why not:
-        503 when Home Assistant cannot be read; with `day`, 400 when that evening is
-        not a cook evening (a leftover night, also one of a dish in `plan`, or away)."""
+    async def evening_settings(start: date):
+        """The helpers' Settings of the menu week, or a 503 when Home Assistant cannot
+        be read."""
         try:
-            settings = await main.week_settings(ctx, start)
+            return await main.week_settings(ctx, start)
         except httpx.HTTPError:
             return _err(503, HA_UNREADABLE)
-        rest = set(settings.leftovers.values())
-        if plan is not None:
-            rest |= {x.leftover_date for x in plan.dishes if x.leftover_date}
-        if day is None or (day in settings.evenings and day not in rest):
-            return settings
-        return _err(400, LEFTOVER_NIGHT if day in rest else NOT_HOME)
+
+    async def evening(start: date, day: date, plan: Plan):
+        """(persons, leftover night) for a dish chosen on `day` in `plan` (a draft or the
+        menu), or the Response that says why not: 503 when Home Assistant cannot be
+        read, 400 for an evening away, a leftover night or one without a cooking moment.
+
+        A leftover night that already has its own dish is never claimed: the evening
+        then cooks for its own persons only. An evening that already has a dish may get
+        another one, also when the helpers changed since."""
+        try:
+            raw = await ctx.hass.read_settings()
+        except httpx.HTTPError:
+            return _err(503, HA_UNREADABLE)
+        settings = main.make_settings(ctx, raw, start)
+        dated = {x.date for x in plan.dishes}
+        if any(x.leftover_date == day and x.date != day for x in plan.dishes):
+            return _err(400, LEFTOVER_NIGHT)
+        if WEEKDAGEN[day.weekday()] in raw.away:
+            return _err(400, NOT_HOME)
+        if day in settings.evenings:
+            rest = settings.leftovers.get(day)
+            if rest is None or rest not in dated:
+                return settings.persons[day], rest
+            return main.persons_on(raw, day), None
+        if day in dated:
+            return main.persons_on(raw, day), None
+        if day in settings.leftovers.values():
+            return _err(400, LEFTOVER_NIGHT)
+        return _err(400, NO_COOKING)
 
     async def save_draft(wlog, draft: Plan) -> None:
         wlog.draft = draft.to_dict()  # the caller holds ctx.lock
@@ -912,13 +934,13 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
 
         async def edit(wlog):
             draft = Plan.from_dict(wlog.draft) if wlog.draft else empty_plan(list(ctx.pantry))
-            settings = await evening_settings(wlog.week, day, draft)
-            if isinstance(settings, web.Response):
-                return settings
+            got = await evening(wlog.week, day, draft)
+            if isinstance(got, web.Response):
+                return got
+            persons, rest = got
             bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(), fallback=True)
             try:
-                new = await pick_dish(chooser(), draft, day, rid, bonus,
-                                      settings.persons[day], settings.leftovers.get(day),
+                new = await pick_dish(chooser(), draft, day, rid, bonus, persons, rest,
                                       overrides=ctx.overrides.load())
             except AhApiError as e:
                 return gone_or_raise(e, rid)
@@ -931,14 +953,14 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
 
         async def change(wlog, plan, d):
             if d is None:  # an evening without a dish: filled, nothing to put back
-                settings = await evening_settings(wlog.week, day, plan)
-                if isinstance(settings, web.Response):
-                    return settings
+                got = await evening(wlog.week, day, plan)
+                if isinstance(got, web.Response):
+                    return got
+                persons, rest = got
                 bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(),
                                                      fallback=True)
                 try:
-                    return await pick_dish(chooser(), plan, day, rid, bonus,
-                                           settings.persons[day], settings.leftovers.get(day),
+                    return await pick_dish(chooser(), plan, day, rid, bonus, persons, rest,
                                            overrides=ctx.overrides.load())
                 except AhApiError as e:
                     return gone_or_raise(e, rid)
