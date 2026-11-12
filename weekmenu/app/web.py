@@ -72,6 +72,8 @@ REPICK_FAILED = ("Je keuze is weg, maar het menu is nog niet aangepast. "
                  "Tik op Ander gerecht of Menu bijwerken.")
 # v1.1: the week filled by hand as a draft, then confirmed once
 NOT_HOME = "Op deze avond eten jullie niet thuis"
+LEFTOVER_NIGHT = "Op deze avond eten jullie restjes"
+HA_UNREADABLE = "Home Assistant is nu niet te lezen; probeer het zo opnieuw"
 OWN_GONE = "Dit eigen recept bestaat niet meer; kies een ander gerecht"
 AH_GONE = "Dit recept bestaat niet meer bij AH; kies een ander gerecht"
 SEARCH_LOGIN = "Log eerst in bij AH om daar te zoeken"
@@ -350,13 +352,22 @@ def draft_week_view(wlog, draft: Plan | None, start: date, away: Iterable[str] =
             if not entry["niet_thuis"] and day not in settings.evenings:
                 entry["geen_kookmoment"] = True  # a leftover night
             out["days"].append(entry)
-    for entry in out["days"]:
+    mark_choosable(out["days"], settings, draft=True)
+    return out
+
+
+def mark_choosable(days: list[dict], settings, draft: bool = False) -> None:
+    """"kies": true on every cook evening of `settings` without a dish (and not a
+    leftover night). On a draft the evening also gets its persons and loses the
+    "geen kookmoment"/"geen gerecht" marks; a confirmed week keeps them."""
+    for entry in days:
         day = date.fromisoformat(entry["date"])
         if entry["recipe"] is None and not entry.get("restjes") and day in settings.evenings:
-            entry.update(kies=True, persons=settings.persons[day], niet_thuis=False)
-            entry.pop("geen_kookmoment", None)
-            entry.pop("geen_gerecht", None)
-    return out
+            entry["kies"] = True
+            if draft:
+                entry.update(persons=settings.persons[day], niet_thuis=False)
+                entry.pop("geen_kookmoment", None)
+                entry.pop("geen_gerecht", None)
 
 
 def staples_view(wlog) -> list[dict]:
@@ -704,6 +715,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             out = week_view(wlog, plan, start,
                             raw.away if raw is not None else (),
                             retry=start == menu_week_start(now))
+            if raw is not None:  # an evening without a dish can still be filled
+                mark_choosable(out["days"], main.make_settings(ctx, raw, start))
         out["enabled"] = raw.enabled if raw is not None else None  # None: HA unreadable
         out["writes_paused"] = PAUSED_NOTE if ctx.health.writes_paused else None
         w = waiting_for(start) if plan is None else None
@@ -724,14 +737,16 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             out["check"]["blocked"] = True
         return out
 
-    def load_dish(day: date):
+    def load_dish(day: date, allow_empty: bool = False):
+        """The week log, menu and dish of `day`; with `allow_empty` the dish may be None
+        (an evening of the menu without a dish)."""
         wlog = ctx.ledger.load(main.week_of(day))
         if not wlog.plan:
             raise web.HTTPNotFound(text='{"error": "geen menu voor die week"}',
                                    content_type="application/json")
         plan = Plan.from_dict(wlog.plan)
         d = next((x for x in plan.dishes if x.date == day), None)
-        if d is None:
+        if d is None and not allow_empty:
             raise web.HTTPNotFound(text='{"error": "geen gerecht op die dag"}',
                                    content_type="application/json")
         return wlog, plan, d
@@ -785,6 +800,22 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 raise SchemaTooNew(ctx.ledger.root / f"{start.isoformat()}.json")
             return await edit(wlog)
 
+    async def evening_settings(start: date, day: date | None = None,
+                               plan: Plan | None = None):
+        """The helpers' Settings of the menu week, or the Response that says why not:
+        503 when Home Assistant cannot be read; with `day`, 400 when that evening is
+        not a cook evening (a leftover night, also one of a dish in `plan`, or away)."""
+        try:
+            settings = await main.week_settings(ctx, start)
+        except httpx.HTTPError:
+            return _err(503, HA_UNREADABLE)
+        rest = set(settings.leftovers.values())
+        if plan is not None:
+            rest |= {x.leftover_date for x in plan.dishes if x.leftover_date}
+        if day is None or (day in settings.evenings and day not in rest):
+            return settings
+        return _err(400, LEFTOVER_NIGHT if day in rest else NOT_HOME)
+
     async def save_draft(wlog, draft: Plan) -> None:
         wlog.draft = draft.to_dict()  # the caller holds ctx.lock
         await main.save_log(ctx, wlog)
@@ -812,13 +843,17 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         except Exception as e:
             log.warning("history.json niet bijgewerkt (%s)", type(e).__name__)
 
-    async def _write(day: date, change, action: str | None = None) -> web.Response:
+    async def _write(day: date, change, action: str | None = None,
+                     allow_empty: bool = False) -> web.Response:
         """Load, change and apply under the lock; `change` returns the new plan or a Response.
 
         `action`: the old dish goes into history.json once the new plan is in the log
-        (also when a write to AH failed after that)."""
+        (also when a write to AH failed after that). `allow_empty`: `change` also gets
+        an evening without a dish (d is None; nothing goes into history.json then)."""
         async with ctx.lock:
-            wlog, plan, d = load_dish(day)
+            wlog, plan, d = load_dish(day, allow_empty)
+            if d is None:
+                action = None
             new = await change(wlog, plan, d)
             if isinstance(new, web.Response):
                 return new
@@ -876,10 +911,10 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         check_offer_week(main.week_of(day))
 
         async def edit(wlog):
-            settings = await main.week_settings(ctx, wlog.week)
-            if day not in settings.evenings:
-                return _err(400, NOT_HOME)
             draft = Plan.from_dict(wlog.draft) if wlog.draft else empty_plan(list(ctx.pantry))
+            settings = await evening_settings(wlog.week, day, draft)
+            if isinstance(settings, web.Response):
+                return settings
             bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(), fallback=True)
             try:
                 new = await pick_dish(chooser(), draft, day, rid, bonus,
@@ -895,6 +930,18 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             return got
 
         async def change(wlog, plan, d):
+            if d is None:  # an evening without a dish: filled, nothing to put back
+                settings = await evening_settings(wlog.week, day, plan)
+                if isinstance(settings, web.Response):
+                    return settings
+                bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(),
+                                                     fallback=True)
+                try:
+                    return await pick_dish(chooser(), plan, day, rid, bonus,
+                                           settings.persons[day], settings.leftovers.get(day),
+                                           overrides=ctx.overrides.load())
+                except AhApiError as e:
+                    return gone_or_raise(e, rid)
             if rid == d.recipe.id:  # the same recipe: nothing to change
                 return web.json_response({
                     **dish_view(wlog, plan, d, ctx.clock().date(), ctx.overrides.load(),
@@ -911,7 +958,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             wlog.previous_dish[iso] = main.dish_to_dict(d)  # "Terug" puts exactly this back
             return new
 
-        return await _write(day, change, "swap")
+        return await _write(day, change, "swap", allow_empty=True)
 
     async def back(request):
         day = day_of(request)
@@ -1012,6 +1059,20 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 return _err(400, NO_DRAFT)
             if wlog.too_new:  # a newer add-on wrote this week: never written over
                 raise SchemaTooNew(ctx.ledger.root / f"{start.isoformat()}.json")
+            settings = await evening_settings(start)
+            if isinstance(settings, web.Response):
+                return settings
+            # an evening that is no longer a cook evening (away now) is left out
+            gone = [x for x in plan.dishes if x.date not in settings.evenings]
+            for x in gone:
+                plan = main.remove_dish(plan, x.date)
+                plan.removed_days = [r for r in plan.removed_days
+                                     if r not in (x.date, x.leftover_date)]
+            if not plan.dishes:
+                return _err(400, NO_DRAFT)
+            if gone:
+                log.info("Week %s: %d gerecht(en) op een avond niet thuis weggelaten",
+                         start, len(gone))
             now = ctx.clock()
             _bonus, warning, period_start = await main.folder_for_week(ctx, start, now,
                                                                        fallback=True)
@@ -1041,7 +1102,8 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         log.info("Week %s bevestigd: %s", start, "bewaard, nog niets toegevoegd" if held
                  else "toegevoegd")
         await publish(start, plan, wlog.target or "list", wlog.extras_total)
-        return web.json_response(await week_payload(start))
+        return web.json_response({**await week_payload(start),
+                                  "dropped": sorted(x.date.isoformat() for x in gone)})
 
     # --- v1.1: the choice list ---
 
@@ -1086,7 +1148,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 return _err(502, SEARCH_FAILED)
         weeks_ago = ctx.ledger.recent_recipe_weeks(start)
         return web.json_response({"items": [
-            catalog._item(e.id, e.title, e.image, e.cook, e.cuisine, e.score, "ah", None,
+            catalog.item(e.id, e.title, e.image, e.cook, e.cuisine, e.score, "ah", None,
                           weeks_ago) for e in found]})
 
     # --- v0.9: "Klopt niet" per ingredient line ---

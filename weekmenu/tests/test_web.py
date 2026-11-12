@@ -736,8 +736,10 @@ async def test_api_week_shows_eat_days_without_a_cooking_moment(aiohttp_client, 
     client = await aiohttp_client(make_app(ctx))
     body = await (await client.get("api/week")).json()
     za = [d for d in body["days"] if d["date"] == "2026-11-07"]
+    # v1.1: a cook evening of the helpers without a dish can still be filled ("kies")
     assert za == [{"date": "2026-11-07", "dag": "zaterdag", "niet_thuis": False,
-                   "geen_kookmoment": True, "persons": 0, "recipe": None, "savings": 0.0}]
+                   "geen_kookmoment": True, "persons": 0, "recipe": None, "savings": 0.0,
+                   "kies": True}]
     assert [d["date"] for d in body["days"]][-3:] == ["2026-11-08", "2026-11-09", "2026-11-10"]
     assert all(d["niet_thuis"] for d in body["days"][-3:])
 

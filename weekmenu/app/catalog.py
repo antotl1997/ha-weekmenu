@@ -225,7 +225,7 @@ def period_for(ctx, start: date) -> date | None:
     return max((k for k in keys if start - timedelta(days=13) <= k <= start), default=None)
 
 
-def _item(id, title, image, cook, cuisine, score, source, day, weeks_ago) -> dict:
+def item(id, title, image, cook, cuisine, score, source, day, weeks_ago) -> dict:
     return {
         "id": id, "title": title, "image": image, "cook": cook, "cuisine": cuisine,
         "savings": round(score, 2), "source": source,
@@ -243,7 +243,7 @@ async def choose_view(ctx, start: date, day: date | None, q: str = "",
     period = period_for(ctx, start)
     entries = ctx.catalog.entries(period) if period is not None else []
     items = [
-        _item(e.id, e.title, e.image, e.cook, e.cuisine, e.score, "ah", day, weeks_ago)
+        item(e.id, e.title, e.image, e.cook, e.cuisine, e.score, "ah", day, weeks_ago)
         for e in entries
     ]
     folder = ctx.bonus_cache.get(period) or []
@@ -254,7 +254,7 @@ async def choose_view(ctx, start: date, day: date | None, q: str = "",
             score, cuisine, _fish = await score_recipe(recipe, folder, pantry, overrides)
         else:
             score, cuisine = 0.0, cuisine_of(recipe)
-        items.append(_item(r.id, r.title, r.image, r.cook, r.kind or cuisine, score,
+        items.append(item(r.id, r.title, r.image, r.cook, r.kind or cuisine, score,
                            r.source or "eigen", day, weeks_ago))
     needle = q.strip().casefold()
     out = []

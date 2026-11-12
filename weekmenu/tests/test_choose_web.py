@@ -313,3 +313,108 @@ def test_own_recipes_from_a_newer_add_on_ask_for_an_update(tmp_path):
     ctx.recipes.path.write_text('{"schema": 99, "recipes": []}', encoding="utf-8")
     main.scan_too_new(ctx)
     assert "recipes.json" in ctx.too_new and main.update_needed(ctx)
+
+
+# --- fix round 1 ------------------------------------------------------------------
+
+
+async def test_pick_fills_an_empty_evening_of_a_confirmed_week(aiohttp_client, tmp_path):
+    ctx, ah = make(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, W, 101)).status == 200
+    assert (await client.post(f"api/week/confirm?week={W.isoformat()}")).status == 200
+    assert ah.held() == {11: 1}
+    week = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+    days = {d["date"]: d for d in week["days"]}
+    assert days[DO.isoformat()].get("kies") is True and "kies" not in days[W.isoformat()]
+
+    r = await pick(client, DO, 102)
+    assert r.status == 200, await r.text()
+    assert (await r.json())["recipe"]["id"] == 102
+    assert ah.held() == {11: 1, 12: 1}  # the first evening's gehakt is not lowered
+    assert not [w for w in ah.writes if list(w[1].values())[0] < 0]
+    log = ctx.ledger.load(W)
+    assert DO.isoformat() not in log.previous and DO.isoformat() not in log.previous_dish
+    assert log.added == {11: 1, 12: 1}
+
+
+async def test_remove_after_confirm_then_pick_the_same_evening(aiohttp_client, tmp_path):
+    ctx, ah = make(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, W, 101)).status == 200
+    assert (await pick(client, DO, 102)).status == 200
+    assert (await client.post(f"api/week/confirm?week={W.isoformat()}")).status == 200
+    r = await client.post(f"api/dish/{DO.isoformat()}/remove")
+    assert r.status == 200, await r.text()
+    assert ah.held() == {11: 1}
+    week = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+    assert {d["date"]: d for d in week["days"]}[DO.isoformat()].get("kies") is True
+    r = await pick(client, DO, 103)
+    assert r.status == 200, await r.text()
+    assert ah.held() == {11: 1, 13: 1}
+    plan = Plan.from_dict(ctx.ledger.load(W).plan)
+    assert DO not in plan.removed_days
+
+
+async def test_pick_on_a_confirmed_week_checks_the_evening(aiohttp_client, tmp_path):
+    ctx, ah = make(tmp_path, aantal=6, away=("vrijdag",))  # six cook evenings
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, W + timedelta(days=3), 101)).status == 200
+    assert (await client.post(f"api/week/confirm?week={W.isoformat()}")).status == 200
+    r = await pick(client, VR, 102)
+    assert r.status == 400 and (await r.json())["error"] == "Op deze avond eten jullie niet thuis"
+
+
+async def test_pick_on_a_leftover_night_says_restjes(aiohttp_client, tmp_path):
+    ctx, ah = make(tmp_path, aantal=5, away=("vrijdag",))  # W cooks, DO is its leftover
+    client = await aiohttp_client(make_app(ctx))
+    r = await pick(client, DO, 101)
+    assert r.status == 400 and (await r.json())["error"] == "Op deze avond eten jullie restjes"
+    assert (await pick(client, W, 101)).status == 200
+    assert (await client.post(f"api/week/confirm?week={W.isoformat()}")).status == 200
+    r = await pick(client, DO, 102)  # the leftover night of W's dish
+    assert r.status == 400 and (await r.json())["error"] == "Op deze avond eten jullie restjes"
+
+
+async def test_pick_when_home_assistant_cannot_be_read_is_a_503(aiohttp_client, tmp_path):
+    ctx, ah = make(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, W, 101)).status == 200
+    ctx.hass.fail_reads = True
+    r = await pick(client, DO, 102)
+    assert r.status == 503
+    assert (await r.json())["error"] == "Home Assistant is nu niet te lezen; probeer het zo opnieuw"
+    ctx.hass.fail_reads = False
+    assert (await client.post(f"api/week/confirm?week={W.isoformat()}")).status == 200
+    ctx.hass.fail_reads = True
+    r = await pick(client, DO, 102)  # an empty evening of a confirmed week
+    assert r.status == 503
+    assert ah.held() == {11: 1}
+
+
+async def test_confirm_drops_dishes_on_evenings_now_away(aiohttp_client, tmp_path):
+    from app.hass import helper_persons
+    ctx, ah = make(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, W, 101)).status == 200
+    assert (await pick(client, VR, 102)).status == 200
+    ctx.hass.states[helper_persons()["vrijdag"]] = "0"  # not at home on Friday after all
+    r = await client.post(f"api/week/confirm?week={W.isoformat()}")
+    assert r.status == 200, await r.text()
+    body = await r.json()
+    assert body["dropped"] == [VR.isoformat()]
+    assert ah.held() == {11: 1}
+    plan = Plan.from_dict(ctx.ledger.load(W).plan)
+    assert [d.date for d in plan.dishes] == [W] and VR not in plan.removed_days
+    assert VR.isoformat() in body["niet_thuis"]
+
+
+async def test_confirm_with_only_away_dishes_is_an_empty_draft(aiohttp_client, tmp_path):
+    from app.hass import helper_persons
+    ctx, ah = make(tmp_path)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, VR, 102)).status == 200
+    ctx.hass.states[helper_persons()["vrijdag"]] = "0"
+    r = await client.post(f"api/week/confirm?week={W.isoformat()}")
+    assert r.status == 400
+    assert ah.writes == [] and ctx.ledger.load(W).plan is None
