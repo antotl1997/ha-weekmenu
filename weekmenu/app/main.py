@@ -71,6 +71,7 @@ from app.hass import (
 )
 from app.foldercache import load_folders, remember, save_folders
 from app.history import HISTORY_SCHEMA, History
+from app.recipes import RecipeStore
 from app.ledger import Ledger, WeekLog, new_folder_available
 from app.overrides import OVERRIDES_SCHEMA, Overrides
 from app.taste import TASTE_SCHEMA, Taste
@@ -240,6 +241,7 @@ class Context:
     found: dict[int, Product] = field(default_factory=dict)
     # v1.0: duim omlaag and "nooit meer" per recipe, and "Besparing nagerekend"
     taste: Taste | None = None
+    recipes: RecipeStore | None = None  # v1.1: own recipes (negative ids)
     reconciliations: Reconciliations | None = None
     recon_checked: datetime | None = None  # not kept: the hour "nagerekend" last looked
 
@@ -251,6 +253,8 @@ class Context:
             self.history = History(data / "history.json")
         if self.taste is None:
             self.taste = Taste(data / "taste.json")
+        if self.recipes is None:
+            self.recipes = RecipeStore(data / "recipes.json")
         if self.reconciliations is None:
             self.reconciliations = Reconciliations(data / "reconciliation.json")
         own = getattr(self.client, "health", None)
