@@ -234,6 +234,11 @@ def item(id, title, image, cook, cuisine, score, source, day, weeks_ago) -> dict
     }
 
 
+def kind_names() -> list[str]:
+    """The keukens (keukens.yaml) a recipe can be filed under."""
+    return [k["naam"] for k in CUISINES]
+
+
 async def choose_view(ctx, start: date, day: date | None, q: str = "",
                       kind: str = "") -> dict:
     """The choice list for the menu week `start` (and the evening `day`, for the cooking
@@ -269,5 +274,5 @@ async def choose_view(ctx, start: date, day: date | None, q: str = "",
             x["savings"] = round(x["savings"] * DOWN_FACTOR, 2)
         out.append(x)
     out.sort(key=lambda x: (-x["savings"], x["title"].casefold()))
-    return {"items": out, "kinds": [k["naam"] for k in CUISINES],
+    return {"items": out, "kinds": kind_names(),
             "catalog_ready": bool(entries)}

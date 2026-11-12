@@ -18,13 +18,14 @@ import html
 import logging
 import re
 from collections.abc import Iterable
+from dataclasses import asdict
 from datetime import date, timedelta
 from pathlib import Path
 
 import httpx
 from aiohttp import web
 
-from app import catalog, main, staples
+from app import catalog, importer, main, staples
 from app.ahclient import LOGIN_URL, AhApiError, AhLoginExpired, Product, extract_code
 from app.hass import (
     BUSY,
@@ -43,7 +44,7 @@ from app.overrides import make_entry
 from app.taste import KINDS as TASTE_KINDS
 from app.reconcile import metrics as savings_metrics
 from app.planner import Dish, Plan, empty_plan, pick_dish
-from app.recipes import LocalFirst, is_own
+from app.recipes import LocalFirst, OwnRecipe, is_own
 from app.deals import qty_for_deal, savings as deal_savings
 from app.diag import diagnose
 from app.durable import UPDATE_MESSAGE, SchemaTooNew
@@ -81,6 +82,14 @@ SEARCH_LOGIN = "Log eerst in bij AH om daar te zoeken"
 SEARCH_FAILED = "Zoeken bij AH lukte nu niet. Probeer het zo nog eens."
 NO_DRAFT = "Kies eerst voor minstens een avond een gerecht"
 CONFIRMED = "Dit menu is al bevestigd"
+RECIPE_NAME = "Geef het recept een naam"
+RECIPE_SERVINGS = "Aantal personen moet tussen 1 en 20 liggen"
+RECIPE_INGREDIENTS = "Zet er minstens één ingrediënt in"
+RECIPE_GONE = "Dit recept bestaat niet (meer)"
+MAX_RECIPE_SERVINGS = 20
+MAX_LINES = 100  # ingredient or step lines kept of one own recipe
+MAX_TEXT = 500  # characters kept of one title or line
+MAX_LINK = 2000  # characters in a link (the recipe page, its photo)
 
 FALLBACK_HTML = """<!doctype html>
 <html lang="nl"><head><meta charset="utf-8">
@@ -1535,6 +1544,105 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             return _err(400, "geen weekmenu-helper")
         return web.json_response({"ok": True, "value": value})
 
+    # --- v1.1: own recipes, and "Van een link" (importer.py) ---
+
+    def recipes_payload() -> dict:
+        items = sorted(ctx.recipes.all(), key=lambda r: r.title.casefold())
+        return {"items": [asdict(r) for r in items], "kinds": catalog.kind_names()}
+
+    async def get_recipes(request):
+        return web.json_response(recipes_payload())
+
+    def own_recipe_of(body: dict) -> OwnRecipe | str:
+        """The recipe in a form body, or the Dutch message of what is wrong with it."""
+        def text(value) -> str | None:
+            return (value.strip()[:MAX_TEXT] or None) if isinstance(value, str) else None
+
+        def lines(value) -> list[str]:
+            if not isinstance(value, list):
+                return []
+            return [x.strip()[:MAX_TEXT] for x in value
+                    if isinstance(x, str) and x.strip()][:MAX_LINES]
+
+        def link(value):
+            """A web link, None when empty, False when it is something else."""
+            if value is None or value == "":
+                return None
+            if (isinstance(value, str) and len(value) <= MAX_LINK
+                    and value.strip().lower().startswith(("http://", "https://"))):
+                return value.strip()
+            return False
+
+        rid, servings, cook = body.get("id", 0), body.get("servings"), body.get("cook")
+        kind = body.get("kind") or None
+        if not isinstance(rid, int) or isinstance(rid, bool) or rid > 0:
+            return "Ongeldig recept-id"
+        title = text(body.get("title"))
+        if not title:
+            return RECIPE_NAME
+        if (not isinstance(servings, int) or isinstance(servings, bool)
+                or not 1 <= servings <= MAX_RECIPE_SERVINGS):
+            return RECIPE_SERVINGS
+        ingredients = lines(body.get("ingredients"))
+        if not ingredients:
+            return RECIPE_INGREDIENTS
+        if cook is not None and (not isinstance(cook, int) or isinstance(cook, bool)
+                                 or not 0 <= cook <= 24 * 60):
+            return "Kooktijd moet een aantal minuten zijn"
+        if kind is not None and kind not in catalog.kind_names():
+            return "Kies een keuken uit de lijst"
+        url, image = link(body.get("url")), link(body.get("image"))
+        if url is False or image is False:
+            return "Een link moet beginnen met http:// of https://"
+        return OwnRecipe(rid, title, servings, ingredients, lines(body.get("steps")),
+                         cook or None, kind, text(body.get("source")), url, image,
+                         ctx.clock().isoformat(timespec="minutes"))
+
+    async def save_recipe(request):
+        """Add (id 0) or change an own recipe. A menu that already has it keeps its copy."""
+        r = own_recipe_of(await body_of(request))
+        if isinstance(r, str):
+            return _err(400, r)
+        if ctx.busy or ctx.in_round:
+            return _err(409, BUSY)
+        async with ctx.lock:
+            if r.id < 0 and ctx.recipes.get(r.id) is None:
+                return _err(404, RECIPE_GONE)
+            saved = await asyncio.to_thread(ctx.recipes.save, r)
+        log.info("Eigen recept %s bewaard", saved.id)
+        return web.json_response(asdict(saved))
+
+    async def remove_recipe(request):
+        try:
+            rid = int(request.match_info["id"])
+        except ValueError:
+            return _err(400, "ongeldig recept-id")
+        if ctx.busy or ctx.in_round:
+            return _err(409, BUSY)
+        async with ctx.lock:
+            if not await asyncio.to_thread(ctx.recipes.remove, rid):
+                return _err(404, RECIPE_GONE)
+        log.info("Eigen recept %s verwijderd", rid)
+        return web.json_response(recipes_payload())
+
+    async def import_recipe(request):
+        """"Van een link": the recipe on that page, filled in for the form; not saved.
+        Nothing is written, so no lock."""
+        url = (await body_of(request)).get("url")
+        if not isinstance(url, str) or not url.strip() or len(url) > MAX_LINK:
+            return _err(400, "Plak de link van een recept")
+        if ctx.web_http is None:
+            return _err(503, "Een recept van een link lezen kan nu niet")
+        try:
+            final, page = await importer.fetch_page(ctx.web_http, url)
+            r = await asyncio.to_thread(importer.parse, page, final)
+        except importer.RecipeImportError as e:
+            # never the link itself in the log: a path or query may carry something private
+            log.info("Recept van een link niet gelezen: %s", e.message)
+            return _err(422, e.message)
+        log.info("Recept gelezen van %s", _printable(r.source))
+        return web.json_response(asdict(r))
+
     app.router.add_get("/", index)
     app.router.add_get("/gids", guide)
     app.router.add_get("/api/status", status)
@@ -1567,6 +1675,10 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     app.router.add_get("/api/savings", savings)
     app.router.add_get("/api/settings", get_settings)
     app.router.add_post("/api/settings", post_settings)
+    app.router.add_get("/api/recipes", get_recipes)
+    app.router.add_post("/api/recipes", save_recipe)
+    app.router.add_post("/api/recipes/import", import_recipe)
+    app.router.add_post("/api/recipes/{id}/remove", remove_recipe)
     if static_dir.is_dir():
         app.router.add_static("/static/", static_dir)
     app.router.add_get("/" + _ASSET, asset)

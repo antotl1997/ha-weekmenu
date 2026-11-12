@@ -244,6 +244,8 @@ class Context:
     # v1.0: duim omlaag and "nooit meer" per recipe, and "Besparing nagerekend"
     taste: Taste | None = None
     recipes: RecipeStore | None = None  # v1.1: own recipes (negative ids)
+    # v1.1: the httpx client for "Van een link" (importer.py); None: import is off
+    web_http: Any = None
     # v1.1: scored AH recipes per folder period for the choice list, kept in
     # catalog_path over a restart when that is set (catalog.py)
     catalog_path: Path | None = None
@@ -1376,8 +1378,12 @@ async def amain() -> None:
     version = load_app_version()
     owner, today_targets, dinner = load_notify_options()
     store = TokenStore(DATA / "tokens.json")
+    # the import client fetches user-supplied links: redirects are followed by hand
+    # (each hop checked, importer.py) and no proxy from the environment is used
     async with httpx.AsyncClient(timeout=30) as ah_http, \
-            httpx.AsyncClient(timeout=15) as ha_http:
+            httpx.AsyncClient(timeout=15) as ha_http, \
+            httpx.AsyncClient(timeout=10, follow_redirects=False,
+                              trust_env=False) as web_http:
         ctx = Context(
             client=AhClient(store, ah_http, app_version=version),
             app_version=version,
@@ -1392,6 +1398,7 @@ async def amain() -> None:
             schedule_time=at,
             dinner_time=dinner,
             ingress_url=ingress_url(),
+            web_http=web_http,
         )
         load_state(ctx)
         ctx.bonus_cache = load_folders(ctx.folder_path)

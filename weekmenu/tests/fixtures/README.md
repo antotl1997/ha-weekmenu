@@ -68,3 +68,7 @@ Geen opname maar de vorm van albert-heijn-mcp `src/ahapi/shoppingList.ts` en `or
 | `handmade-shoppinglist__items.json` | `GET /mobile-services/shoppinglist/v2/items` met items |
 | `handmade-order-active__items.json` | `GET /mobile-services/order/v1/summaries/active` met items (order-id `123456`) |
 | `handmade-graphql-fulfillments__open.json` | GraphQL `orderFulfillments(status: OPEN)` met de bezorgdag van die bestelling (`getFulfillments` in `orders.ts`). Niet geverifieerd op echte AH: of de actieve bestelling hierin staat en of de samenvatting zelf een bezorgdag noemt. |
+
+## Receptpagina (`recipe-page__*.html`)
+
+`recipe-page__leukerecepten.html` is met de hand gemaakt: een verzonnen recept met schema.org Recipe JSON-LD, geen inhoud van een echte site. De naam zegt alleen welke site-scraper van `recipe-scrapers` hij in de test raakt.
