@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- **Aanbiedingen laadt snel.** De bonusfolder wordt per week één keer bij AH opgehaald (dat zijn zo'n 340 vragen achter elkaar, minuten werk) en daarna bewaard in `/data/folder.json`, ook over een herstart. Eerder hield de add-on maar één folder vast, alleen in het geheugen: na elke herstart of update, en elke keer dat de app de lopende week toonde terwijl het menu al met de folder van volgende week werkte, werd de hele folder opnieuw opgehaald. Bij het opstarten laadt de add-on de folder van de getoonde week alvast op de achtergrond.
+- **Foto's bij de aanbiedingen.** Producten uit een bonusgroep (verreweg de meeste) hadden geen foto, omdat AH die via een andere route levert. Ze krijgen nu de afbeelding van de actie, dezelfde als in de AH-app.
+- **Volgorde zoals bij AH.** De aanbiedingen staan in de volgorde van "Alle Bonus" bij AH, per categorie en binnen een categorie, in plaats van op alfabet. "Overig" staat nog steeds onderaan.
+
 ## 1.0.0
 
 - **Koken.** Op het gerechtscherm staat de knop Koken. Die opent een kookscherm met de hoeveelheden uit het recept groot ("400 g kipdijfilet") en het AH-product klein eronder, en daaronder de bereiding in grote, genummerde stappen. Tik op een stap als hij klaar is. Ingrediënten en stappen staan op één scherm dat je doorscrollt; Klaar brengt je terug. Het scherm blijft aan zolang je kookt, als je browser dat toestaat (Wake Lock); kan dat niet, dan werkt de rest gewoon.

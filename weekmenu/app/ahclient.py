@@ -140,7 +140,7 @@ class Product:
     orderable: bool
     category: str | None
     hq_id: int | None = None  # AH article number; the only product id on a till receipt
-    image: str | None = None  # product photo (bonus cards only), shown in the Aanbiedingen tab
+    image: str | None = None  # photo for the Aanbiedingen tab (a group deal: its combined picture)
 
 
 @dataclass
@@ -279,9 +279,12 @@ def product_from_card(c: dict) -> Product:
 
 
 def product_from_graphql(
-    p: dict, is_bonus: bool = True, category: str | None = None
+    p: dict, is_bonus: bool = True, category: str | None = None,
+    image: str | None = None,
 ) -> Product:
-    """GraphQL product (bonus group expansion)."""
+    """GraphQL product (bonus group expansion). GraphQL has no category and no photo:
+    the caller passes the group's own (the planner filters on the category, the
+    Aanbiedingen tab shows the group's combined picture)."""
     price = p.get("priceV2") or {}
     now = (price.get("now") or {}).get("amount")
     was = (price.get("was") or {}).get("amount")
@@ -299,6 +302,7 @@ def product_from_graphql(
         mechanism=(price.get("discount") or {}).get("description") or None,
         orderable=True,
         category=category,
+        image=image,
     )
 
 
@@ -591,13 +595,14 @@ class AhClient:
             },
         )
         out = []
+        picture = _widest_image(group.get("images"))  # AH's combined picture of the deal
         for promo in data.get("bonusPromotions") or []:
             for p in promo.get("products") or []:
                 if p.get("id") is not None:
-                    # GraphQL has no category: use the group's own (the planner filters on it)
                     out.append(
                         product_from_graphql(
-                            p, is_bonus=True, category=group.get("category") or None
+                            p, is_bonus=True, category=group.get("category") or None,
+                            image=picture,
                         )
                     )
         return out

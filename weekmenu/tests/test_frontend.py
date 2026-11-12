@@ -430,11 +430,12 @@ def test_app_offers_tab_in_chrome(tmp_path):
             dom.index('data-tab="besparing"') < dom.index('data-tab="instellingen"')
         assert dom.count('data-tab="') == 4
         # the search field on top, then a heading per category
-        assert dom.index('id="offerq"') < dom.index('<div class="sec">Borrel, chips, snacks')
+        assert dom.index('id="offerq"') < dom.index('<div class="sec">Zuivel, eieren')
         for cat in ("Borrel, chips, snacks", "Drogisterij", "Frisdrank, sappen, water",
                     "Zuivel, eieren"):
             assert f'<div class="sec">{cat}</div>' in dom, cat
-        assert dom.index(">Drogisterij<") < dom.index(">Zuivel, eieren<")
+        # in the folder's own order (AH's "Alle Bonus"), not A to Z
+        assert dom.index(">Zuivel, eieren<") < dom.index(">Borrel, chips, snacks<") <             dom.index(">Drogisterij<") < dom.index(">Frisdrank, sappen, water<")
         assert "5 aanbiedingen" in dom
         # pill with the action, price, the old price struck through only when it is lower
         assert "2e halve prijs" in dom and "1 + 1 gratis" in dom

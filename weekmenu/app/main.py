@@ -69,6 +69,7 @@ from app.hass import (
     plan_view,
     vanavond,
 )
+from app.foldercache import load_folders, remember, save_folders
 from app.history import HISTORY_SCHEMA, History
 from app.ledger import Ledger, WeekLog, new_folder_available
 from app.overrides import OVERRIDES_SCHEMA, Overrides
@@ -201,8 +202,11 @@ class Context:
     error_kind: str | None = None  # "read": a read that failed; a waiting result clears it
     away_notified: date | None = None  # menu week of the last "all evenings away" push
     total_day: date | None = None
-    # bonus offers per period start: the folder is the same all week
+    # bonus offers per period start: the folder is the same all week. Several periods
+    # (the tab may show this week's folder while the round reads next week's), kept in
+    # folder_path over a restart when that is set (foldercache.py)
     bonus_cache: dict[date, list[Product]] = field(default_factory=dict)
+    folder_path: Path | None = None
     # menu week -> (start of the current period used instead of its own folder, when):
     # lets the Aanbiedingen tab use a filled cache without asking AH for the periods
     offers_fallback: dict[date, tuple[date, datetime]] = field(default_factory=dict)
@@ -582,8 +586,37 @@ async def folder_for_week(
     elif ctx.waiting is not None and ctx.waiting.week == start:
         ctx.waiting = None  # the folder is out
     if period.start not in ctx.bonus_cache:
-        ctx.bonus_cache = {period.start: await ctx.client.bonus_offers(period)}
+        items = await ctx.client.bonus_offers(period)
+        ctx.bonus_cache = remember(ctx.bonus_cache, period.start, items)
+        if ctx.folder_path is not None:
+            await asyncio.to_thread(save_folders, ctx.folder_path, ctx.bonus_cache)
     return ctx.bonus_cache[period.start], warning, period.start
+
+
+def app_week(ctx: Context, now: datetime) -> date:
+    """The week the app shows by default: the running one when it has a menu, else the
+    next menu week (not shown_week below: that is the sensor's choice)."""
+    current = week_of(now.date())
+    return current if ctx.ledger.load(current).plan else menu_week_start(now)
+
+
+async def warm_folder(ctx: Context) -> None:
+    """At start, in the background: read the folder the Aanbiedingen tab will show when
+    it is not kept yet, so opening the tab does not wait minutes. Only with a usable
+    login; a failure is left to the tab itself (which then reads it as it always did)."""
+    now = ctx.clock()
+    if not login_view(ctx, now)["login_ok"]:
+        return
+    try:
+        start = app_week(ctx, now)
+        async with ctx.lock:
+            if any(first <= start <= first + timedelta(days=6) for first in ctx.bonus_cache):
+                return
+            await folder_for_week(ctx, start, now, fallback=True)
+        log.info("Folder voor de week van %s voorgeladen", start)
+    except Exception as e:
+        log.info("Folder voorladen lukte niet (%s); de tab haalt hem zelf op",
+                 type(e).__name__)
 
 
 # --- the round --------------------------------------------------------------------------
@@ -1362,11 +1395,13 @@ async def amain() -> None:
             pantry=pantry,
             total_path=TOTAL_PATH,
             state_path=DATA / "state.json",
+            folder_path=DATA / "folder.json",
             schedule_time=at,
             dinner_time=dinner,
             ingress_url=ingress_url(),
         )
         load_state(ctx)
+        ctx.bonus_cache = load_folders(ctx.folder_path)
         scan_too_new(ctx)  # the message goes out with the first look of the schedule
         # no access log: its Referer carries the ingress token, and it adds nothing
         runner = web.AppRunner(make_app(ctx, allowed_remotes={INGRESS_PROXY}),
@@ -1377,6 +1412,9 @@ async def amain() -> None:
                  at.strftime("%H:%M"))
         await update_total(ctx, ctx.clock().date())  # publish_total from /data/totaal.json
         stdin_task = asyncio.create_task(stdin_loop(ctx))
+        warm = asyncio.create_task(warm_folder(ctx))
+        ctx.tasks.add(warm)
+        warm.add_done_callback(ctx.tasks.discard)
         try:
             await schedule_loop(ctx)
         finally:

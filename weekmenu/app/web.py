@@ -346,7 +346,9 @@ def offer_item(p: Product, wlog) -> dict:
 
 
 def offers_view(products: Iterable[Product], wlog, q: str = "", category: str = "") -> dict:
-    """The folder per category (A to Z, "Overig" last), searchable on title."""
+    """The folder per category, searchable on title, in AH's own order ("Alle Bonus":
+    categories as the folder lists them, products as each category lists them).
+    `products` comes in that order from bonus_offers; "Overig" goes last."""
     q, category = q.strip().casefold(), category.strip().casefold()
     groups: dict[str, list[Product]] = {}
     for p in products:
@@ -356,11 +358,9 @@ def offers_view(products: Iterable[Product], wlog, q: str = "", category: str = 
         if q and q not in p.title.casefold():
             continue
         groups.setdefault(name, []).append(p)
-    names = sorted(groups, key=lambda n: (n == OTHER_CATEGORY, n.casefold()))
+    names = sorted(groups, key=lambda n: n == OTHER_CATEGORY)  # stable: AH's order stays
     return {"categories": [
-        {"name": n, "items": [offer_item(p, wlog)
-                              for p in sorted(groups[n], key=lambda x: x.title.casefold())]}
-        for n in names]}
+        {"name": n, "items": [offer_item(p, wlog) for p in groups[n]]} for n in names]}
 
 
 def cook_lines(d: Dish) -> list[dict]:
@@ -643,8 +643,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             except ValueError:
                 raise web.HTTPBadRequest(text='{"error": "ongeldige week"}',
                                          content_type="application/json") from None
-        current = main.week_of(now.date())
-        return current if ctx.ledger.load(current).plan else menu_week_start(now)
+        return main.app_week(ctx, now)
 
     async def week(request):
         now = ctx.clock()

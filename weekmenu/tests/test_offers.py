@@ -51,9 +51,10 @@ async def test_offers_are_grouped_by_category_and_searchable(aiohttp_client, tmp
     r = await client.get("api/offers")
     assert r.status == 200
     body = await r.json()
+    # AH's own order (the folder's), not A to Z; "Overig" last
     assert [c["name"] for c in body["categories"]] == [
-        "Kaas, vleeswaren", "Zuivel, eieren", "Overig"]
-    zuivel = body["categories"][1]["items"]
+        "Zuivel, eieren", "Kaas, vleeswaren", "Overig"]
+    zuivel = body["categories"][0]["items"]
     assert [i["title"] for i in zuivel] == ["AH Halfvolle melk", "AH Roomboter", "AH Zuurkool"]
     assert zuivel[1] == {
         "id": 51, "title": "AH Roomboter", "mechanism": "2e halve prijs", "price_now": 3.0,
@@ -68,6 +69,15 @@ async def test_offers_are_grouped_by_category_and_searchable(aiohttp_client, tmp
     assert body["categories"] == []
     body = await (await client.get("api/offers?category=kaas, vleeswaren")).json()
     assert [c["name"] for c in body["categories"]] == ["Kaas, vleeswaren"]
+
+
+def test_offers_keep_the_folder_order_within_a_category():
+    from app.web import offers_view
+    vla, appel, yoghurt = (op(60, "Vla", "Zuivel, eieren"), op(61, "Appel", None),
+                           op(62, "AH Yoghurt", "Zuivel, eieren"))
+    body = offers_view([vla, appel, yoghurt], WeekLog(W))
+    assert [(c["name"], [i["title"] for i in c["items"]]) for c in body["categories"]] == [
+        ("Zuivel, eieren", ["Vla", "AH Yoghurt"]), ("Overig", ["Appel"])]
 
 
 async def test_empty_cache_is_filled_once_under_the_lock(aiohttp_client, tmp_path):
@@ -103,7 +113,8 @@ async def test_tap_writes_once_with_the_quantity_the_deal_asks(aiohttp_client, t
     log = ctx.ledger.load(W)
     assert log.offers_added == {50: 2} and log.offers_savings == savings(KAAS, 2) == 3.0
     assert log.extras_added == {} and log.added == {} and log.pending == {}
-    items = (await (await client.get("api/offers")).json())["categories"][0]["items"]
+    cats = (await (await client.get("api/offers")).json())["categories"]
+    items = next(c["items"] for c in cats if c["name"] == "Kaas, vleeswaren")
     assert items[0]["id"] == 50 and items[0]["added_qty"] == 2
 
 
