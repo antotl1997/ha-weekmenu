@@ -4,7 +4,7 @@
 negative id so it never meets an AH id. `LocalFirst` wraps the AH client: a negative id
 is answered from this store, everything else goes to AH. A file that cannot be read, or
 one from a newer add-on, loads as empty; saving over a newer file raises SchemaTooNew
-(like History.record). Callers write under `ctx.lock`.
+(like History.record), and an unreadable file is set aside before the first save. Callers write under `ctx.lock`.
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ import json
 import logging
 import re
 from dataclasses import asdict, dataclass, field, fields, replace
+from datetime import datetime
 from pathlib import Path
 
 from app.ahclient import AhApiError, Recipe
@@ -85,7 +86,26 @@ class RecipeStore:
             return min(stored, derived)
         return derived
 
+    def _set_aside_broken(self) -> None:
+        """A file that exists but cannot be read as recipes (loaded as empty) is renamed
+        to recipes.json.broken-<time> before the first write, so a save never overwrites
+        the user's recipes. A failing rename is raised: then nothing is written."""
+        try:
+            data = json.loads(self.path.read_bytes().decode("utf-8"))
+        except FileNotFoundError:
+            return
+        except (OSError, ValueError):
+            data = None
+        if isinstance(data, dict) and isinstance(data.get("recipes", []), list):
+            return  # readable (a newer form is refused by write_json itself)
+        aside = self.path.with_name(
+            f"{self.path.name}.broken-{datetime.now().strftime('%Y%m%d-%H%M%S')}")
+        self.path.rename(aside)
+        log.warning("%s was niet te lezen; bewaard als %s, er komt een nieuw bestand",
+                    self.path.name, aside.name)
+
     def _write(self, recipes: list[OwnRecipe], next_id: int) -> None:
+        self._set_aside_broken()
         write_json(self.path, {"recipes": [asdict(x) for x in recipes],
                                "next_id": next_id}, RECIPES_SCHEMA)
 

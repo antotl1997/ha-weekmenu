@@ -58,3 +58,28 @@ async def test_draft_target_notes_an_expired_login_without_a_push(aiohttp_client
     assert week["target"] is None
     assert ctx.login_expired is True
     assert ctx.hass.notifications() == []
+
+
+def test_a_broken_recipes_file_is_set_aside_before_a_save(tmp_path, caplog):
+    from app.recipes import OwnRecipe, RecipeStore
+    path = tmp_path / "recipes.json"
+    path.write_bytes(b'{"schema": 1, "recipes": [{"id": -1, "title": "Oma\'s sto')
+    store = RecipeStore(path)
+    assert store.all() == []  # shown as empty
+    saved = store.save(OwnRecipe(0, "Soep", 2, ["1 ui"]))
+    aside = list(tmp_path.glob("recipes.json.broken-*"))
+    assert len(aside) == 1
+    assert aside[0].read_bytes().startswith(b'{"schema": 1, "recipes": [{"id": -1')
+    assert [r.title for r in store.all()] == ["Soep"] and saved.id < 0
+    assert "niet te lezen" in caplog.text
+    store.save(OwnRecipe(0, "Stoof", 2, ["1 ui"]))  # a readable file now: nothing set aside
+    assert len(list(tmp_path.glob("recipes.json.broken-*"))) == 1
+    assert [r.title for r in store.all()] == ["Soep", "Stoof"]
+
+
+def test_a_recipes_file_with_a_wrong_shape_is_set_aside_too(tmp_path):
+    from app.recipes import OwnRecipe, RecipeStore
+    path = tmp_path / "recipes.json"
+    path.write_text('{"schema": 1, "recipes": {"-1": "x"}}', encoding="utf-8")
+    RecipeStore(path).save(OwnRecipe(0, "Soep", 2, []))
+    assert len(list(tmp_path.glob("recipes.json.broken-*"))) == 1
