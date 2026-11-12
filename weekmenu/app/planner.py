@@ -24,6 +24,7 @@ from pathlib import Path
 import yaml
 
 from app.ahclient import AhApiError, Product, Recipe, RecipeSummary, is_blocking
+from app.recipes import is_own, scale_recipe
 from app.deals import parse_mechanism, qty_for_deal, savings
 from app.taste import DOWN_FACTOR
 from app.ingredients import (
@@ -819,12 +820,16 @@ async def swap_dish(
 
 async def rescale_dish(client, plan: Plan, day: date, persons: int,
                        overrides: dict | None = None) -> Plan:
-    """The same recipe for another number of persons; only this dish changes."""
+    """The same recipe for another number of persons; only this dish changes. An own
+    recipe is scaled from the copy in the dish (no store read, no AH call)."""
     old = next((d for d in plan.dishes if d.date == day), None)
     if old is None or persons < 1:
         return plan
     started = time.perf_counter()
-    recipe = await client.get_recipe(old.recipe.id, servings=persons)
+    if is_own(old.recipe.id):  # from the dish's own copy, never from the store
+        recipe = scale_recipe(old.recipe, persons)
+    else:
+        recipe = await client.get_recipe(old.recipe.id, servings=persons)
 
     old_keys = [n or t for t, n in old.recipe.ingredients]
     key_of_text = dict(zip((t for t, _ in old.recipe.ingredients), old_keys))
@@ -908,6 +913,15 @@ async def dish_for(
     the user chose this recipe. A recipe without a known cuisine is "eigen".
     """
     recipe = await client.get_recipe(recipe_id, servings=persons)
+    return await _dish_of(client, recipe, day, persons, bonus, pantry, overrides,
+                          leftover_date)
+
+
+async def _dish_of(
+    client, recipe: Recipe, day: date, persons: int, bonus: list[Product],
+    pantry: list[str], overrides: dict | None, leftover_date: date | None,
+) -> Dish:
+    """The dish of this (already scaled) recipe; see dish_for."""
     names = " ".join(n or t for t, n in recipe.ingredients)
     resolve = _resolver(client, bonus, pantry, {}, overrides)
     lines, pantry_texts, not_found, skipped = await _lines(client, recipe, resolve)
@@ -959,11 +973,17 @@ async def pick_dish(
 async def rebuild_plan(client, plan: Plan, bonus: list[Product],
                        overrides: dict | None = None) -> Plan:
     """"Menu bijwerken": every dish made again from the same recipe, day, persons and
-    leftover night, against `bonus` (the new folder). A recipe that is gone (404, such
-    as a deleted own recipe) keeps its dish as it was; other AH errors are raised."""
+    leftover night, against `bonus` (the new folder). An own recipe is rebuilt from the
+    copy in the dish, so editing or deleting it never changes the menu. An AH recipe
+    that is gone (404) keeps its dish as it was; other AH errors are raised."""
     started = time.perf_counter()
     dishes = []
     for old in plan.dishes:
+        if is_own(old.recipe.id):  # the dish's own copy: the store is never read again
+            new = await _dish_of(client, old.recipe, old.date, old.persons, bonus,
+                                 plan.pantry, overrides, old.leftover_date)
+            dishes.append(_keep_cuisine(new, old))
+            continue
         try:
             new = await dish_for(client, old.recipe.id, old.date, old.persons, bonus,
                                  plan.pantry, overrides, old.leftover_date)

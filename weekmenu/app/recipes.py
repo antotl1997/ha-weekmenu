@@ -12,7 +12,7 @@ from __future__ import annotations
 import json
 import logging
 import re
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import asdict, dataclass, field, fields, replace
 from pathlib import Path
 
 from app.ahclient import AhApiError, Recipe
@@ -155,6 +155,18 @@ def to_recipe(r: OwnRecipe, persons: int) -> Recipe:
                   r.image)
 
 
+def is_own(recipe_id: int) -> bool:
+    """Own recipes have negative ids; AH's are positive."""
+    return recipe_id < 0
+
+
+def scale_recipe(recipe: Recipe, persons: int) -> Recipe:
+    """An already made recipe (an own dish's copy) for another number of persons."""
+    factor = persons / recipe.servings if recipe.servings else 1.0
+    return replace(recipe, servings=persons,
+                   ingredients=[(scale_text(t, factor), n) for t, n in recipe.ingredients])
+
+
 class LocalFirst:
     """The AH client, except that own (negative) recipe ids are answered from the store."""
 
@@ -163,7 +175,7 @@ class LocalFirst:
         self._store = store
 
     async def get_recipe(self, id: int, servings: int):
-        if id < 0:
+        if is_own(id):
             own = self._store.get(id)
             if own is None:
                 raise AhApiError("eigen recept bestaat niet meer", 404)
