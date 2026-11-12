@@ -389,6 +389,31 @@ async def _score(
     return round(sum(_potential(prods[i], n) for i, n in need.items()), 2), list(prods.values())
 
 
+def _now(coro):
+    """Run a coroutine that never waits (scoring only meets _BonusOnly) to its result."""
+    try:
+        coro.send(None)
+    except StopIteration as done:
+        return done.value
+    coro.close()
+    raise RuntimeError("scoring waited on I/O")
+
+
+def score_recipe(
+    recipe: Recipe, bonus: list[Product], pantry: list[str], overrides: dict | None = None,
+) -> tuple[float, str | None, bool]:
+    """The bonus saving of `recipe` against the folder `bonus`, its cuisine (None: none
+    found) and whether it is a fish dish. Local only: no AH call."""
+    score, prods = _now(_score(recipe, bonus, pantry, overrides))
+    names = " ".join(n or t for t, n in recipe.ingredients)
+    fish = (
+        is_fishy(recipe.title)
+        or is_fishy(names)
+        or any(is_fishy(p.title) or _fold(p.category or "") == "vis" for p in prods)
+    )
+    return score, cuisine_of(recipe), fish
+
+
 def _potential(p: Product, n: int) -> float:
     """The deal's saving per pack, times the packs this recipe needs.
 
@@ -456,15 +481,10 @@ async def _gather(
         cuisine = cuisine_of(recipe, term)
         if cuisine is None:
             continue
-        score, prods = await _score(recipe, bonus, s.pantry, s.overrides)
+        score, _, fish = score_recipe(recipe, bonus, s.pantry, s.overrides)
         if recipe.id in s.down or summ.id in s.down:  # duim omlaag: a soft penalty
             score = round(score * DOWN_FACTOR, 2)
         names = " ".join(n or t for t, n in recipe.ingredients)
-        fish = (
-            is_fishy(recipe.title)
-            or is_fishy(names)
-            or any(is_fishy(p.title) or _fold(p.category or "") == "vis" for p in prods)
-        )
         cands.append(
             _Cand(
                 summary=summ, recipe=recipe, term=term, cuisine=cuisine, is_fish=fish,

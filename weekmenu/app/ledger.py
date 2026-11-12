@@ -245,12 +245,17 @@ class Ledger:
         return self._all()
 
     def recent_recipe_ids(self, before: date, weeks: int = 4) -> set[int]:
-        ids: set[int] = set()
+        return set(self.recent_recipe_weeks(before, weeks))
+
+    def recent_recipe_weeks(self, before: date, weeks: int = 4) -> dict[int, int]:
+        """Recipe id -> how many menu weeks before the menu week `before` it was last in
+        a plan (1: last week), over the last `weeks` weeks."""
+        out: dict[int, int] = {}
         for i in range(1, weeks + 1):
             log = self.load(before - timedelta(days=7 * i))
             for d in (log.plan or {}).get("dishes") or []:
-                ids.add(int(d["recipe"]["id"]))
-        return ids
+                out.setdefault(int(d["recipe"]["id"]), i)
+        return out
 
     def weeks_to_count(self, today: date) -> list[WeekLog]:
         return [lg for lg in self._all() if lg.week <= today and not lg.counted]

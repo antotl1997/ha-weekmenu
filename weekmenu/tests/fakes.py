@@ -5,7 +5,7 @@ from datetime import date, datetime
 
 import httpx
 
-from app.ahclient import ActiveOrder, AhApiError, BonusPeriod, Product, Recipe
+from app.ahclient import ActiveOrder, AhApiError, BonusPeriod, Product, Recipe, RecipeSummary
 from app.hass import HELPER_AAN, HELPER_AVONDEN, Hass, helper_persons
 from app.ledger import Ledger
 from app.main import Context
@@ -75,6 +75,7 @@ class FakeAh:
         self.fresh_checks = 0
         self.search_results: dict[str, list[Product]] = {}  # v0.9: "Ander product"
         self.searches: list[str] = []
+        self.recipe_hits: dict[str, list[int]] = {}  # v1.1: search_recipes text -> ids
 
     async def search_products(self, query, size=20):
         self._maybe_raise("search_products")
@@ -109,6 +110,12 @@ class FakeAh:
     async def previously_bought_bonus(self, period):
         self._maybe_raise("previously_bought_bonus")
         return list(self.prev_bonus)
+
+    async def search_recipes(self, text, size=30):
+        self._maybe_raise("search_recipes")
+        return [RecipeSummary(rid, f"Recept {rid}", f"recept-{rid}", ["hoofdgerecht"],
+                              30, None, None, 2, f"https://example.invalid/{rid}.jpg")
+                for rid in self.recipe_hits.get(text, [])][:size]
 
     async def get_recipe(self, id, servings):
         self._maybe_raise("get_recipe")

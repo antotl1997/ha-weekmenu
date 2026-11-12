@@ -69,6 +69,7 @@ from app.hass import (
     plan_view,
     vanavond,
 )
+from app.catalog import Catalog
 from app.foldercache import load_folders, remember, save_folders
 from app.history import HISTORY_SCHEMA, History
 from app.recipes import RecipeStore
@@ -242,6 +243,10 @@ class Context:
     # v1.0: duim omlaag and "nooit meer" per recipe, and "Besparing nagerekend"
     taste: Taste | None = None
     recipes: RecipeStore | None = None  # v1.1: own recipes (negative ids)
+    # v1.1: scored AH recipes per folder period for the choice list, kept in
+    # catalog_path over a restart when that is set (catalog.py)
+    catalog_path: Path | None = None
+    catalog: Catalog | None = None
     reconciliations: Reconciliations | None = None
     recon_checked: datetime | None = None  # not kept: the hour "nagerekend" last looked
 
@@ -255,6 +260,8 @@ class Context:
             self.taste = Taste(data / "taste.json")
         if self.recipes is None:
             self.recipes = RecipeStore(data / "recipes.json")
+        if self.catalog is None:
+            self.catalog = Catalog(self.catalog_path)  # loads the file, if any
         if self.reconciliations is None:
             self.reconciliations = Reconciliations(data / "reconciliation.json")
         own = getattr(self.client, "health", None)
@@ -1400,6 +1407,7 @@ async def amain() -> None:
             total_path=TOTAL_PATH,
             state_path=DATA / "state.json",
             folder_path=DATA / "folder.json",
+            catalog_path=DATA / "catalog.json",
             schedule_time=at,
             dinner_time=dinner,
             ingress_url=ingress_url(),
