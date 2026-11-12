@@ -898,6 +898,86 @@ def remove_dish(plan: Plan, day: date) -> Plan:
                    set(plan.removed_days) | gone)
 
 
+async def dish_for(
+    client, recipe_id: int, day: date, persons: int, bonus: list[Product],
+    pantry: list[str], overrides: dict | None = None, leftover_date: date | None = None,
+) -> Dish:
+    """The dish of recipe `recipe_id` for `persons` on `day`, its ingredients matched
+    to products (savings 0: `_finish` splits them). Own recipes (negative ids) come
+    from the store when `client` is a LocalFirst. The week's rules are not checked:
+    the user chose this recipe. A recipe without a known cuisine is "eigen".
+    """
+    recipe = await client.get_recipe(recipe_id, servings=persons)
+    names = " ".join(n or t for t, n in recipe.ingredients)
+    resolve = _resolver(client, bonus, pantry, {}, overrides)
+    lines, pantry_texts, not_found, skipped = await _lines(client, recipe, resolve)
+    fish = is_fishy(recipe.title) or is_fishy(names) or any(
+        is_fishy(ln.product.title) or _fold(ln.product.category or "") == "vis" for ln in lines
+    )
+    return Dish(
+        date=day, recipe=recipe, cuisine=cuisine_of(recipe) or "eigen", is_fish=fish,
+        lines=lines, savings=0.0, persons=persons, cook=recipe.cook, oven=recipe.oven,
+        wait=recipe.wait, pantry=pantry_texts, not_found=not_found,
+        leftover_date=leftover_date, skipped=skipped,
+    )
+
+
+def _keep_cuisine(new: Dish, old: Dish | None) -> Dish:
+    """An AH recipe whose cuisine came from its search term keeps the old label."""
+    if old is not None and cuisine_of(new.recipe) is None:
+        return dataclasses.replace(new, cuisine=old.cuisine)
+    return new
+
+
+def _with_dish(plan: Plan, dish: Dish) -> Plan:
+    """`plan` with `dish` on its day (replacing what was there); its evenings are no
+    longer "geen gerecht"."""
+    dishes = [d for d in plan.dishes if d.date != dish.date] + [dish]
+    back = {dish.date, dish.leftover_date}
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
+                   [x for x in plan.removed_days if x not in back])
+
+
+def empty_plan(pantry: list[str]) -> Plan:
+    """A menu without dishes, for a new draft the user fills evening by evening."""
+    return _finish([], 0, pantry)
+
+
+async def pick_dish(
+    client, plan: Plan, day: date, recipe_id: int, bonus: list[Product], persons: int,
+    leftover_date: date | None, overrides: dict | None = None,
+) -> Plan:
+    """The user picked recipe `recipe_id` for `day`: it replaces the dish there (or
+    fills the empty evening); the rest of the week stays as it is."""
+    started = time.perf_counter()
+    dish = await dish_for(client, recipe_id, day, persons, bonus, plan.pantry, overrides,
+                          leftover_date)
+    log.info("Planner: gekozen gerecht in %.2f s", time.perf_counter() - started)
+    return _with_dish(plan, dish)
+
+
+async def rebuild_plan(client, plan: Plan, bonus: list[Product],
+                       overrides: dict | None = None) -> Plan:
+    """"Menu bijwerken": every dish made again from the same recipe, day, persons and
+    leftover night, against `bonus` (the new folder). A recipe that is gone (404, such
+    as a deleted own recipe) keeps its dish as it was; other AH errors are raised."""
+    started = time.perf_counter()
+    dishes = []
+    for old in plan.dishes:
+        try:
+            new = await dish_for(client, old.recipe.id, old.date, old.persons, bonus,
+                                 plan.pantry, overrides, old.leftover_date)
+        except AhApiError as e:
+            if e.status != 404:
+                raise
+            dishes.append(old)
+            continue
+        dishes.append(_keep_cuisine(new, old))
+    log.info("Planner: menu bijgewerkt in %.2f s", time.perf_counter() - started)
+    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
+                   plan.removed_days)
+
+
 async def restore_dish(
     client, plan: Plan, day: date, recipe_id: int, bonus: list[Product],
     overrides: dict | None = None,
@@ -905,28 +985,13 @@ async def restore_dish(
     """Put recipe `recipe_id` back on `day`: the fallback for logs without a saved dish.
 
     The recipe already passed the week's rules before it was swapped out, so they are
-    not checked again. Oven and waiting times only come with search results and are
-    lost here.
+    not checked again.
     """
     old = next((d for d in plan.dishes if d.date == day), None)
     persons = old.persons if old else SCORE_SERVINGS
-    recipe = await client.get_recipe(recipe_id, servings=persons)
-    names = " ".join(n or t for t, n in recipe.ingredients)
-    resolve = _resolver(client, bonus, plan.pantry, {}, overrides)
-    lines, pantry, not_found, skipped = await _lines(client, recipe, resolve)
-    fish = is_fishy(recipe.title) or is_fishy(names) or any(
-        is_fishy(ln.product.title) or _fold(ln.product.category or "") == "vis" for ln in lines
-    )
-    dish = Dish(
-        date=day, recipe=recipe, cuisine=cuisine_of(recipe) or (old.cuisine if old else ""),
-        is_fish=fish, lines=lines, savings=0.0, persons=persons, cook=recipe.cook,
-        pantry=pantry, not_found=not_found, leftover_date=old.leftover_date if old else None,
-        skipped=skipped,
-    )
-    dishes = [d for d in plan.dishes if d.date != day] + [dish]
-    back = {day, dish.leftover_date}
-    return _finish(dishes, plan.short_by, plan.pantry, plan.budget_exhausted,
-                   [x for x in plan.removed_days if x not in back])
+    dish = await dish_for(client, recipe_id, day, persons, bonus, plan.pantry, overrides,
+                          old.leftover_date if old else None)
+    return _with_dish(plan, _keep_cuisine(dish, old))
 
 
 async def _redo(plan: Plan, key: str, resolve) -> Plan:
