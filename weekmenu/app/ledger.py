@@ -92,6 +92,9 @@ class WeekLog:
     # v1.1: the week being filled evening by evening (Plan.to_dict), before it is
     # confirmed; nothing in it was written to AH. None once confirmed (plan is set then).
     draft: dict | None = None
+    # v1.1: the start of the oldest bonus period a dish in the draft was matched to;
+    # confirming with a newer folder out matches the draft again first. None: no draft.
+    draft_period_start: date | None = None
     # not stored: the file was written by a newer add-on. Shown, never written (v0.6).
     too_new: bool = field(default=False, compare=False, repr=False)
 
@@ -134,6 +137,7 @@ class WeekLog:
             "delivery": _iso(self.delivery),
             "offers_saved": {str(k): v for k, v in self.offers_saved.items()},
             "draft": self.draft,
+            "draft_period_start": _iso(self.draft_period_start),
         }
 
     @classmethod
@@ -173,6 +177,7 @@ class WeekLog:
             delivery=_date(d.get("delivery")),
             offers_saved={int(k): float(v) for k, v in (d.get("offers_saved") or {}).items()},
             draft=d.get("draft"),
+            draft_period_start=_date(d.get("draft_period_start")),
         )
 
 

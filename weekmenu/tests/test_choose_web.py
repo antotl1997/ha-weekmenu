@@ -491,3 +491,76 @@ async def test_draft_says_where_confirming_would_write(aiohttp_client, tmp_path)
     assert await target() is None
     assert W not in ctx.draft_targets  # an error is not kept: the next look asks again
     assert ah.writes == []
+
+
+# --- final review -----------------------------------------------------------------
+
+OLD_GEHAKT = Product(21, "AH Rundergehakt", "500 g", 7.0, 7.0, True, "25% korting", True,
+                     "Vlees")
+
+
+def only_current(ctx, ah):
+    """Only the running folder is out: the menu week falls back on it."""
+    from tests.fakes import CURRENT
+    ah.periods = [CURRENT]
+    ctx.bonus_cache = {CURRENT.start: [OLD_GEHAKT, KIP, UI], NEXT.start: list(BONUS)}
+
+
+async def test_draft_picked_on_the_old_folder_is_matched_again_on_confirm(aiohttp_client,
+                                                                         tmp_path):
+    from tests.fakes import CURRENT
+    ctx, ah = make(tmp_path)
+    only_current(ctx, ah)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, W, 101)).status == 200
+    assert ctx.ledger.load(W).draft_period_start == CURRENT.start
+    draft = Plan.from_dict(ctx.ledger.load(W).draft)
+    assert [ln.product.id for ln in draft.dishes[0].lines] == [21]
+
+    ah.periods = [CURRENT, NEXT]  # the week's own folder came out before confirming
+    r = await client.post(f"api/week/confirm?week={W.isoformat()}")
+    assert r.status == 200, await r.text()
+    assert ah.held() == {11: 1}  # NEXT's gehakt, not the old folder's
+    log = ctx.ledger.load(W)
+    assert log.folder_period_start == NEXT.start and log.period_warning is None
+    assert log.draft_period_start is None
+    plan = Plan.from_dict(log.plan)
+    assert [ln.product.id for ln in plan.dishes[0].lines] == [11]
+
+
+async def test_a_later_pick_on_a_newer_folder_keeps_the_oldest_period(aiohttp_client,
+                                                                     tmp_path):
+    from tests.fakes import CURRENT
+    ctx, ah = make(tmp_path)
+    only_current(ctx, ah)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, W, 101)).status == 200
+    ah.periods = [CURRENT, NEXT]
+    assert (await pick(client, DO, 102)).status == 200
+    assert ctx.ledger.load(W).draft_period_start == CURRENT.start  # W still on the old one
+    assert (await client.post(f"api/dish/{W.isoformat()}/remove")).status == 200
+    assert (await client.post(f"api/dish/{DO.isoformat()}/remove")).status == 200
+    assert (await pick(client, DO, 102)).status == 200  # an empty draft starts again
+    assert ctx.ledger.load(W).draft_period_start == NEXT.start
+
+
+async def test_confirmed_on_the_old_folder_offers_menu_bijwerken_later(aiohttp_client,
+                                                                      tmp_path):
+    from app import main
+    from app.main import PERIOD_WARNING
+    from tests.fakes import CURRENT
+    ctx, ah = make(tmp_path)
+    only_current(ctx, ah)
+    client = await aiohttp_client(make_app(ctx))
+    assert (await pick(client, W, 101)).status == 200
+    r = await client.post(f"api/week/confirm?week={W.isoformat()}")
+    assert r.status == 200, await r.text()
+    assert ah.held() == {21: 1}
+    log = ctx.ledger.load(W)
+    assert log.folder_period_start == CURRENT.start and log.period_warning == PERIOD_WARNING
+
+    ah.periods = [CURRENT, NEXT]  # the week's own folder comes out
+    await main.check_new_folder(ctx, W)
+    log = ctx.ledger.load(W)
+    from app.ledger import new_folder_available
+    assert new_folder_available(log) is True

@@ -43,7 +43,7 @@ from app.ledger import leftovers, new_folder_available
 from app.overrides import make_entry
 from app.taste import KINDS as TASTE_KINDS
 from app.reconcile import metrics as savings_metrics
-from app.planner import Dish, Plan, empty_plan, pick_dish
+from app.planner import Dish, Plan, empty_plan, pick_dish, rebuild_plan
 from app.recipes import LocalFirst, OwnRecipe, is_own
 from app.deals import qty_for_deal, savings as deal_savings
 from app.diag import diagnose
@@ -951,12 +951,19 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             if isinstance(got, web.Response):
                 return got
             persons, rest = got
-            bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(), fallback=True)
+            bonus, _, period = await main.folder_for_week(ctx, wlog.week, ctx.clock(),
+                                                          fallback=True)
             try:
                 new = await pick_dish(chooser(), draft, day, rid, bonus, persons, rest,
                                       overrides=ctx.overrides.load())
             except AhApiError as e:
                 return gone_or_raise(e, rid)
+            # the oldest folder a dish of the draft was matched to: confirming once a
+            # newer one is out matches the whole draft again
+            others = [x for x in draft.dishes if x.date != day]
+            if others and wlog.draft_period_start is not None:
+                period = min(period, wlog.draft_period_start)
+            wlog.draft_period_start = period
             await save_draft(wlog, new)
             return web.json_response(draft_dish_view(wlog, new, draft_dish(new, day)))
 
@@ -1109,11 +1116,19 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                 log.info("Week %s: %d gerecht(en) op een avond niet thuis weggelaten",
                          start, len(gone))
             now = ctx.clock()
-            _bonus, warning, period_start = await main.folder_for_week(ctx, start, now,
-                                                                       fallback=True)
+            bonus, warning, period_start = await main.folder_for_week(ctx, start, now,
+                                                                      fallback=True)
+            if (wlog.draft_period_start is not None
+                    and period_start > wlog.draft_period_start):
+                # picked on an older folder: the same dishes against the current one,
+                # like Menu bijwerken, so the menu never locks in old prices
+                plan = await rebuild_plan(chooser(), plan, bonus, ctx.overrides.load())
+                log.info("Week %s: concept opnieuw gekoppeld aan de folder van %s",
+                         start, period_start)
             # apply saves these with the plan, before writing: a stop halfway is
             # completed once by the hourly look, from the log, never blind
             wlog.draft = None
+            wlog.draft_period_start = None
             wlog.period_warning = warning
             wlog.folder_period_start = period_start
             wlog.round_done = wlog.completion_tried = wlog.notified = False
