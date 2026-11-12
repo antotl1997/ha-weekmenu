@@ -271,3 +271,39 @@ textarea::placeholder,input::placeholder{color:#6b655c;opacity:1}
 .cstep.done .n{background:#2f6b3a;color:#fff}
 .row.chk .nm b{display:block;font-size:15px;font-weight:600;margin:2px 0}
 .row.chk .nm small:first-child{margin:0 0 1px}
+/* v1.1: choosing per evening, the concept, own recipes */
+.skip.kies{width:calc(100% - 32px);text-align:left;color:#22201c;border:1.5px dashed #cfc8bc;box-shadow:none;background:#fbfaf8}
+.skip.kies .pill{margin-left:auto}
+.skip.kies .now{color:#2f6b3a;font-weight:600}
+.concept{padding:14px;display:flex;flex-direction:column;gap:3px;border:1.5px solid #22201c;font-size:13.5px;line-height:1.45}
+.concept b{font-size:16px}
+.concept .cnt{font-size:15px;font-weight:600;color:#2b2722}
+.concept .muted{color:#6b655c}
+.concept .btn.full{margin:10px 0 0;width:100%}
+.kinds{display:flex;gap:6px;overflow-x:auto;padding:10px 16px 6px;scrollbar-width:none}
+.kinds::-webkit-scrollbar{display:none}
+.kinds .chip{flex:none;padding:8px 14px}
+.row.choice{width:100%;text-align:left;font-size:14px}
+.row.choice .thumb{width:56px;height:56px;border-radius:12px;flex:none;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.row.choice .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.row.choice .thumb svg{width:24px;height:24px}
+.row.choice .nm b{display:block;font-weight:600;font-size:14.5px;line-height:1.3}
+.row.choice .nm small{display:flex;flex-wrap:wrap;align-items:center;gap:2px 5px;margin-top:3px}
+.row.choice .nm small.eaten{color:#8a5a14}
+.row.choice .pill.b{margin:0;font-size:10.5px;padding:3px 7px}
+.row.choice > .pill{margin-left:auto}
+.row.choice .long{color:#c0661a;font-weight:700}
+.row.choice.busy{color:inherit!important;opacity:.6}
+.row.choice.busy::after{left:auto;right:8px;border-color:rgba(34,32,28,.18);border-top-color:#22201c}
+a.btn.sm{display:inline-flex}
+.form{padding:4px 14px 14px}
+.fl{display:block;font-size:13px;font-weight:600;color:#5f5a52;margin-top:12px}
+.fl input,.fl select{display:block;width:100%;margin-top:6px;border:1px solid #e1dbd1;border-radius:12px;padding:10px 12px;font:inherit;font-size:15px;font-weight:400;background:#fff;color:#22201c;min-height:44px}
+.fl input:focus,.fl select:focus{outline:2px solid #2f6b3a;outline-offset:1px}
+.fl textarea{margin:6px 0 0;font-size:14px;font-weight:400;color:#22201c}
+.fl2{display:flex;gap:10px}
+.fl2 .fl{flex:1;min-width:0}
+.linkbox{display:flex;gap:8px;margin-top:6px}
+.linkbox input{flex:1;min-width:0;border:1px solid #e1dbd1;border-radius:12px;padding:10px 12px;font:inherit;font-size:15px;background:#fff;min-height:44px}
+.form p.hint{margin-top:6px}
+.form p.hint[hidden]{display:none}

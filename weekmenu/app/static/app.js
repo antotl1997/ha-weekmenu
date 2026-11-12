@@ -18,7 +18,11 @@ const BUSY_TEXT = "Het menu wordt nu gemaakt, even geduld";
 
 const state = { status: null, week: null, weekParam: null, savings: null, settings: null,
   staples: [], dishes: {}, open: {}, polling: false, offers: null, offersNote: "", offerQ: "",
-  welcomed: false, overrides: null, fix: null, taste: null, cookDone: {} };
+  welcomed: false, overrides: null, fix: null, taste: null, cookDone: {},
+  // v1.1: the choose screen of one evening, own recipes and their form, and where the
+  // back buttons of those three screens go
+  choose: null, recipes: null, recipeKinds: [], form: null,
+  chooseBack: "#week", recipesBack: "#instellingen", formBack: null };
 
 // --- helpers ---------------------------------------------------------------------------
 
@@ -57,6 +61,13 @@ function longDate(iso) {
 function shortDate(dt) {
   const dag = ["zo", "ma", "di", "wo", "do", "vr", "za"][dt.getDay()];
   return `${dag} ${dt.getDate()} ${MAANDEN[dt.getMonth()].slice(0, 3)}`;
+}
+
+/* The Wednesday that starts the menu week holding `iso`. */
+function weekOf(iso) {
+  const d = parseDate(iso);
+  d.setDate(d.getDate() - ((d.getDay() + 4) % 7));  // wednesday: 0 days back
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
 function isoWeek(iso) {
@@ -235,6 +246,19 @@ async function loadDish(day) {
   state.dishes[day] = await api(`api/dish/${encodeURIComponent(day)}`);
 }
 
+/* The choice list of one evening: AH recipes kept for the folder and own recipes. */
+async function loadChoose(day) {
+  const res = await api(`api/choose?day=${encodeURIComponent(day)}`);
+  state.choose = { day, items: res.items || [], kinds: res.kinds || [],
+    ready: !!res.catalog_ready, q: "", kind: "", found: [] };
+}
+
+async function loadRecipes() {
+  const res = await api("api/recipes");
+  state.recipes = res.items || [];
+  state.recipeKinds = res.kinds || [];
+}
+
 async function loadTaste() {
   state.taste = (await api("api/taste")).items;
 }
@@ -378,6 +402,11 @@ function dayCard(d) {
     return `<button class="card skip rest" data-dish="${esc(d.restjes_van.date)}"><div class="ic">${ICON.bowl}</div>
       <div><b>${esc(cap(d.dag))}</b> · restjes van ${esc(d.restjes_van.title)}</div></button>`;
   }
+  if (d.kies && !d.recipe) {  // an empty cook evening: draft, or emptied after confirming
+    return `<button class="card skip kies" data-kies="${esc(d.date)}"><div class="ic">${ICON.plus}</div>
+      <div class="grow"><b>${esc(cap(d.dag))}</b>${tonight ? ' · <span class="now">vanavond</span>' : ""}</div>
+      <span class="pill dark">Kies een gerecht</span></button>`;
+  }
   if (d.geen_kookmoment) {  // an eat day with no cooking moment and no leftovers
     return `<div class="card skip"><div class="ic">${ICON.moon}</div>
       <div><b>${esc(cap(d.dag))}</b> · geen kookmoment</div></div>`;
@@ -419,6 +448,44 @@ function staplesHtml(w) {
   return html + `<div class="card ing">${rows.join("")}</div>`;
 }
 
+/* A week without a confirmed menu: the concept card, then the evenings to choose. */
+function draftHtml(w, waiting) {
+  const days = w.days || [];
+  if (w.geen_avonden) {
+    return `<div class="card empty"><b>Alle avonden niet thuis</b>
+      Er is deze week geen avond om te kiezen. Tik bij Instellingen een dag weer uit bij Niet thuis eten.</div>`;
+  }
+  let html = "";
+  if (w.enabled === false) {
+    html += `<div class="card note soft"><span class="dot"></span><div><b>Het weekmenu staat uit</b>
+      <span class="muted">Je krijgt op zondag geen herinnering om het menu te kiezen. Zet het aan bij Instellingen.</span></div></div>`;
+  }
+  const when = waiting
+    ? "De recepten met de prijzen van die week staan klaar zodra de folder uit is, meestal op vrijdag."
+    : "";
+  if (!days.length) {  // Home Assistant could not be read: the evenings are not known
+    return html + `<div class="card empty"><b>Nog geen menu voor deze week</b>
+      Kies per avond een gerecht. ${when}</div>`;
+  }
+  return html + conceptCard(w, when) + days.map(dayCard).join("");
+}
+
+/* "Concept: nog niets in je bestelling": how far the week is, and the one button that
+ * puts it all at AH. Off until at least one dish is chosen. */
+function conceptCard(w, when) {
+  const days = w.days || [];
+  const filled = days.filter((d) => d.recipe).length;
+  const total = filled + days.filter((d) => d.kies && !d.recipe).length;
+  const saving = days.reduce((a, d) => a + (Number(d.savings) || 0), 0);
+  const label = w.target === "order" ? "Zet in bestelling" : "Zet op lijst";
+  const sub = !filled ? `Kies per avond een gerecht. ${when}`
+    : saving > 0 ? `Bonus bespaard ${eur(saving)}, geschat.` : "";
+  return `<div class="card concept"><b>Concept: nog niets in je bestelling</b>
+    <span class="cnt">${filled} van ${total} ${total === 1 ? "avond" : "avonden"} gekozen</span>
+    ${sub ? `<span class="muted">${esc(sub.trim())}</span>` : ""}
+    <button class="btn pri full" data-confirm ${filled ? "" : "disabled"}>${label}</button></div>`;
+}
+
 function weekScreen() {
   const w = state.week;
   const running = state.status && state.status.running;
@@ -426,8 +493,8 @@ function weekScreen() {
   const end = new Date(start); end.setDate(end.getDate() + 6);
   const where = w.target === "order" ? "in bestelling" : w.target === "list" ? "op de lijst" : "";
   const waiting = w.waiting_for_folder;
-  // v1.1: a draft week (not confirmed) shows as no menu until the choose screen is built
-  const days = w.draft ? [] : w.days;
+  const draft = !!w.draft;  // v1.1: chosen evening by evening, nothing at AH yet
+  const days = w.days || [];
   const order = waiting
     ? `Volgende bestelling: ${longDate(w.week)}. ` +
       (waiting.expected ? `De folder komt vanaf ${longDate(waiting.expected)}.` : "De folder is er nog niet.")
@@ -438,7 +505,7 @@ function weekScreen() {
     ${order ? `<div class="full order">${esc(order)}</div>` : ""}
     <div class="full sub">${shortDate(start)} – ${shortDate(end)}${w.target === "order" ? " · bezorging woensdag" : ""}</div></header>`;
 
-  if (days.length && !running) html += checkCard(w);
+  if (!draft && days.length && !running) html += checkCard(w);
   html += loginCard(w.login, false);
   if (w.vanavond) {
     html += `<div class="card tonight"><b>Vanavond</b><span>${esc(String(w.vanavond).replace(/^Vanavond: /, ""))}</span></div>`;
@@ -455,18 +522,8 @@ function weekScreen() {
       <span class="muted">${esc(sub)} Werk het bij voor de prijzen van nu.</span></div>
       <button class="btn pri full" data-run="bijwerken">${ICON.refresh} Menu bijwerken</button></div>`;
   }
-  if (!days.length && w.geen_avonden) {
-    html += `<div class="card empty"><b>Alle avonden niet thuis</b>
-      Er is deze week geen avond om te kiezen. Tik bij Instellingen een dag weer uit bij Niet thuis eten.</div>`;
-  } else if (!days.length && w.enabled === false) {
-    html += `<div class="card empty"><b>Het weekmenu staat uit</b>
-      Je krijgt op zondag geen herinnering om het menu te kiezen. Zet het aan bij Instellingen.</div>`;
-  } else if (!days.length) {
-    const when = waiting
-      ? "De recepten met de prijzen van die week staan klaar zodra de folder uit is, meestal op vrijdag."
-      : "";
-    html += `<div class="card empty"><b>Nog geen menu voor deze week</b>
-      Kies per avond een gerecht. ${when}</div>`;
+  if (draft) {
+    html += draftHtml(w, waiting);
   } else {
     const extras = Number(w.extras_savings) || 0;
     const loose = Number(w.offers_savings) || 0;
@@ -506,11 +563,13 @@ function loginCard(l, bottom) {
 // --- screens: one dish -----------------------------------------------------------------
 
 /* "Klopt niet" on every ingredient line: another product, not needed, or at home. */
-function fixButton(text) {
+function fixLink(text) {
   return `<button class="fixbtn" data-fix="${esc(text)}" aria-label="Klopt niet: ${esc(text)}">Klopt niet</button>`;
 }
 
 function ingredientRows(d) {
+  // a draft dish is not at AH yet: Klopt niet works on a confirmed menu only
+  const fixButton = d.draft ? () => "" : fixLink;
   const mine = (l) => l.override ? `<small class="mine">jouw keuze</small>` : "";
   const rows = d.lines.map((l) => {
     if (l.pantry || l.skipped) {
@@ -601,7 +660,7 @@ function cookScreen(day) {
     <div class="sec">Bereiding</div>
     ${steps ? `<div class="card cook"><ol class="csteps">${steps}</ol></div><p class="foot">Tik op een stap als hij klaar is.</p>`
       : `<div class="card empty">Geen bereiding gevonden. Bekijk het recept op Allerhande.</div>`}
-    ${tasteHtml(d)}
+    ${d.draft ? "" : tasteHtml(d)}
     <button class="btn pri full" data-cookdone>Klaar</button>`;
 }
 
@@ -657,7 +716,7 @@ function dishScreen(day) {
       <button class="btn sec2" data-steps aria-expanded="${open}">${ICON.book} Bereiding</button>
       <button class="btn pri" data-swap>${ICON.swap} Ander gerecht</button></div>
     ${open ? `<div class="sec">Bereiding</div><div class="card steps">${steps}</div>` : ""}
-    ${tasteHtml(d)}
+    ${d.draft ? `<p class="foot">Concept: dit gerecht gaat naar AH zodra je de week bevestigt.</p>` : tasteHtml(d)}
     ${d.can_back ? `<button class="btn sec2 full" data-undo>${ICON.undo} Terug naar het vorige gerecht</button>` : ""}
     <button class="btn sec2 full" data-remove>Gerecht weghalen</button>
     ${safeUrl(r.url) ? `<a class="src" href="${esc(safeUrl(r.url))}" target="_blank" rel="noopener">Recept op Allerhande</a>` : ""}
@@ -703,6 +762,150 @@ function offersScreen() {
     ${state.offersNote ? `<div class="card note soft"><span class="dot"></span><div>${esc(state.offersNote)}</div></div>` : ""}
     <div class="search"><input id="offerq" type="search" placeholder="Zoek in de folder" value="${esc(state.offerQ)}" autocomplete="off" aria-label="Zoek in de folder"></div>
     <div id="offerlist">${offersList()}</div>`;
+}
+
+// --- screens: kiezen -------------------------------------------------------------------
+
+/* "vorige week gegeten", "3 weken geleden gegeten" ("" when not in the last weeks). */
+function eatenText(n) {
+  if (!n) return "";
+  return n === 1 ? "vorige week gegeten" : `${n} weken geleden gegeten`;
+}
+
+function chooseRow(i) {
+  const cook = i.cook ? `<span${i.long ? ' class="long"' : ""}>⏱ ${esc(minutes(i.cook))}</span>` : "";
+  const kind = i.cuisine ? esc(cuisineLabel(i.cuisine)) : "";
+  // own recipes say where they come from; AH recipes need no label
+  const label = i.source && i.source !== "ah" ? `<span class="pill grey b">${esc(i.source)}</span>` : "";
+  const eaten = eatenText(i.eaten_weeks_ago);
+  const save = Number(i.savings) > 0 ? `<span class="pill green b">${eur(i.savings)}</span>` : "";
+  return `<button class="row choice" data-choose="${esc(i.id)}">${photo(i, "thumb")}</div>
+    <span class="nm"><b>${esc(i.title)}</b><small>${[cook, kind, label].filter(Boolean).join(" · ")}</small>
+    ${eaten ? `<small class="eaten">${esc(eaten)}</small>` : ""}</span>${save}</button>`;
+}
+
+/* The list under the search field and the chips: it alone is redrawn while filtering.
+ * Found by "Zoek bij AH" stays in view for that search, also when its title differs. */
+function chooseList() {
+  const c = state.choose;
+  const q = c.q.trim().toLowerCase();
+  const items = c.items.filter((i) => (!c.kind || i.cuisine === c.kind)
+    && (!q || String(i.title).toLowerCase().includes(q) || c.found.includes(i.id)));
+  if (!items.length) {
+    return c.items.length
+      ? `<div class="card empty"><b>Niets gevonden</b>Probeer een ander woord, of zoek bij AH.</div>`
+      : `<div class="card empty"><b>Nog geen gerechten</b>Zoek bij AH, of voeg een eigen recept toe.</div>`;
+  }
+  return `<div class="card ing">${items.map(chooseRow).join("")}</div>`;
+}
+
+function chooseScreen(day) {
+  const c = state.choose;
+  const chip = (value, text) => `<button class="chip${c.kind === value ? " x" : ""}" data-kind="${esc(value)}" aria-pressed="${c.kind === value}">${esc(text)}</button>`;
+  const chips = [chip("", "Alles")].concat(c.kinds.map((k) => chip(k, cuisineLabel(k))));
+  return `<header class="top fixtop"><button class="back inline" data-chooseback aria-label="Terug">${ICON.back}</button>
+    <div><h1>Kies een gerecht</h1><div class="sub">${esc(cap(longDate(day)))}</div></div></header>
+    ${c.ready ? "" : `<div class="card note soft"><span class="dot"></span><div><b>De bonusrecepten worden nog opgehaald</b>
+      <span class="muted">Je eigen recepten staan er al. Zoek bij AH als je iets mist.</span></div></div>`}
+    <div class="search"><input id="chooseq" type="search" placeholder="Zoek een gerecht" value="${esc(c.q)}" autocomplete="off" aria-label="Zoek een gerecht"></div>
+    <div class="kinds">${chips.join("")}</div>
+    <div id="chooselist">${chooseList()}</div>
+    <div class="btnrow col"><button class="btn sec2" data-ahsearch>Zoek bij AH</button>
+      <a class="btn sec2" href="#recept/nieuw">Eigen recept toevoegen</a></div>
+    <p class="foot"><a href="#recepten">Mijn recepten</a> aanpassen of weghalen.</p>`;
+}
+
+function redrawChooseList() {
+  const list = document.getElementById("chooselist");
+  if (list && state.choose && route().choose === state.choose.day) list.innerHTML = chooseList();
+}
+
+// --- screens: eigen recepten -----------------------------------------------------------
+
+function recipesScreen() {
+  const items = state.recipes || [];
+  const rows = items.map((x) => {
+    const sub = [x.source || "eigen", plural(x.servings, "persoon", "personen"),
+      x.kind ? cuisineLabel(x.kind) : ""].filter(Boolean).join(" · ");
+    return `<div class="row"><span class="nm">${esc(x.title)}<small>${esc(sub)}</small></span>
+      <a class="btn sec2 sm" href="#recept/${esc(x.id)}" aria-label="Aanpassen: ${esc(x.title)}">Aanpassen</a>
+      <button class="btn sec2 sm" data-recdel="${esc(x.id)}" aria-label="Weghalen: ${esc(x.title)}">Weghalen</button></div>`;
+  });
+  return `<header class="top fixtop"><button class="back inline" data-recback aria-label="Terug">${ICON.back}</button>
+    <div><h1>Mijn recepten</h1><div class="sub">${esc(plural(items.length, "recept", "recepten"))}</div></div></header>
+    ${rows.length ? `<div class="card ing">${rows.join("")}</div>`
+      : `<div class="card note soft"><span class="dot"></span><div>Nog geen eigen recepten. Typ er een in, of haal er een van een receptensite.</div></div>`}
+    <a class="btn pri full" href="#recept/nieuw">${ICON.plus} Nieuw recept</a>
+    <p class="foot">Aanpassen of weghalen verandert niets aan een menu dat het recept al heeft.</p>`;
+}
+
+/* The form of `key` ("nieuw" or an own recipe id), kept in state while typing. */
+function initForm(key) {
+  const blank = { key, id: 0, title: "", servings: "4", kind: "", cook: "", ingredients: "",
+    steps: "", source: null, url: null, image: null, link: "" };
+  if (key === "nieuw") { state.form = blank; return; }
+  const r = (state.recipes || []).find((x) => String(x.id) === key);
+  state.form = r ? Object.assign(blank, {
+    id: r.id, title: r.title, servings: String(r.servings), kind: r.kind || "",
+    cook: r.cook ? String(r.cook) : "", ingredients: (r.ingredients || []).join("\n"),
+    steps: (r.steps || []).join("\n"), source: r.source, url: r.url, image: r.image,
+  }) : Object.assign(blank, { missing: true });
+}
+
+const FORM_FIELDS = { "rf-title": "title", "rf-servings": "servings", "rf-kind": "kind",
+  "rf-cook": "cook", "rf-ing": "ingredients", "rf-steps": "steps", "rf-link": "link" };
+
+function formScreen() {
+  const f = state.form;
+  const head = (title) => `<header class="top fixtop"><button class="back inline" data-formback aria-label="Terug">${ICON.back}</button>
+    <div><h1>${title}</h1></div></header>`;
+  if (f.missing) {
+    return head("Recept") + `<div class="card empty"><b>Dit recept bestaat niet meer</b>Ga terug naar Mijn recepten.</div>`;
+  }
+  const kinds = [`<option value="">Geen</option>`].concat(state.recipeKinds.map((k) =>
+    `<option value="${esc(k)}"${f.kind === k ? " selected" : ""}>${esc(cuisineLabel(k))}</option>`));
+  const from = f.source ? `<p class="foot">Van ${esc(f.source)}${safeUrl(f.url) ? `, <a href="${esc(safeUrl(f.url))}" target="_blank" rel="noopener">recept bekijken</a>` : ""}.</p>` : "";
+  return head(f.id ? "Recept aanpassen" : "Nieuw recept") + `
+    <div class="card form">
+      <label class="fl" for="rf-link">Van een link <span class="hint">· plak de link van een recept</span></label>
+      <div class="linkbox"><input id="rf-link" type="url" inputmode="url" placeholder="https://" value="${esc(f.link)}" autocomplete="off">
+        <button class="btn sec2 sm" data-import>Ophalen</button></div>
+      <p class="hint" id="rf-wait" hidden>Het recept wordt gelezen. Dat kan even duren.</p>
+    </div>
+    ${from}
+    <div class="card form">
+      <label class="fl">Naam<input id="rf-title" type="text" value="${esc(f.title)}" autocomplete="off"></label>
+      <div class="fl2">
+        <label class="fl">Personen<input id="rf-servings" type="number" inputmode="numeric" min="1" max="20" value="${esc(f.servings)}"></label>
+        <label class="fl">Kooktijd <span class="hint">in min</span><input id="rf-cook" type="number" inputmode="numeric" min="0" max="1440" value="${esc(f.cook)}"></label>
+      </div>
+      <label class="fl">Soort<select id="rf-kind">${kinds.join("")}</select></label>
+      <label class="fl">Ingrediënten <span class="hint">· één per regel, zoals 500 g rundergehakt</span>
+        <textarea id="rf-ing" rows="6" placeholder="500 g rundergehakt&#10;1 ui&#10;2 el olijfolie">${esc(f.ingredients)}</textarea></label>
+      <label class="fl">Bereiding <span class="hint">· één stap per regel</span>
+        <textarea id="rf-steps" rows="5">${esc(f.steps)}</textarea></label>
+    </div>
+    <button class="btn pri full" data-recsave>Bewaren</button>`;
+}
+
+function formLines(text) {
+  return String(text || "").split("\n").map((x) => x.trim()).filter(Boolean);
+}
+
+/* Where the back buttons of the choose screen, Mijn recepten and the form go: the
+ * screen they were opened from, but never one of the screens they open themselves. */
+function noteBack(r, old) {
+  if (r.choose) {
+    if (old.startsWith("#gerecht/")) state.chooseBack = old;
+    else if (!old.startsWith("#recept")) state.chooseBack = "#week";
+  }
+  if (r.recipes && !old.startsWith("#recept/")) {
+    state.recipesBack = old.startsWith("#kies/") ? old : "#instellingen";
+  }
+  if (r.recipe && !old.startsWith("#recept/")) {
+    state.formBack = old && old !== "#" ? old : "#week";
+    state.form = null;  // opened afresh: from the saved recipe, not what was typed before
+  }
 }
 
 // --- screens: savings ------------------------------------------------------------------
@@ -810,6 +1013,8 @@ function settingsScreen() {
       <div class="lbl2">Personen per avond <span class="hint">· tik om te wijzigen</span></div>
       <div class="days">${boxes}</div>
     </div>
+    <div class="sec">Eigen recepten</div>
+    <a class="btn sec2 full" href="#recepten">${ICON.book} Mijn recepten</a>
     ${correctionsHtml()}
     ${neverHtml()}
     ${diagnoseHtml()}
@@ -958,8 +1163,16 @@ function route() {
       return { tab: "week", fix: { day: rest.slice(0, i), text } };
     }
   }
+  if (h.startsWith("kies/")) return { tab: "week", choose: h.slice(5) };
+  if (h === "recepten") return { tab: "instellingen", recipes: true };
+  if (h.startsWith("recept/")) return { tab: "instellingen", recipe: h.slice(7) };
   if (h === "aanbiedingen" || h === "besparing" || h === "instellingen" || h === "inloggen") return { tab: h };
   return { tab: "week" };
+}
+
+/* A screen inside a tab: no bottom bar, not refreshed in the background. */
+function isInner(r) {
+  return !!(r.dish || r.fix || r.cook || r.choose || r.recipes || r.recipe);
 }
 
 let renderSeq = 0;
@@ -969,7 +1182,7 @@ async function render() {
   const r = route();
   const loggedIn = state.status && state.status.logged_in;
   const relogin = r.tab === "inloggen";  // "Opnieuw inloggen" in Instellingen
-  const inner = !!r.dish || !!r.fix || !!r.cook;  // a dish, its "Klopt niet", cooking: no bottom bar
+  const inner = isInner(r);  // a dish, Klopt niet, cooking, choosing, recipes: no bottom bar
   nav.hidden = !loggedIn || inner || relogin;
   app.classList.toggle("bare", !loggedIn || inner || relogin);
   for (const a of nav.querySelectorAll("a")) a.classList.toggle("on", a.dataset.tab === r.tab);
@@ -979,7 +1192,9 @@ async function render() {
   if (!loggedIn || relogin) { app.innerHTML = loginScreen(loggedIn && relogin); return; }
 
   keepAwake(!!r.cook);
-  const need = r.fix ? (state.dishes[r.fix.day] ? null : () => loadDish(r.fix.day))
+  const need = r.choose ? (state.choose && state.choose.day === r.choose ? null : () => loadChoose(r.choose))
+    : r.recipes || r.recipe ? (state.recipes ? null : loadRecipes)
+    : r.fix ? (state.dishes[r.fix.day] ? null : () => loadDish(r.fix.day))
     : r.cook ? (state.dishes[r.cook] ? null : () => loadDish(r.cook))
     : r.dish ? (state.dishes[r.dish] ? null : () => loadDish(r.dish))
     : r.tab === "aanbiedingen" ? (state.offers && state.week ? null : async () => {
@@ -1002,7 +1217,11 @@ async function render() {
     }
     if (seq !== renderSeq) return;
   }
-  app.innerHTML = r.fix ? fixScreen(r.fix.day, r.fix.text)
+  if (r.recipe && (!state.form || state.form.key !== r.recipe)) initForm(r.recipe);
+  app.innerHTML = r.choose ? chooseScreen(r.choose)
+    : r.recipes ? recipesScreen()
+    : r.recipe ? formScreen()
+    : r.fix ? fixScreen(r.fix.day, r.fix.text)
     : r.cook ? cookScreen(r.cook)
     : r.dish ? dishScreen(r.dish)
     : r.tab === "aanbiedingen" ? offersScreen()
@@ -1018,7 +1237,7 @@ async function refreshQuietly(what) {
     if (what === "aanbiedingen") { if (!state.week) await loadWeek(); await loadOffers(); }
     if (what === "besparing") state.savings = await api("api/savings");
     if (what === "instellingen") { await loadSettings(); await loadStatus(); }
-    if (route().tab === what && !route().dish && !route().fix && !route().cook) render();
+    if (route().tab === what && !isInner(route())) render();
   } catch (e) { /* the cached view stays */ }
 }
 
@@ -1069,12 +1288,179 @@ async function startRound(btn, mode) {
   });
 }
 
+/* "Zet in bestelling" / "Zet op lijst": the concept becomes the menu, in one write. It
+ * can take a few seconds (AH, then the staples): the button shows that and stays off. */
+async function confirmWeek(btn) {
+  const w = state.week;
+  const where = w.target === "order" ? "in je bestelling" : "op je AH-lijst";
+  const label = w.target === "order" ? "Zet in bestelling" : "Zet op lijst";
+  const ok = await confirmSheet(`De week ${where} zetten?`,
+    "De boodschappen van alle gekozen gerechten gaan in één keer naar AH. Wat je daarna per avond wijzigt, past de add-on meteen aan.",
+    label);
+  if (!ok) return;
+  await busy(btn, async () => {
+    const res = await api(`api/week/confirm?week=${encodeURIComponent(w.week)}`, {});
+    state.week = res;
+    state.dishes = {};
+    state.savings = null;
+    await loadStaples();
+    const n = (res.dropped || []).length;
+    const dropped = !n ? ""
+      : n === 1 ? " Het gerecht op een avond dat jullie niet thuis eten, is weggelaten."
+      : ` ${n} gerechten op avonden dat jullie niet thuis eten, zijn weggelaten.`;
+    const done = res.held || `Staat ${res.target === "order" ? "in je bestelling" : "op je lijst"}.`;
+    toast(done + dropped);
+  });
+  if (route().tab === "week" && !isInner(route())) render();
+}
+
+let picking = false;
+
+/* The choose screen: a chip, a recipe, Zoek bij AH, back. */
+async function chooseClick(t, day) {
+  const c = state.choose;
+  if ("chooseback" in t.dataset) {
+    state.choose = null;
+    location.hash = state.chooseBack || "#week";
+    return;
+  }
+  if ("kind" in t.dataset) {
+    c.kind = t.dataset.kind;
+    for (const b of app.querySelectorAll("[data-kind]")) {
+      const on = b.dataset.kind === c.kind;
+      b.classList.toggle("x", on);
+      b.setAttribute("aria-pressed", String(on));
+    }
+    redrawChooseList();
+    return;
+  }
+  if (t.dataset.choose) {
+    if (picking) return;  // one dish per evening: a second tap waits for the first
+    picking = true;
+    try {
+      await busy(t, async () => {
+        const data = await api(`api/dish/${encodeURIComponent(day)}/pick`, { recipe_id: Number(t.dataset.choose) });
+        state.dishes[day] = data;
+        state.savings = null;
+        state.choose = null;
+        try { await loadWeek(); } catch (e) { /* the week refreshes on the next visit */ }
+        if (data.draft) {
+          location.hash = "#week";
+          toast(`${cap(longDate(day))}: ${data.recipe.title}`);
+          return;
+        }
+        location.hash = "#gerecht/" + day;
+        const gone = removedText(data);
+        toast(data.held || `Gekozen. De boodschappen staan ${data.target === "order" ? "in je bestelling" : "op je lijst"}` + (gone ? `. ${gone}` : ""));
+      });
+    } finally {
+      picking = false;
+    }
+    return;
+  }
+  if ("ahsearch" in t.dataset) {
+    const q = c.q.trim();
+    if (q.length < 2) {
+      toast("Typ eerst wat je zoekt, bijvoorbeeld stamppot", true);
+      const field = document.getElementById("chooseq");
+      if (field) field.focus();
+      return;
+    }
+    if (t.disabled) return;
+    t.disabled = true;
+    t.textContent = "even zoeken…";
+    try {
+      const res = await api(`api/choose/search?week=${encodeURIComponent(weekOf(day))}`, { q });
+      const known = new Set(c.items.map((i) => i.id));
+      const dow = parseDate(day).getDay();
+      for (const i of res.items) {
+        if (known.has(i.id)) continue;
+        // the search has no evening: mark a long cook on a weekday here (as the planner, 45 min)
+        i.long = dow >= 1 && dow <= 5 && (Number(i.cook) || 0) > 45;
+        c.items.push(i);
+      }
+      c.items.sort((a, b) => b.savings - a.savings || String(a.title).localeCompare(String(b.title), "nl"));
+      c.found = res.items.map((i) => i.id);
+      toast(res.items.length ? `${plural(res.items.length, "recept", "recepten")} gevonden bij AH`
+        : "Niets gevonden bij AH. Probeer een ander woord.");
+    } catch (e) {
+      toast(errorText(e), true);
+    } finally {
+      t.disabled = false;
+      t.textContent = "Zoek bij AH";
+    }
+    redrawChooseList();
+  }
+}
+
+/* Mijn recepten and the recipe form. */
+async function recipeClick(t, r) {
+  if ("recback" in t.dataset) { location.hash = state.recipesBack || "#instellingen"; return; }
+  if ("formback" in t.dataset) { location.hash = state.formBack || "#recepten"; return; }
+  if (t.dataset.recdel) {
+    const id = Number(t.dataset.recdel);
+    const item = (state.recipes || []).find((x) => x.id === id);
+    const ok = await confirmSheet(`${item ? item.title : "Dit recept"} weghalen?`,
+      "Een menu dat het recept al heeft, houdt het gerecht.", "Weghalen");
+    if (!ok) return;
+    await busy(t, async () => {
+      const res = await api(`api/recipes/${encodeURIComponent(id)}/remove`, {});
+      state.recipes = res.items;
+      state.choose = null;
+      toast("Recept weggehaald");
+    });
+    render();
+    return;
+  }
+  const f = state.form;
+  if (!r.recipe || !f) return;
+  if ("import" in t.dataset) {
+    const url = (f.link || "").trim();
+    if (!url) { toast("Plak eerst de link van een recept", true); return; }
+    const wait = document.getElementById("rf-wait");
+    if (wait) wait.hidden = false;
+    let got = null;
+    await busy(t, async () => { got = await api("api/recipes/import", { url }); });
+    if (wait) wait.hidden = true;
+    if (!got || state.form !== f) return;
+    Object.assign(f, {
+      title: got.title || "", servings: String(got.servings || f.servings), kind: got.kind || "",
+      cook: got.cook ? String(got.cook) : "", ingredients: (got.ingredients || []).join("\n"),
+      steps: (got.steps || []).join("\n"), source: got.source || null, url: got.url || url,
+      image: got.image || null,
+    });
+    toast("Recept gelezen. Kijk het na en tik op Bewaren.");
+    render();
+    return;
+  }
+  if ("recsave" in t.dataset) {
+    const body = {
+      id: f.id, title: f.title.trim(), servings: Number(f.servings) || 0,
+      kind: f.kind || null, cook: String(f.cook).trim() === "" ? null : Number(f.cook),
+      ingredients: formLines(f.ingredients), steps: formLines(f.steps),
+      source: f.source, url: f.url, image: f.image,
+    };
+    await busy(t, async () => {
+      await api("api/recipes", body);
+      state.recipes = null;  // read again, sorted
+      state.choose = null;   // the choice list has it now
+      state.form = null;
+      location.hash = state.formBack || "#recepten";
+      toast("Recept bewaard");
+    });
+  }
+}
+
 app.addEventListener("click", async (ev) => {
   const t = ev.target.closest("button, [data-dish]");
   if (!t || t.disabled) return;
   const r = route();
 
   if (t.dataset.dish) { location.hash = "#gerecht/" + t.dataset.dish; return; }
+  if (t.dataset.kies) { location.hash = "#kies/" + t.dataset.kies; return; }
+  if ("confirm" in t.dataset && state.week) { confirmWeek(t); return; }
+  if (r.choose && state.choose) { await chooseClick(t, r.choose); return; }
+  if (r.recipes || r.recipe) { await recipeClick(t, r); return; }
   // the check card: a product not found is an action
   if (t.dataset.fixday) {
     location.hash = "#klopt/" + t.dataset.fixday + "/" + encodeURIComponent(t.dataset.fix);
@@ -1121,11 +1507,17 @@ app.addEventListener("click", async (ev) => {
   }
   if ("welcome" in t.dataset) { state.welcomed = true; render(); return; }
   if ("back" in t.dataset) { location.hash = "#week"; return; }
-  if ("retry" in t.dataset) { state.week = state.savings = state.settings = state.offers = null; state.dishes = {}; boot(); return; }
+  if ("retry" in t.dataset) {
+    state.week = state.savings = state.settings = state.offers = state.choose = state.recipes = null;
+    state.dishes = {};
+    boot();
+    return;
+  }
   if ("week" in t.dataset) {
     state.weekParam = t.dataset.week || null;
     state.week = null;
     state.offers = null;
+    state.choose = null;
     render();
     return;
   }
@@ -1239,8 +1631,9 @@ app.addEventListener("click", async (ev) => {
     }
     if ("remove" in t.dataset) {
       const where = state.week && state.week.target === "list" ? "gaan van je lijst" : "gaan uit je bestelling";
-      const ok = await confirmSheet("Dit gerecht weghalen?",
-        `De producten die alleen hiervoor waren, ${where} als dat nog kan.`, "Weghalen");
+      const ok = await confirmSheet("Dit gerecht weghalen?", state.dishes[day].draft
+        ? "De avond is daarna weer leeg; er staat nog niets bij AH."
+        : `De producten die alleen hiervoor waren, ${where} als dat nog kan.`, "Weghalen");
       if (!ok) return;
       await busy(t, async () => {
         const data = await api(`api/dish/${encodeURIComponent(day)}/remove`, {});
@@ -1364,17 +1757,25 @@ app.addEventListener("keydown", (ev) => {
 
 app.addEventListener("input", (ev) => {
   if (ev.target.id === "fixq" && state.fix) { state.fix.q = ev.target.value; return; }
+  if (FORM_FIELDS[ev.target.id] && state.form) { state.form[FORM_FIELDS[ev.target.id]] = ev.target.value; return; }
+  if (ev.target.id === "chooseq" && state.choose) {
+    state.choose.q = ev.target.value;
+    state.choose.found = [];  // a new word: the last AH search no longer counts
+    redrawChooseList();
+    return;
+  }
   if (ev.target.id !== "offerq") return;
   state.offerQ = ev.target.value;
   const list = document.getElementById("offerlist");
   if (list) list.innerHTML = offersList();
 });
 
-window.addEventListener("hashchange", () => {
+window.addEventListener("hashchange", (ev) => {
   const r = route();
+  noteBack(r, new URL(ev.oldURL).hash);
   window.scrollTo(0, 0);
   render();
-  if (!r.dish && !r.fix && !r.cook) refreshQuietly(r.tab);
+  if (!isInner(r)) refreshQuietly(r.tab);
 });
 
 async function boot() {

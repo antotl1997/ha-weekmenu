@@ -326,8 +326,10 @@ def test_app_screens_in_chrome(tmp_path):
         assert "Onzeker" not in dom and "AH Gehaktballetjes" in dom
         assert "Status onbekend" in dom and "De Cecco Penne rigate" in dom
         assert "Snel gekozen" in dom
-        assert "Maandag</b> · geen gerecht" in dom and TITLES[4] not in dom
-        assert "Zaterdag</b> · geen kookmoment" in dom and "Maandag</b> · geen kookmoment" not in dom
+        # v1.1: an emptied cook evening of a confirmed week can be filled again
+        assert 'data-kies="2026-11-09"' in dom and TITLES[4] not in dom
+        assert 'data-kies="2026-11-07"' in dom and dom.count("Kies een gerecht") == 2
+        assert "geen kookmoment" not in dom and "geen gerecht" not in dom
         assert "De folder van volgende week was er nog niet" in dom
 
         # a dish with leftovers goes up to 16 persons: + still works at 9, − too
@@ -360,7 +362,8 @@ def test_app_waiting_for_folder_in_chrome(tmp_path):
     # v1.1: no Nu maken any more; the week is chosen evening by evening
     assert "De folder van volgende week is er nog niet" not in dom
     assert 'data-run="nu_maken"' not in dom and "Nu maken" not in dom
-    assert "Nog geen menu voor deze week" in dom and "Kies per avond een gerecht" in dom
+    assert "Concept: nog niets in je bestelling" in dom and "Kies per avond een gerecht" in dom
+    assert "staan klaar zodra de folder uit is" in dom and 'data-kies="2026-11-11"' in dom
     assert "Voor de bestelling van" not in dom and "\u2014" not in dom
     assert "Het weekmenu staat uit" in off and "vanzelf" not in off
 
@@ -668,3 +671,246 @@ def test_app_v10_savings_with_recounted_weeks_and_numbers_in_chrome(tmp_path):
         assert "Ingrediëntregels zonder ingreep" in dom and "(25 van 26)" in dom
         assert "Toegevoegd en echt gekocht" in dom and "89%" in dom and "(33 van 37)" in dom
         assert "—" not in dom
+
+
+# --- v1.1: choosing the week, the concept, own recipes ---------------------------------
+
+# A page next to the app that loads it in a frame, does a few taps or types, and copies
+# the frame's body into its own: --dump-dom only shows the top document.
+ACT = """<!doctype html><html><head><meta charset="utf-8"></head><body>
+<iframe id="f" src="../{route}" style="width:390px;height:844px;border:0"></iframe>
+<div id="out"></div>
+<script>
+const steps = {steps};
+const f = document.getElementById("f");
+const out = document.getElementById("out");
+let i = 0;
+function step() {
+  const d = f.contentDocument;
+  if (i < steps.length) {
+    const s = steps[i++];
+    const el = d.querySelector(s.sel);
+    if (!el) { out.setAttribute("data-missing", s.sel); }
+    else if (s.type !== undefined) {
+      el.value = s.type;
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    } else { el.click(); }
+    setTimeout(step, 800);
+    return;
+  }
+  out.innerHTML = d.body.innerHTML;
+}
+f.addEventListener("load", () => setTimeout(step, 1200));
+</script></body></html>"""
+
+
+def act(base, route, tmp_path, name, steps) -> str:
+    """The app's body after `steps` ({"sel": css} taps, {"sel": css, "type": text})."""
+    import json
+
+    page = f"act-{name}.html"
+    (tmp_path / "static" / page).write_text(
+        ACT.replace("{route}", route).replace("{steps}", json.dumps(steps)), encoding="utf-8")
+    args = [CHROME, "--headless=new", "--disable-gpu",
+            f"--user-data-dir={tmp_path / ('act-' + name)}", "--no-first-run",
+            "--no-default-browser-check", "--virtual-time-budget=12000", "--dump-dom"]
+    if sys.platform.startswith("linux"):
+        args.append("--no-sandbox")
+    out = subprocess.run(args + [f"{base}static/{page}"], capture_output=True, timeout=90)
+    dom = out.stdout.decode("utf-8", "replace")
+    head, _, rest = dom.partition('<div id="out"')
+    assert rest, dom[:300]
+    assert not rest.startswith(' data-missing="'), rest[:200]
+    return rest
+
+
+def post(base, path, body):
+    import json
+    import urllib.request
+
+    req = urllib.request.Request(base + path, data=json.dumps(body).encode(),
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return json.loads(r.read())
+
+
+@pytest.mark.slow
+def test_choose_screen_in_chrome(tmp_path):
+    """#kies/<day>: rows best saving first, kind chips that filter, the long cook time
+    marked on a weekday, the label of an own recipe, when it was eaten last, and the
+    buttons under the list."""
+    from app.catalog import Entry
+    from app.recipes import OwnRecipe
+
+    ctx = make_ctx(tmp_path, now=NOW)
+    ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
+    period = date(2026, 11, 2)
+    ctx.catalog.add(period, [
+        Entry(501, "Ovenschotel met prei", "https://example.invalid/501.jpg", 70, None, None,
+              "Hollandse pot", 4.5, False),
+        Entry(502, "Pasta pesto met <b>kip</b>", None, 20, None, None, "pasta en Italiaans",
+              2.0, False),
+        Entry(503, "Nasi goreng", "http://example.invalid/503.jpg", 30, None, None,
+              "Aziatisch", 0.0, False),
+    ])
+    ctx.recipes.save(OwnRecipe(0, "Soep van oma", 4, ["500 g uien"], ["Kook."]))
+    ctx.recipes.save(OwnRecipe(0, "Shakshuka", 2, ["4 eieren"], [], 25, None,
+                               "Leukerecepten", "https://example.invalid/s", None))
+    old = Plan([_dish(date(2026, 10, 28), 502, "Pasta pesto", "pasta en Italiaans", 20, 1.0,
+                      [])], {}, {}, 1.0, [], 0)
+    ctx.ledger.save(WeekLog(date(2026, 10, 28), plan=old.to_dict(), target="order"))
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "#kies/2026-11-06", tmp_path, "kiezen", size=PHONE_LONG)
+        assert "Kies een gerecht" in dom and "Vrijdag 6 november" in dom
+        assert 'id="nav" class="nav" hidden' in dom and 'id="chooseq"' in dom
+        # best saving first, then A to Z
+        order = ["Ovenschotel met prei", "Pasta pesto met &lt;b&gt;kip&lt;/b&gt;",
+                 "Nasi goreng", "Shakshuka", "Soep van oma"]
+        at = [dom.index(t) for t in order]
+        assert at == sorted(at), at
+        assert dom.count('data-choose="') == 5
+        assert "€ 4,50" in dom and "€ 2,00" in dom and "€ 0,00" not in dom
+        assert '<span class="long">⏱ 1 u 10 min</span>' in dom  # friday: over 45 min
+        assert ">eigen<" in dom and ">Leukerecepten<" in dom
+        assert "vorige week gegeten" in dom
+        assert "http://example.invalid" not in dom  # https photos only
+        assert "data-ahsearch" in dom and "Zoek bij AH" in dom
+        assert 'href="#recept/nieuw"' in dom and "Eigen recept toevoegen" in dom
+        assert 'href="#recepten"' in dom
+        assert "De bonusrecepten worden nog opgehaald" not in dom
+        # one chip per kind, plus Alles
+        assert 'data-kind=""' in dom and 'data-kind="Aziatisch"' in dom
+        assert "—" not in dom
+
+        # a kind chip filters on this side, without a new request
+        got = act(base, "#kies/2026-11-06", tmp_path, "kiezen-soort",
+                  [{"sel": '[data-kind="Aziatisch"]'}])
+        assert "Nasi goreng" in got and "Ovenschotel" not in got and "Shakshuka" not in got
+        assert 'class="chip x" data-kind="Aziatisch"' in got
+        # and so does typing
+        got = act(base, "#kies/2026-11-06", tmp_path, "kiezen-zoeken",
+                  [{"sel": "#chooseq", "type": "SOEP"}])
+        assert "Soep van oma" in got and "Nasi goreng" not in got
+        got = act(base, "#kies/2026-11-06", tmp_path, "kiezen-niets",
+                  [{"sel": "#chooseq", "type": "lasagne"}])
+        assert "Niets gevonden" in got and 'data-choose="' not in got
+
+        # a Saturday: the long dish is not marked
+        dom = chrome(base + "#kies/2026-11-07", tmp_path / "profile-kies-za")
+        assert "Ovenschotel met prei" in dom and 'class="long"' not in dom
+
+    # no recipes of the folder yet: a soft note, own recipes are there
+    fresh = make_ctx(tmp_path / "leeg", now=NOW)
+    fresh.store.save(Tokens("test-access", "test-refresh", 9e9))
+    fresh.recipes.save(OwnRecipe(0, "Soep van oma", 4, ["500 g uien"], ["Kook."]))
+    with Server(fresh, static) as base:
+        dom = chrome(base + "#kies/2026-11-06", tmp_path / "profile-kies-leeg")
+        assert "De bonusrecepten worden nog opgehaald" in dom and "Soep van oma" in dom
+
+
+@pytest.mark.slow
+def test_draft_week_and_confirm_in_chrome(tmp_path):
+    """A week without a confirmed menu: the concept card on top with its button off
+    until a dish is chosen, "Kies een gerecht" on every empty cook evening, a pick from
+    the choose screen, and Zet op lijst with its sheet."""
+    from app.recipes import OwnRecipe
+
+    ctx = make_ctx(tmp_path)  # Sunday 1 November: the menu week of 4 November
+    ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
+    ctx.hass.states[helper_persons()["dinsdag"]] = "0"  # niet thuis
+    own = ctx.recipes.save(OwnRecipe(0, "Soep van oma", 2, ["500 g uien"], ["Kook."]))
+    two = ctx.recipes.save(OwnRecipe(0, "Shakshuka", 2, ["4 eieren"], []))
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "", tmp_path, "concept-leeg", size=PHONE_LONG)
+        assert "Concept: nog niets in je bestelling" in dom
+        assert "0 van 5 avonden gekozen" in dom and "Kies per avond een gerecht" in dom
+        # 6 eat days, 5 cooking moments: one leftover night, dinsdag away
+        assert dom.count('data-kies="') == 5 and 'data-kies="2026-11-04"' in dom
+        assert dom.count("Kies een gerecht") == 5
+        assert "Dinsdag</b> · niet thuis" in dom
+        assert 'data-confirm="" disabled=""' in dom and "Zet op lijst" in dom
+        assert dom.index("Concept: nog niets") < dom.index('data-kies="')
+        assert "Bonus bespaard deze week" not in dom and "Check voor je bestelt" not in dom
+        assert "—" not in dom
+
+        # a tap on an evening, then on a recipe: back on the week with the dish
+        got = act(base, "", tmp_path, "concept-kiezen",
+                  [{"sel": '[data-kies="2026-11-04"]'},
+                   {"sel": f'[data-choose="{own.id}"]'}])
+        assert "Soep van oma" in got and "1 van 5 avonden gekozen" in got
+        assert got.count('data-kies="') == 4 and 'data-confirm=""' in got
+        assert 'data-confirm="" disabled' not in got
+        assert ctx.ledger.load(W).plan is None and ctx.ledger.load(W).draft is not None
+
+        post(base, "api/dish/2026-11-06/pick", {"recipe_id": two.id})
+        dom = render(base, "", tmp_path, "concept-twee", size=PHONE_LONG)
+        assert "2 van 5 avonden gekozen" in dom and "Shakshuka" in dom
+
+        # the draft dish opens; nothing of it is at AH yet, so no Klopt niet
+        dom = chrome(base + "#gerecht/2026-11-04", tmp_path / "profile-concept-gerecht")
+        assert "Soep van oma" in dom and "Ander gerecht" in dom and "fixbtn" not in dom
+
+        # Zet op lijst: a sheet first, then the week is the menu
+        got = act(base, "", tmp_path, "concept-bevestigen",
+                  [{"sel": "[data-confirm]"}, {"sel": '#sheet [data-a="yes"]'}])
+        assert "Concept: nog niets" not in got and "Soep van oma" in got
+        assert ctx.ledger.load(W).plan is not None and ctx.ledger.load(W).draft is None
+        # after confirming, an empty cook evening can still be filled
+        assert got.count('data-kies="') == 3
+
+
+@pytest.mark.slow
+def test_recipe_form_in_chrome(tmp_path):
+    """Mijn recepten from Instellingen, the list with Aanpassen and Weghalen, and the
+    form with Van een link on top."""
+    from app.recipes import OwnRecipe
+
+    ctx = build_ctx(tmp_path)
+    mine = ctx.recipes.save(OwnRecipe(0, "Soep van <oma>", 4, ["500 g uien", "1 l bouillon"],
+                                      ["Fruit de uien.", "Voeg de bouillon toe."], 30,
+                                      "Hollandse pot"))
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = chrome(base + "#instellingen", tmp_path / "profile-recepten-set")
+        assert 'href="#recepten"' in dom and "Mijn recepten" in dom
+
+        dom = render(base, "#recepten", tmp_path, "recepten")
+        assert "<h1>Mijn recepten</h1>" in dom and "Soep van &lt;oma&gt;" in dom
+        assert f'href="#recept/{mine.id}"' in dom and f'data-recdel="{mine.id}"' in dom
+        assert 'href="#recept/nieuw"' in dom and 'id="nav" class="nav" hidden' in dom
+
+        dom = render(base, "#recept/nieuw", tmp_path, "recept-nieuw", size=PHONE_LONG)
+        assert "Nieuw recept" in dom and "Van een link" in dom
+        assert 'id="rf-link"' in dom and "data-import" in dom
+        for field in ("rf-title", "rf-servings", "rf-kind", "rf-cook", "rf-ing", "rf-steps"):
+            assert f'id="{field}"' in dom, field
+        assert dom.index("Van een link") < dom.index('id="rf-title"')
+        assert '<option value="Aziatisch">' in dom and "data-recsave" in dom
+        assert "—" not in dom
+
+        dom = render(base, f"#recept/{mine.id}", tmp_path, "recept-aanpassen", size=PHONE_LONG)
+        assert "Recept aanpassen" in dom and 'value="Soep van &lt;oma&gt;"' in dom
+        flat = dom.replace("\r\n", "\n")
+        assert "500 g uien\n1 l bouillon</textarea>" in flat, flat[flat.find('id="rf-ing"'):][:300]
+        assert '<option value="Hollandse pot" selected="">' in dom and 'value="30"' in dom
+
+        # Van een link without a link fetcher: the reason, in plain Dutch, the form stays
+        got = act(base, "#recept/nieuw", tmp_path, "recept-link",
+                  [{"sel": "#rf-link", "type": "https://example.invalid/recept"},
+                   {"sel": "[data-import]"}])
+        assert "Een recept van een link lezen kan nu niet" in got and 'id="rf-title"' in got
+
+        # saving a new one: back to the list, which has it
+        got = act(base, "#recepten", tmp_path, "recept-bewaren",
+                  [{"sel": 'a[href="#recept/nieuw"]'},
+                   {"sel": "#rf-title", "type": "Pannenkoeken"},
+                   {"sel": "#rf-ing", "type": "250 g bloem\n3 eieren\n500 ml melk"},
+                   {"sel": "[data-recsave]"}])
+        assert "<h1>Mijn recepten</h1>" in got and "Pannenkoeken" in got
+        saved = next(r for r in ctx.recipes.all() if r.title == "Pannenkoeken")
+        assert saved.ingredients == ["250 g bloem", "3 eieren", "500 ml melk"]
