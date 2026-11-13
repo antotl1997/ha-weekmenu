@@ -978,3 +978,38 @@ def test_own_dish_links_to_its_own_source_in_chrome(tmp_path):
         assert 'class="src"' not in dom
         dom = chrome(base + "#koken/2026-11-04", tmp_path / "profile-eigen-zelf-koken")
         assert "Geen bereiding gevonden." in dom and "Bekijk het recept" not in dom
+
+
+@pytest.mark.slow
+def test_app_offer_group_is_one_row_with_a_choice_in_chrome(tmp_path):
+    from dataclasses import replace
+
+    ctx = build_ctx(tmp_path)
+
+    def o(pid, title, now, unit):
+        return replace(Product(pid, title, unit, now + 0.5, now, True, "2 voor 2.49", True,
+                               "Groente, aardappelen", image="https://example.invalid/k.jpg"),
+                       group_id="g9", group_title="AH Groente <kleinverpakking>")
+
+    avocado = Product(80, "AH Avocado", None, 1.39, 1.39, True, "2 voor 1.99", True,
+                      "Groente, aardappelen")
+    ctx.bonus_cache = {date(2026, 11, 2): [
+        avocado, o(81, "AH Spinazie kleinverpakking", 1.69, "200 g"),
+        o(82, "AH Andijvie fijngesneden kleinverpakking", 1.49, "250 g"),
+        o(83, "AH Boerenkool kleinverpakking", 1.69, "150 g")]}
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "#aanbiedingen", tmp_path, "aanbieding-groep")
+        # two rows: the avocado and one row for the promotion, escaped, with "vanaf"
+        assert dom.count('class="row offer"') == 2
+        assert "AH Groente &lt;kleinverpakking&gt;" in dom and "<kleinverpakking>" not in dom
+        assert "vanaf" in dom and "3 soorten" in dom and "2 aanbiedingen" in dom
+        assert 'data-offergroup="g9"' in dom and "AH Spinazie" not in dom
+        # the plus opens the choices; tapping one adds that product only
+        got = act(base, "#aanbiedingen", tmp_path, "aanbieding-groep-kies", [
+            {"sel": "[data-offergroup]"}, {"sel": '#sheet [data-offer="82"]'}])
+        assert "AH Spinazie kleinverpakking" in got and "AH Boerenkool kleinverpakking" in got
+        assert 'aria-label="Toegevoegd: 1 stuks"' in got or "Toegevoegd: 2 stuks" in got
+        assert [w for w in ctx.client.writes if 82 in w[1]]
+        assert not [w for w in ctx.client.writes if 81 in w[1] or 83 in w[1]]

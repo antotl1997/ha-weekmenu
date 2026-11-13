@@ -747,7 +747,8 @@ function dishScreen(day) {
 
 // --- screens: aanbiedingen -------------------------------------------------------------
 
-function offerRow(i) {
+function offerRow(i, cat) {
+  if (Array.isArray(i.items)) return offerGroupRow(i, cat);
   const src = safeUrl(i.image);
   const img = src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : "";
   const was = Number(i.price_regular) > Number(i.price_now)
@@ -763,22 +764,92 @@ function offerRow(i) {
     ${btn}</div>`;
 }
 
+/* One AH promotion with several products ("2 voor 2.49" on small packs): one row, and
+   its plus button opens the products as choices. */
+function offerGroupRow(g, cat) {
+  const src = safeUrl(g.image);
+  const img = src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+  const pill = g.mechanism ? `<span class="pill green b">${esc(g.mechanism)}</span>` : "";
+  const n = Number(g.added_qty) || 0;
+  const label = `${g.title}: kies uit ${g.items.length} producten`;
+  const btn = g.orderable === false ? ""
+    : `<button class="plus${n > 0 ? " done" : ""}" data-offergroup="${esc(g.group)}" data-cat="${esc(cat)}" aria-label="${esc(label)}">${n > 0 ? `${ICON.check}<i>${esc(n)}</i>` : ICON.plus}</button>`;
+  return `<div class="row offer"><div class="thumb">${img}</div>
+    <span class="nm">${esc(g.title)}<small>${pill}<span class="price">${g.price_from ? "vanaf " : ""}<b>${eur(g.price_now)}</b></span><span class="unit">${esc(g.items.length)} soorten</span></small></span>
+    ${btn}</div>`;
+}
+
+function offerMatches(i, q) {
+  if (!q) return true;
+  if (String(i.title).toLowerCase().includes(q)) return true;
+  return Array.isArray(i.items) && i.items.some((x) => String(x.title).toLowerCase().includes(q));
+}
+
+function findOfferGroup(gid, cat) {
+  const c = (state.offers || []).find((x) => x.name === cat);
+  return c ? c.items.find((i) => Array.isArray(i.items) && String(i.group) === gid) : null;
+}
+
+/* The products of one promotion, each with its own plus; stays open to add more. */
+function openOfferGroup(gid, cat) {
+  const draw = () => {
+    const g = findOfferGroup(gid, cat);
+    if (!g) { closeSheet(); return; }
+    const q = state.offerQ.trim().toLowerCase();
+    const items = q ? [...g.items].sort((a, b) => offerMatches(b, q) - offerMatches(a, q)) : g.items;
+    sheetEl.innerHTML = `<div class="dialog offergroup" role="dialog" aria-modal="true" aria-label="${esc(g.title)}">
+      <p><b>${esc(g.title)}</b></p>${g.mechanism ? `<p class="muted">${esc(g.mechanism)}: kies welke je wilt</p>` : ""}
+      <div class="card ing">${items.map((i) => offerRow(i, cat)).join("")}</div>
+      <div class="btnrow"><button class="btn pri" data-a="close">Klaar</button></div></div>`;
+  };
+  const closeSheet = () => { sheetEl.hidden = true; sheetEl.innerHTML = ""; sheetEl.onclick = null; };
+  draw();
+  sheetEl.hidden = false;
+  sheetEl.onclick = async (ev) => {
+    const add = ev.target.closest("[data-offer]");
+    if (add) { await addOffer(add, Number(add.dataset.offer)); draw(); return; }
+    if (ev.target.closest("[data-a]") || ev.target === sheetEl) closeSheet();
+  };
+}
+
+/* One tap on a plus: the product goes into the order or onto the list. */
+async function addOffer(btn, id) {
+  if (!state.week) return;
+  await busy(btn, async () => {
+    const res = await api(`api/offers/${encodeURIComponent(id)}?week=${encodeURIComponent(state.week.week)}`, {});
+    for (const c of state.offers || []) {
+      for (const i of c.items) {
+        if (i.id === id) i.added_qty = res.added_qty;
+        if (Array.isArray(i.items)) {
+          for (const x of i.items) if (x.id === id) x.added_qty = res.added_qty;
+          i.added_qty = i.items.reduce((a, x) => a + (Number(x.added_qty) || 0), 0);
+        }
+      }
+    }
+    toast(`Toegevoegd, het staat ${res.target === "order" ? "in je bestelling" : "op je lijst"}`);
+    state.savings = null;
+    const list = document.getElementById("offerlist");
+    if (list && route().tab === "aanbiedingen") list.innerHTML = offersList();
+    try { await loadWeek(); } catch (e2) { /* keep */ }  // the savings on the Week tab
+  });
+}
+
 /* The list under the search field: it alone is redrawn while typing. */
 function offersList() {
   const q = state.offerQ.trim().toLowerCase();
   const groups = (state.offers || []).map((c) => ({ name: c.name,
-    items: c.items.filter((i) => !q || String(i.title).toLowerCase().includes(q)) }))
+    items: c.items.filter((i) => offerMatches(i, q)) }))
     .filter((c) => c.items.length);
   if (!groups.length) {
     return `<div class="card empty"><b>${q ? "Niets gevonden" : "Geen aanbiedingen"}</b>${q ? "Probeer een andere zoekterm." : "De folder van deze week is leeg of nog niet op te halen."}</div>`;
   }
   return groups.map((c) => `<div class="sec">${esc(c.name)}</div>
-    <div class="card ing">${c.items.map(offerRow).join("")}</div>`).join("");
+    <div class="card ing">${c.items.map((i) => offerRow(i, c.name)).join("")}</div>`).join("");
 }
 
 function offersScreen() {
   const w = state.week;
-  const n = (state.offers || []).reduce((a, c) => a + c.items.length, 0);
+  const n = (state.offers || []).reduce((a, c) => a + c.items.length, 0);  // a group counts once
   const sub = w ? `${plural(n, "aanbieding", "aanbiedingen")} voor de week van ${shortDate(parseDate(w.week))}` : "";
   return `<header class="top"><div><h1>Aanbiedingen</h1><div class="sub">${esc(sub)}</div></div></header>
     ${state.offersNote ? `<div class="card note soft"><span class="dot"></span><div>${esc(state.offersNote)}</div></div>` : ""}
@@ -1564,19 +1635,13 @@ app.addEventListener("click", async (ev) => {
     return;
   }
 
+  if (t.dataset.offergroup) {
+    openOfferGroup(t.dataset.offergroup, t.dataset.cat || "");
+    return;
+  }
+
   if (t.dataset.offer && state.week) {
-    await busy(t, async () => {
-      const id = Number(t.dataset.offer);
-      const res = await api(`api/offers/${encodeURIComponent(id)}?week=${encodeURIComponent(state.week.week)}`, {});
-      for (const c of state.offers || []) {
-        for (const i of c.items) if (i.id === id) i.added_qty = res.added_qty;
-      }
-      toast(`Toegevoegd, het staat ${res.target === "order" ? "in je bestelling" : "op je lijst"}`);
-      state.savings = null;
-      const list = document.getElementById("offerlist");
-      if (list && route().tab === "aanbiedingen") list.innerHTML = offersList();
-      try { await loadWeek(); } catch (e2) { /* keep */ }  // the savings on the Week tab
-    });
+    await addOffer(t, Number(t.dataset.offer));
     return;
   }
 

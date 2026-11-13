@@ -421,22 +421,63 @@ def offer_item(p: Product, wlog) -> dict:
     }
 
 
+def offer_group(members: list[Product], wlog, q: str = "") -> dict:
+    """One row for a bonus group with several products (AH's promotion, e.g. "2 voor
+    2.49" on small packs): the products are the choices behind its plus button. With a
+    search, the products that match come first."""
+    items = [offer_item(p, wlog) for p in members]
+    if q:
+        items.sort(key=lambda i: q not in i["title"].casefold())  # stable
+    cheapest = min(members, key=lambda p: p.now)
+    first = members[0]
+    return {
+        "group": first.group_id, "title": first.group_title or first.title,
+        "mechanism": first.mechanism, "image": first.image,
+        "price_now": cheapest.now, "price_regular": cheapest.regular,
+        "price_from": len({p.now for p in members}) > 1,
+        "added_qty": sum(i["added_qty"] for i in items),
+        "orderable": any(p.orderable for p in members), "items": items,
+    }
+
+
 def offers_view(products: Iterable[Product], wlog, q: str = "", category: str = "") -> dict:
     """The folder per category, searchable on title, in AH's own order ("Alle Bonus":
     categories as the folder lists them, products as each category lists them).
-    `products` comes in that order from bonus_offers; "Overig" goes last."""
+    `products` comes in that order from bonus_offers; "Overig" goes last. The products
+    of one bonus group share one row (offer_group) at the place of the first of them;
+    a search on a product or on the group's description finds the row."""
     q, category = q.strip().casefold(), category.strip().casefold()
-    groups: dict[str, list[Product]] = {}
+    rows: dict[str, list] = {}  # category -> [Product | list[Product] (a group)]
+    by_group: dict[tuple[str, str], list[Product]] = {}
     for p in products:
         name = p.category or OTHER_CATEGORY
         if category and name.casefold() != category:
             continue
-        if q and q not in p.title.casefold():
+        if p.group_id is None:
+            if not q or q in p.title.casefold():
+                rows.setdefault(name, []).append(p)
             continue
-        groups.setdefault(name, []).append(p)
-    names = sorted(groups, key=lambda n: n == OTHER_CATEGORY)  # stable: AH's order stays
-    return {"categories": [
-        {"name": n, "items": [offer_item(p, wlog) for p in groups[n]]} for n in names]}
+        key = (name, p.group_id)
+        if key not in by_group:
+            by_group[key] = []
+            rows.setdefault(name, []).append(by_group[key])
+        by_group[key].append(p)
+
+    def hit(members: list[Product]) -> bool:
+        title = (members[0].group_title or "").casefold()
+        return not q or q in title or any(q in m.title.casefold() for m in members)
+
+    out = []
+    for name in sorted(rows, key=lambda n: n == OTHER_CATEGORY):  # stable: AH's order
+        items = []
+        for r in rows[name]:
+            if isinstance(r, Product):
+                items.append(offer_item(r, wlog))
+            elif hit(r):
+                items.append(offer_item(r[0], wlog) if len(r) == 1 else offer_group(r, wlog, q))
+        if items:
+            out.append({"name": name, "items": items})
+    return {"categories": out}
 
 
 def cook_lines(d: Dish) -> list[dict]:

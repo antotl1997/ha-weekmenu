@@ -99,6 +99,10 @@ async def test_bonus_offers_expands_group_deals_and_marks_bonus(respx_mock, tmp_
     assert soup.category == "Groente, aardappelen"
     # GraphQL has no photo either: the group's combined picture, the widest one
     assert soup.image and "rendition=708px" in soup.image
+    # it remembers its promotion, so the Aanbiedingen tab can show the group as one row
+    assert soup.group_id == "816453" and soup.group_title
+    gehakt_card = next(p for p in offers if p.id == 619322)
+    assert gehakt_card.group_id is None  # a single-product card has no group
     # a plain REST card keeps its own fields
     gehakt = by_id[619322]
     assert (gehakt.regular, gehakt.now, gehakt.mechanism) == (2.99, 1.49, "50% korting")

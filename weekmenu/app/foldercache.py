@@ -24,7 +24,7 @@ from app.durable import schema_of, write_json
 
 log = logging.getLogger(__name__)
 
-FOLDER_SCHEMA = 1
+FOLDER_SCHEMA = 2  # 2: products know their bonus group (an older file is read again)
 KEEP = 3
 _FIELDS = {f.name for f in fields(Product)}
 

@@ -320,3 +320,54 @@ async def test_tap_refused_while_the_open_order_is_for_another_week(aiohttp_clie
                              "toe in de AH-app: AH Halfvolle melk")
     assert body["added_qty"] == 0
     assert ctx.client.writes == [] and ctx.ledger.load(W).offers_added == {}
+
+
+# --- one row per bonus group ----------------------------------------------------------
+
+
+def grouped(p, gid="g1", name="AH Groente kleinverpakking"):
+    from dataclasses import replace
+    return replace(p, group_id=gid, group_title=name)
+
+
+def test_a_bonus_group_is_one_row_with_its_products_as_choices():
+    from app.web import offers_view
+    spin = grouped(op(70, "AH Spinazie kleinverpakking", "Groente", "2 voor 2.49", 1.69))
+    andijvie = grouped(op(71, "AH Andijvie kleinverpakking", "Groente", "2 voor 2.49", 1.49))
+    avocado = op(72, "AH Avocado", "Groente", "2 voor 1.99", 1.39)
+    log = WeekLog(W, offers_added={71: 2})
+    body = offers_view([avocado, spin, andijvie], log)
+    [cat] = body["categories"]
+    assert [i.get("group") for i in cat["items"]] == [None, "g1"]
+    row = cat["items"][1]
+    assert row["title"] == "AH Groente kleinverpakking"
+    assert row["price_now"] == 1.49 and row["price_from"] is True
+    assert [i["id"] for i in row["items"]] == [70, 71]
+    assert row["added_qty"] == 2 and row["items"][1]["added_qty"] == 2
+
+
+def test_a_group_of_one_stays_a_plain_row():
+    from app.web import offers_view
+    alone = grouped(op(73, "AH Boerenkool", "Groente"), gid="g2")
+    [cat] = offers_view([alone], WeekLog(W))["categories"]
+    assert cat["items"][0]["id"] == 73 and "group" not in cat["items"][0]
+
+
+def test_search_finds_the_group_and_puts_the_hit_first():
+    from app.web import offers_view
+    spin = grouped(op(70, "AH Spinazie kleinverpakking", "Groente"))
+    andijvie = grouped(op(71, "AH Andijvie kleinverpakking", "Groente"))
+    rows = offers_view([andijvie, spin], WeekLog(W), q="spinazie")["categories"][0]["items"]
+    assert [i["id"] for i in rows[0]["items"]] == [70, 71]
+    assert offers_view([andijvie, spin], WeekLog(W), q="kleinverpakking")["categories"]
+    assert offers_view([andijvie, spin], WeekLog(W), q="banaan")["categories"] == []
+
+
+def test_same_group_in_two_categories_is_a_row_in_each():
+    from app.web import offers_view
+    a = grouped(op(74, "Chips paprika", "Borrel"))
+    b = grouped(op(75, "Chips naturel", "Borrel"))
+    c = grouped(op(76, "Cola", "Frisdrank"))
+    cats = offers_view([a, c, b], WeekLog(W))["categories"]
+    assert [(x["name"], [i.get("group") for i in x["items"]]) for x in cats] == [
+        ("Borrel", ["g1"]), ("Frisdrank", [None])]

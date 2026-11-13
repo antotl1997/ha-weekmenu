@@ -3,7 +3,7 @@ import html
 import logging
 import re
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date, datetime, timedelta, timezone
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
@@ -141,6 +141,10 @@ class Product:
     category: str | None
     hq_id: int | None = None  # AH article number; the only product id on a till receipt
     image: str | None = None  # photo for the Aanbiedingen tab (a group deal: its combined picture)
+    # the AH bonus group (one promotion, e.g. "2 voor 2.49" on several small packs) this
+    # product came from, and AH's own description of it; None for a single-product deal
+    group_id: str | None = None
+    group_title: str | None = None
 
 
 @dataclass
@@ -582,9 +586,12 @@ class AhClient:
         return out
 
     async def _expand_group(self, group: dict, period: BonusPeriod) -> list[Product]:
+        gid = str(group["id"])
+        name = html.unescape(group.get("segmentDescription") or "") or None
         inline = group.get("products") or []
         if inline:
-            return [product_from_card(c) for c in inline if c.get("webshopId")]
+            return [replace(product_from_card(c), group_id=gid, group_title=name)
+                    for c in inline if c.get("webshopId")]
         await self._pause()
         data = await self.graphql(
             GROUP_QUERY,
@@ -605,7 +612,7 @@ class AhClient:
                             image=picture,
                         )
                     )
-        return out
+        return [replace(p, group_id=gid, group_title=name) for p in out]
 
     @staticmethod
     def _is_blocking(e: Exception) -> bool:

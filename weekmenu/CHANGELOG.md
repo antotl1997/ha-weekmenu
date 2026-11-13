@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+- **Eén regel per actie in Aanbiedingen.** Producten uit dezelfde AH-actie (bijvoorbeeld "2 voor 2.49" op spinazie, andijvie, boerenkool en andere kleinverpakkingen) staan nu samen op één regel, met de foto en de omschrijving van de actie en "vanaf" de laagste prijs. De plusknop opent de producten van die actie, elk met gewicht en prijs, en daar tik je aan welke je wilt; je kunt er meer kiezen voordat je op Klaar tikt. Een actie met één product blijft een gewone regel. Zoeken vindt de actie ook op de naam van een product erin, en dat product staat dan bovenaan. De bewaarde folder wordt na de update één keer opnieuw opgehaald.
+
 ## 2.0.0
 
 - **Je kiest het menu zelf.** De add-on maakt geen menu meer voor je. Je kiest per avond een gerecht uit een keuzelijst en bouwt zo een concept voor de week. Het concept bewaart de add-on in het logboek van die week (veld `draft`). Er gaat niets naar AH zolang je niet bevestigt.

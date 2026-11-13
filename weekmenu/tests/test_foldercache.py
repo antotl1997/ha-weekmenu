@@ -34,7 +34,7 @@ def test_save_and_load_keep_order_and_photos(tmp_path):
     path = tmp_path / "folder.json"
     folder = [p(9, "Zalm", "https://example.invalid/z.jpg"), p(3, "Appel")]
     save_folders(path, {date(2026, 11, 2): folder})
-    assert json.loads(path.read_text(encoding="utf-8"))["schema"] == 1
+    assert json.loads(path.read_text(encoding="utf-8"))["schema"] == 2
     assert load_folders(path) == {date(2026, 11, 2): folder}
 
 

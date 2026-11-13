@@ -197,6 +197,7 @@ textarea:focus{outline:2px solid #2f6b3a;outline-offset:1px}
 .overlay[hidden],.toast[hidden]{display:none}
 .dialog{background:#f4f1ec;width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:22px 4px calc(10px + env(safe-area-inset-bottom))}
 .dialog p{font-size:15px;line-height:1.45;margin:0 20px 6px}
+.dialog.offergroup .card.ing{max-height:60vh;overflow:auto;margin:10px 12px}
 .dialog p.muted{font-size:13.5px;color:#6b655c}
 
 /* gradient fallbacks per cuisine (mockup b1..b5) */
