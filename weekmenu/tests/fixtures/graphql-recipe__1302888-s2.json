@@ -1,0 +1,188 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302888,
+   "title": "Aardappel-zuurkoolgratin met chorizo",
+   "description": "Zuurkoolschotel met pit: de chorizo en chilivlokken geven de gratin een pittige twist. Je zet 'm in 20 minuten in elkaar en de oven doet de rest. Kun jij in de tussentijd wat voor jezelf doen.",
+   "href": "/allerhande/recept/R-R1302888/aardappel-zuurkoolgratin-met-chorizo",
+   "cookTime": 20,
+   "nutriScore": "C",
+   "courses": [
+    "hoofdgerecht",
+    "bijgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036856_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 4.285713,
+    "count": 14
+   },
+   "ingredients": [
+    {
+     "text": "500 g vastkokende aardappel",
+     "name": {
+      "singular": "vastkokende aardappel"
+     }
+    },
+    {
+     "text": "125 ml slagroom",
+     "name": {
+      "singular": "slagroom"
+     }
+    },
+    {
+     "text": "100 ml volle melk",
+     "name": {
+      "singular": "volle melk"
+     }
+    },
+    {
+     "text": "2&#189; takje verse tijm",
+     "name": {
+      "singular": "verse tijm"
+     }
+    },
+    {
+     "text": "1 tl mosterd",
+     "name": {
+      "singular": "mosterd"
+     }
+    },
+    {
+     "text": "&#189; teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "50 g chorizoblokjes",
+     "name": {
+      "singular": "chorizoblokje"
+     }
+    },
+    {
+     "text": "&#189; tl chilivlokken",
+     "name": {
+      "singular": "chilivlokken"
+     }
+    },
+    {
+     "text": "260 g wijnzuurkool",
+     "name": {
+      "singular": "wijnzuurkool"
+     }
+    },
+    {
+     "text": "75 g geraspte kaas voor ovengratin",
+     "name": {
+      "singular": "geraspte kaas voor ovengratin"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verwarm de oven voor op 180 °C.",
+     "Snijd ondertussen de aardappelen met een kaasschaaf of mandoline in zo dun mogelijke plakjes. Kook de aardappelplakjes 5-6 min. en giet af.",
+     "Breng de slagroom met de melk, de takjes tijm en de mosterd aan de kook. Breng op smaak met peper en eventueel zout.",
+     "Haal van het vuur en laat 10 min. trekken.",
+     "Snijd ondertussen de knoflook fijn. Verhit een koekenpan zonder olie of boter op middelhoog vuur en bak de chorizo in 5 min. knapperig.",
+     "Voeg de knoflook en chilivlokken toe en bak 1 min. Laat uitlekken op keukenpapier.",
+     "Knijp het vocht uit de zuurkool en meng met de kaas.",
+     "Verdeel de helft van de aardappelplakjes over de bodem van de ovenschaal.",
+     "Verdeel daarover de helft van het zuurkool-kaasmengsel en de helft van de chorizo.",
+     "Herhaal met de rest van de aardappelen, het zuurkool-kaas mengsel en de chorizo. Druk alles heel licht aan.",
+     "Verwijder de tijm uit de room en schenk het mengsel over de ovenschaal. Dek af met aluminiumfolie en bak ca. 40 min. in de oven.",
+     "Ris de blaadjes van de rest van de tijm. Haal de gratin uit de oven.",
+     "Verwijder de folie, bestrooi met de rest van de kaas en de tijmblaadjes en bak nog ca. 30 min. in de oven."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 730,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 56,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 42,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 27,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

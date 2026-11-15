@@ -1,0 +1,2844 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 181,
+  "totalPages": 10,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 621115,
+   "hqId": 0,
+   "title": "AH Woksmaakmaker knoflook 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_47594b5878705a4d525f6d5432347850575067774267?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_47594b5878705a4d525f6d5432347850575067774267?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_47594b5878705a4d525f6d5432347850575067774267?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_47594b5878705a4d525f6d5432347850575067774267?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_47594b5878705a4d525f6d5432347850575067774267?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "3% volume voordeel",
+   "currentPrice": 3.47,
+   "priceBeforeBonus": 3.58,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Maaltijden, salades",
+   "subCategory": "Woksmaakmakers",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Woksmaakmaker knoflook 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 584838,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "3% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 3,
+     "unit": null,
+     "precisePercentage": 3
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 605185,
+   "hqId": 59586,
+   "title": "AH Excellent Mediterrane olijfmix met knoflook",
+   "salesUnitSize": "130 g",
+   "unitPriceDescription": "normale prijs per kg €25.31",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_496a3947624134725456574855586736394962386c67?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_496a3947624134725456574855586736394962386c67?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_496a3947624134725456574855586736394962386c67?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_496a3947624134725456574855586736394962386c67?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_496a3947624134725456574855586736394962386c67?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-10-26",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "3 VOOR 5.99",
+   "currentPrice": null,
+   "priceBeforeBonus": 3.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Borrel, chips, snacks",
+   "subCategory": "Verse olijven",
+   "brand": "AH Excellent",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [
+    "*M.u.v. kleintjes"
+   ],
+   "bonusSegmentId": 816491,
+   "bonusSegmentDescription": "Alle AH Borrelhapjes t/m 210 gram van de versafdeling*",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 120,
+   "multipleItemPromotion": true,
+   "labelType": "SPOTLIGHT",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_X_FOR_Y",
+     "defaultDescription": "3 voor 5.99",
+     "amount": null,
+     "deliveryType": null,
+     "count": 3,
+     "freeCount": null,
+     "actualCount": null,
+     "price": 5.99,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 7,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 4160,
+   "hqId": 21023,
+   "title": "AH Knoflook",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536393638?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536393638?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536393638?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536393638?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536393638?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.39,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Knoflook",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Knoflook is een echte smaakmaker die een gerecht extra smaak en geur geeft.</p><p><ul><li>Smaak: Knoflook heeft een scherpe smaak.</li><li>Bewaren: Op een koele, donkere en droge plaats buiten de koelkast.</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 8,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 162764,
+   "hqId": 631937,
+   "title": "Philadelphia Knoflook & fijne kruiden",
+   "salesUnitSize": "185 g",
+   "unitPriceDescription": "prijs per kg €16.16",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_7543364f4e6a2d3152507941546a49315765416e5f77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_7543364f4e6a2d3152507941546a49315765416e5f77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_7543364f4e6a2d3152507941546a49315765416e5f77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_7543364f4e6a2d3152507941546a49315765416e5f77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_7543364f4e6a2d3152507941546a49315765416e5f77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Kaas",
+   "subCategory": "Roomkaas",
+   "brand": "Philadelphia",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>De heerlijke frisse en romige smaak van philadelphia, vermengd met knoflook en fijne kruiden.</p><p><ul><li>Zacht-frisse kruidenkaas met knoflook en kruiden</li><li>Fris en romig van smaak</li><li>Ovaal kuipje voor een betere houdbaarheid</li><li>Heerlijk op brood, op een wrap of in een pasta</li></ul></p>",
+   "propertyIcons": [
+    "vega"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 560686,
+   "hqId": 90909,
+   "title": "AH Knoflookboter",
+   "salesUnitSize": "100 g",
+   "unitPriceDescription": "prijs per kg €10.90",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323034303139?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323034303139?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323034303139?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323034303139?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323034303139?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.09,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Zuivel, eieren",
+   "subCategory": "Kruidenboter",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vega"
+   ],
+   "stickers": null,
+   "nutriscore": "E",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 11,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 202509,
+   "hqId": 796085,
+   "title": "Yildriz Turkse knoflooksaus",
+   "salesUnitSize": "0,54 l",
+   "unitPriceDescription": "normale prijs per liter €7.64",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313531393437?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313531393437?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313531393437?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313531393437?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313531393437?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-02",
+   "bonusEndDate": "2026-11-08",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "25% korting",
+   "currentPrice": 3.07,
+   "priceBeforeBonus": 4.09,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Knoflooksaus",
+   "brand": "Yildriz",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vanaf maandag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Yildriz turkse knoflooksaus, romig zoet met volle knoflooksmaak.</p><p><ul><li>Knoflooksaus naar turks recept</li><li>Heerlijk bij turkse pizza, shoarma en en andere vleesgerechten</li><li>Met handige doseerdop</li><li>Gekoeld smaken onze sauzen het lekkerst</li></ul></p>",
+   "propertyIcons": [
+    "vega"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 817979,
+   "bonusSegmentDescription": "Alle Remia",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Yildriz maakt de lekkerste wereldsauzen, gebaseerd op lokale recepten en ingredienten van over de hele wereld. Yildriz wereldsauzen: voor mensen met smaak!",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 71,
+   "multipleItemPromotion": true,
+   "labelType": null,
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "25% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 25,
+     "unit": null,
+     "precisePercentage": 25
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 185774,
+   "hqId": 521755,
+   "title": "AH Biologisch Knoflook",
+   "salesUnitSize": "100 g",
+   "unitPriceDescription": "normale prijs per kg €14.90",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536383837?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536383837?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536383837?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536383837?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393536383837?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 1.34,
+   "priceBeforeBonus": 1.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Knoflook",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Knoflook behoort tot de familie van de Alliaceae (uiachtigen), evenals uien en prei. Knoflook bestaat uit witte of lichtpaars gekleurde tenen, de\nzogenaamde klisters. Knoflook heeft een zeer sterke, doordringende geur, die voornamelijk veroorzaakt wordt door allicine.</p>",
+   "propertyIcons": [
+    "biologisch"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "<p>\n   <ul>\n   <li><strong>Smaak:</strong> Knoflook is scherp van smaak en geeft gerechten een sterke en extra geurige smaak.\n\n </li>\n   <li><strong>Bewaren:</strong> Op een koele, donkere en droge plaats buiten de koelkast. Zo is knoflook enkele weken te bewaren.\n\n </li>\n   <li><strong>Bereiden:</strong> De knoflook ontdoen van de schil, hierna snipperen of uitpersen. Hele teentjes kunnen worden gestoofd.\n Knoflook is ideaal om te fruiten of als smaakmaker. Door knoflook te verhitten, wordt de smaak aromatischer en zoeter.\n\n\n </li>\n   </ul>\n  </p>\n  <p>Neem het ervan en geniet van het lekkerste dat de natuur te bieden heeft. Van onze biologische producten kun je met een goed gevoel genieten dankzij de aandacht en inspanning van de boeren en producenten die ze voor ons maken. Natuurlijk worden al onze biologische producten onafhankelijk gecontroleerd en daarom verdienen ze het Europese keurmerk. Biologisch van Albert Heijn: dat smaakt naar meer!</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 7,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 1982,
+   "hqId": 4023,
+   "title": "Boursin Knoflook & fijne kruiden",
+   "salesUnitSize": "80 g",
+   "unitPriceDescription": "prijs per kg €27.38",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4e79787079566b525346693972634a7a6979635a7541?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4e79787079566b525346693972634a7a6979635a7541?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4e79787079566b525346693972634a7a6979635a7541?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4e79787079566b525346693972634a7a6979635a7541?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4e79787079566b525346693972634a7a6979635a7541?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.19,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Kaas",
+   "subCategory": "Roomkaas",
+   "brand": "Boursin",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Boursin knoflook en fijne kruiden roomkaas is een heerlijke romige roomkaas met een rijke smaak van knoflook en kruiden. Perfect voor op de borrelplank of een gemakkelijke smaakmaker voor je gerechten.</p><p><ul><li>Heerlijk romig, vol van smaak en met een kruimelige textuur</li><li>Perfect bij de borrel op stokbrood en crackers</li><li>Heerlijk in hapjes of gerechten zoals pasta of wraps</li><li>Een gemakkelijke smaakmaker gemaakt van kwalitatieve ingredienten</li></ul></p>",
+   "propertyIcons": [
+    "vega"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Boursin is de perfecte smaakmaker om iets lekkers te serveren dankzij zijn veelzijdigheid, heerlijk volle smaak en romige textuur. Het zijn de momenten samen met vrienden en familie die smaak geven aan het leven. Dan wil je niet uren in de keuken staan, maar vooral genieten van je gezelschap. Perfect voor elke gelegenheid, of het nu gaat om een feestelijke borrel, een gezellig etentje of een uitgebreide lunch. Boursin is gemaakt van kwalitatieve ingredienten en biedt zowel klassieke als plantaardige varianten, zodat iedereen kan genieten van deze heerlijke roomkaas. Boursin inspireert, jij creeert",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 7,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 193444,
+   "hqId": 794555,
+   "title": "Calvé Knoflooksaus",
+   "salesUnitSize": "320 ml",
+   "unitPriceDescription": "normale prijs per liter €6.84",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_3279354b344e336254345365375733436c635a446c67?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_3279354b344e336254345365375733436c635a446c67?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_3279354b344e336254345365375733436c635a446c67?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_3279354b344e336254345365375733436c635a446c67?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_3279354b344e336254345365375733436c635a446c67?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-10-26",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "2 + 2 GRATIS",
+   "currentPrice": null,
+   "priceBeforeBonus": 2.19,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Knoflooksaus",
+   "brand": "Calvé",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Calve knoflook saus: een frisse en romige saus met milde knoflooksmaak, lekker bij al je snacks, de barbecue of bij het gourmetten.</p><p><ul><li>Calve knoflook saus: een frisse en romige saus met milde knoflooksmaak</li><li>Een romige knoflooksaus, waarbij je de kruiden goed proeft</li><li>Calve knoflook saus, in de vertrouwde glazen fles van calve</li><li>Lekker bij al je snacks, de barbecue of bij het gourmetten</li></ul></p>",
+   "propertyIcons": [
+    "vega"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 816495,
+   "bonusSegmentDescription": "Alle Knorr, Unox soep in zak en Hellmann's en Calvé sauzen",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Over Calve knoflook saus: Calve knoflook saus is een heerlijke frisse en romige saus met een milde knoflooksmaak, waarbij je de kruiden goed proeft. Jouw vertrouwde knoflooksaus van Calve is gemaakt van goede en pure ingredienten zoals olie, azijn en eieren. Dat proef je! Maak je gerecht nog lekkerder met de knoflook-tafelsaus van calve. Deze knoflooksaus kun je perfect op tafel zetten tijdens een avondje gourmetten, maar ook wanneer je gaat barbecueen met familie of vrienden. De knoflooksaus van Calve is een heerlijke smaakmaker. Deze saus is overigens ook geschikt voor vegetariers. Waarmee te serveren: probeer Calve knoflook saus bij snacks of tussendoortjes. Uiteraard is de saus ook erg lekker bij verschillende maaltijden zoals wraps of pitabroodjes. Of probeer deze knoflooksaus lekker in de zomer tijdens een barbecue met familie of vrienden! Calve, eten met elkaar, lekker doen! Over calve: het merk Calve bestaat al een hele tijd en wie is er in Nederland niet mee opgegroeid? in 1883 werd de Nederlandse oliefabriek opgericht in delft. In 1898 fuseerde de Nederlandse oliefabriek met een frans bedrijf tot nof calve-delft, later kortweg calve. Het bedrijf begon met de productie van delftsche slaolie, maar sinds 1898 zet Calve zich in om de lekkerste sauzen te maken van de beste kwaliteit. Al meer dan 100 jaar zet maakt Calve mayonaise van de beste kwaliteit. Niet alleen de mayonaise van Calve zit boordevol smaak, ook de sauzen, dressings en natuurlijk de pindakaas.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 223,
+   "multipleItemPromotion": true,
+   "labelType": "SPOTLIGHT",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_X_PLUS_Y_FREE",
+     "defaultDescription": "2+2 gratis",
+     "amount": null,
+     "deliveryType": null,
+     "count": 2,
+     "freeCount": 2,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 187573,
+   "hqId": 633454,
+   "title": "AH Knoflooksaus",
+   "salesUnitSize": "150 g",
+   "unitPriceDescription": "prijs per kg €6.60",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_75336336515a6f4151372d5a3173644f667945767277?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_75336336515a6f4151372d5a3173644f667945767277?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_75336336515a6f4151372d5a3173644f667945767277?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_75336336515a6f4151372d5a3173644f667945767277?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_75336336515a6f4151372d5a3173644f667945767277?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 0.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Knoflooksaus",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Een romige knoflooksaus voor bij vlees</li><li>Lekker vol en romig</li><li>Heerlijk bij de bbq, fondue en gourmet</li><li>Een echte smaakmaker</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "vega"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 12,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 467793,
+   "hqId": 719130,
+   "title": "AH Knoflooksaus",
+   "salesUnitSize": "300 ml",
+   "unitPriceDescription": "prijs per liter €3.97",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833393737?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833393737?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833393737?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833393737?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833393737?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.19,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Knoflooksaus",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Romige, frisse knoflooksaus, heerlijk bij de shoarma of barbecue.</p><p><ul><li>Knoflooksaus. Bereid met magere yoghurt</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "vega"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 378628,
+   "hqId": 839775,
+   "title": "Heinz Tomaten blokjes met knoflook",
+   "salesUnitSize": "390 g",
+   "unitPriceDescription": "prijs per kg €4.33",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_476e43474a634f2d53452d502d4f4642696f66434541?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_476e43474a634f2d53452d502d4f4642696f66434541?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_476e43474a634f2d53452d502d4f4642696f66434541?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_476e43474a634f2d53452d502d4f4642696f66434541?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_476e43474a634f2d53452d502d4f4642696f66434541?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.69,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Tomatenblokjes",
+   "brand": "Heinz",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Heinz tomatenblokjes met knoflook is gemaakt van de goede kwaliteit zongerijpte tomaten met vers gesneden knoflook voor een onweerstaanbare, rijke smaak. Een heerlijke tomaten basis in vele gerechten.</p><p><ul><li>Uitsluitend gemaakt van tomaten geteeld in de open lucht</li><li>Zonder toegevoegde smaakstoffen of conserveermiddelen en glutenvrij</li><li>Lekker in een pasta, lasagne, curry of op een pizza</li><li>De beste kwaliteit zongerijpte tomaten</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Heinz tomatenblokjes knofloof is gemaakt met tomaten van hoge kwalitieit die in de volle grond zijn geteeld en in de zon zijn gerijpt voor een authentieke, rijke en onweerstaanbare smaak. De tomatenklokjes met knoflook zijn gemaakt op basis van sappige tomaten, ideaal voor uw soepen, pastasauzen, couscous of elk ander gerecht naar uw wens. Alle Heinz producten zijn grown, not made en hebben daarom geen toegevoegde smaakstoffen of conserveermiddelen maar een natuurlijke smaak, en dat proef je!",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 617435,
+   "hqId": 0,
+   "title": "AH Roerbak garnalen knoflook 4-pack",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6b77696a376b32745149753669476a4a356d47376c77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6b77696a376b32745149753669476a4a356d47376c77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6b77696a376b32745149753669476a4a356d47376c77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6b77696a376b32745149753669476a4a356d47376c77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6b77696a376b32745149753669476a4a356d47376c77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": null,
+   "currentPrice": 16.47,
+   "priceBeforeBonus": 21.96,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Garnalen (vers)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Roerbak garnalen knoflook 4x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 415351,
+     "quantity": 4
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PRODUCT_DISCOUNT_BUNDLE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE",
+     "defaultDescription": "pakketkorting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 621116,
+   "hqId": 0,
+   "title": "AH Woksmaakmaker knoflook 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_45665363364d52445165614b754c334839304b4d5f77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_45665363364d52445165614b754c334839304b4d5f77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_45665363364d52445165614b754c334839304b4d5f77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_45665363364d52445165614b754c334839304b4d5f77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_45665363364d52445165614b754c334839304b4d5f77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 5.1,
+   "priceBeforeBonus": 5.37,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Maaltijden, salades",
+   "subCategory": "Woksmaakmakers",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Woksmaakmaker knoflook 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 584838,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 621615,
+   "hqId": 0,
+   "title": "AH Excellent Mediterrane olijfmix met knoflook 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4e374d35714661544f656d6736737a6331596f3541?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4e374d35714661544f656d6736737a6331596f3541?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4e374d35714661544f656d6736737a6331596f3541?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4e374d35714661544f656d6736737a6331596f3541?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4e374d35714661544f656d6736737a6331596f3541?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-02",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "3% volume voordeel",
+   "currentPrice": 6.38,
+   "priceBeforeBonus": 6.58,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Borrel, chips, snacks",
+   "subCategory": "Verse olijven",
+   "brand": "AH Excellent",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vanaf maandag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Mediterrane olijfmix met knoflook 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 605185,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "3% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 3,
+     "unit": null,
+     "precisePercentage": 3
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 626153,
+   "hqId": 0,
+   "title": "Paturain Paturain Knoflook fijne kruiden 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4f392d776c6e5054584770494e6f6f754d63796351?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4f392d776c6e5054584770494e6f6f754d63796351?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4f392d776c6e5054584770494e6f6f754d63796351?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4f392d776c6e5054584770494e6f6f754d63796351?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_2d4f392d776c6e5054584770494e6f6f754d63796351?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 12.51,
+   "priceBeforeBonus": 13.17,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Kaas",
+   "subCategory": "Roomkaas",
+   "brand": "Paturain",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Paturain Knoflook fijne kruiden 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 494278,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 122302,
+   "hqId": 89743,
+   "title": "Go-Tan Gehakte knoflook",
+   "salesUnitSize": "100 g",
+   "unitPriceDescription": "prijs per kg €22.90",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353732353335?revLabel=4&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353732353335?revLabel=4&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353732353335?revLabel=4&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353732353335?revLabel=4&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239353732353335?revLabel=4&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Gember en knoflook (conserven)",
+   "brand": "Go-Tan",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Gehakte knoflook: van oorsprong een chinees product. Direct na de oogst worden de teentjes schoongemaakt en in stukjes gehakt.</p><p><ul><li>Glutenvrij, vegetarisch</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "C",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 624534,
+   "hqId": 77750,
+   "title": "Philadelphia Light knoflook & fijne kruiden",
+   "salesUnitSize": "185 g",
+   "unitPriceDescription": "prijs per kg €16.16",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_74694d333536506952366533503563337538764b6651?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_74694d333536506952366533503563337538764b6651?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_74694d333536506952366533503563337538764b6651?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_74694d333536506952366533503563337538764b6651?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_74694d333536506952366533503563337538764b6651?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Kaas",
+   "subCategory": "Roomkaas",
+   "brand": "Philadelphia",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Ontdek de frisse en romige smaak van Philadelphia knoflook & fijne kruiden zuivelspread in een lichtere versie met 40% minder vet. Perfect om te smeren of in gerechten voor extra smaak in je maaltijd.</p><p><ul><li>Ontdek onze Philadelphia knoflook en kruiden in de light-versie.</li><li>Bereid met 40% minder vet dan de Philadelphia knoflook & fijne Kruiden.</li><li>Met een heerlijk frisse en romige smaak en smeuïge textuur.</li><li>Ideaal om te smeren op je brood, wrap of toastjes of om te koken.</li></ul></p>",
+   "propertyIcons": [
+    "vega"
+   ],
+   "stickers": null,
+   "nutriscore": "C",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Philadelphia heerlijk romig. Je kunt erop rekenen dat je met Philadelphia eenvoudige, maar heerlijke maaltijden maakt waar iedereen van houdt. Of het nu wordt belegd met gerookte zalm, als aanvulling op vleeswaren of royaal op een versgebakken sneetje brood wordt gesmeerd, Philadelphia is de perfecte aanvulling. Wij staan altijd voor je klaar. We beschouwen onszelf als een echte vriend van eten. Het opfleuren van ontbijt, lunch en diner en het onvergetelijk maken van tussendoortjes. En zoals elke goede vriend, zijn we er door dik en dun. Je kunt altijd op Philadelphia vertrouwen om mensen samen te brengen. We zijn er voor die zoete en zoute momenten!",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 627847,
+   "hqId": 0,
+   "title": "Haust Toast en chips knoflook 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_7055373971626136524475777a496b6837445a475667?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_7055373971626136524475777a496b6837445a475667?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_7055373971626136524475777a496b6837445a475667?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_7055373971626136524475777a496b6837445a475667?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_7055373971626136524475777a496b6837445a475667?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 3.4,
+   "priceBeforeBonus": 3.58,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Borrel, chips, snacks",
+   "subCategory": "Borreltoast",
+   "brand": "Haust",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Haust Toast en chips knoflook 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 376062,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 217336,
+   "hqId": 807641,
+   "title": "AH Groene olijven met knoflook",
+   "salesUnitSize": "260 g",
+   "unitPriceDescription": "prijs per kg €13.04",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3751795a53416854646d664e666f7a657453455341?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3751795a53416854646d664e666f7a657453455341?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3751795a53416854646d664e666f7a657453455341?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3751795a53416854646d664e666f7a657453455341?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3751795a53416854646d664e666f7a657453455341?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 3.39,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Borrel, chips, snacks",
+   "subCategory": "Verse olijven",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>De populairste olijf van Nederland! Heerlijk genieten van deze verse groene Griekse olijven met kruidige knoflookplakjes.</p><p><ul><li>Smaak: Karakteristiek.</li><li>Zonder pit.</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 7,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=knoflook&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=knoflook&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=knoflook&sortBy=RELEVANCE&page=1&size=20"
+  },
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=knoflook&sortBy=RELEVANCE&page=9&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 85,
+     "display": true
+    },
+    {
+     "id": "AH Biologisch",
+     "label": "AH Biologisch",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "AH Excellent",
+     "label": "AH Excellent",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "AH Terra",
+     "label": "AH Terra",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Aardappel Anders",
+     "label": "Aardappel Anders",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Ashoka",
+     "label": "Ashoka",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Bertolli",
+     "label": "Bertolli",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Boursin",
+     "label": "Boursin",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "Brandt & Levie",
+     "label": "Brandt & Levie",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Calvé",
+     "label": "Calvé",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Carbonell",
+     "label": "Carbonell",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Conimex",
+     "label": "Conimex",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Drogheria",
+     "label": "Drogheria",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Efepasa",
+     "label": "Efepasa",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Fratelli Laurieri",
+     "label": "Fratelli Laurieri",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Garlan",
+     "label": "Garlan",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Go-Tan",
+     "label": "Go-Tan",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Gouda's Glorie",
+     "label": "Gouda's Glorie",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Haust",
+     "label": "Haust",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Heinz",
+     "label": "Heinz",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Knorr",
+     "label": "Knorr",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Kühne",
+     "label": "Kühne",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Laurieri",
+     "label": "Laurieri",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Mill & Mortar",
+     "label": "Mill & Mortar",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Mutti",
+     "label": "Mutti",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "No Fairytales",
+     "label": "No Fairytales",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Paolo",
+     "label": "Paolo",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Paturain",
+     "label": "Paturain",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "Philadelphia",
+     "label": "Philadelphia",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Remia",
+     "label": "Remia",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Stegeman",
+     "label": "Stegeman",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Tilda",
+     "label": "Tilda",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Verstegen",
+     "label": "Verstegen",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "Yildriz",
+     "label": "Yildriz",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "3301",
+     "label": "Afbakbrood",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "10206",
+     "label": "Aziatische keuken",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "4508",
+     "label": "Borrelhapjes",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "20831",
+     "label": "Borreltoast",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "951",
+     "label": "Boter en margarine",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "2206",
+     "label": "Crackers, beschuit",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "1544",
+     "label": "Creme fraiche, room, kokosmelk",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "9930",
+     "label": "Dips",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "10566",
+     "label": "Dipsaus",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "9931",
+     "label": "Dipsaus (vers)",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "6464",
+     "label": "Droge worst",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "6061",
+     "label": "Droge worst - cervelaat",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "2615",
+     "label": "Droge worst - salami, fuet",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "2614",
+     "label": "Droge worst - snacks",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "10301",
+     "label": "Franse keuken",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "10527",
+     "label": "Fruit- en groentesauzen",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "2599",
+     "label": "Garnalen",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "1091",
+     "label": "Garnalen (vers)",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "10209",
+     "label": "Gedroogde kruiden",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "6007",
+     "label": "Gember en knoflook (conserven)",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "10438",
+     "label": "Groente pizzabodems",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "2723",
+     "label": "Groenteconserven",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "2761",
+     "label": "Hartig beleg",
+     "count": 22,
+     "display": true
+    },
+    {
+     "id": "4431",
+     "label": "Indiase keuken",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "1177",
+     "label": "Indonesische keuken",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "1178",
+     "label": "Indonesische maaltijdpakketten, mixen",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "2235",
+     "label": "Italiaanse keuken",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "18539",
+     "label": "Kaas voor borrel",
+     "count": 25,
+     "display": true
+    },
+    {
+     "id": "18541",
+     "label": "Kaas voor maaltijden",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "4684",
+     "label": "Kaasblokjes",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "8624",
+     "label": "Keukengerei",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "4806",
+     "label": "Knoflook",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "8626",
+     "label": "Knoflookpers en gardes",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "4805",
+     "label": "Knoflookpoeder, uienpoeder",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "10518",
+     "label": "Knoflooksaus",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "12044",
+     "label": "Koken",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "1263",
+     "label": "Kookroom",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "44491",
+     "label": "Koude borrelhapjes",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "20447",
+     "label": "Kruiden, specerijen, garnering",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "21106",
+     "label": "Kruiden- en specerijenmixen",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "1275",
+     "label": "Kruidenboter",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "10013",
+     "label": "Luxe toast",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "1300",
+     "label": "Maaltijd Kruidenmixen",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "2229",
+     "label": "Maaltijdpakketten, maaltijdmixen",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "18581",
+     "label": "Mascarpone, ricotta, monchou",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "1341",
+     "label": "Naanbrood, pappadum",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "1352",
+     "label": "Noten",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "20448",
+     "label": "Olie, azijn, frituurvet",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "1881",
+     "label": "Olijfolie",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "1882",
+     "label": "Olijfolie met smaaktoevoegingen",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "2227",
+     "label": "Olijven",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "2607",
+     "label": "Pangasius (vers)",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "10900",
+     "label": "Pitten, zaden en noten",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "5282",
+     "label": "Plantaardige alternatieven",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "18543",
+     "label": "Plantaardige plakken, stukken en rasp",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "10543",
+     "label": "Roerbak- en woksauzen",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "4687",
+     "label": "Roomkaas",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "10480",
+     "label": "Sauzen",
+     "count": 30,
+     "display": true
+    },
+    {
+     "id": "1492",
+     "label": "Schaal- en schelpdieren",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "10481",
+     "label": "Smaakmakers",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "18549",
+     "label": "Smeerkaas, roomkaas, cottage cheese",
+     "count": 21,
+     "display": true
+    },
+    {
+     "id": "3963",
+     "label": "Smeersels en dips",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "10484",
+     "label": "Soepverrijking",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "20218",
+     "label": "Stokbrood en ciabatta",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "17839",
+     "label": "Tapas",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "1353",
+     "label": "Toast",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "10140",
+     "label": "Toast crackers",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "1784",
+     "label": "Tomatenblokjes",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "9444",
+     "label": "Tomatenconserven",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "19595",
+     "label": "Tomatenproducten",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "10449",
+     "label": "Tomatenpulp",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "10151",
+     "label": "Ui, prei en knoflook",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "2403",
+     "label": "Variatiesauzen",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "19816",
+     "label": "Vegetarisch en plantaardig beleg",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "19814",
+     "label": "Vegetarische spreads",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "1628",
+     "label": "Verse kruiden, gember, pepers",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "43935",
+     "label": "Verse noedels en woksauzen",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "2529",
+     "label": "Verse olijven",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "6539",
+     "label": "Verse vis",
+     "count": 15,
+     "display": true
+    },
+    {
+     "id": "44763",
+     "label": "Woksmaakmakers",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "9560",
+     "label": "Zuivelspread",
+     "count": 2,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 85,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 89,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 62,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 107,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 62,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 90,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 97,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 97,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 107,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 105,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 103,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 102,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 98,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 105,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 65,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 18,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 39,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 81,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "a",
+     "label": "Score A",
+     "count": 17,
+     "display": true
+    },
+    {
+     "id": "b",
+     "label": "Score B",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "c",
+     "label": "Score C",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "d",
+     "label": "Score D",
+     "count": 47,
+     "display": true
+    },
+    {
+     "id": "e",
+     "label": "Score E",
+     "count": 12,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 107,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "previouslyBought",
+   "allLabel": null,
+   "label": "Eerder gekocht",
+   "options": [
+    {
+     "id": "previouslyBought",
+     "label": "Eerder gekocht",
+     "count": 8,
+     "display": true
+    }
+   ],
+   "type": "PREVIOUSLY_BOUGHT",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_verbluffen",
+   "allLabel": null,
+   "label": "Prijsfavoriet",
+   "options": [
+    {
+     "id": "np_verbluffen",
+     "label": "Prijsfavoriet",
+     "count": 7,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "diepvries",
+   "allLabel": null,
+   "label": "Diepvries",
+   "options": [
+    {
+     "id": "diepvries",
+     "label": "Diepvries",
+     "count": 3,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_biologisch",
+   "allLabel": null,
+   "label": "Biologisch",
+   "options": [
+    {
+     "id": "np_biologisch",
+     "label": "Biologisch",
+     "count": 3,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_nieuw",
+   "allLabel": null,
+   "label": "Nieuw",
+   "options": [
+    {
+     "id": "np_nieuw",
+     "label": "Nieuw",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_vegetarisch",
+   "allLabel": null,
+   "label": "Vegetarisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 81,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_veganistisch",
+   "allLabel": null,
+   "label": "Veganistisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 39,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

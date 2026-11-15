@@ -1,0 +1,874 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Huishouden",
+ "bonusGroupOrProducts": [
+  {
+   "product": {
+    "webshopId": 595094,
+    "hqId": 43281,
+    "title": "AH Extra zacht & sterk toiletpapier 4-laags 12=18 rollen",
+    "brand": "AH",
+    "isSample": false,
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200191_AH_NL_WK44_AH_EXTRA_ZACHT_STERK_TOILETPAPIER_4LAAGS_1218_ROLLEN?rendition=200px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200191_AH_NL_WK44_AH_EXTRA_ZACHT_STERK_TOILETPAPIER_4LAAGS_1218_ROLLEN?rendition=708px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     }
+    ],
+    "segmentId": "816393",
+    "bonusSegmentId": 816393,
+    "offerId": 200191,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Extra zacht & sterk toiletpapier 4-laags 12=18 rollen",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "2 VOOR 13.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 13.99",
+      "count": 2,
+      "price": 13.99
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 7.99,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Huishouden",
+    "subCategory": "Toiletpapier - 4 en 5 laags",
+    "subCategoryId": 2045,
+    "propertyIcons": [],
+    "properties": {
+     "da_accreditation": [
+      "EU_ECO_LABEL"
+     ],
+     "da_store_department": [
+      "Non Food"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "da_toilet_paper_layers": [
+      "4"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816473",
+    "offerId": 200271,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816473,
+    "segmentDescription": "Alle Reus toiletblokken en wasmiddelen t/m 23 wasbeurten",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 + 3 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200271_AH_NL_WK44_ALLE_REUS_TOILETBLOKKEN_EN_WASMIDDELEN_TM_23_WASBEURTEN?rendition=200px&fileType=binary&version=SdPJPL4fJc9L7yB4enoVtA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200271_AH_NL_WK44_ALLE_REUS_TOILETBLOKKEN_EN_WASMIDDELEN_TM_23_WASBEURTEN?rendition=708px&fileType=binary&version=SdPJPL4fJc9L7yB4enoVtA"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "2+3 gratis",
+      "count": 2,
+      "freeCount": 3
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816445",
+    "offerId": 200243,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816445,
+    "segmentDescription": "Alle Kleenex",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_697265667748423954746174334b6b6f4a4257633677?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_697265667748423954746174334b6b6f4a4257633677?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_697265667748423954746174334b6b6f4a4257633677?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_697265667748423954746174334b6b6f4a4257633677?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_697265667748423954746174334b6b6f4a4257633677?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816406",
+    "offerId": 200204,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816406,
+    "segmentDescription": "Alle Robijn Quickwash of Klein & Krachtig",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 6.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200204_AH_NL_WK44_ALLE_ROBIJN_QUICKWASH_OF_KLEIN_KRACHTIG?rendition=200px&fileType=binary&version=OF5FISvtFAF8TvLzNwNtfQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200204_AH_NL_WK44_ALLE_ROBIJN_QUICKWASH_OF_KLEIN_KRACHTIG?rendition=708px&fileType=binary&version=OF5FISvtFAF8TvLzNwNtfQ"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 6.99",
+      "price": 6.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816427",
+    "offerId": 200225,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816427,
+    "segmentDescription": "Alle Ajax",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "1 + 1 GRATIS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_366f484d5a31642d524e4b4a4a316f4473504f757241?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_366f484d5a31642d524e4b4a4a316f4473504f757241?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_366f484d5a31642d524e4b4a4a316f4473504f757241?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_366f484d5a31642d524e4b4a4a316f4473504f757241?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_366f484d5a31642d524e4b4a4a316f4473504f757241?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "1+1 gratis",
+      "count": 1,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "820503",
+    "offerId": 204363,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 820503,
+    "segmentDescription": "Alle Ariel pods+ en vloeibaar+",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 + 3 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_204363_AH_NL_WK44_ALLE_ARIEL_PODS_EN_VLOEIBAAR?rendition=200px&fileType=binary&version=bmWqu7vgraLbOdAkJVd1pA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_204363_AH_NL_WK44_ALLE_ARIEL_PODS_EN_VLOEIBAAR?rendition=708px&fileType=binary&version=bmWqu7vgraLbOdAkJVd1pA"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "2+3 gratis",
+      "count": 2,
+      "freeCount": 3
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816425",
+    "offerId": 200223,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816425,
+    "segmentDescription": "Alle Dreft handafwas 350-520 ml",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "4 VOOR 9.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6643696e31644777536861464c6958747a5156464151?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6643696e31644777536861464c6958747a5156464151?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6643696e31644777536861464c6958747a5156464151?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6643696e31644777536861464c6958747a5156464151?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6643696e31644777536861464c6958747a5156464151?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "4 voor 9.99",
+      "count": 4,
+      "price": 9.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816430",
+    "offerId": 200228,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816430,
+    "segmentDescription": "Alle Dreft en Finish vaatwascapsules",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "1 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200228_AH_NL_WK44_ALLE_DREFT_EN_FINISH_VAATWASCAPSULES?rendition=200px&fileType=binary&version=7rFo8AhDsBXEQ3vGWsvUpA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200228_AH_NL_WK44_ALLE_DREFT_EN_FINISH_VAATWASCAPSULES?rendition=708px&fileType=binary&version=7rFo8AhDsBXEQ3vGWsvUpA"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "1+1 gratis",
+      "count": 1,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816477",
+    "offerId": 200275,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816477,
+    "segmentDescription": "Alle ecologische en parfumvrije wasmiddelen en wasverzachters",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e HALVE PRIJS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200275_AH_NL_WK44_ALLE_ECOLOGISCHE_EN_PARFUMVRIJE_WASMIDDELEN_EN_WASVERZACHTERS?rendition=200px&fileType=binary&version=NBYNkMlqp4GAmUM3lrM0Kw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200275_AH_NL_WK44_ALLE_ECOLOGISCHE_EN_PARFUMVRIJE_WASMIDDELEN_EN_WASVERZACHTERS?rendition=708px&fileType=binary&version=NBYNkMlqp4GAmUM3lrM0Kw"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_HALF_PRICE",
+      "defaultDescription": "2e halve prijs",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816472",
+    "offerId": 200270,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816472,
+    "segmentDescription": "Alle A-merk toiletgels",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "40% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_524b5333745639715356366230534d71524751707867?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_524b5333745639715356366230534d71524751707867?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_524b5333745639715356366230534d71524751707867?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_524b5333745639715356366230534d71524751707867?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_524b5333745639715356366230534d71524751707867?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "40% korting",
+      "percentage": 40,
+      "precisePercentage": 40
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816398",
+    "offerId": 200196,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816398,
+    "segmentDescription": "Alle Edet keukenpapier 6 t/m 8 rollen",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "1 + 1 GRATIS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303430313836?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303430313836?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303430313836?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303430313836?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303430313836?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "1+1 gratis",
+      "count": 1,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "820839",
+    "offerId": 204699,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 820839,
+    "segmentDescription": "Alle Lenor wasverzachters t/m 42 wasbeurten",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 9.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6e7745656d696f4e514d364a4c394d7a774d47706741?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6e7745656d696f4e514d364a4c394d7a774d47706741?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6e7745656d696f4e514d364a4c394d7a774d47706741?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6e7745656d696f4e514d364a4c394d7a774d47706741?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6e7745656d696f4e514d364a4c394d7a774d47706741?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 9.99",
+      "count": 3,
+      "price": 9.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816415",
+    "offerId": 200213,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816415,
+    "segmentDescription": "Alle Lenor geurboosters",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "1 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200213_AH_NL_WK44_ALLE_LENOR_GEURBOOSTERS?rendition=200px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200213_AH_NL_WK44_ALLE_LENOR_GEURBOOSTERS?rendition=708px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     }
+    ],
+    "category": "Huishouden",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "1+1 gratis",
+      "count": 1,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 624666,
+    "hqId": 80151,
+    "title": "Edet vochtig toiletpapier maxi pack",
+    "brand": "Edet",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_30596861724a304a547465774d675046396e556e4741?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_30596861724a304a547465774d675046396e556e4741?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_30596861724a304a547465774d675046396e556e4741?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_30596861724a304a547465774d675046396e556e4741?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_30596861724a304a547465774d675046396e556e4741?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "821866",
+    "bonusSegmentId": 821866,
+    "offerId": 205668,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "Edet vochtig toiletpapier maxi pack",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "50% korting",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 4.29,
+    "hasListPrice": false,
+    "currentPrice": 2.14,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Huishouden",
+    "subCategory": "Toiletpapier - 4 en 5 laags",
+    "subCategoryId": 2045,
+    "propertyIcons": [
+     "nieuw"
+    ],
+    "properties": {
+     "da_store_department": [
+      "Non Food"
+     ],
+     "da_grape": [],
+     "da_toilet_paper_layers": [
+      "-1"
+     ],
+     "np_nieuw": [
+      "Nieuw"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Edet maxi pack vochtig toiletpapier. Gemaakt van 100% plantaardige vezels, bevat minstens 5% vlasvezels uit hernieuwbare vlasplanten en is plasticvrij. Gebruik voor een extra schoon, fris gevoel.</p><p><ul><li>100% plantaardige vezels, plastic vrij</li><li>De 1ste in nl met 5% vlasvezels uit hernieuwbare, snelgroeiende vlasplanten</li><li>Dermatologisch getest, biologisch afbreekbaar en goed doorspoelbaar</li><li>Maxi verpakking met 80 velletjes. Hersluitbare en recyclebare verpakking</li></ul></p>",
+    "descriptionFull": "Voor een extra schoon en fris gevoel gebruik je na droog toiletpapier vochtig toiletpapier. Wij adviseren het gebruik van 2 velletjes vochtig toiletpapier per spoelbeurt"
+   }
+  }
+ ],
+ "sectionImage": []
+}

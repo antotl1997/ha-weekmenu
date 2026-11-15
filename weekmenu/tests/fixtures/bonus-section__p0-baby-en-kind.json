@@ -1,0 +1,551 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Baby en kind",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "816480",
+    "offerId": 200278,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816480,
+    "segmentDescription": "Alle A-merk baby- en peuterknijpzakjes en -snacks",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 + 2 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200278_AH_NL_WK44_ALLE_AMERK_BABY_EN_PEUTERKNIJPZAKJES_EN_SNACKS?rendition=200px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200278_AH_NL_WK44_ALLE_AMERK_BABY_EN_PEUTERKNIJPZAKJES_EN_SNACKS?rendition=708px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "3+2 gratis",
+      "count": 3,
+      "freeCount": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816444",
+    "offerId": 200242,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816444,
+    "segmentDescription": "Alle Olvarit potten",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 0.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313935373230?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313935373230?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313935373230?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313935373230?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313935373230?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 0.99",
+      "price": 0.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816464",
+    "offerId": 200262,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816464,
+    "segmentDescription": "Alle A-merk babyverzorging",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200262_AH_NL_WK44_ALLE_AMERK_BABYVERZORGING?rendition=200px&fileType=binary&version=-Pl1I42096y6ZYfGlsFxjg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200262_AH_NL_WK44_ALLE_AMERK_BABYVERZORGING?rendition=708px&fileType=binary&version=-Pl1I42096y6ZYfGlsFxjg"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816467",
+    "offerId": 200265,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816467,
+    "segmentDescription": "Alle Care baby en kind vitamines of lichaamsverzorging",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "35% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200265_AH_NL_WK44_ALLE_CARE_BABY_EN_KIND_VITAMINES_OF_LICHAAMSVERZORGING?rendition=200px&fileType=binary&version=qNehFku2YVvjC0ZSf-yLig"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200265_AH_NL_WK44_ALLE_CARE_BABY_EN_KIND_VITAMINES_OF_LICHAAMSVERZORGING?rendition=708px&fileType=binary&version=qNehFku2YVvjC0ZSf-yLig"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "35% korting",
+      "percentage": 35,
+      "precisePercentage": 35
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816443",
+    "offerId": 200241,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816443,
+    "segmentDescription": "Alle Pampers luiers en luierbroekjes",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 23.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200241_AH_NL_WK44_ALLE_PAMPERS_LUIERS_EN_LUIERBROEKJES?rendition=200px&fileType=binary&version=hwamW_gkiOeKHRLOTXH0AA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200241_AH_NL_WK44_ALLE_PAMPERS_LUIERS_EN_LUIERBROEKJES?rendition=708px&fileType=binary&version=hwamW_gkiOeKHRLOTXH0AA"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 23.99",
+      "count": 3,
+      "price": 23.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816404",
+    "offerId": 200202,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816404,
+    "segmentDescription": "Alle Ella's Kitchen maaltijden",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 + 1 GRATIS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303330393536?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303330393536?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303330393536?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303330393536?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303330393536?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "3+1 gratis",
+      "count": 3,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816456",
+    "offerId": 200254,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816456,
+    "segmentDescription": "Alle AH Extra droog & zacht luiers en luierbroekjes",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200254_AH_NL_WK44_ALLE_AH_EXTRA_DROOG_ZACHT_LUIERS_EN_LUIERBROEKJES?rendition=200px&fileType=binary&version=T-Zt7W6vZjuEWFKcZeAjjg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200254_AH_NL_WK44_ALLE_AH_EXTRA_DROOG_ZACHT_LUIERS_EN_LUIERBROEKJES?rendition=708px&fileType=binary&version=T-Zt7W6vZjuEWFKcZeAjjg"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "2+1 gratis",
+      "count": 2,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816400",
+    "offerId": 200198,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816400,
+    "segmentDescription": "Alle AH Flesvoeding standaard 2 t/m 5",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200198_AH_NL_WK44_ALLE_AH_FLESVOEDING_STANDAARD_2_TM_5?rendition=200px&fileType=binary&version=O35wT-gHiHAYek7VkcFzPA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200198_AH_NL_WK44_ALLE_AH_FLESVOEDING_STANDAARD_2_TM_5?rendition=708px&fileType=binary&version=O35wT-gHiHAYek7VkcFzPA"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821965",
+    "offerId": 205767,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821965,
+    "segmentDescription": "Online only: Pampers grootverpakking",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6968324435586a57542d2d6a716f42442d4639394377?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6968324435586a57542d2d6a716f42442d4639394377?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6968324435586a57542d2d6a716f42442d4639394377?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6968324435586a57542d2d6a716f42442d4639394377?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6968324435586a57542d2d6a716f42442d4639394377?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821900",
+    "offerId": 205702,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821900,
+    "segmentDescription": "AH Biologisch knijpfruit",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "5 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205702_AH_NL_WK44_AH_BIOLOGISCH_KNIJPFRUIT?rendition=200px&fileType=binary&version=PuVSCqx5-MRYhz-B45jVEA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205702_AH_NL_WK44_AH_BIOLOGISCH_KNIJPFRUIT?rendition=708px&fileType=binary&version=PuVSCqx5-MRYhz-B45jVEA"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "5+1 gratis",
+      "count": 5,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "body": {
+    "data": {
+      "orderFulfillments": {
+        "result": [
+          {"orderId": 123456, "delivery": {"slot": {"date": "2026-11-04"}}}
+        ]
+      }
+    }
+  }
+}

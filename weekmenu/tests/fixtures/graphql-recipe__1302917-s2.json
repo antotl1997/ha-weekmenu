@@ -1,0 +1,175 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302917,
+   "title": "Panlasagne met zalm en broccoli",
+   "description": "Zin in lasagne, maar niet alle tijd? Deze panlasagne met zalm en broccoli staat al in 30 min. op tafel. Perfect voor doordeweeks en nog budgetproof ook!",
+   "href": "/allerhande/recept/R-R1302917/panlasagne-met-zalm-en-broccoli",
+   "cookTime": 30,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036882_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 3.363636,
+    "count": 121
+   },
+   "ingredients": [
+    {
+     "text": "1 middelgrote ui",
+     "name": {
+      "singular": "middelgrote ui"
+     }
+    },
+    {
+     "text": "1&#189; teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "1 el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "125 g diepvries zalmfilets",
+     "name": {
+      "singular": "diepvries zalmfilet"
+     }
+    },
+    {
+     "text": "100 g zuivelspread naturel",
+     "name": {
+      "singular": "zuivelspread naturel"
+     }
+    },
+    {
+     "text": "300 ml water",
+     "name": {
+      "singular": "water"
+     }
+    },
+    {
+     "text": "5 lasagnevellen",
+     "name": {
+      "singular": "lasagnevel"
+     }
+    },
+    {
+     "text": "250 g broccoli",
+     "name": {
+      "singular": "broccoli"
+     }
+    },
+    {
+     "text": "2.5 g verse dille",
+     "name": {
+      "singular": "verse dille"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Laat de zalm ontdooien. Snijd de uien in halve ringen en de knoflook fijn. Verhit de olie in de pan op middelhoog vuur en bak de ui en knoflook 5 min.",
+     "Voeg de zuivelspread en het water toe en roer door.",
+     "Breek elk lasagnevel in 6 stukken, voeg in delen toe aan de saus en roer door. Zorg dat alle vellen bedekt zijn met saus.",
+     "Kook 15-17 min. tot de lasagnevellen gaar zijn, roer regelmatig.",
+     "Snijd ondertussen de broccoli in kleine roosjes en de zalm in blokjes van 2 cm.",
+     "Voeg de broccoli de laatste 8 min. toe aan de panlasagne en de zalm de laatste 5 min. Breng op smaak met peper en eventueel zout.",
+     "Snijd de dille fijn en verdeel erover."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 490,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 41,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 23,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 27,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

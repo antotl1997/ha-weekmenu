@@ -1,0 +1,818 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 6,
+  "totalPages": 1,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 412114,
+   "hqId": 855610,
+   "title": "Conimex Sambal oelek",
+   "salesUnitSize": "200 g",
+   "unitPriceDescription": "prijs per kg €8.75",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_3845514f44345035516b69754637315442454f706577?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_3845514f44345035516b69754637315442454f706577?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_3845514f44345035516b69754637315442454f706577?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_3845514f44345035516b69754637315442454f706577?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_3845514f44345035516b69754637315442454f706577?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.75,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Indonesische sambal",
+   "brand": "Conimex",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Conimex sambal oelek is een authentiek pittige sambal uit de indonesische keuken.</p><p><ul><li>Conimex sambal oelek is een pittige sambal</li><li>De sambal is gemaakt op basis van een authentiek indonesisch recept</li><li>De verse Chilipepers in de sambal zorgen voor die heerlijk pittige smaak</li><li>Deze sambal wordt gemaakt door lomboks (chilipepers) te pletten</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "E",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Over Conimex sambal oelek: Conimex sambal oelek is een lekker pittige sambal die wordt gemaakt volgens authentiek indonesisch recept op basis van vers gemalen Chilipepers. De sambal wordt vers op de markt gemaakt door lomboks (chilipepers) te pletten onder de 'ulek': de stamper waar sambal oelek zijn naam aan heeft te danken. Deze heerlijke Conimex sambal oelek heeft een groot formaat, voor de echte samballiefhebbers. Laten we wat vaker eten zoals ze dat in indonesie doen. Een en al inspiratie. Het lekkerste eten wordt bereid in piepkleine keukentjes, waar families hun keukengeheimen delen van generatie op generatie. Daar vind je heerlijke recepten, authentieke producten en de beste ingredienten. Op de lokale markten kiezen de indonesiers uit verschillende soorten verse sambals. Uitgestald in grote bakken, in porties verkocht. Hoe te gebruiken: deze sambal geeft een pittige smaak aan je oosterse gerechten, maar doet het ook goed in soepen, sauzen en marinades. Of je nu veel van de sambal gebruikt of weinig, iedereen kan ervan genieten. Selamat makan! Over conimex: al sinds 1932 zorgt Conimex ervoor dat heerlijke oosterse smaken in Nederland verkrijgbaar zijn. Met Conimex producten maak je thuis in een paar stappen heerlijke Aziatische gerechten.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 591786,
+   "hqId": 39591,
+   "title": "Koningsvogel Sambal oelek",
+   "salesUnitSize": "270 g",
+   "unitPriceDescription": "prijs per kg €14.41",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313638363534?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313638363534?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313638363534?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313638363534?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313638363534?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 3.89,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Indonesische sambal",
+   "brand": "Koningsvogel",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Extra pittige sambal van gemalen pepers</p><p><ul><li>Geschikt voor de rijsttafel, vlees kip en visgerechten</li><li>Pittigheid: +++</li><li>Ook lekker om je gerecht of maaltijd extra pit te geven</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 450146,
+   "hqId": 565391,
+   "title": "AH Sambal Oelek",
+   "salesUnitSize": "200 g",
+   "unitPriceDescription": "prijs per kg €4.95",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038393039?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038393039?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038393039?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038393039?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038393039?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 0.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Indonesische sambal",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Het geheim van de oosterse keuken: sambal oelek met vers gemalen pepers. De smaakmaker die extra pit aan je gerechten geeft.</p><p><ul><li>Sambal oelek is een scherpe sambalsoort</li><li>Ideaal voor het kruiden van allerlei gerechten</li><li>Ook lekker in soepen, sauzen en marinades</li><li>Voor het verrijken van satesaus</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "C",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 412046,
+   "hqId": 855598,
+   "title": "Conimex Sambal oelek",
+   "salesUnitSize": "375 g",
+   "unitPriceDescription": "prijs per kg €8.24",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6f616d634339434552694f414a304979435377506651?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6f616d634339434552694f414a304979435377506651?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6f616d634339434552694f414a304979435377506651?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6f616d634339434552694f414a304979435377506651?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6f616d634339434552694f414a304979435377506651?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 3.09,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Indonesische sambal",
+   "brand": "Conimex",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Conimex sambal oelek is een authentiek pittige sambal uit de indonesische keuken.</p><p><ul><li>Conimex sambal oelek is een pittige sambal</li><li>De sambal is gemaakt op basis van een authentiek indonesisch recept</li><li>De verse Chilipepers in de sambal zorgen voor die heerlijk pittige smaak</li><li>Deze sambal wordt gemaakt door lomboks (chilipepers) te pletten</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "E",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Over Conimex sambal oelek: Conimex sambal oelek is een lekker pittige sambal die wordt gemaakt volgens authentiek indonesisch recept op basis van vers gemalen Chilipepers. De sambal wordt vers op de markt gemaakt door lomboks (chilipepers) te pletten onder de 'ulek': de stamper waar sambal oelek zijn naam aan heeft te danken. Deze heerlijke Conimex sambal oelek heeft een groot formaat, voor de echte samballiefhebbers. Laten we wat vaker eten zoals ze dat in indonesie doen. Een en al inspiratie. Het lekkerste eten wordt bereid in piepkleine keukentjes, waar families hun keukengeheimen delen van generatie op generatie. Daar vind je heerlijke recepten, authentieke producten en de beste ingredienten. Op de lokale markten kiezen de indonesiers uit verschillende soorten verse sambals. Uitgestald in grote bakken, in porties verkocht. Hoe te gebruiken: deze sambal geeft een pittige smaak aan je oosterse gerechten, maar doet het ook goed in soepen, sauzen en marinades. Of je nu veel van de sambal gebruikt of weinig, iedereen kan ervan genieten. Selamat makan! Over conimex: al sinds 1932 zorgt Conimex ervoor dat heerlijke oosterse smaken in Nederland verkrijgbaar zijn. Met Conimex producten maak je thuis in een paar stappen heerlijke Aziatische gerechten.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 628407,
+   "hqId": 0,
+   "title": "Conimex Sambal Oelek 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_5a57373833684364515847386930724d337879484e41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_5a57373833684364515847386930724d337879484e41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_5a57373833684364515847386930724d337879484e41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_5a57373833684364515847386930724d337879484e41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_5a57373833684364515847386930724d337879484e41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "15% volume voordeel",
+   "currentPrice": 2.97,
+   "priceBeforeBonus": 3.5,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Indonesische sambal",
+   "brand": "Conimex",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Conimex Sambal Oelek 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 412114,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "15% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 15,
+     "unit": null,
+     "precisePercentage": 15
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 388294,
+   "hqId": 845477,
+   "title": "AH Sambal oelek",
+   "salesUnitSize": "280 g",
+   "unitPriceDescription": "prijs per kg €3.18",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038373838?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038373838?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038373838?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038373838?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130323038373838?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 0.89,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Indonesische sambal",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Vers gemalen spaanse pepers om je gerechten meer pit te geven.</p><p><ul><li>Pittige sambal</li><li>Een verrijking voor elk gerecht</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "C",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=sambal%20oelek&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=sambal%20oelek&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": null,
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=sambal%20oelek&sortBy=RELEVANCE&page=0&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Conimex",
+     "label": "Conimex",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "Koningsvogel",
+     "label": "Koningsvogel",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "10206",
+     "label": "Aziatische keuken",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "21294",
+     "label": "Hete sauzen",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "1177",
+     "label": "Indonesische keuken",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "1487",
+     "label": "Indonesische sambal",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "10480",
+     "label": "Sauzen",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 5,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 5,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "c",
+     "label": "Score C",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "d",
+     "label": "Score D",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "e",
+     "label": "Score E",
+     "count": 2,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_veganistisch",
+   "allLabel": null,
+   "label": "Veganistisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 5,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_vegetarisch",
+   "allLabel": null,
+   "label": "Vegetarisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 5,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

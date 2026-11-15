@@ -1,0 +1,117 @@
+# Changelog
+
+## 2.0.2
+
+- **Naar volgende week om te kiezen.** Onderaan de lopende week staat nu altijd "Menu voor volgende week", ook als daar nog niets voor gekozen is. Eerder verscheen die knop pas als volgende week al een menu had, en dat kan sinds je zelf kiest pas na bevestigen: zo kwam je er nooit.
+
+## 2.0.1
+
+- **Eén regel per actie in Aanbiedingen.** Producten uit dezelfde AH-actie (bijvoorbeeld "2 voor 2.49" op spinazie, andijvie, boerenkool en andere kleinverpakkingen) staan nu samen op één regel, met de foto en de omschrijving van de actie en "vanaf" de laagste prijs. De plusknop opent de producten van die actie, elk met gewicht en prijs, en daar tik je aan welke je wilt; je kunt er meer kiezen voordat je op Klaar tikt. Een actie met één product blijft een gewone regel. Zoeken vindt de actie ook op de naam van een product erin, en dat product staat dan bovenaan. De bewaarde folder wordt na de update één keer opnieuw opgehaald.
+
+## 2.0.0
+
+- **Je kiest het menu zelf.** De add-on maakt geen menu meer voor je. Je kiest per avond een gerecht uit een keuzelijst en bouwt zo een concept voor de week. Het concept bewaart de add-on in het logboek van die week (veld `draft`). Er gaat niets naar AH zolang je niet bevestigt.
+- **Keuzelijst met de bonus eerst.** Recepten met producten uit de folder van de week staan bovenaan. Je kunt zoeken en filteren op soort (zoals Aziatisch of Italiaans). Staat het niet in de lijst, tik dan op "Zoek bij AH" om recepten bij AH op te zoeken. De lijst bewaart de add-on in `/data/catalog.json`.
+- **Eén keer bevestigen.** Als de week naar wens is, tik je op "Zet in bestelling" (of "Zet op lijst" als er geen bestelling openstaat). Pas dan gaan de boodschappen naar AH, in één keer. Klopt niet en de duimen werken zodra het menu bevestigd is.
+- **Eigen recepten.** Je kunt zelf een recept toevoegen, aanpassen en verwijderen. Ze staan in `/data/recipes.json`. Zit een eigen recept al in een menu, dan houdt dat menu de versie van toen je het koos, ook als je het recept daarna aanpast of weghaalt.
+- **Importeren via een link.** Plak de link van een recept en de app vult het formulier in; jij kijkt na en bewaart. Het werkt op de sites die recipe-scrapers kent (ruim 600, zoals Leukerecepten, 24Kitchen en Jumbo) en op de meeste sites met schema.org-receptgegevens. Links naar je thuisnetwerk worden geweigerd.
+- **Menu bijwerken houdt je keuzes.** Komt er een nieuwe folder, dan zet Menu bijwerken dezelfde gerechten op de nieuwe prijzen. Je gerechten blijven staan.
+- **Geen automatisch menu meer.** Het menu van zondag om 18:00 en de uurlijkse controle die een menu maakte zijn weg. De zondagherinnering vraagt nu om het menu te kiezen. `input_boolean.weekmenu_aan` schakelt alleen nog die herinnering. De knoppen Nu maken en Nieuw menu doen niets meer, en de stdin-commando's `nu_maken` en `nieuw_menu` worden genegeerd (met een regel in het logboek).
+- Zet je terug naar 1.0.x, dan negeert die versie `draft`, `recipes.json` en `catalog.json`. Een bevestigd menu met een eigen recept blijft gewoon zichtbaar, maar daar het aantal personen wijzigen lukt in 1.0.x niet, en Menu bijwerken mislukt in 1.0.x op een week met een eigen gerecht. Een week met alleen een concept heeft voor 1.0.x geen menu: die maakt weer zelf een menu (zodra de folder er is, uiterlijk zondag om 18:00) en zet dat in je bestelling of op je lijst. Als 1.0.x het weeklogboek dan opnieuw schrijft, is het concept weg. De bestanden blijven bewaard.
+
+## 1.0.1
+
+- **Aanbiedingen laadt snel.** De bonusfolder wordt per week één keer bij AH opgehaald (dat zijn zo'n 340 vragen achter elkaar, minuten werk) en daarna bewaard in `/data/folder.json`, ook over een herstart. Eerder hield de add-on maar één folder vast, alleen in het geheugen: na elke herstart of update, en elke keer dat de app de lopende week toonde terwijl het menu al met de folder van volgende week werkte, werd de hele folder opnieuw opgehaald. Bij het opstarten laadt de add-on de folder van de getoonde week alvast op de achtergrond.
+- **Foto's bij de aanbiedingen.** Producten uit een bonusgroep (verreweg de meeste) hadden geen foto, omdat AH die via een andere route levert. Ze krijgen nu de afbeelding van de actie, dezelfde als in de AH-app.
+- **Volgorde zoals bij AH.** De aanbiedingen staan in de volgorde van "Alle Bonus" bij AH, per categorie en binnen een categorie, in plaats van op alfabet. "Overig" staat nog steeds onderaan.
+
+## 1.0.0
+
+- **Koken.** Op het gerechtscherm staat de knop Koken. Die opent een kookscherm met de hoeveelheden uit het recept groot ("400 g kipdijfilet") en het AH-product klein eronder, en daaronder de bereiding in grote, genummerde stappen. Tik op een stap als hij klaar is. Ingrediënten en stappen staan op één scherm dat je doorscrollt; Klaar brengt je terug. Het scherm blijft aan zolang je kookt, als je browser dat toestaat (Wake Lock); kan dat niet, dan werkt de rest gewoon.
+- **Duim omlaag en Nooit meer** per gerecht, op het gerechtscherm en in het kookscherm. Een duim omlaag laat het gerecht minder vaak terugkomen (in de rangschikking telt het voor 75 procent). Nooit meer haalt het gerecht uit elk volgend menu, ook bij Ander gerecht; het menu van deze week verandert er niet door (tik daarvoor op Ander gerecht). Nog een keer tikken draait het terug. In Instellingen staat de lijst Nooit meer, met Terugdraaien. De keuzes staan in `/data/taste.json`.
+- **Besparing nagerekend.** De dag na de bezorging legt de add-on de bezorgde bestelling naast wat hij zelf toevoegde. Hij leest daarvoor alleen (de bestelgegevens bij AH, niets wordt geschreven), en niet zolang schrijven stilstaat of de login verlopen is. In Besparing staat per week "Echt bespaard (nagerekend)": hoeveel van de toegevoegde producten echt gekocht zijn, en de bonusbesparing over wat echt gekocht is. Is de bestelling nog niet bezorgd, is er nog geen te vinden of lukt het lezen niet, dan kijkt hij één keer per dag opnieuw, tot een week later. Is er dan geen bezorgde bestelling in de menuweek (bijvoorbeeld in de winkel gekocht), of is de bestelling geannuleerd, dan staat er "niet na te rekenen". De schatting en het totaal blijven zoals ze waren. De uitkomsten staan in `/data/reconciliation.json`. Is de bezorgdag niet bekend (je bestelde vanaf de lijst), dan rekent hij na op de woensdag na de menuweek.
+- **Twee meetgetallen**, in Besparing en in de diagnose, over de laatste 4 weken: het aandeel ingrediëntregels zonder ingreep (geen Klopt niet voor die regel in die week) en het aandeel toegevoegde producten dat echt gekocht is.
+- **Terugdraaien in Mijn correcties** zet een week die al bijgewerkt was nu altijd op het dashboard, ook als een volgende stap mislukt. Lukt het opnieuw kiezen niet, dan zegt de app eerlijk: "Je keuze is weg, maar het menu is nog niet aangepast. Tik op Ander gerecht of Menu bijwerken."
+- **Niets raakt ongemerkt kwijt als schrijven stilstaat.** Tik je op Ander gerecht, Klopt niet, een ander aantal personen of Terugdraaien terwijl schrijven stilstaat, in een week waar geen ronde meer naar kijkt (de lopende week), dan noemt de app de producten die je zelf moet toevoegen en krijg je daar één melding over. Check voor je bestelt telt elk product dat het menu nodig heeft maar dat nog niet is toegevoegd als "nog niet toegevoegd", zodat de kaart dan nooit groen is.
+- Klopt niet komt ook in `/data/history.json` (per week), zodat een correctie die later teruggedraaid wordt toch meetelt in het meetgetal.
+- Zet je terug naar 0.9, dan negeert die versie `taste.json` en `reconciliation.json`: Nooit meer en de duim tellen dan niet, en er wordt niets nagerekend. De bestanden blijven bewaard. Schrijft 0.9 een weeklogboek opnieuw, dan raakt hij de velden kwijt die het nagerekende bedrag gebruikt (de bezorgdag en de besparing per losse aanbieding); die week telt dan minder mee in "Echt bespaard".
+
+## 0.9.0
+
+- **Check voor je bestelt.** Bovenaan de Week, onder de bestelregel, staat in één kaart wat nog een blik nodig heeft, met de aantallen per soort: wat niet gevonden is (per gerecht), wat nog niet zeker in je bestelling of op je lijst staat, wat over is van het vorige menu, producten die nog niet toegevoegd konden worden en producten met een prijs per gewicht ("hoeveelheid controleren"). Een product dat niet gevonden is, is een actie: "Zoek product" of "Hoeft niet". Klopt alles, dan staat er een groen vinkje: "Alles staat klaar".
+- **Klopt niet.** Elke ingrediëntregel op het gerechtscherm heeft "Klopt niet", met drie keuzes: een ander product (zoeken bij AH en kiezen), "Hoeft niet" (nooit meer kopen voor dit ingrediënt) en "Hebben we al" (telt voortaan als in huis). De keuze geldt voor dit ingrediënt in elke week en gaat vóór de eigen keuze van de add-on. Van een gekozen product onthoudt de add-on alleen welk product het is en de verpakking, nooit de aanbieding: of het in de bonus is, bepaalt de folder van die week. Op het menu van deze week wordt hij meteen toegepast, met dezelfde garanties als Ander gerecht: wat alleen voor het oude product was gaat eruit als dat nog kan, en de bestelweek-check en de pauze bij een AH-wijziging gelden ook hier. De keuzes staan in `/data/overrides.json`.
+- **Mijn correcties** in Instellingen: elke keuze onder de naam waarvoor hij geldt (zonder hoeveelheid, bijvoorbeeld "rode ui"), met Terugdraaien. Na Terugdraaien kiest de add-on weer zelf, ook meteen in het menu van deze en volgende week, met dezelfde garanties als Ander gerecht.
+- **Minder verkeerde producten.** "2-3 el" telt als 3 el en "1 1/2 el" als 1,5. Een product met "per 100 gram" of "per kilo" in de titel en zonder verpakkingsmaat wordt nooit meerdere keren gekocht om aan het gewicht te komen: er komt 1 stuk, met "hoeveelheid controleren". Kaas is geen pindakaas of kaasstengels, room geen roomboter, melk geen melkchocolade (een kernwoord moet een titelwoord zijn of het laatste deel ervan). Kipkruiden en kippenbouillon tellen niet als kip. "Rode ui" valt niet meer terug op witte uien: rode, witte, gele, zoete, gerookte en gedroogde moeten in de titel staan, en bij "verse" kiest de add-on geen gedroogd, gerookt of diepvriesproduct.
+- **Wissels en weghalingen vastgelegd.** Ander gerecht, Terug en Gerecht weghalen komen per week in `/data/history.json`, zonder om een reden te vragen. Er is nog geen scherm voor; 1.0 rekent er de meetgetallen mee uit.
+- Zet je terug naar 0.8, dan negeert die versie `overrides.json` en `history.json`; de keuzes gelden dan niet, maar blijven bewaard.
+
+## 0.8.0
+
+- **Vanavond.** Elke dag om 16:00 een korte melding: "Vanavond: <gerecht>, begin om <tijd>", of "Vanavond: restjes van <gerecht>". De begintijd is de etenstijd (`dinner_time`, standaard 18:30) min kook-, oven- en wachttijd, naar beneden afgerond op een kwartier; zou dat vóór 15:00 zijn, dan staat er geen begintijd. Niet thuis, geen gerecht of geen kookmoment: geen melding. Hooguit één keer per dag, ook na een herstart. Hetzelfde staat bovenaan de Week in de app, als attribuut `vanavond` op `sensor.weekmenu` en in `api/week`.
+- **Meldingsdoelen als instelling.** `notify_owner` krijgt het menu, fouten, de login en de herinnering; `notify_today` (een lijst) krijgt alleen Vanavond. De vaste naam in de code is weg.
+- **Bestelherinnering.** Op zondag tussen 17:00 en 23:00 (dus ook na een menu dat om 18:00 gemaakt wordt), als het menu voor de komende week klaarstaat maar er nog geen bestelling is die in die week bezorgd wordt, één melding: "Het menu staat klaar, maar er is nog geen bezorgmoment gekozen." De add-on leest daarvoor alleen de bestelling. Is de bezorgdag van een open bestelling niet te lezen, dan komt er geen herinnering.
+- **Inloggen zonder stress.** Het inlogscherm is een stappenplan; de uitleg over F12 staat onder "Hoe werkt dit?". De code plakken kan ook op je telefoon, ook als een hele chatregel. Op de Week staat "AH-login in orde, laatst ververst <datum>"; is de login verlopen, dan vraagt de app om opnieuw in te loggen en is de regel op de dashboardkaart rood. `sensor.weekmenu` heeft de attributen `login_ok` en `login_refreshed`.
+- **Welkom en een gids.** Bij de eerste start, zonder login en zonder menu, een kort welkomstscherm met drie stappen. `GIDS.md` is een gebruikersgids van één pagina, in de app te openen via "Lees de gids".
+- **Gewone taal.** "Er loopt al een ronde" heet nu "Het menu wordt nu gemaakt, even geduld" en "Onzeker of gelukt" heet "Nog niet zeker of dit in je bestelling staat" (of "op je lijst"). Grijze tekst heeft minstens 4.5:1 contrast en alle knoppen zijn minstens 44 px.
+- **Dashboardkaart.** `dashboard/weekmenu-card.yaml`: Vanavond, de week per dag (restjes, niet thuis en geen gerecht als rustige regels), de besparing van de week, de AH-login en een knop Open weekmenu. Zonder `condition: template`.
+- `sensor.weekmenu` wordt nu één keer per dag opnieuw gezet (en als de login verandert), zodat `vanavond` meeloopt. Het menu zelf verandert daardoor niet.
+- Een verzoek dat niet via Home Assistant komt, wordt geweigerd en nu ook gelogd, met alleen het adres en het pad.
+- Zet je terug naar 0.7, dan vergeet die versie dat Vanavond of de herinnering vandaag al verstuurd is zodra hij `state.json` bijwerkt; op die dag kan er dan één keer een tweede komen.
+
+## 0.7.0
+
+- **Als AH iets verandert, weet je het meteen.** De add-on controleert of de antwoorden van AH (bonus, recepten, producten, lijst en bestelling) de vorm hebben die hij verwacht. Gaat het twee keer achter elkaar mis op hetzelfde onderdeel, dan schrijft hij niets meer naar je bestelling of lijst en krijg je één melding: "AH lijkt iets veranderd te hebben, schrijven naar je bestelling staat stil. Kijk in de Weekmenu-app bij Diagnose." Het menu wordt wel bewaard. Zodra AH weer normaal antwoordt gaat het schrijven vanzelf weer aan en vult het elk uur aan wat bleef liggen, of je tikt in Diagnose op Opnieuw proberen.
+- **Een blokkade van AH (HTTP 403) stopt de ronde meteen**, net als te veel verzoeken (429), in plaats van door te gaan met de volgende categorie.
+- **Diagnose in Instellingen.** Zie of AH antwoordt zoals verwacht, wanneer de laatste geslaagde AH-sync was en met welke app-versie de add-on zich meldt. "Kopieer diagnose" zet de versie, de status per onderdeel, de laatste 50 logregels, een samenvatting per week en de duur van de laatste menuberekening op je klembord, zonder login, codes of antwoorden van AH. Handig bij een melding op GitHub.
+- **Uitloggen bij AH.** Een knop in Instellingen wist de AH-login (ook de oude kopie `tokens.json.bak`). Daarna toont de app het inlogscherm.
+- **AH-appversie als instelling** (`ah_app_version`, standaard 9.28). Weigert AH een oude app-versie, dan pas je dit aan zonder op een nieuwe versie van de add-on te wachten.
+- **Watchdog.** Home Assistant start de add-on opnieuw als hij niet meer reageert.
+- De melding "werk de add-on bij" komt nu echt één keer, ook na een herstart. Staat de AH-login in een bestand van een nieuwere versie, dan toont de app die melding in plaats van het inlogscherm.
+- Voor ontwikkelaars: `python -m tools.record_fixtures --check <tokens.json>` vergelijkt een verse, alleen-lezen opname met de opgeslagen voorbeeldantwoorden en noemt de verschillen. Gebruik daarvoor een eigen login, niet een kopie van die van de add-on; de check ververst nooit.
+- Zet je terug naar 0.6, dan vergeet die versie een lopende pauze van het schrijven (en de melding daarover) zodra hij `state.json` bijwerkt.
+
+## 0.6.0
+
+- **Geen half bestand meer na een stroomstoring.** Elk bestand dat de add-on bijhoudt (de weeklogboeken, `totaal.json`, `niet_thuis.json`, `state.json` en de AH-login in `tokens.json`) wordt eerst volledig naar een tijdelijk bestand geschreven en pas daarna verwisseld. Valt de stroom halverwege weg, dan staat de vorige versie er nog heel.
+- **Versienummer in de bestanden.** Elk van die bestanden krijgt een schemaversie. Zet je een oudere add-on terug op gegevens van een nieuwere, dan schrijft hij niets in die bestanden en niets in je AH-lijst of bestelling voor die week, en krijg je één melding: "Deze versie van de add-on is ouder dan je gegevens; werk de add-on bij". De eerste keer dat een bestand uit een eerdere versie wordt bijgewerkt, blijft de oude versie één keer bewaard als `<naam>.bak` ernaast.
+- **De AH-login raakt minder snel kwijt.** Een beschadigd of onleesbaar `tokens.json` geeft nu "opnieuw inloggen" in plaats van een fout, en het tijdelijke bestand van de login is vanaf het begin alleen voor de add-on leesbaar.
+- **De app blijft bereikbaar terwijl het menu wordt gekozen.** Het rekenwerk van de planner draait naast de rest, en hoe lang het duurde staat in het logboek en als `planner_seconds` in de status.
+
+## 0.5.0
+
+- **Winkelklaar.** Er is nu een volledige handleiding (`DOCS.md`, zichtbaar in het tabblad Documentatie van de add-on), een icoon en logo, en Nederlandse en Engelse namen en uitleg bij de instellingen. De handleiding legt ook uit dat de AH-login in je Home Assistant-backups zit en wat je doet bij een lek.
+- **Vaste versies.** De add-on installeert exact dezelfde versies als waarmee getest is (`requirements.txt`), en een versie-test houdt `config.yaml` en `pyproject.toml` gelijk.
+- **Automatische controle.** Elke push draait de tests, de Chrome-test van de app, een build voor amd64 en aarch64 en een audit van de dependencies op bekende kwetsbaarheden. Dependabot houdt de versies bij.
+- **Licentie.** Apache-2.0 (`LICENSE`).
+- Geen wijzigingen aan het gedrag van de add-on.
+
+## 0.4.0
+
+- **Opschonen.** Bij Ander gerecht, Nieuw menu, Menu bijwerken, minder personen en het nieuwe Gerecht weghalen haalt de add-on producten van de lijst of uit de bestelling die hij zelf voor dat menu heeft toegevoegd en die geen gerecht meer nodig heeft. Wat jullie zelf op de lijst of in de bestelling zetten blijft staan, ook vaste boodschappen en losse aanbiedingen die je zelf aantikte. Elke verlaging loopt via hetzelfde write-ahead-logboek als toevoegen, en afrekenen doet de add-on nog steeds nooit. De regel in de README dat de add-on nooit iets verwijdert is hiermee vervallen.
+- **Kookmomenten en restjes.** In plaats van "kookavonden" kies je kookmomenten, van 1 tot het aantal eetdagen. Zijn er meer eetdagen dan kookmomenten, dan worden de extra eetdagen restjesavonden ("<Dag> · restjes van <gerecht>"). Let op, dat is een ander gedrag dan voorheen: met 7 eetdagen en 5 kookmomenten zijn er nu 2 restjesavonden. De kookdag kookt voor zijn eigen avond plus de restjesavond (2 + 2 = 4 personen), nooit met vis, en er wordt niets extra voor gekocht. Een gerecht met restjes kan op tot 16 personen.
+- **Menu vóór de nieuwe folder.** Nu maken maakt altijd een menu, ook als de folder van de bezorgweek er nog niet is (met de huidige folder en een waarschuwing). Komt de nieuwe folder later, dan krijg je één melding "De nieuwe folder is er" en toont de app bovenaan "Nieuwe folder is er" met de knop Menu bijwerken. Die maakt een nieuw menu op de nieuwe folder met dezelfde eetdagen, personen, restjes en weggehaalde dagen. De automatische ronde past een bestaand menu nooit zelf aan.
+- **Tabblad Aanbiedingen.** De hele bonusfolder van de menuweek per categorie, met een zoekveld. Een plusknop zet het aantal dat de actie vraagt (bijvoorbeeld 2 bij 1+1 gratis) in de bestelling of op de lijst. Het telt mee in de besparing, op een eigen regel "waarvan losse aanbiedingen", en in het totaal. Een losse aanbieding wordt nooit opgeschoond.
+- **Alleen de bestelling van de menuweek.** De add-on schrijft alleen nog in een open bestelling die in de menuweek (woensdag tot en met dinsdag) bezorgd wordt. Staat er op maandag of dinsdag nog een bestelling open voor deze woensdag, of is de bezorgdag niet te lezen, dan wordt het menu bewaard en niets toegevoegd of verlaagd, ook geen vaste boodschappen of aanbiedingen. De melding en de app zeggen dat, en de uurcheck voegt alles toe zodra er een bestelling of lijst voor de menuweek is.
+- Wat je zelf uit de bestelling of van de lijst haalde, komt die week niet terug via Terug, Ander gerecht, Nieuw menu of Menu bijwerken. De meldingregel over wat er over is heet nu "Over van het vorige menu".
+- Instellingen: "Niet thuis eten" en "Kookmomenten" tonen hoeveel eetdagen, kookmomenten en restjesavonden dat geeft.
+
+## 0.3.0
+
+- Niet thuis eten: tik in Instellingen de dagen aan waarop jullie niet thuis eten. Die avond krijgt geen gerecht en er wordt niets voor gekocht. De add-on onthoudt het aantal personen van die dag. Dit vervangt de oude ouders-helper.
+
+## 0.2.1
+
+- Avonden met 0 personen tellen als niet thuis in de app, de melding en `sensor.weekmenu`. De personen-helpers gaan van 0 tot 8.
+
+## 0.2.0
+
+- Het menu wordt gemaakt zodra de folder van de bezorgweek uit is, meestal op vrijdag. Vanaf `schedule_time` tot 18:00 kijkt de add-on elk uur. Is de folder zondag om 18:00 nog niet uit, dan wordt de huidige folder gebruikt en staat dat in de melding.
+- De app en de melding noemen voor welke bestelling het menu is ("Voor de bestelling van woensdag ...").
+- Een onafgemaakte ronde wordt één keer aangevuld, en een verlopen login verbruikt die kans niet.
+
+## 0.1.0
+
+- Eerste versie. Een weekmenu van Allerhande-recepten rond de AH-bonus, met de boodschappen in je open bestelling of op Mijn lijst, een logboek per menuweek zodat niets dubbel wordt toegevoegd, en een melding met de besparing.
+- App via ingress met de weekkaart, het gerechtscherm (ander gerecht, terug, personen), de besparing en Instellingen.
+- Vaste boodschappen in de bonus: producten die jullie vaak kopen en nu in de aanbieding zijn, als voorstel dat je met een tik toevoegt.
+- Sensoren `sensor.weekmenu` en de totale besparing in Home Assistant.

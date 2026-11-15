@@ -1,0 +1,181 @@
+{
+ "status": 200,
+ "body": {
+  "data": {
+   "orderFulfillments": {
+    "result": [
+     {
+      "orderId": 900001,
+      "statusDescription": "redacted",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 48.82
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-10-28",
+        "dateDisplay": "woensdag 28 oktober"
+       }
+      }
+     },
+     {
+      "orderId": 900002,
+      "statusDescription": "redacted",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 74.44
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-10-07",
+        "dateDisplay": "woensdag 7 oktober"
+       }
+      }
+     },
+     {
+      "orderId": 900003,
+      "statusDescription": "redacted",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 56.76
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-08-12",
+        "dateDisplay": "woensdag 12 augustus"
+       }
+      }
+     },
+     {
+      "orderId": 900004,
+      "statusDescription": "Geannuleerd",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 0
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-08-04",
+        "dateDisplay": "dinsdag 4 augustus"
+       }
+      }
+     },
+     {
+      "orderId": 900005,
+      "statusDescription": "redacted",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 77.32
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-07-29",
+        "dateDisplay": "woensdag 29 juli"
+       }
+      }
+     },
+     {
+      "orderId": 900006,
+      "statusDescription": "redacted",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 103.54
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-07-22",
+        "dateDisplay": "woensdag 22 juli"
+       }
+      }
+     },
+     {
+      "orderId": 900007,
+      "statusDescription": "redacted",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 78.37
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-07-15",
+        "dateDisplay": "woensdag 15 juli"
+       }
+      }
+     },
+     {
+      "orderId": 900008,
+      "statusDescription": "redacted",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 76.93
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-07-08",
+        "dateDisplay": "woensdag 8 juli"
+       }
+      }
+     },
+     {
+      "orderId": 900009,
+      "statusDescription": "redacted",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 291.61
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-07-08",
+        "dateDisplay": "woensdag 8 juli"
+       }
+      }
+     },
+     {
+      "orderId": 900010,
+      "statusDescription": "redacted",
+      "shoppingType": "DELIVERY",
+      "modifiable": true,
+      "totalPrice": {
+       "totalPrice": {
+        "amount": 61.09
+       }
+      },
+      "delivery": {
+       "slot": {
+        "date": "2026-07-01",
+        "dateDisplay": "woensdag 1 juli"
+       }
+      }
+     }
+    ]
+   }
+  }
+ }
+}

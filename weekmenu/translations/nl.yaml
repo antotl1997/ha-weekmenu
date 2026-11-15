@@ -1,0 +1,19 @@
+configuration:
+  schedule_time:
+    name: Schema-tijd
+    description: Tijdstip (UU:MM) vanaf wanneer de add-on elk uur kijkt, tot 18:00, of de folder van de bezorgweek er is, om de keuzelijst alvast te vullen. Hij maakt nooit zelf een menu.
+  pantry:
+    name: Basisvoorraad
+    description: Producten die je altijd in huis hebt, zoals olie en zout. Die komen niet op je lijst of in je bestelling.
+  ah_app_version:
+    name: AH-appversie
+    description: De versie van de AH-app waarmee de add-on zich meldt (bijvoorbeeld 9.28). Alleen aanpassen als AH de add-on weigert met een melding over een oude app-versie.
+  notify_owner:
+    name: Melding eigenaar
+    description: De notify-dienst (zonder "notify.") van de telefoon die het menu, fouten, de AH-login en de bestelherinnering krijgt, bijvoorbeeld mobile_app_mijn_telefoon.
+  notify_today:
+    name: Melding vanavond
+    description: De notify-diensten (zonder "notify.") die alleen de korte dagelijkse melding "Vanavond" om 16:00 krijgen. Laat leeg om die naar niemand te sturen.
+  dinner_time:
+    name: Etenstijd
+    description: Tijdstip (UU:MM) waarop het eten op tafel staat. "Vanavond" rekent de begintijd daarvan terug, naar beneden afgerond op een kwartier.

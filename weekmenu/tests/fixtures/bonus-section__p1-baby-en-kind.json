@@ -1,0 +1,57 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Baby en kind",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "823268",
+    "offerId": 207075,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823268,
+    "segmentDescription": "AH Biologisch knijpfruit",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "5 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207075_AH_NL_WK45_AH_BIOLOGISCH_KNIJPFRUIT?rendition=200px&fileType=binary&version=Jwmv349heDKOB9CZP2s40w"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207075_AH_NL_WK45_AH_BIOLOGISCH_KNIJPFRUIT?rendition=708px&fileType=binary&version=Jwmv349heDKOB9CZP2s40w"
+     }
+    ],
+    "category": "Baby en kind",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "5+1 gratis",
+      "count": 5,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

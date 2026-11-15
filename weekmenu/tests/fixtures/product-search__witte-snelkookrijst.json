@@ -1,0 +1,787 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 6,
+  "totalPages": 1,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 412500,
+   "hqId": 855873,
+   "title": "Lassie Toverrijst builtje",
+   "salesUnitSize": "300 g",
+   "unitPriceDescription": "prijs per kg €4.63",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_454a6b6472373366536561357a536e2d43474f4f5277?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_454a6b6472373366536561357a536e2d43474f4f5277?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_454a6b6472373366536561357a536e2d43474f4f5277?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_454a6b6472373366536561357a536e2d43474f4f5277?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_454a6b6472373366536561357a536e2d43474f4f5277?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.39,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Witte rijst",
+   "brand": "Lassie",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Ideale basis voor je rijst gerecht. Door de grote, droge korrel lukt toverrijst altijd.</p><p><ul><li>4 x 1 persoons portie</li><li>Klaar in 10 minuten</li><li>De perfecte droge, grote korrel</li><li>Van nature glutenvrij</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>  Al ruim 60 jaar een begrip in de Nederlandse keuken.  </p>\n  <p>  Als Lassie willen we jou helpen om lekker en gezond te koken. Dat doen we al decennia lang en dat blijven we de komende jaren doen. Gewoon een makkelijke en vooral lekkere maaltijd op je bord. Zonder veel gedoe en met goede ingredienten als basis.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 484982,
+   "hqId": 740204,
+   "title": "Lassie Toverrijst voordeelpak",
+   "salesUnitSize": "750 g",
+   "unitPriceDescription": "prijs per kg €2.65",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_7747637246336e30535336554138393945586b596f41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_7747637246336e30535336554138393945586b596f41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_7747637246336e30535336554138393945586b596f41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_7747637246336e30535336554138393945586b596f41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_7747637246336e30535336554138393945586b596f41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Witte rijst",
+   "brand": "Lassie",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Ideale basis voor je rijst gerecht. Deze witte snelkook rijst is voorgestoomd, zonder iets toe te voegen. Zo zet je thuis in 8 minuten rijst op tafel, met een mooie, droge korrel.</p><p><ul><li>Witte snelkook rijst</li><li>Klaar in 8 minuten</li><li>Van nature glutenvrij</li><li>Vegan, 100% natuurlijk</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Lassie toverrijst is al ruim 65 jaar een begrip in de Nederlandse keuken. Deze witte rijst wordt door ons kort voorgekookt, zonder iets toe te voegen. Zo zet jij thuis in 8 minuten rijst op tafel, met een mooie, droge korrel. Een goede basis voor heerlijke recepten uit de Aziatische keukens zoals indonesisch, chinees en Indiaas. Maar ook voor gerechten uit de Mexicaanse, caraibische en Hollandse keuken. Op onze Lassie website vind je heel veel recepten om met rijst te koken. Witte rijst bevat aardig wat vitamines en mineralen. Een portie levert je bijvoorbeeld heel wat vitamine B5 en b6 op als ook mineralen als fosfor, koper en selenium. Bovendien zitten er relatief veel koolhydraten en eiwitten in. Genoeg brandstof om de avond mee door te komen of wanneer je gaat sporten. Niet gek dus dat rijst wereldwijd zo veel gegeten wordt!",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 553560,
+   "hqId": 59761,
+   "title": "Lassie Tover mix met vezel verrijkte korrels",
+   "salesUnitSize": "375 g",
+   "unitPriceDescription": "prijs per kg €5.31",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_786d59556a78424c5258477243456d524e3776745177?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_786d59556a78424c5258477243456d524e3776745177?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_786d59556a78424c5258477243456d524e3776745177?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_786d59556a78424c5258477243456d524e3776745177?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_786d59556a78424c5258477243456d524e3776745177?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Witte rijst",
+   "brand": "Lassie",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Lassie tover rijst extra vezels snelkook rijst combineert het gemak en de lekkere smaak van toverrijst met natuurlijke vezels toegevoegd.</p><p><ul><li>Toverrijst met natuurlijke vezels toegevoegd</li><li>Klaar in 8 minuten</li><li>Van nature glutenvrij</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Als Lassie willen we jou helpen om lekker  en  gezond te koken. Dat doen we al decennia lang en dat blijven we de komende jaren doen. Gewoon een makkelijke en vooral lekkere maaltijd op je bord. Zonder veel gedoe en met goede ingredienten als basis.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 3509,
+   "hqId": 796072,
+   "title": "Lassie Toverrijst",
+   "salesUnitSize": "400 g",
+   "unitPriceDescription": "prijs per kg €2.73",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4f426f696c325156522d4734776a73456f6365374451?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4f426f696c325156522d4734776a73456f6365374451?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4f426f696c325156522d4734776a73456f6365374451?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4f426f696c325156522d4734776a73456f6365374451?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4f426f696c325156522d4734776a73456f6365374451?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.09,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Witte rijst",
+   "brand": "Lassie",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Lassie witte tover rijst is in 8 minuten klaar. De ideale basis voor al je rijst gerechten en recepten. Lassie witte tover rijst is de basis voor diverse kip met rijst gerechten en natuurlijk nasi.</p><p><ul><li>Snelkook rijst</li><li>Van nature glutenvrij</li><li>Vegan, 100% natuurlijk</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "Door de grote, droge korrel lukt Lassie witte tover rijst altijd en dankzij de korte kooktijd blijft de smaak behouden. Zo heb je altijd en gemakkelijk een goede basis voor heerlijke recepten uit oosterse keukens, zoals indonesisch, chinees en Indiaas. Maar ook voor gerechten uit de Mexicaanse, de caraibische en natuurlijk de Hollandse keuken. Wokschotels met groente, heerlijke kip of vis, salades. Alles is lekker met Lassie witte tover rijst. Bereid bijvoorbeeld een heerlijke nasi goreng met kipfilet, ananas blokjes, uien, pindasaus en Chinese kool. Op onze website lassie.nl vind je heel veel recepten om met rijst te koken.\n\nwitte rijst bevat van nature veel vitamines b en belangrijke mineralen als kalium en fosfor. Die zorgen voor een verlaagde bloeddruk en stevige botten en tanden. Daarnaast is het een bron van koolhydraten waar je energie van krijgt en bevat het vrijwel geen suikers, vetten of zout. Hartstikke gezond dus!\n\nlassie is al jaren de nummer een op het gebied van rijst en granen in Nederland. Naast de Lassie witte tover rijst kun je kiezen uit vele andere soorten rijst. Bijvoorbeeld basmati rijst voor een echte Indiase curry, pandan rijst als je Trek hebt in een pittig aziatisch gerecht, Italiaanse risotto rijst en zilvervlies rijst met nog meer gezonde voedingsstoffen. Op lassie.nl vind je een rijstwijzer, waarop de verschillen tussen rijst duidelijk worden uitgelegd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 948,
+   "hqId": 12975,
+   "title": "AH Witte snelkookrijst",
+   "salesUnitSize": "400 g",
+   "unitPriceDescription": "prijs per kg €1.13",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393338?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393338?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393338?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393338?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393338?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 0.45,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Witte rijst",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": true,
+   "descriptionHighlights": "<p>Deze voorgekookte witte langgraanrijst is de ideale basisrijst met een mooie, droge korrel. In 8 minuten klaar!</p><p><ul><li>Culinaire tip! Rijttimbaaltjes met aubergine</li><li>Evt zelf toevoegen: gedroogde oregano, kaneel, aubergine</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 525287,
+   "hqId": 829820,
+   "title": "AH Witte snelkook rijst",
+   "salesUnitSize": "1 kg",
+   "unitPriceDescription": "prijs per kg €0.59",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313935333736?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313935333736?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313935333736?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313935333736?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313935333736?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 0.59,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Pasta, rijst, wereldkeuken",
+   "subCategory": "Witte rijst",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=witte%20snelkookrijst&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=witte%20snelkookrijst&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": null,
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=witte%20snelkookrijst&sortBy=RELEVANCE&page=0&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Lassie",
+     "label": "Lassie",
+     "count": 4,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "1451",
+     "label": "Rijst",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "1824",
+     "label": "Witte rijst",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "b",
+     "label": "Score B",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "previouslyBought",
+   "allLabel": null,
+   "label": "Eerder gekocht",
+   "options": [
+    {
+     "id": "previouslyBought",
+     "label": "Eerder gekocht",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "PREVIOUSLY_BOUGHT",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_verbluffen",
+   "allLabel": null,
+   "label": "Prijsfavoriet",
+   "options": [
+    {
+     "id": "np_verbluffen",
+     "label": "Prijsfavoriet",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_veganistisch",
+   "allLabel": null,
+   "label": "Veganistisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_vegetarisch",
+   "allLabel": null,
+   "label": "Vegetarisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

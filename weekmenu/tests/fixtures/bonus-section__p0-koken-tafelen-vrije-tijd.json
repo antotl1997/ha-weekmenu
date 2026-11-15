@@ -1,0 +1,1067 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Koken, tafelen, vrije tijd",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "816408",
+    "offerId": 200206,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816408,
+    "segmentDescription": "Grote keukenpret voor kleine chefs",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-08",
+     "description": "",
+     "code": "NO_LABEL"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "BONUS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6950794e754b3938527a61644365784d4f3846767067?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6950794e754b3938527a61644365784d4f3846767067?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6950794e754b3938527a61644365784d4f3846767067?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6950794e754b3938527a61644365784d4f3846767067?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6950794e754b3938527a61644365784d4f3846767067?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_BONUS",
+      "defaultDescription": "BONUS"
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816493",
+    "offerId": 200291,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816493,
+    "segmentDescription": "Alle A-merk geurkaarsen, -stokjes en -theelichten",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "1 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200291_AH_NL_WK44_ALLE_AMERK_GEURKAARSEN_STOKJES_EN_THEELICHTEN?rendition=200px&fileType=binary&version=OF5FISvtFAF8TvLzNwNtfQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200291_AH_NL_WK44_ALLE_AMERK_GEURKAARSEN_STOKJES_EN_THEELICHTEN?rendition=708px&fileType=binary&version=OF5FISvtFAF8TvLzNwNtfQ"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "1+1 gratis",
+      "count": 1,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "822027",
+    "offerId": 205830,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 822027,
+    "segmentDescription": "AH Gaultheria en chrysant",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 4.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205830_AH_NL_WK44_AH_GAULTHERIA_EN_CHRYSANT?rendition=200px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205830_AH_NL_WK44_AH_GAULTHERIA_EN_CHRYSANT?rendition=708px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 4.00",
+      "count": 2,
+      "price": 4.0
+     }
+    ],
+    "storeOnlyPromotion": true
+   }
+  },
+  {
+   "product": {
+    "webshopId": 586042,
+    "hqId": 31120,
+    "title": "AH Hedera",
+    "brand": "AH",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_5155424d6658424852577175672d6f4b4d3764486e51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_5155424d6658424852577175672d6f4b4d3764486e51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_5155424d6658424852577175672d6f4b4d3764486e51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_5155424d6658424852577175672d6f4b4d3764486e51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_5155424d6658424852577175672d6f4b4d3764486e51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "822054",
+    "bonusSegmentId": 822054,
+    "offerId": 205857,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Hedera",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "2 VOOR 4.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 4.99",
+      "count": 2,
+      "price": 4.99
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "NOT_IN_ASSORTMENT",
+    "availableOnline": false,
+    "isOrderable": false,
+    "propertyIcons": [],
+    "properties": {
+     "da_store_department": [
+      "Vers"
+     ],
+     "da_grape": [],
+     "da_available_in_store": [
+      "true"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821943",
+    "offerId": 205745,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821943,
+    "segmentDescription": "Bolsius of Gouda kaarsen",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "30% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_62386e6f716f7936545775736e2d4c39663557473641?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_62386e6f716f7936545775736e2d4c39663557473641?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_62386e6f716f7936545775736e2d4c39663557473641?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_62386e6f716f7936545775736e2d4c39663557473641?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_62386e6f716f7936545775736e2d4c39663557473641?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "30% korting",
+      "percentage": 30,
+      "precisePercentage": 30
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821822",
+    "offerId": 205628,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821822,
+    "segmentDescription": "Alle Duracell",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "40% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_694d61364a746f2d527871716d2d5f43336571584241?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_694d61364a746f2d527871716d2d5f43336571584241?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_694d61364a746f2d527871716d2d5f43336571584241?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_694d61364a746f2d527871716d2d5f43336571584241?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_694d61364a746f2d527871716d2d5f43336571584241?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "40% korting",
+      "percentage": 40,
+      "precisePercentage": 40
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 586789,
+    "hqId": 32445,
+    "title": "AH Najaarsbloemen",
+    "brand": "AH",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_517370664941655253335361556f4d305f717a583341?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_517370664941655253335361556f4d305f717a583341?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_517370664941655253335361556f4d305f717a583341?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_517370664941655253335361556f4d305f717a583341?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_517370664941655253335361556f4d305f717a583341?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "822045",
+    "bonusSegmentId": 822045,
+    "offerId": 205848,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Najaarsbloemen",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 4.00",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 4.00",
+      "price": 4.0
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "NOT_IN_ASSORTMENT",
+    "availableOnline": false,
+    "isOrderable": false,
+    "propertyIcons": [],
+    "properties": {
+     "da_available_in_store": [
+      "true"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "822001",
+    "offerId": 205804,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 822001,
+    "segmentDescription": "AH Herfstarrangementen",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 EURO KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205804_AH_NL_WK44_AH_HERFSTARRANGEMENTEN?rendition=200px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205804_AH_NL_WK44_AH_HERFSTARRANGEMENTEN?rendition=708px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_AMOUNT",
+      "defaultDescription": "€2.00 euro korting",
+      "amount": 2.0
+     }
+    ],
+    "storeOnlyPromotion": true
+   }
+  },
+  {
+   "product": {
+    "webshopId": 486436,
+    "hqId": 741489,
+    "title": "AH Herfstchrysantenboeket",
+    "brand": "AH",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_77554c7a6b53446e53626945626b7a33737551774751?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_77554c7a6b53446e53626945626b7a33737551774751?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_77554c7a6b53446e53626945626b7a33737551774751?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_77554c7a6b53446e53626945626b7a33737551774751?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_77554c7a6b53446e53626945626b7a33737551774751?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "822010",
+    "bonusSegmentId": 822010,
+    "offerId": 205813,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Herfstchrysantenboeket",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 10.00",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 10.00",
+      "price": 10.0
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "NOT_IN_ASSORTMENT",
+    "availableOnline": false,
+    "isOrderable": false,
+    "propertyIcons": [],
+    "properties": {
+     "da_store_department": [
+      "Vers"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816461",
+    "offerId": 200259,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816461,
+    "segmentDescription": "Nomad thermokleding",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200259_AH_NL_WK44_NOMAD_THERMOKLEDING?rendition=200px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200259_AH_NL_WK44_NOMAD_THERMOKLEDING?rendition=708px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": true
+   }
+  },
+  {
+   "product": {
+    "webshopId": 625469,
+    "hqId": 79173,
+    "title": "Goliath Games Gurkie hup",
+    "brand": "Goliath Games",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_5a434b2d3954486454536537456d7574344d4b6c5767?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_5a434b2d3954486454536537456d7574344d4b6c5767?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_5a434b2d3954486454536537456d7574344d4b6c5767?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_5a434b2d3954486454536537456d7574344d4b6c5767?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_5a434b2d3954486454536537456d7574344d4b6c5767?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "816395",
+    "bonusSegmentId": 816395,
+    "offerId": 200193,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "Goliath Games Gurkie hup",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 14.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 14.99",
+      "price": 14.99
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-08",
+    "bonusPeriodDescription": "",
+    "priceBeforeBonus": 21.99,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "FUTURE_ASSORTMENT",
+    "orderAvailabilityDescription": "Leverbaar vanaf 02-11",
+    "availableOnline": true,
+    "isOrderable": false,
+    "mainCategory": "Koken, tafelen, vrije tijd",
+    "subCategory": "Hobby artikelen",
+    "subCategoryId": 8708,
+    "propertyIcons": [],
+    "properties": {
+     "da_store_department": [
+      "Non Food"
+     ],
+     "da_grape": [],
+     "da_available_in_store": [
+      "true"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Ontmoet gurkie hup! Oogst stiekem zoveel mogelijk augurken zonder hem te laten schrikken. Springt gurkie toch de lucht in? vang hem razendsnel en win het spel!</p><p><ul><li>Ontmoet gurkie hup, het nieuwste lid van kesbeke</li><li>Probeer zoveel mogelijk augurken te verzamelen om het spel te winnen</li><li>Je moet slim kiezen welke augurk je pakt zonder dat gurkie wakker wordt</li></ul></p>",
+    "descriptionFull": "Ontmoet gurkie hup, het nieuwste lid van kesbeke. Gurkie ligt even te rusten op de augurkenberg. Aan jou de taak om zijn augurken in de gaten te houden en te oogsten zonder dat gurkie schrikt. Als gurkie namelijk schrikt zal hij de lucht in springen en is het aan jou om hem zo snel mogelijk te vangen.wat maakt gurkie hup zo leuk?je moet slim kiezen welke augurk je pakt zonder dat gurkie wakker wordt.na elke augurk die uit de augurkenberg wordt getrokken wordt het spannender wanneer gurkie wakker schrikt.probeer zoveel mogelijk augurken te verzamelen om het spel te winnen.spelomschrijvingzet gurkie hup op zijn augurkenberg en plaats alle augurken in de berg. Zet de draaischijf in het midden neer. De jongste speler mag beginnen. De speler draait de pijl op de draaischijf en doet wat de wijzer aangeeft. Dit kan zijn dat de speler een of twee augurken uit de berg moet pakken. Deze leg je dan voor je neer. Ook kan het zijn dat de speler een beurt over moet slaan. Ook kan het zijn dat gurkie hup je augurk heeft opgegeten. Als je dan een augurk voor je hebt liggen moet je een augurk wegleggen in de doos. Zodra gurkie hup wakker schrikt moeten alle spelers proberen om als eerste gurkie te vangen. De speler dei namelijk gurkie vangt krijgt twee bonusaugurken om bij zijn score op te tellen. De speler die aan het einde de meeste augurken heeft, wint het spel!inhoud van gurkie hup:1 augurkenberg1 gurkie hup12 augurken1 draaibordhandleiding"
+   }
+  },
+  {
+   "product": {
+    "webshopId": 625467,
+    "hqId": 79171,
+    "title": "Goliath Games Keezen met Kesbeke",
+    "brand": "Goliath Games",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_7a2d556e3232516554732d302d644744556f58766f67?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_7a2d556e3232516554732d302d644744556f58766f67?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_7a2d556e3232516554732d302d644744556f58766f67?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_7a2d556e3232516554732d302d644744556f58766f67?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_7a2d556e3232516554732d302d644744556f58766f67?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "816396",
+    "bonusSegmentId": 816396,
+    "offerId": 200194,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "Goliath Games Keezen met Kesbeke",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 7.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 7.99",
+      "price": 7.99
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-08",
+    "bonusPeriodDescription": "",
+    "priceBeforeBonus": 13.99,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "FUTURE_ASSORTMENT",
+    "orderAvailabilityDescription": "Leverbaar vanaf 02-11",
+    "availableOnline": true,
+    "isOrderable": false,
+    "mainCategory": "Koken, tafelen, vrije tijd",
+    "subCategory": "Hobby artikelen",
+    "subCategoryId": 8708,
+    "propertyIcons": [],
+    "properties": {
+     "da_store_department": [
+      "Non Food"
+     ],
+     "da_grape": [],
+     "da_available_in_store": [
+      "true"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Maak je klaar voor echte amsterdamse gezelligheid met keezen met kesbeke, het gezelligste bord- en kaartspel van Nederland.</p><p><ul><li>Een gezellig keezenspel volledig in Kesbeke stijl</li><li>Een avond vol amsterdamse gezelligheid</li><li>Speel tegen elkaar of in teams</li></ul></p>",
+    "descriptionFull": "Maak je klaar voor echte amsterdamse gezelligheid met keezen met kesbeke, het gezelligste bord- en kaartspel van Nederland. Speel tegen elkaar of in teams van twee. Speel je kaarten en zorg dat jij zo snel mogelijk al je pionnen hebt veiliggesteld in je eigen honk. Maar let op, je tegenstanders kunnen proberen om jou te hinderen. Dit bordspel is te spelen met 2 of 4 spelers.het plezier van het keezen met kesbeke:een gezellig keezenspel volledig in Kesbeke stijleen avond vol amsterdamse gezelligheidspeel tegen elkaar of in teamsspelomschrijvingeen speler wordt gekozen als startspeler. Deze persoon deelt een aantal rondes de kaarten. Wanneer je het spel met twee spelers speelt, wordt het spel met 26 kaarten gespeeld. Wanneer je met vier spelers bent wordt het spel met alle 52 kaarten gespeeld.de speler die aan de beurt is legt een kaart in het midden op het speelbord. Afhankelijk van de kaart plaats je jouw pion. Op het tegeltje staat hoeveel plaatsen je jouw pion mag verzetten. Om een pion op het bord te zetten moet je een aas of heer opleggen. Als er een kaart opgelegd kan worden, moet hij gespeeld worden, zelfs als je hiermee je eigen pion van het bord slaat. Als je geen pionnen op het bord hebt staan en je kan echt niet spelen, dan lever je al je kaarten in en wacht je tot de volgende ronde.de speler die als eerste al zijn pionnen in zijn honk heeft staan heeft het spel gewonnen. Maar let goed op. Pionnen kunnen in je honk niet langs elkaar heen en ze mogen niet heen en weer bewegen in het honk. Dus zorg ervoor dat je exact uitkomt met je stappen!"
+   }
+  },
+  {
+   "product": {
+    "webshopId": 625468,
+    "hqId": 79172,
+    "title": "Goliath Games Kesbeke klapper",
+    "brand": "Goliath Games",
+    "isSample": false,
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200195_AH_NL_WK44_GOLIATH_GAMES_KESBEKE_KLAPPER?rendition=200px&fileType=binary&version=-1DPq04oimzNyAVD11Sw0Q"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200195_AH_NL_WK44_GOLIATH_GAMES_KESBEKE_KLAPPER?rendition=708px&fileType=binary&version=-1DPq04oimzNyAVD11Sw0Q"
+     }
+    ],
+    "segmentId": "816397",
+    "bonusSegmentId": 816397,
+    "offerId": 200195,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "Goliath Games Kesbeke klapper",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 9.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 9.99",
+      "price": 9.99
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-08",
+    "bonusPeriodDescription": "",
+    "hasListPrice": true,
+    "currentPrice": 14.99,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "FUTURE_ASSORTMENT",
+    "orderAvailabilityDescription": "Leverbaar vanaf 02-11",
+    "availableOnline": true,
+    "isOrderable": false,
+    "mainCategory": "Koken, tafelen, vrije tijd",
+    "subCategory": "Hobby artikelen",
+    "subCategoryId": 8708,
+    "propertyIcons": [],
+    "properties": {
+     "da_store_department": [
+      "Non Food"
+     ],
+     "da_grape": [],
+     "da_available_in_store": [
+      "true"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Het zuurste spel van het jaar! Leg kaarten neer en reageer razendsnel zodra 6 gelijke zuren verschijnen. Sla op de klapper en pak de buit!</p><p><ul><li>Sla je zuur met het pittigste familiespel van het jaar</li><li>Zie je de zure bom? sla als eerste op de klapper</li><li>Helpt bij het snel rekenen en het vasthouden van opperste concentratie</li></ul></p>",
+    "descriptionFull": "Sla je zuur met het pittigste familiespel van het jaar! Dit spel zorgt voor veel chaos en lachbuien rond de speeltafel. Om de beurt draaien spelers een kaart om en zodra er 6 zuren van dezelfde soort op tafel liggen moet je zo snel mogelijk op de klapper rammen! De speler die dan als eerste op de klapper ramt krijgt alle open kaarten.plezier van Kesbeke klapperzorgt voor plezier en totale chaos op de speeltafel. Je moet snel nadenken en op de klapper drukken zodra er precies 6 van een tafelzuur op tafel ligt. Sla je te vroeg? dan moet je kaarten inleveren.helpt bij het snel rekenen en het vasthouden van opperste concentratielet op de zure bom. Dit is de joker in het spel en als deze op tafel ligt mag je direct op de klapper slaan!spelomschrijvingplaats de klapper in het midden van de tafel. Schud de kaarten en deel de kaarten uit tot alle kaarten op zijn. De spelers leggen de kaarten gesloten voor hun neer. Om de beurt mag een speler de bovenste kaart van zijn stapel omdraaien. De kaart moet van de speler af omgedraaid worden, je mag natuurlijk niet spieken. Zodra er gecombineerd 6 van dezelfde zuren op tafel liggen moet de speler zo snel mogelijk op de klapper staan. De speler die als eerste slaat krijgt alle open kaarten. Ligt er een zure bom op tafel? dan mag je direct op de klapper slaan. Heeft een speler geen kaarten meer? dan is hij af. De speler die alle kaarten heeft wint het spel."
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "818890",
+    "offerId": 202719,
+    "offerStartDate": "2026-10-12",
+    "segmentId": 818890,
+    "segmentDescription": "A-merk speelgoed",
+    "bonusStartDate": "2026-10-12",
+    "bonusEndDate": "2026-12-27",
+    "validityPeriod": {
+     "start": "2026-10-12",
+     "end": "2026-12-27",
+     "description": "",
+     "code": "NO_LABEL"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "BONUS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_202719_AH_NL_WK42_AMERK_SPEELGOED?rendition=200px&fileType=binary&version=IuGbz528ZAL_BF32TPRrVw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_202719_AH_NL_WK42_AMERK_SPEELGOED?rendition=708px&fileType=binary&version=IuGbz528ZAL_BF32TPRrVw"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_BONUS",
+      "defaultDescription": "BONUS"
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "819728",
+    "offerId": 203567,
+    "offerStartDate": "2026-10-19",
+    "segmentId": 819728,
+    "segmentDescription": "Sinterklaas accessoires",
+    "bonusStartDate": "2026-10-19",
+    "bonusEndDate": "2026-12-06",
+    "validityPeriod": {
+     "start": "2026-10-19",
+     "end": "2026-12-06",
+     "description": "",
+     "code": "NO_LABEL"
+    },
+    "bonusType": "FESTIVE_FAVOURITE",
+    "promotionType": "NATIONAL",
+    "segmentType": "FESTIVE_FAVOURITE",
+    "discountDescription": "Feestfavoriet",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_31705665684832565253363533743043375f66784b77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_31705665684832565253363533743043375f66784b77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_31705665684832565253363533743043375f66784b77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_31705665684832565253363533743043375f66784b77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_31705665684832565253363533743043375f66784b77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FESTIVE_FAVOURITE",
+      "defaultDescription": "Feestfavoriet"
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "819794",
+    "offerId": 203653,
+    "offerStartDate": "2026-10-19",
+    "segmentId": 819794,
+    "segmentDescription": "AH Excellent tafelversiering",
+    "bonusStartDate": "2026-10-19",
+    "bonusEndDate": "2026-12-27",
+    "validityPeriod": {
+     "start": "2026-10-19",
+     "end": "2026-12-27",
+     "description": "",
+     "code": "NO_LABEL"
+    },
+    "bonusType": "FESTIVE_FAVOURITE",
+    "promotionType": "NATIONAL",
+    "segmentType": "FESTIVE_FAVOURITE",
+    "discountDescription": "Feestfavoriet",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_45457938636e785952346564416448446763396d4841?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_45457938636e785952346564416448446763396d4841?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_45457938636e785952346564416448446763396d4841?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_45457938636e785952346564416448446763396d4841?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_45457938636e785952346564416448446763396d4841?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Koken, tafelen, vrije tijd",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FESTIVE_FAVOURITE",
+      "defaultDescription": "Feestfavoriet"
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

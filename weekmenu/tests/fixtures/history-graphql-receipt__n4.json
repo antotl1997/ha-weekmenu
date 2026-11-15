@@ -1,0 +1,102 @@
+{
+ "status": 200,
+ "body": {
+  "data": {
+   "posReceiptDetails": {
+    "id": "receipt-5",
+    "products": [
+     {
+      "name": "WOKGROENTE",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.39
+      }
+     },
+     {
+      "name": "ROOMKAAS",
+      "quantity": 2,
+      "price": {
+       "amount": 1.29
+      },
+      "amount": {
+       "amount": 2.58
+      }
+     },
+     {
+      "name": "AH KOKOSMELK",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 2.75
+      }
+     },
+     {
+      "name": "AH NOEDELS",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.29
+      }
+     },
+     {
+      "name": "KNACKEBROD",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.75
+      }
+     },
+     {
+      "name": "AH DROP",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.25
+      }
+     },
+     {
+      "name": "KEUKENPAPIER",
+      "quantity": 2,
+      "price": {
+       "amount": 2.99
+      },
+      "amount": {
+       "amount": 5.98
+      }
+     },
+     {
+      "name": "SPINAZIE",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 0.99
+      }
+     },
+     {
+      "name": "AH CHOCOSTIC",
+      "quantity": 1,
+      "price": null,
+      "amount": {
+       "amount": 1.59
+      }
+     }
+    ],
+    "discounts": [
+     {
+      "name": "AHKEUKENPAPA",
+      "amount": {
+       "amount": -1.99
+      }
+     },
+     {
+      "name": "WOKGROENTE",
+      "amount": {
+       "amount": -0.6
+      }
+     }
+    ]
+   }
+  }
+ }
+}

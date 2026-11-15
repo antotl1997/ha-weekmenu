@@ -1,0 +1,192 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302922,
+   "title": "Stamppot met Chinese kool, worst en appel",
+   "description": "Als herfst een gerecht was, was het deze: stamppot met Chinese kool, braadworstjes en zoete appelpartjes afgetopt met knapperige hazelnoten. Lekker budgetproof en binnen 30 min. op tafel!",
+   "href": "/allerhande/recept/R-R1302922/stamppot-met-chinese-kool-worst-en-appel",
+   "cookTime": 30,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036895_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 3.898306,
+    "count": 59
+   },
+   "ingredients": [
+    {
+     "text": "500 g kruimige aardappel",
+     "name": {
+      "singular": "kruimige aardappel"
+     }
+    },
+    {
+     "text": "15 g ongezouten hazelnoten",
+     "name": {
+      "singular": "ongezouten hazelnoten"
+     }
+    },
+    {
+     "text": "2 el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "3 Catalaans braadworstjes",
+     "name": {
+      "singular": "Catalaans braadworstje"
+     }
+    },
+    {
+     "text": "1 friszoete appel",
+     "name": {
+      "singular": "friszoete appel"
+     }
+    },
+    {
+     "text": "&#189; middelgrote ui",
+     "name": {
+      "singular": "middelgrote ui"
+     }
+    },
+    {
+     "text": "&#189; teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "300 g Chinese kolen",
+     "name": {
+      "singular": "Chinese kool"
+     }
+    },
+    {
+     "text": "&#189; tl komijnzaad",
+     "name": {
+      "singular": "komijnzaad"
+     }
+    },
+    {
+     "text": "&#189; tl paprikapoeder",
+     "name": {
+      "singular": "paprikapoeder"
+     }
+    },
+    {
+     "text": "50 ml halfvolle melk",
+     "name": {
+      "singular": "halfvolle melk"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Schil de aardappelen, snijd in gelijke stukken en kook in 20 min. gaar.",
+     "Hak ondertussen de hazelnoten grof en rooster in een koekenpan zonder boter of olie in 3 min. goudgeel. Laat afkoelen op een bord.",
+     "Verhit de olie in een koekenpan op middelhoog vuur en bak de worstjes in 12 min. rondom gaar.",
+     "Snijd ondertussen de appels in plakjes van 0.5 cm en bak de laatste 5 min. mee.",
+     "Snipper ondertussen de ui en snijd de knoflook fijn.",
+     "Snijd het witte deel van de Chinese kool in reepjes en het groene deel in stukjes van 2 cm.",
+     "Verhit de rest van de olie in een hapjespan op middelhoog vuur.",
+     "Bak de ui, knoflook, het witte deel van de kool, komijnzaad en de paprikapoeder 5 min. Schep af en toe om.",
+     "Breng op smaak met peper en eventueel zout.",
+     "Giet de aardappelen af, voeg de melk toe en stamp met de pureestamper tot grove puree.",
+     "Roer het ui-koolmengsel en het rauwe groene deel van de kool erdoor. Breng op smaak met peper en eventueel zout.",
+     "Snijd de worstjes in plakjes. Verdeel de worst met de appel en hazelnoten over de stamppot."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 595,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 50,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 32,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 21,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

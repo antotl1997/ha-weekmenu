@@ -1,0 +1,282 @@
+{
+ "data": {
+  "bonusPromotions": [
+   {
+    "products": [
+     {
+      "id": 395948,
+      "title": "AH Spinazie kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "200 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.69
+       },
+       "was": {
+        "amount": 1.69
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 56338,
+      "title": "AH Andijvie fijngesneden kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "250 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.49
+       },
+       "was": {
+        "amount": 1.49
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 230848,
+      "title": "AH Sperziebonen kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "200 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.99
+       },
+       "was": {
+        "amount": 1.99
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 395939,
+      "title": "AH Boerenkool kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "150 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.69
+       },
+       "was": {
+        "amount": 1.69
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 230846,
+      "title": "AH Snijbonen kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "200 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.99
+       },
+       "was": {
+        "amount": 1.99
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 494449,
+      "title": "AH Macaroni spaghetti groente klein",
+      "brand": "AH",
+      "salesUnitSize": "250 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.59
+       },
+       "was": {
+        "amount": 1.59
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 369971,
+      "title": "AH Bloemkool broccoli kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "200 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.99
+       },
+       "was": {
+        "amount": 1.99
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 494451,
+      "title": "AH Nasi bami groente kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "250 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.69
+       },
+       "was": {
+        "amount": 1.69
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 67690,
+      "title": "AH Wokgroente Chinees kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "250 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.99
+       },
+       "was": {
+        "amount": 1.99
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 168090,
+      "title": "AH Roerbakgroente Italiaans champignons",
+      "brand": "AH",
+      "salesUnitSize": "250 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.99
+       },
+       "was": {
+        "amount": 1.99
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 230674,
+      "title": "AH Bloemkoolroosjes kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "200 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.99
+       },
+       "was": {
+        "amount": 1.99
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 435437,
+      "title": "AH Jonge bladsla met rucola kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "50 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.39
+       },
+       "was": {
+        "amount": 1.39
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 168093,
+      "title": "AH Kleintje thaise wokgroente",
+      "brand": "AH",
+      "salesUnitSize": "250 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.99
+       },
+       "was": {
+        "amount": 1.99
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 617528,
+      "title": "AH Broccoliroosjes",
+      "brand": "AH",
+      "salesUnitSize": "200 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.99
+       },
+       "was": {
+        "amount": 1.99
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 435438,
+      "title": "AH Jonge bladsla veldsla kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "50 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.39
+       },
+       "was": {
+        "amount": 1.39
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     },
+     {
+      "id": 457053,
+      "title": "AH Bloemkoolrijst kleinverpakking",
+      "brand": "AH",
+      "salesUnitSize": "200 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.79
+       },
+       "was": {
+        "amount": 1.79
+       },
+       "discount": {
+        "description": "2 voor 2.49"
+       }
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

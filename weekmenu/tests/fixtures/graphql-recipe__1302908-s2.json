@@ -1,0 +1,199 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302908,
+   "title": "Linguine met paddenstoelen, truffel en burrata",
+   "description": "Wat deze linguine met paddenstoelen en burrata afmaakt? Krokant gebakken Parmezaane kaas met hazelnoten. Thank us later!",
+   "href": "/allerhande/recept/R-R1302908/linguine-met-paddenstoelen-truffel-en-burrata",
+   "cookTime": 35,
+   "nutriScore": "B",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036877_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 4.318182,
+    "count": 22
+   },
+   "ingredients": [
+    {
+     "text": "25 g ongezouten hazelnoten",
+     "name": {
+      "singular": "ongezouten hazelnoten"
+     }
+    },
+    {
+     "text": "15 g Parmigiano Reggiano",
+     "name": {
+      "singular": "Parmigiano Reggiano"
+     }
+    },
+    {
+     "text": "1 sjalot",
+     "name": {
+      "singular": "sjalot"
+     }
+    },
+    {
+     "text": "1 teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "300 g paddenstoelen voor pasta en risotto",
+     "name": {
+      "singular": "paddenstoelen voor pasta en risotto"
+     }
+    },
+    {
+     "text": "150 g linguine",
+     "name": {
+      "singular": "linguine"
+     }
+    },
+    {
+     "text": "1 el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "12.5 g ongezouten roomboter",
+     "name": {
+      "singular": "ongezouten roomboter"
+     }
+    },
+    {
+     "text": "37.5 ml droge witte wijn",
+     "name": {
+      "singular": "droge witte wijn"
+     }
+    },
+    {
+     "text": "1 el paddenstoelen-truffeltapenade",
+     "name": {
+      "singular": "paddenstoelen-truffeltapenade"
+     }
+    },
+    {
+     "text": "7.5 g verse platte peterselie",
+     "name": {
+      "singular": "verse platte peterselie"
+     }
+    },
+    {
+     "text": "250 g burrata",
+     "name": {
+      "singular": "burrata"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verwarm de oven voor op 180 °C.",
+     "Hak de hazelnoten grof en rasp de Parmezaanse kaas. Meng en verdeel over een met bakpapier beklede bakplaat.",
+     "Bak in ca. 8 min. in de oven goudgeel en knapperig. Laat afkoelen en breek in stukjes.",
+     "Snipper de sjalotten en snijd de knoflook fijn. Snijd grotere paddenstoelen in plakjes.",
+     "Ris de blaadjes en naaldjes van de bijgevoegde kruiden en snijd fijn.",
+     "Kook de linguine volgens de aanwijzingen op de verpakking, giet af en vang een kopje kookvocht op.",
+     "Verhit ondertussen de olie en boter in een ruime koekenpan op hoog vuur.",
+     "Bak de paddenstoelen zonder de bijgevoegde kruiden 5 min.",
+     "Zet het vuur lager, voeg de sjalotten, bijgevoegde kruiden en knoflook toe en bak 2 min. mee. Blus af met de wijn en laat 1 min. inkoken.",
+     "Schep de linguine door de paddenstoelen.",
+     "Voeg een scheut kookvocht en de truffeltapenade toe en schep om tot de saus licht gebonden is. Breng op smaak met peper en eventueel zout.",
+     "Snijd de peterselie fijn.",
+     "Verdeel de pasta over diepe borden. Verdeel de burrata erover. Bestrooi met de hazelnoot-parmezaankrokantjes en de peterselie."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 715,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 60,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 39,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 25,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

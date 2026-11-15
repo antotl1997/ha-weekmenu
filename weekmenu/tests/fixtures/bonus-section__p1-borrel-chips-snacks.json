@@ -1,0 +1,402 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Borrel, chips, snacks",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817963",
+    "offerId": 201755,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817963,
+    "segmentDescription": "Alle Proper en Jimmy's 70-110 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201755_AH_NL_WK45_ALLE_PROPER_EN_JIMMYS_70110_GRAM?rendition=200px&fileType=binary&version=bjSCWQVCqMbzQWEZ7pj_yQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201755_AH_NL_WK45_ALLE_PROPER_EN_JIMMYS_70110_GRAM?rendition=708px&fileType=binary&version=bjSCWQVCqMbzQWEZ7pj_yQ"
+     }
+    ],
+    "category": "Borrel, chips, snacks",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817951",
+    "offerId": 201743,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817951,
+    "segmentDescription": "Alle Lay's Sensations 150 gram of flat 300 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 1.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201743_AH_NL_WK45_ALLE_LAYS_SENSATIONS_150_GRAM_OF_FLAT_300_GRAM?rendition=200px&fileType=binary&version=AW1Xl9wWs-husYjQiBttRg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201743_AH_NL_WK45_ALLE_LAYS_SENSATIONS_150_GRAM_OF_FLAT_300_GRAM?rendition=708px&fileType=binary&version=AW1Xl9wWs-husYjQiBttRg"
+     }
+    ],
+    "category": "Borrel, chips, snacks",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 1.99",
+      "price": 1.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817962",
+    "offerId": 201754,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817962,
+    "segmentDescription": "Alle AH Salades 175 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201754_AH_NL_WK45_ALLE_AH_SALADES_175_GRAM?rendition=200px&fileType=binary&version=VCzjFRoVNG1TiiypFW1GdQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201754_AH_NL_WK45_ALLE_AH_SALADES_175_GRAM?rendition=708px&fileType=binary&version=VCzjFRoVNG1TiiypFW1GdQ"
+     }
+    ],
+    "category": "Borrel, chips, snacks",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817936",
+    "offerId": 201728,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817936,
+    "segmentDescription": "Alle Pringles 165 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 1.69",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201728_AH_NL_WK45_ALLE_PRINGLES_165_GRAM?rendition=200px&fileType=binary&version=GmaRR62BfVY2bW8k4JRuyQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201728_AH_NL_WK45_ALLE_PRINGLES_165_GRAM?rendition=708px&fileType=binary&version=GmaRR62BfVY2bW8k4JRuyQ"
+     }
+    ],
+    "category": "Borrel, chips, snacks",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 1.69",
+      "price": 1.69
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817991",
+    "offerId": 201783,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817991,
+    "segmentDescription": "Alle Gran Pavesi",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201783_AH_NL_WK45_ALLE_GRAN_PAVESI?rendition=200px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201783_AH_NL_WK45_ALLE_GRAN_PAVESI?rendition=708px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     }
+    ],
+    "category": "Borrel, chips, snacks",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823253",
+    "offerId": 207056,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823253,
+    "segmentDescription": "AH Markthal noten",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 7.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207056_AH_NL_WK45_AH_MARKTHAL_NOTEN?rendition=200px&fileType=binary&version=Es6rDENYh_YNuGvapOo_Xg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207056_AH_NL_WK45_AH_MARKTHAL_NOTEN?rendition=708px&fileType=binary&version=Es6rDENYh_YNuGvapOo_Xg"
+     }
+    ],
+    "category": "Borrel, chips, snacks",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 7.00",
+      "count": 3,
+      "price": 7.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823264",
+    "offerId": 207071,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823264,
+    "segmentDescription": "AH Scrocchi, Picos en Borreltoast",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 4.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207071_AH_NL_WK45_AH_SCROCCHI_PICOS_EN_BORRELTOAST?rendition=200px&fileType=binary&version=-qEI-p6y8I88O3PiTBu9nA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207071_AH_NL_WK45_AH_SCROCCHI_PICOS_EN_BORRELTOAST?rendition=708px&fileType=binary&version=-qEI-p6y8I88O3PiTBu9nA"
+     }
+    ],
+    "category": "Borrel, chips, snacks",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 4.00",
+      "count": 2,
+      "price": 4.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823300",
+    "offerId": 207109,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823300,
+    "segmentDescription": "AH Borrel kleintjes",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 3.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207109_AH_NL_WK45_AH_BORREL_KLEINTJES?rendition=200px&fileType=binary&version=xuTxITQJHW4nZPHO607AFA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207109_AH_NL_WK45_AH_BORREL_KLEINTJES?rendition=708px&fileType=binary&version=xuTxITQJHW4nZPHO607AFA"
+     }
+    ],
+    "category": "Borrel, chips, snacks",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 3.00",
+      "count": 3,
+      "price": 3.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

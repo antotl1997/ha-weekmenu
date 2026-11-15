@@ -1,0 +1,1429 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 12,
+  "totalPages": 1,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 611646,
+   "hqId": 67853,
+   "title": "AH Peterselie",
+   "salesUnitSize": "45 g",
+   "unitPriceDescription": "prijs per kg €28.67",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6251503350555279524b7532625a317541576f415467?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6251503350555279524b7532625a317541576f415467?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6251503350555279524b7532625a317541576f415467?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6251503350555279524b7532625a317541576f415467?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6251503350555279524b7532625a317541576f415467?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Verse kruiden",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 2,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 238971,
+   "hqId": 831603,
+   "title": "AH Platte peterselie",
+   "salesUnitSize": "15 g",
+   "unitPriceDescription": "prijs per kg €86.00",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_7839664259395a5f52552d4b58384b41496e614d5151?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_7839664259395a5f52552d4b58384b41496e614d5151?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_7839664259395a5f52552d4b58384b41496e614d5151?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_7839664259395a5f52552d4b58384b41496e614d5151?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_7839664259395a5f52552d4b58384b41496e614d5151?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Verse kruiden",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Deze AH platte peterselie met frisse, groene smaak is een echte smaakmaker in allerhande gerechten zoals soepen, sauzen en pastagerechten.</p><p><ul><li>Voeg het kruid vlak voor het opdienen toe aan het gerecht</li></ul></p>",
+   "propertyIcons": [
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> Er zijn verschillende soorten, namelijk krulpeterselie en platte peterselie. Platte peterselie heeft gladde bladeren.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 4,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 611647,
+   "hqId": 67854,
+   "title": "AH Platte peterselie grootverpakking",
+   "salesUnitSize": "50 g",
+   "unitPriceDescription": "prijs per kg €29.80",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5f444972363362523936314e625f46745a74544451?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5f444972363362523936314e625f46745a74544451?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5f444972363362523936314e625f46745a74544451?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5f444972363362523936314e625f46745a74544451?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5f444972363362523936314e625f46745a74544451?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Verse kruiden",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 2,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 136373,
+   "hqId": 603464,
+   "title": "AH Wokgarnalen met knoflook en peterselie",
+   "salesUnitSize": "400 g",
+   "unitPriceDescription": "prijs per kg €17.23",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6163425644736c4b536f47642d41483679704f484751?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6163425644736c4b536f47642d41483679704f484751?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6163425644736c4b536f47642d41483679704f484751?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6163425644736c4b536f47642d41483679704f484751?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6163425644736c4b536f47642d41483679704f484751?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 6.89,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Garnalen (diepvries)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Rauwe & gepelde wokgarnalen met knoflookmarinade.</p><p><ul><li>Vers ingevroren</li><li>Na vangst direct gemarineerd en ingevroren</li></ul></p>",
+   "propertyIcons": [
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 216611,
+   "hqId": 844292,
+   "title": "Verstegen Peterselie",
+   "salesUnitSize": "8 g",
+   "unitPriceDescription": "prijs per kg €311.25",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6943534631567a3053724f694c423538434f4b725277?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6943534631567a3053724f694c423538434f4b725277?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6943534631567a3053724f694c423538434f4b725277?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6943534631567a3053724f694c423538434f4b725277?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6943534631567a3053724f694c423538434f4b725277?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Peterselie en selderij",
+   "brand": "Verstegen",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Peterselie is een smaakvol en fris kruid. Om deze frisheid te behouden kun je peterselie het beste na bereiding toevoegen.</p><p><ul><li>De smaak is fris en kruidig</li><li>Karakteristieke smaak</li><li>Mooie tafelstrooier met handig alfabet design</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 570447,
+   "hqId": 10593,
+   "title": "Verstegen Peterselie",
+   "salesUnitSize": "25 g",
+   "unitPriceDescription": "prijs per kg €179.60",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_7a775941346531685272324f3145616f4c714b483741?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_7a775941346531685272324f3145616f4c714b483741?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_7a775941346531685272324f3145616f4c714b483741?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_7a775941346531685272324f3145616f4c714b483741?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_7a775941346531685272324f3145616f4c714b483741?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 4.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Peterselie en selderij",
+   "brand": "Verstegen",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Peterselie is een smaakvol en fris kruid en heeft een verfijnde, hartige smaak. Om deze frisheid te behouden kun je peterselie het beste na de bereiding toevoegen.</p><p><ul><li>Lekker in soepen, dressings, sauzen, salades en kruidenboter</li><li>Ook geschikt om als garnering te gebruiken over diverse gerechten</li><li>Handige grote voorraadverpakking</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Lekker eten begint bij de juiste smaak. En wij geloven erin dat kruiden en specerijen het fundament van de juiste smaak zijn. Als sinds het ontstaan van ons familiebedrijf in 1886 reizen we de hele wereld over om de allerbeste kruiden en specerijen in huis te halen. Dit doen we door samen te werken met lokale boeren uit de landen van oorsprong. Vanaf het land van oorsprong hebben we alles in eigen hand: van transport, tot zelf malen en zelf verwerken in onze fabriek in rotterdam. Hiermee leveren we de allerbeste kwaliteit zodat jij de lekkerste gerechten kunt maken. Bewaar je kruiden en specerijen bij voorkeur op een koele en donkere plaats om de smaak en versheid het beste te behouden. </p><p>Eet smakelijk!</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 386200,
+   "hqId": 844291,
+   "title": "Verstegen Selderijblad",
+   "salesUnitSize": "14 g",
+   "unitPriceDescription": "prijs per kg €199.29",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_796e66627168444a52372d794a50514f4d5a70545967?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_796e66627168444a52372d794a50514f4d5a70545967?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_796e66627168444a52372d794a50514f4d5a70545967?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_796e66627168444a52372d794a50514f4d5a70545967?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_796e66627168444a52372d794a50514f4d5a70545967?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.79,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Peterselie en selderij",
+   "brand": "Verstegen",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Selderijblad is het blad van de selderijplant dat groen van kleur is en een zoet- bittere smaak heeft. Qua smaak lijkt selderij op nootmuskaat en peterselie.</p><p><ul><li>Aromatische kruid met een zoet-pittige smaak</li><li>Kan heel goed verse selderie vervangen</li><li>Mooie tafelstrooier met handig alfabet design</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 223825,
+   "hqId": 816950,
+   "title": "Verstegen Selderijzout",
+   "salesUnitSize": "94 g",
+   "unitPriceDescription": "prijs per kg €31.81",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_56704a4e39617666545f364c3177374939426b714751?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_56704a4e39617666545f364c3177374939426b714751?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_56704a4e39617666545f364c3177374939426b714751?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_56704a4e39617666545f364c3177374939426b714751?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_56704a4e39617666545f364c3177374939426b714751?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Peterselie en selderij",
+   "brand": "Verstegen",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Selderiezout is een smaakvolle mix van gemalen selderij en zout</p><p><ul><li>Toepasbaar als smaakvol alternatief van keukenzout</li><li>Mooie tafelstrooier met handig alfabet design</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "E",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> Heerlijke kruiden &amp; specerijen  </p>\n  <p>Lekker eten begint bij de juiste smaak. Met de kruiden en specerijen van Verstegen is elk gerecht een succes. Sinds het ontstaan van ons familiebedrijf in 1886 reizen we de hele wereld over om uitstekende kruiden en specerijen in huis te halen. En dit proeft u als u deze in uw gerechten gebruikt. Eet smakelijk!</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 197308,
+   "hqId": 580189,
+   "title": "AH Biologisch Peterselie pot",
+   "salesUnitSize": "per stuk",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6e623655517a56445173433747415f4c2d7a73447a51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6e623655517a56445173433747415f4c2d7a73447a51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6e623655517a56445173433747415f4c2d7a73447a51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6e623655517a56445173433747415f4c2d7a73447a51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6e623655517a56445173433747415f4c2d7a73447a51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": null,
+   "priceBeforeBonus": 1.99,
+   "orderAvailabilityStatus": "NO_LONGER_IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Verse kruiden",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Smaak: Peterselie heeft een frisse, groene smaak</li><li>Bewaren: Buiten de koelkast op een koele plek. De potvariant om de dag water geven. De variant in het bakje in de koelkast bewaren</li><li>Bereiden: Verwijder de takjes. Voeg het kruid vlak voor het opdienen toe aan het gerecht. Peterselie wordt veelal gebruikt in soepen en sauzen</li></ul></p>",
+   "propertyIcons": [
+    "biologisch"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "<p> Neem het ervan en geniet van het lekkerste dat de natuur te bieden heeft. Van onze biologische producten kun je met een goed gevoel genieten dankzij de aandacht en inspanning van de boeren en producenten die ze voor ons maken. Natuurlijk worden al onze biologische producten onafhankelijk gecontroleerd en daarom verdienen ze het Europese keurmerk. Biologisch van Albert Heijn: dat smaakt naar meer!  </p>\n  <p>Peterselie is het meest gebruikte keukenkruid. Er zijn verschillende soorten, namelijk krulpeterselie en platte peterselie. In de kruidenpot wordt gebruik gemaakt van krulpeterselie. Deze heeft diep ingesneden, gekroesde bladeren. Platte peterselie heeft daarentegen gladde bladeren.</p>",
+   "isOrderable": false,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 2,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 622838,
+   "hqId": 0,
+   "title": "AH Krokante zalmstick citron peterselie 2pk",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_674d4d4a3358594354682d767364686f39497a4a4467?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_674d4d4a3358594354682d767364686f39497a4a4467?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_674d4d4a3358594354682d767364686f39497a4a4467?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_674d4d4a3358594354682d767364686f39497a4a4467?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_674d4d4a3358594354682d767364686f39497a4a4467?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": "AH",
+   "segmentType": null,
+   "promotionType": "PERPETUAL",
+   "bonusMechanism": "3% volume voordeel",
+   "currentPrice": null,
+   "priceBeforeBonus": null,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Gepaneerde vis (vers)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Krokante zalmsticks citroen peterselie 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": true,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PERPETUAL",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "3% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 3,
+     "unit": null,
+     "precisePercentage": 3
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 622839,
+   "hqId": 0,
+   "title": "AH Krokante zalmstick citron peterselie 3pk",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4c5550544f7544545239656359494751725679476b51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4c5550544f7544545239656359494751725679476b51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4c5550544f7544545239656359494751725679476b51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4c5550544f7544545239656359494751725679476b51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4c5550544f7544545239656359494751725679476b51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": "AH",
+   "segmentType": null,
+   "promotionType": "PERPETUAL",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": null,
+   "priceBeforeBonus": null,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Gepaneerde vis (vers)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Krokante zalmsticks citroen peterselie 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": true,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PERPETUAL",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 622840,
+   "hqId": 0,
+   "title": "AH Krokante zalmstick citron peterselie 4pk",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_32766e373256467351396d4f6746665a646777543577?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_32766e373256467351396d4f6746665a646777543577?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_32766e373256467351396d4f6746665a646777543577?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_32766e373256467351396d4f6746665a646777543577?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_32766e373256467351396d4f6746665a646777543577?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": "AH",
+   "segmentType": null,
+   "promotionType": "PERPETUAL",
+   "bonusMechanism": "10% volume voordeel",
+   "currentPrice": null,
+   "priceBeforeBonus": null,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Gepaneerde vis (vers)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Krokante zalmsticks citroen peterselie 4x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": true,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PERPETUAL",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "10% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=verse%20peterselie&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=verse%20peterselie&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": null,
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=verse%20peterselie&sortBy=RELEVANCE&page=0&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "AH Biologisch",
+     "label": "AH Biologisch",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Verstegen",
+     "label": "Verstegen",
+     "count": 4,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "6360",
+     "label": "Diepvries vis",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "5887",
+     "label": "Diepvries vlees, vis",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "2599",
+     "label": "Garnalen",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "2598",
+     "label": "Garnalen (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "10209",
+     "label": "Gedroogde kruiden",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "2601",
+     "label": "Gepaneerde vis",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "1097",
+     "label": "Gepaneerde vis (vers)",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "20447",
+     "label": "Kruiden, specerijen, garnering",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "5796",
+     "label": "Peterselie en selderij",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "1492",
+     "label": "Schaal- en schelpdieren",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "6381",
+     "label": "Schelpdieren (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "5800",
+     "label": "Verse kruiden",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "1628",
+     "label": "Verse kruiden, gember, pepers",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "6539",
+     "label": "Verse vis",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 9,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 4,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "a",
+     "label": "Score A",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "b",
+     "label": "Score B",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "e",
+     "label": "Score E",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "diepvries",
+   "allLabel": null,
+   "label": "Diepvries",
+   "options": [
+    {
+     "id": "diepvries",
+     "label": "Diepvries",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_biologisch",
+   "allLabel": null,
+   "label": "Biologisch",
+   "options": [
+    {
+     "id": "np_biologisch",
+     "label": "Biologisch",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_veganistisch",
+   "allLabel": null,
+   "label": "Veganistisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 4,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_vegetarisch",
+   "allLabel": null,
+   "label": "Vegetarisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 4,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

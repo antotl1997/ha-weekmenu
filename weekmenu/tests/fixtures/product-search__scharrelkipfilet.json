@@ -1,0 +1,2308 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 150,
+  "totalPages": 8,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 598476,
+   "hqId": 0,
+   "title": "AH Scharrel flinterdunne kipfilet 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_49643274344f43315450697a37396b6f617a72694e51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_49643274344f43315450697a37396b6f617a72694e51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_49643274344f43315450697a37396b6f617a72694e51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_49643274344f43315450697a37396b6f617a72694e51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_49643274344f43315450697a37396b6f617a72694e51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "3% volume voordeel",
+   "currentPrice": 6.58,
+   "priceBeforeBonus": 6.78,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vleeswaren",
+   "subCategory": "Kipfilet en kalkoenfilet (versafdeling)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>AH Scharrel flinterdunne kipfilet 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 440358,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "3% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 3,
+     "unit": null,
+     "precisePercentage": 3
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 617871,
+   "hqId": 0,
+   "title": "AH Scharrel flinterdunne kipfilet 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_41705f63446b494d53783666415743566c555f506341?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_41705f63446b494d53783666415743566c555f506341?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_41705f63446b494d53783666415743566c555f506341?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_41705f63446b494d53783666415743566c555f506341?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_41705f63446b494d53783666415743566c555f506341?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 9.66,
+   "priceBeforeBonus": 10.17,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vleeswaren",
+   "subCategory": "Kipfilet en kalkoenfilet (versafdeling)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel flinterdunne kipfilet 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 440358,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 577858,
+   "hqId": 0,
+   "title": "AH Scharrel gebraden kipflakes kebab 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_784c4750436a5a45544c475273443054383462673977?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_784c4750436a5a45544c475273443054383462673977?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_784c4750436a5a45544c475273443054383462673977?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_784c4750436a5a45544c475273443054383462673977?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_784c4750436a5a45544c475273443054383462673977?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "2% volume voordeel",
+   "currentPrice": 11.73,
+   "priceBeforeBonus": 11.97,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Gebraden kip",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>AH Scharrel gebraden kipflakes kebab 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 477885,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "2% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 2,
+     "unit": null,
+     "precisePercentage": 2
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 543332,
+   "hqId": 697661,
+   "title": "AH Scharrel kipfilet naturel",
+   "salesUnitSize": "150 g",
+   "unitPriceDescription": "prijs per kg €17.27",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393132353833?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393132353833?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393132353833?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393132353833?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239393132353833?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.59,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vleeswaren",
+   "subCategory": "Kipfilet en kalkoenfilet (voorverpakt)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "C",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 7,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 505441,
+   "hqId": 846281,
+   "title": "AH Scharrel kipfilet",
+   "salesUnitSize": "ca. 180 g",
+   "unitPriceDescription": "prijs per kg €27.19",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135383138?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135383138?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135383138?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135383138?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135383138?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 4.89,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vleeswaren",
+   "subCategory": "Kipfilet en kalkoenfilet (versafdeling)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 6,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 533080,
+   "hqId": 683624,
+   "title": "AH Scharrel kipfilet blokjes",
+   "salesUnitSize": "300 g",
+   "unitPriceDescription": "prijs per kg €18.30",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_35587261697078345171655a474a7838626978597a41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_35587261697078345171655a474a7838626978597a41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_35587261697078345171655a474a7838626978597a41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_35587261697078345171655a474a7838626978597a41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_35587261697078345171655a474a7838626978597a41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 5.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Kipfiletblokjes en kipfiletreepjes",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 2,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 619730,
+   "hqId": 0,
+   "title": "AH Scharrel krokante kipfiletschnitzel 4-pk",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_597876515161496851324b5a48395a59536a346a6a41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_597876515161496851324b5a48395a59536a346a6a41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_597876515161496851324b5a48395a59536a346a6a41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_597876515161496851324b5a48395a59536a346a6a41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_597876515161496851324b5a48395a59536a346a6a41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": null,
+   "currentPrice": 10.0,
+   "priceBeforeBonus": 12.76,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Schnitzel (kip)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel krokante kipfiletschnitzel 4x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 531875,
+     "quantity": 4
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "PRODUCT_DISCOUNT_BUNDLE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE",
+     "defaultDescription": "pakketkorting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 619702,
+   "hqId": 0,
+   "title": "AH Scharrel kipfilet plakjes gerookt 5-pack",
+   "salesUnitSize": "5 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4d4e533945326f465465655374565449574b69503277?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4d4e533945326f465465655374565449574b69503277?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4d4e533945326f465465655374565449574b69503277?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4d4e533945326f465465655374565449574b69503277?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4d4e533945326f465465655374565449574b69503277?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "4% volume voordeel",
+   "currentPrice": 17.71,
+   "priceBeforeBonus": 18.45,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Gerookte kip",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel kipfilet plakjes gerookt 5x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 531864,
+     "quantity": 5
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "4% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 4,
+     "unit": null,
+     "precisePercentage": 4
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 619705,
+   "hqId": 0,
+   "title": "AH Scharrel kipfilet stukjes roerbak 4-pack",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3758424b4147345232325068386667414a51446351?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3758424b4147345232325068386667414a51446351?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3758424b4147345232325068386667414a51446351?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3758424b4147345232325068386667414a51446351?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6b3758424b4147345232325068386667414a51446351?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "3% volume voordeel",
+   "currentPrice": 21.3,
+   "priceBeforeBonus": 21.96,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Kipfiletblokjes en kipfiletreepjes",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel kipfilet stukjes roerbak 4x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 531827,
+     "quantity": 4
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "3% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 3,
+     "unit": null,
+     "precisePercentage": 3
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 619707,
+   "hqId": 0,
+   "title": "AH Scharrel kipfilet stukjes roerbak 6-pack",
+   "salesUnitSize": "6 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5658705a43324f544c753534514d5a6565506f4d51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5658705a43324f544c753534514d5a6565506f4d51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5658705a43324f544c753534514d5a6565506f4d51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5658705a43324f544c753534514d5a6565506f4d51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_5f5658705a43324f544c753534514d5a6565506f4d51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 31.29,
+   "priceBeforeBonus": 32.94,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Kipfiletblokjes en kipfiletreepjes",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel kipfilet stukjes roerbak 6x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 531827,
+     "quantity": 6
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 619789,
+   "hqId": 0,
+   "title": "AH Scharrel gerookte kipfiletflakes 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_454d444259656474524f4363704f585f4b4334454e77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_454d444259656474524f4363704f585f4b4334454e77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_454d444259656474524f4363704f585f4b4334454e77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_454d444259656474524f4363704f585f4b4334454e77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_454d444259656474524f4363704f585f4b4334454e77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "2% volume voordeel",
+   "currentPrice": 10.85,
+   "priceBeforeBonus": 11.07,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Gerookte kip",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel gerookte kipfiletflakes 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 531893,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "2% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 2,
+     "unit": null,
+     "precisePercentage": 2
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 619717,
+   "hqId": 0,
+   "title": "AH Scharrel kipfiletreepjes gerookt 5-pack",
+   "salesUnitSize": "5 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_69434c754268784a5142694a664d4946675f756e3751?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_69434c754268784a5142694a664d4946675f756e3751?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_69434c754268784a5142694a664d4946675f756e3751?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_69434c754268784a5142694a664d4946675f756e3751?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_69434c754268784a5142694a664d4946675f756e3751?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "4% volume voordeel",
+   "currentPrice": 26.35,
+   "priceBeforeBonus": 27.45,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Gerookte kip - reepjes",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel kipfiletreepjes gerookt 5x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 531865,
+     "quantity": 5
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "4% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 4,
+     "unit": null,
+     "precisePercentage": 4
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 619727,
+   "hqId": 0,
+   "title": "AH Scharrel krokante kipfilethaasjes 4-pack",
+   "salesUnitSize": "4 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_486b434d5979306c524e324870747a626f5267654f77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_486b434d5979306c524e324870747a626f5267654f77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_486b434d5979306c524e324870747a626f5267654f77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_486b434d5979306c524e324870747a626f5267654f77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_486b434d5979306c524e324870747a626f5267654f77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "8% volume voordeel",
+   "currentPrice": 20.2,
+   "priceBeforeBonus": 21.96,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Kipfiletblokjes en kipfiletreepjes",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel krokante kipfilethaasjes 4x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 531830,
+     "quantity": 4
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "8% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 8,
+     "unit": null,
+     "precisePercentage": 8
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 533079,
+   "hqId": 59574,
+   "title": "AH Scharrel kipfilet 3 stuks",
+   "salesUnitSize": "600 g",
+   "unitPriceDescription": "prijs per kg €13.82",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_45355747732d626b523569356962507735794f683241?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_45355747732d626b523569356962507735794f683241?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_45355747732d626b523569356962507735794f683241?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_45355747732d626b523569356962507735794f683241?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_45355747732d626b523569356962507735794f683241?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 8.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Kipfilet",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": true,
+   "descriptionHighlights": "<p><ul><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 2,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 533083,
+   "hqId": 805391,
+   "title": "AH Scharrel kipfilet 2 stuks",
+   "salesUnitSize": "300 g",
+   "unitPriceDescription": "normale prijs per kg €14.97",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_416f5f7578504c4b52564355452d336549756e445151?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_416f5f7578504c4b52564355452d336549756e445151?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_416f5f7578504c4b52564355452d336549756e445151?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_416f5f7578504c4b52564355452d336549756e445151?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_416f5f7578504c4b52564355452d336549756e445151?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-10-26",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "VOOR 3.99",
+   "currentPrice": null,
+   "priceBeforeBonus": 4.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Kipfilet",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": true,
+   "descriptionHighlights": "<p><ul><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje",
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 816399,
+   "bonusSegmentDescription": "AH Scharrelkipfilet 2 stuks of scharrelkipfilethaasjes 300 gram",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 2,
+   "multipleItemPromotion": true,
+   "labelType": null,
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_FIXED_PRICE",
+     "defaultDescription": "voor 3.99",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": 3.99,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 2,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 618819,
+   "hqId": 0,
+   "title": "AH Scharrel gebraden kipfilet caesar 5-pack",
+   "salesUnitSize": "5 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_304d4a5547615863517732686b564451334177496867?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_304d4a5547615863517732686b564451334177496867?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_304d4a5547615863517732686b564451334177496867?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_304d4a5547615863517732686b564451334177496867?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_304d4a5547615863517732686b564451334177496867?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "4% volume voordeel",
+   "currentPrice": 18.19,
+   "priceBeforeBonus": 18.95,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Gebraden kip",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel gebraden kipfilet caesar 5x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 477571,
+     "quantity": 5
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "4% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 4,
+     "unit": null,
+     "precisePercentage": 4
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 620072,
+   "hqId": 0,
+   "title": "AH Scharrel kipfilet kleinverpakking 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4c46376f64684e6b51722d323942384a6b7a42434c67?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4c46376f64684e6b51722d323942384a6b7a42434c67?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4c46376f64684e6b51722d323942384a6b7a42434c67?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4c46376f64684e6b51722d323942384a6b7a42434c67?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4c46376f64684e6b51722d323942384a6b7a42434c67?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "3% volume voordeel",
+   "currentPrice": 4.44,
+   "priceBeforeBonus": 4.58,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vleeswaren",
+   "subCategory": "Kipfilet en kalkoenfilet (versafdeling)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel kipfilet kleinverpakking 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 558553,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "3% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 3,
+     "unit": null,
+     "precisePercentage": 3
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 620073,
+   "hqId": 0,
+   "title": "AH Scharrel kipfilet kleinverpakking 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_3372567732543653525f534d61415753795857775367?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_3372567732543653525f534d61415753795857775367?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_3372567732543653525f534d61415753795857775367?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_3372567732543653525f534d61415753795857775367?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_3372567732543653525f534d61415753795857775367?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "5% volume voordeel",
+   "currentPrice": 6.53,
+   "priceBeforeBonus": 6.87,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vleeswaren",
+   "subCategory": "Kipfilet en kalkoenfilet (versafdeling)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel kipfilet kleinverpakking 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 558553,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "5% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 5,
+     "unit": null,
+     "precisePercentage": 5
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 598040,
+   "hqId": 0,
+   "title": "AH Scharrel kipfilet bieslook 2-pack",
+   "salesUnitSize": "2 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_5a6f67696e47586d5348572d53537447794564476867?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_5a6f67696e47586d5348572d53537447794564476867?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_5a6f67696e47586d5348572d53537447794564476867?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_5a6f67696e47586d5348572d53537447794564476867?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_5a6f67696e47586d5348572d53537447794564476867?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "3% volume voordeel",
+   "currentPrice": 7.16,
+   "priceBeforeBonus": 7.38,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vleeswaren",
+   "subCategory": "Kipfilet en kalkoenfilet (versafdeling)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>AH Scharrel kipfilet bieslook 2x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 192850,
+     "quantity": 2
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "3% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 3,
+     "unit": null,
+     "precisePercentage": 3
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 617873,
+   "hqId": 0,
+   "title": "AH Scharrel kipfilet blokjes 3-pack",
+   "salesUnitSize": "3 stuks",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_7a4d665f57355f6253366d374872594773576f363577?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_7a4d665f57355f6253366d374872594773576f363577?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_7a4d665f57355f6253366d374872594773576f363577?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_7a4d665f57355f6253366d374872594773576f363577?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_7a4d665f57355f6253366d374872594773576f363577?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-01",
+   "bonusEndDate": "2999-12-31",
+   "discountType": "AHOO",
+   "segmentType": "AHOO",
+   "promotionType": "AHONLINE",
+   "bonusMechanism": "2% volume voordeel",
+   "currentPrice": 11.14,
+   "priceBeforeBonus": 11.37,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vlees",
+   "subCategory": "Kipfiletblokjes en kipfiletreepjes",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Scharrel kipfilet blokjes 3x</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": "",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Dit pakket wordt als losse artikelen geleverd.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": true,
+   "virtualBundleItems": [
+    {
+     "productId": 451141,
+     "quantity": 3
+    }
+   ],
+   "productCount": null,
+   "multipleItemPromotion": false,
+   "labelType": "ONLINE",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_BUNDLE_BULK",
+     "defaultDescription": "2% volume voordeel",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 2,
+     "unit": null,
+     "precisePercentage": 2
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=scharrelkipfilet&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=scharrelkipfilet&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=scharrelkipfilet&sortBy=RELEVANCE&page=1&size=20"
+  },
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=scharrelkipfilet&sortBy=RELEVANCE&page=7&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 150,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "20873",
+     "label": "Gebraden kip",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "21008",
+     "label": "Gerookte kip",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "5506",
+     "label": "Gerookte kip - reepjes",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "5505",
+     "label": "Gerookte, gebraden kip",
+     "count": 26,
+     "display": true
+    },
+    {
+     "id": "44129",
+     "label": "Kerst vlees en kip",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "1226",
+     "label": "Kip en gevogelte",
+     "count": 111,
+     "display": true
+    },
+    {
+     "id": "7146",
+     "label": "Kip- burger, schnitzel, cordon bleu",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "6334",
+     "label": "Kipburger",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "5502",
+     "label": "Kipdijfilet",
+     "count": 3,
+     "display": true
+    },
+    {
+     "id": "1231",
+     "label": "Kipfilet",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "19917",
+     "label": "Kipfilet en kalkoenfilet (versafdeling)",
+     "count": 28,
+     "display": true
+    },
+    {
+     "id": "19948",
+     "label": "Kipfilet en kalkoenfilet (voorverpakt)",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "5501",
+     "label": "Kipfilet en kipdijfilet",
+     "count": 93,
+     "display": true
+    },
+    {
+     "id": "5503",
+     "label": "Kipfiletblokjes en kipfiletreepjes",
+     "count": 55,
+     "display": true
+    },
+    {
+     "id": "44862",
+     "label": "Luxe kip en gevogelte",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "44866",
+     "label": "Luxe kip en gevogelte vers",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "44150",
+     "label": "Luxe vlees",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "20872",
+     "label": "Ovenschotel kip",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "12279",
+     "label": "Ovenschotel vlees, kip",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "1238",
+     "label": "Schnitzel (kip)",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "19914",
+     "label": "Vleeswaren vers",
+     "count": 28,
+     "display": true
+    },
+    {
+     "id": "19945",
+     "label": "Vleeswaren voorverpakt",
+     "count": 11,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 64,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 55,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 61,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 65,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 61,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 61,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 63,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 63,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 65,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 65,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 65,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 63,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 65,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 65,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 45,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 33,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 21,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "a",
+     "label": "Score A",
+     "count": 29,
+     "display": true
+    },
+    {
+     "id": "b",
+     "label": "Score B",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "c",
+     "label": "Score C",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "d",
+     "label": "Score D",
+     "count": 5,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 83,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "previouslyBought",
+   "allLabel": null,
+   "label": "Eerder gekocht",
+   "options": [
+    {
+     "id": "previouslyBought",
+     "label": "Eerder gekocht",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "PREVIOUSLY_BOUGHT",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_nieuw",
+   "allLabel": null,
+   "label": "Nieuw",
+   "options": [
+    {
+     "id": "np_nieuw",
+     "label": "Nieuw",
+     "count": 3,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

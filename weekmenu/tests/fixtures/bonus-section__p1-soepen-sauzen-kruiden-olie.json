@@ -1,0 +1,250 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Soepen, sauzen, kruiden, olie",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "823490",
+    "offerId": 207304,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823490,
+    "segmentDescription": "Unox soep in zak romige of Chinese tomatensoep 570 ml",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 1.49",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_39485230533679415355573975576a6b4d43644c2d41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_39485230533679415355573975576a6b4d43644c2d41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_39485230533679415355573975576a6b4d43644c2d41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_39485230533679415355573975576a6b4d43644c2d41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_39485230533679415355573975576a6b4d43644c2d41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Soepen, sauzen, kruiden, olie",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 1.49",
+      "price": 1.49
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817979",
+    "offerId": 201771,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817979,
+    "segmentDescription": "Alle Remia",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_39413271534176355261615a764f45683664516b4c77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_39413271534176355261615a764f45683664516b4c77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_39413271534176355261615a764f45683664516b4c77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_39413271534176355261615a764f45683664516b4c77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_39413271534176355261615a764f45683664516b4c77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Soepen, sauzen, kruiden, olie",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817992",
+    "offerId": 201784,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817992,
+    "segmentDescription": "Alle Samyang",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201784_AH_NL_WK45_ALLE_SAMYANG?rendition=200px&fileType=binary&version=JdlkAmms4BhFNFYMBbODAg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201784_AH_NL_WK45_ALLE_SAMYANG?rendition=708px&fileType=binary&version=JdlkAmms4BhFNFYMBbODAg"
+     }
+    ],
+    "category": "Soepen, sauzen, kruiden, olie",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817921",
+    "offerId": 201713,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817921,
+    "segmentDescription": "Alle Carapelli olijfolie",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_633355637a75775954446938335a2d78525f68505767?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_633355637a75775954446938335a2d78525f68505767?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_633355637a75775954446938335a2d78525f68505767?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_633355637a75775954446938335a2d78525f68505767?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_633355637a75775954446938335a2d78525f68505767?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Soepen, sauzen, kruiden, olie",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

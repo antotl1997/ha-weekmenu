@@ -1,0 +1,1818 @@
+"""Ingress page and JSON API on port 8099.
+
+Ingress puts `/api/hassio_ingress/<token>/` in front of every path, so the page
+must use relative paths (`api/week`, not `/api/week`). Every call that may write
+to AH, or refresh the AH tokens, runs under `ctx.lock`.
+
+Never in a response or in the log: the login code, a token, an Authorization header.
+
+`api/health` (the Supervisor watchdog) takes no lock and calls nothing. The watchdog
+comes from the Supervisor, which is also the ingress proxy (172.30.32.2), so the same
+allowlist lets it through; no other address is needed.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import html
+import logging
+import re
+from collections.abc import Iterable
+from dataclasses import asdict
+from datetime import date, timedelta
+from pathlib import Path
+from urllib.parse import urlsplit
+
+import httpx
+from aiohttp import web
+
+from app import catalog, importer, main, staples
+from app.ahclient import LOGIN_URL, AhApiError, AhLoginExpired, Product, extract_code
+from app.hass import (
+    BUSY,
+    HELPER_AAN,
+    HELPER_AVONDEN,
+    eat_count,
+    format_message,
+    helper_persons,
+    load_total,
+    plan_view,
+    unsure,
+)
+from app.ingredients import KINDS, PRODUCT, override_key
+from app.ledger import leftovers, new_folder_available
+from app.overrides import make_entry
+from app.taste import KINDS as TASTE_KINDS
+from app.reconcile import metrics as savings_metrics
+from app.planner import Dish, Plan, empty_plan, pick_dish, rebuild_plan
+from app.recipes import LocalFirst, OwnRecipe, is_own
+from app.deals import qty_for_deal, savings as deal_savings
+from app.diag import diagnose
+from app.durable import UPDATE_MESSAGE, SchemaTooNew
+from app.health import PAUSED_NOTE
+from app.staples import extras_savings, staple_list
+from app.week import (
+    WEEKDAGEN,
+    away_dates,
+    bestelling_zin,
+    eat_days,
+    menu_week_start,
+)
+from app.writer import (OFFER, apply, apply_extras, destination, held_note, manual_note,
+                        missing)
+
+log = logging.getLogger("weekmenu.web")
+
+STATIC_DIR = Path(__file__).parent / "static"
+# the user guide: weekmenu/GIDS.md here, /GIDS.md in the image (see Dockerfile)
+GUIDE_PATH = Path(__file__).resolve().parent.parent / "GIDS.md"
+_ASSET = r"{name:[A-Za-z0-9_-][A-Za-z0-9_.-]*\.(?:css|js|png|svg|ico|jpg|webp|json|webmanifest)}"
+MIN_PERSONS, MAX_PERSONS = 1, 8
+MAX_FOUND = 200  # products kept from "Ander product" searches (a choice is one of these)
+MAX_PERSONS_LEFTOVERS = 2 * MAX_PERSONS  # a dish that also feeds a leftover night
+# v1.0: Terugdraaien took the choice back, but choosing again failed halfway
+REPICK_FAILED = ("Je keuze is weg, maar het menu is nog niet aangepast. "
+                 "Tik op Ander gerecht of Menu bijwerken.")
+# v1.1: the week filled by hand as a draft, then confirmed once
+NOT_HOME = "Op deze avond eten jullie niet thuis"
+LEFTOVER_NIGHT = "Op deze avond eten jullie restjes"
+NO_COOKING = "Op deze avond staat geen kookmoment"
+PAST_EVENING = "Deze avond is al geweest"
+HA_UNREADABLE = "Home Assistant is nu niet te lezen; probeer het zo opnieuw"
+OWN_GONE = "Dit eigen recept bestaat niet meer; kies een ander gerecht"
+AH_GONE = "Dit recept bestaat niet meer bij AH; kies een ander gerecht"
+SEARCH_LOGIN = "Log eerst in bij AH om daar te zoeken"
+SEARCH_FAILED = "Zoeken bij AH lukte nu niet. Probeer het zo nog eens."
+NO_DRAFT = "Kies eerst voor minstens een avond een gerecht"
+CONFIRMED = "Dit menu is al bevestigd"
+RECIPE_NAME = "Geef het recept een naam"
+RECIPE_SERVINGS = "Aantal personen moet tussen 1 en 20 liggen"
+RECIPE_INGREDIENTS = "Zet er minstens één ingrediënt in"
+RECIPE_GONE = "Dit recept bestaat niet (meer)"
+MAX_RECIPE_SERVINGS = 20
+DRAFT_TARGET_TTL = 300  # seconds an answer to "order or list?" for a draft is kept
+MAX_LINES = 100  # ingredient or step lines kept of one own recipe
+MAX_TEXT = 500  # characters kept of one title or line
+MAX_LINK = 2000  # characters in a link (the recipe page, its photo)
+PARSE_LIMIT = 20  # seconds to read a recipe out of a fetched page; also the wait for a turn
+IMPORT_BUSY = "Er loopt nog een import; probeer het zo nog eens"
+
+FALLBACK_HTML = """<!doctype html>
+<html lang="nl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekmenu</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#f4f1ec;margin:0;padding:24px;color:#222}
+main{max-width:480px;margin:0 auto;background:#fff;border-radius:16px;padding:20px}
+textarea{width:100%;box-sizing:border-box;min-height:90px;font:inherit}
+button{background:#2f6b3a;color:#fff;border:0;border-radius:10px;padding:12px 18px;font:inherit}
+</style></head><body><main>
+<h1>Weekmenu AH</h1>
+<p id="status">Status laden…</p>
+<h2>Inloggen bij AH</h2>
+<p>Op een computer:</p>
+<ol>
+<li>Open deze link: <a id="login" target="_blank" rel="noopener">AH-inlogpagina</a>.</li>
+<li>Druk F12 en kies Console.</li>
+<li>Log in.</li>
+<li>Kopieer de regel die begint met <code>appie://login-exit?code=</code></li>
+<li>Plak hem hier (dat kan ook op je telefoon, bijvoorbeeld via WhatsApp naar jezelf).</li>
+</ol>
+<textarea id="code" placeholder="appie://login-exit?code=…"></textarea>
+<p><button id="send">Inloggen</button></p>
+<p id="msg"></p>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+async function status() {
+  const s = await (await fetch("api/status")).json();
+  $("status").textContent = (s.logged_in ? "Ingelogd bij AH." : "Niet ingelogd bij AH.")
+    + (s.last_round ? " Laatste menu: " + s.last_round + "." : "")
+    + (s.error ? " Fout: " + s.error : "");
+  $("login").href = s.login_url;
+}
+$("send").onclick = async () => {
+  $("send").disabled = true;
+  const r = await fetch("api/login", {method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({code: $("code").value})});
+  const b = await r.json();
+  $("code").value = "";
+  $("msg").textContent = r.ok ? "Ingelogd." : (b.error || "Mislukt.");
+  $("send").disabled = false;
+  status();
+};
+status();
+</script></body></html>
+"""
+
+
+GUIDE_HTML = """<!doctype html>
+<html lang="nl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekmenu: de gids</title>
+<style>
+body{font-family:"Segoe UI",Roboto,system-ui,sans-serif;background:#f4f1ec;margin:0;color:#22201c}
+main{max-width:480px;margin:0 auto;padding:22px 20px 40px;line-height:1.55;font-size:15px}
+h1{font-size:24px;margin:0 0 10px}h2{font-size:18px;margin:22px 0 6px}
+ul,ol{padding-left:22px}li{margin:4px 0}
+a{color:#2f6b3a;display:inline-block;min-height:44px;line-height:44px}
+code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:#ebe7e0;border-radius:6px;padding:1px 5px}
+</style></head><body><main>
+<a href="./">Terug naar Weekmenu</a>
+{body}
+</main></body></html>
+"""
+
+
+def _inline(text: str) -> str:
+    """Escaped first; then only **bold** and `code`."""
+    out = html.escape(text, quote=True)
+    out = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", out)
+    return re.sub(r"`(.+?)`", r"<code>\1</code>", out)
+
+
+def markdown_page(md: str) -> str:
+    """The small part of Markdown GIDS.md uses: headings, paragraphs and lists."""
+    parts: list[str] = []
+    para: list[str] = []
+    items: list[str] = []
+    kind = ""
+
+    def flush():
+        nonlocal kind
+        if para:
+            parts.append(f"<p>{_inline(' '.join(para))}</p>")
+            para.clear()
+        if items:
+            parts.append(f"<{kind}>" + "".join(f"<li>{_inline(i)}</li>" for i in items)
+                         + f"</{kind}>")
+            items.clear()
+
+    for line in md.splitlines():
+        line = line.strip()
+        m = re.match(r"^(#{1,3}) (.+)$", line)
+        if not line:
+            flush()
+        elif m:
+            flush()
+            level = len(m.group(1))
+            parts.append(f"<h{level}>{_inline(m.group(2))}</h{level}>")
+        elif re.match(r"^[-*] ", line) or re.match(r"^\d+\. ", line):
+            new = "ul" if line[0] in "-*" else "ol"
+            if para or (items and new != kind):
+                flush()
+            kind = new
+            items.append(re.sub(r"^([-*]|\d+\.) ", "", line))
+        else:
+            if items:
+                flush()
+            para.append(line)
+    flush()
+    return GUIDE_HTML.replace("{body}", "\n".join(parts))
+
+
+# --- views ------------------------------------------------------------------------------
+
+
+def _printable(text, limit: int = 80) -> str:
+    """For a log line: no line breaks or other control characters, and not too long."""
+    out = "".join(c if c.isprintable() else "?" for c in str(text or "?"))
+    return out[:limit] + ("..." if len(out) > limit else "")
+
+
+def _err(status: int, message: str, **extra) -> web.Response:
+    return web.json_response({"error": message, **extra}, status=status)
+
+
+def _recipe_view(d: Dish) -> dict:
+    return {
+        "id": d.recipe.id, "title": d.recipe.title, "image": d.recipe.image,
+        "cook": d.cook, "oven": d.oven, "wait": d.wait, "cuisine": d.cuisine,
+        "url": d.recipe.url, "source": _source_of(d.recipe),
+    }
+
+
+def _source_of(recipe) -> str:
+    """Where the recipe can be read: "ah" (Allerhande), the site an own recipe came
+    from (the host of its link, from the dish's own copy), or "eigen" without a link."""
+    if not is_own(recipe.id):
+        return "ah"
+    host = urlsplit(recipe.url or "").hostname or ""
+    return host.removeprefix("www.") or "eigen"
+
+
+def _title(plan: Plan, pid: int) -> str:
+    p = plan.products.get(pid)
+    return p.title if p else str(pid)
+
+
+def _leftovers(log, plan: Plan) -> list[dict]:
+    return [{"product": _title(plan, p), "qty": n} for p, n in leftovers(log, plan).items()]
+
+
+def _held(wlog, plan: Plan | None, start: date, retry: bool) -> str | None:
+    """The note of a held menu: a promise only for the week the schedule retries."""
+    if not wlog.held or plan is None:
+        return None
+    if retry:  # writes paused: the hourly look completes it once writing is on again
+        return PAUSED_NOTE if wlog.held == PAUSED_NOTE else held_note(start)
+    todo = missing(wlog, plan)
+    return manual_note(_title(plan, p) for p in todo) if todo else None
+
+
+def check_view(wlog, plan: Plan, held: str | None) -> dict:
+    """"Check voor je bestelt": what still needs a look before ordering, by kind.
+
+    ok: nothing at all, the app shows "Alles staat klaar". v1.0: products the menu
+    needs that were never added (writes paused, a write that stopped halfway) count as
+    "nog niet toegevoegd" too, also without a held note, so the card is never green
+    while something is missing.
+    """
+    dishes = sorted(plan.dishes, key=lambda d: d.date)
+    not_found = [{"date": d.date.isoformat(), "dag": WEEKDAGEN[d.date.weekday()],
+                  "title": d.recipe.title, "ingredient": t}
+                 for d in dishes for t in d.not_found]
+    weigh = [{"date": d.date.isoformat(), "dag": WEEKDAGEN[d.date.weekday()],
+              "product": ln.product.title, "ingredient": ln.from_ingredient}
+             for d in dishes for ln in d.lines if ln.check]
+    pending = [_title(plan, p) for p in wlog.pending]
+    unknown = [_title(plan, p) for p in wlog.unknown]
+    left = _leftovers(wlog, plan)
+    todo = [] if held else [{"product": _title(plan, p), "qty": n}
+                            for p, n in missing(wlog, plan).items()]
+    counts = {"not_found": len(not_found), "unsure": len(pending) + len(unknown),
+              "leftovers": len(left), "held": 1 if held else 0, "missing": len(todo),
+              "weigh": len(weigh)}
+    return {"ok": not any(counts.values()), "counts": counts, "not_found": not_found,
+            "weigh": weigh, "pending": pending, "unknown": unknown, "leftovers": left,
+            "held": held, "missing": todo}
+
+
+def week_view(wlog, plan: Plan | None, start: date,
+              away: Iterable[str] = (), retry: bool = True) -> dict:
+    away = set(away)
+    out = {
+        "week": start.isoformat(), "bestelling": bestelling_zin(start),
+        "target": wlog.target, "days": [],
+        "niet_thuis": [d.isoformat() for d in away_dates(start, away)],
+        "geen_avonden": not eat_days(start, away),
+        "savings": 0.0, "products": 0, "bonus_products": 0, "leftovers": [],
+        "not_found": [], "short_by": 0, "pending": [], "unknown": [],
+        "budget_exhausted": False, "period_warning": wlog.period_warning,
+        "extras_savings": wlog.extras_savings, "offers_savings": wlog.offers_savings,
+        "staples_error": wlog.staples_error,
+        # Ruling 42: the menu is saved but waits for an order or list for this week
+        "held": _held(wlog, Plan.from_dict(wlog.plan) if wlog.plan else None, start, retry),
+    }
+    if plan is None:
+        return out
+    by_day = {d.date: d for d in plan.dishes}
+    rest_of = {d.leftover_date: d for d in plan.dishes if d.leftover_date}
+    removed = set(plan.removed_days)
+    out["niet_thuis"] = [i for i in out["niet_thuis"]
+                         if date.fromisoformat(i) not in by_day
+                         and date.fromisoformat(i) not in rest_of
+                         and date.fromisoformat(i) not in removed]
+    for i in range(7):
+        day = date.fromordinal(start.toordinal() + i)
+        dag = WEEKDAGEN[day.weekday()]
+        d = by_day.get(day)
+        if d is not None:
+            out["days"].append({"date": day.isoformat(), "dag": dag,
+                                "niet_thuis": False, "persons": d.persons, "recipe": _recipe_view(d),
+                                "savings": d.savings})
+        elif day in rest_of:  # "<Dag> · restjes van <gerecht>": a tap opens that dish
+            src = rest_of[day]
+            out["days"].append({"date": day.isoformat(), "dag": dag, "niet_thuis": False,
+                                "restjes": True, "persons": 0, "recipe": None,
+                                "restjes_van": {"date": src.date.isoformat(),
+                                                "title": src.recipe.title},
+                                "savings": 0.0})
+        elif day in removed:
+            out["days"].append({"date": day.isoformat(), "dag": dag,
+                                "niet_thuis": False, "geen_gerecht": True, "persons": 0,
+                                "recipe": None, "savings": 0.0})
+        elif dag in away:
+            out["days"].append({"date": day.isoformat(), "dag": dag,
+                                "niet_thuis": True, "persons": 0, "recipe": None,
+                                "savings": 0.0})
+        else:  # an eat day with no dish and no leftovers: "geen kookmoment"
+            out["days"].append({"date": day.isoformat(), "dag": dag, "niet_thuis": False,
+                                "geen_kookmoment": True, "persons": 0, "recipe": None,
+                                "savings": 0.0})
+    out.update(
+        savings=plan.savings,
+        products=len(plan.basket),
+        bonus_products=sum(1 for p in plan.basket if plan.products[p].is_bonus),
+        leftovers=_leftovers(wlog, plan),
+        not_found=list(plan.not_found),
+        short_by=plan.short_by,
+        budget_exhausted=plan.budget_exhausted,
+        pending=[_title(plan, p) for p in wlog.pending],
+        unknown=[_title(plan, p) for p in wlog.unknown],
+    )
+    out["check"] = check_view(wlog, plan, out["held"])
+    return out
+
+
+def draft_week_view(wlog, draft: Plan | None, start: date, away: Iterable[str] = (),
+                    settings=None) -> dict:
+    """v1.1: a week without a confirmed menu, as its draft (or empty). Every cook
+    evening of `settings` (planner.Settings from the helpers; None: HA unreadable)
+    without a dish gets "kies": true. Nothing of a draft is on the AH list or in an
+    order yet, so it has no "Check voor je bestelt"."""
+    out = week_view(wlog, draft, start, away)
+    out.pop("check", None)
+    out["draft"] = True
+    if settings is None:
+        return out
+    if draft is None:  # nothing chosen yet: the evenings themselves
+        away = set(away)
+        for i in range(7):
+            day = start + timedelta(days=i)
+            dag = WEEKDAGEN[day.weekday()]
+            entry = {"date": day.isoformat(), "dag": dag, "niet_thuis": dag in away,
+                     "persons": 0, "recipe": None, "savings": 0.0}
+            if not entry["niet_thuis"] and day not in settings.evenings:
+                entry["geen_kookmoment"] = True  # a leftover night
+            out["days"].append(entry)
+    mark_choosable(out["days"], settings, draft=True)
+    return out
+
+
+def mark_choosable(days: list[dict], settings, draft: bool = False) -> None:
+    """"kies": true on every cook evening of `settings` without a dish (and not a
+    leftover night). On a draft the evening also gets its persons and loses the
+    "geen kookmoment"/"geen gerecht" marks; a confirmed week keeps them."""
+    for entry in days:
+        day = date.fromisoformat(entry["date"])
+        if entry["recipe"] is None and not entry.get("restjes") and day in settings.evenings:
+            entry["kies"] = True
+            if draft:
+                entry.update(persons=settings.persons[day], niet_thuis=False)
+                entry.pop("geen_kookmoment", None)
+                entry.pop("geen_gerecht", None)
+
+
+def staples_view(wlog) -> list[dict]:
+    """Vaste boodschappen in de bonus, as the app lists them under the dishes."""
+    return [
+        {"product": s.product.title, "product_id": s.product.id, "times": s.times,
+         "qty": s.qty, "mechanism": s.product.mechanism, "savings": s.savings,
+         "added": s.product.id in wlog.extras_added or s.product.id in wlog.offers_added}
+        for s in staple_list(wlog)
+    ]
+
+
+OTHER_CATEGORY = "Overig"
+OFFERS_FALLBACK_NOTE = ("Dit is de huidige folder; de folder van je bezorgweek "
+                        "is er nog niet.")
+
+
+def offer_item(p: Product, wlog) -> dict:
+    """One bonus product for the Aanbiedingen tab. added_qty: what a staple or a loose
+    offer already put on the list or in the order this week."""
+    return {
+        "id": p.id, "title": p.title, "mechanism": p.mechanism, "price_now": p.now,
+        "price_regular": p.regular, "unit_size": p.unit_size, "image": p.image,
+        "added_qty": wlog.offers_added.get(p.id, 0) or wlog.extras_added.get(p.id, 0),
+        "orderable": p.orderable,
+    }
+
+
+def offer_group(members: list[Product], wlog, q: str = "") -> dict:
+    """One row for a bonus group with several products (AH's promotion, e.g. "2 voor
+    2.49" on small packs): the products are the choices behind its plus button. With a
+    search, the products that match come first."""
+    items = [offer_item(p, wlog) for p in members]
+    if q:
+        items.sort(key=lambda i: q not in i["title"].casefold())  # stable
+    cheapest = min(members, key=lambda p: p.now)
+    first = members[0]
+    return {
+        "group": first.group_id, "title": first.group_title or first.title,
+        "mechanism": first.mechanism, "image": first.image,
+        "price_now": cheapest.now, "price_regular": cheapest.regular,
+        "price_from": len({p.now for p in members}) > 1,
+        "added_qty": sum(i["added_qty"] for i in items),
+        "orderable": any(p.orderable for p in members), "items": items,
+    }
+
+
+def offers_view(products: Iterable[Product], wlog, q: str = "", category: str = "") -> dict:
+    """The folder per category, searchable on title, in AH's own order ("Alle Bonus":
+    categories as the folder lists them, products as each category lists them).
+    `products` comes in that order from bonus_offers; "Overig" goes last. The products
+    of one bonus group share one row (offer_group) at the place of the first of them;
+    a search on a product or on the group's description finds the row."""
+    q, category = q.strip().casefold(), category.strip().casefold()
+    rows: dict[str, list] = {}  # category -> [Product | list[Product] (a group)]
+    by_group: dict[tuple[str, str], list[Product]] = {}
+    for p in products:
+        name = p.category or OTHER_CATEGORY
+        if category and name.casefold() != category:
+            continue
+        if p.group_id is None:
+            if not q or q in p.title.casefold():
+                rows.setdefault(name, []).append(p)
+            continue
+        key = (name, p.group_id)
+        if key not in by_group:
+            by_group[key] = []
+            rows.setdefault(name, []).append(by_group[key])
+        by_group[key].append(p)
+
+    def hit(members: list[Product]) -> bool:
+        title = (members[0].group_title or "").casefold()
+        return not q or q in title or any(q in m.title.casefold() for m in members)
+
+    out = []
+    for name in sorted(rows, key=lambda n: n == OTHER_CATEGORY):  # stable: AH's order
+        items = []
+        for r in rows[name]:
+            if isinstance(r, Product):
+                items.append(offer_item(r, wlog))
+            elif hit(r):
+                items.append(offer_item(r[0], wlog) if len(r) == 1 else offer_group(r, wlog, q))
+        if items:
+            out.append({"name": name, "items": items})
+    return {"categories": out}
+
+
+def cook_lines(d: Dish) -> list[dict]:
+    """v1.0 kookmodus: every recipe line in recipe order ("400 g kipdijfilet"), with the
+    AH product bought for it (shown small) or why there is none."""
+    by_text = {ln.from_ingredient: ln for ln in d.lines}
+    notes = {**{t: "niet gevonden bij AH" for t in d.not_found},
+             **{t: "hoeft niet" for t in d.skipped},
+             **{t: "in huis" for t in d.pantry}}
+    out, seen = [], set()
+    texts = [t for t, _ in d.recipe.ingredients]
+    texts += [t for t in list(by_text) + list(notes) if t not in texts]  # never lost
+    for t in texts:
+        if t in seen:
+            continue
+        seen.add(t)
+        ln = by_text.get(t)
+        out.append({"text": t, "product": ln.product.title if ln else None,
+                    "qty": ln.qty if ln else 0, "note": None if ln else notes.get(t)})
+    return out
+
+
+def dish_view(wlog, plan: Plan, d: Dish, today: date, overrides: dict | None = None,
+              taste: str | None = None) -> dict:
+    names = {t: (n or t) for t, n in d.recipe.ingredients}
+    chosen = overrides or {}
+
+    def fix(text: str) -> dict:
+        """"Klopt niet": the search term to start with, and the choice already made."""
+        key = override_key(names.get(text, text))
+        o = chosen.get(key)
+        return {"query": key, "override": o["kind"] if o else None}
+
+    lines = [
+        {"product": ln.product.title, "product_id": ln.product.id, "qty": ln.qty,
+         "mechanism": ln.product.mechanism if ln.product.is_bonus else None,
+         "bonus": ln.product.is_bonus, "ingredient": ln.from_ingredient, "pantry": False,
+         "check": ln.check, **fix(ln.from_ingredient)}
+        for ln in d.lines
+    ]
+    lines += [
+        {"product": text, "product_id": None, "qty": 0, "mechanism": None, "bonus": False,
+         "ingredient": text, "pantry": True, "check": False, **fix(text)}
+        for text in d.pantry
+    ]
+    lines += [
+        {"product": text, "product_id": None, "qty": 0, "mechanism": None, "bonus": False,
+         "ingredient": text, "pantry": False, "skipped": True, "check": False, **fix(text)}
+        for text in d.skipped
+    ]
+    iso = d.date.isoformat()
+    return {
+        "cook": cook_lines(d),
+        "date": iso, "dag": WEEKDAGEN[d.date.weekday()], "week": wlog.week.isoformat(),
+        "persons": d.persons, "savings": d.savings, "recipe": _recipe_view(d),
+        "restjes": d.leftover_date.isoformat() if d.leftover_date else None,
+        "lines": lines, "not_found": list(d.not_found), "steps": list(d.recipe.steps),
+        "missing": [{"ingredient": t, **fix(t)} for t in d.not_found],
+        "can_back": iso in wlog.previous and today < wlog.week,
+        "week_savings": plan.savings, "leftovers": _leftovers(wlog, plan),
+        # v1.0: "down" (duim omlaag), "never" (nooit meer) or None
+        "taste": taste,
+    }
+
+
+# --- the app ----------------------------------------------------------------------------
+
+
+def make_app(ctx, static_dir: Path = STATIC_DIR,
+             allowed_remotes: set[str] | None = None) -> web.Application:
+    static_dir = Path(static_dir)
+
+    @web.middleware
+    async def guard_mw(request: web.Request, handler):
+        if allowed_remotes is not None and request.remote not in allowed_remotes:
+            # remote and path only: no query, no Referer (it may carry the ingress token)
+            log.warning("Verzoek geweigerd (niet via Home Assistant): %s %s",
+                        _printable(request.remote), _printable(request.path))
+            return _err(403, "alleen via Home Assistant")
+        if request.path == "/api/health":  # the watchdog: nothing else, never blocks
+            return await handler(request)
+        try:
+            return await handler(request)
+        finally:
+            # a read or write may have paused writing: the one push goes out now
+            if main.health_needs_sync(ctx):
+                try:
+                    await main.sync_health(ctx)
+                except Exception as e:  # never in the way of the answer itself
+                    log.warning("Melding API-status mislukt (%s)", type(e).__name__)
+
+    @web.middleware
+    async def errors_mw(request: web.Request, handler):
+        try:
+            return await handler(request)
+        except web.HTTPException:
+            raise
+        except SchemaTooNew as e:  # a file from a newer add-on: nothing was written
+            main.note_too_new(ctx, e.path)
+            return _err(409, UPDATE_MESSAGE)
+        except AhLoginExpired:
+            ctx.login_expired = True
+            return _err(401, main.LOGIN_EXPIRED, login=True)
+        except AhApiError as e:
+            return _err(502, main.short_error(e))
+        except httpx.HTTPError as e:
+            return _err(502, f"Home Assistant niet bereikbaar ({type(e).__name__})")
+        except Exception as e:
+            log.error("API-fout: %s", type(e).__name__)
+            return _err(500, type(e).__name__)
+
+    app = web.Application(middlewares=[guard_mw, errors_mw])
+
+    async def body_of(request) -> dict:
+        try:
+            data = await request.json()
+        except ValueError:
+            return {}
+        return data if isinstance(data, dict) else {}
+
+    def day_of(request) -> date:
+        try:
+            return date.fromisoformat(request.match_info["day"])
+        except ValueError:
+            raise web.HTTPBadRequest(text='{"error": "ongeldige datum"}',
+                                     content_type="application/json") from None
+
+    async def settings_now():
+        try:
+            return await ctx.hass.read_settings()
+        except httpx.HTTPError:
+            return None
+
+    async def publish(start: date, plan: Plan, target: str, extras: float = 0.0) -> None:
+        """Update sensor.weekmenu when this is the week it shows."""
+        now = ctx.clock()
+        nxt = menu_week_start(now)
+        shown = nxt if ctx.ledger.load(nxt).plan else main.week_of(now.date())
+        if start != shown:
+            return
+        raw = await settings_now()
+        if raw is None:
+            return
+        view = plan_view(plan, start, target, away_dates(start, raw.away),
+                         new_folder=new_folder_available(ctx.ledger.load(start)))
+        view.update(main.sensor_extras(ctx, raw.away, now))
+        await main.guard(ctx.hass.publish(view,
+                                          plan.savings + extras), "sensoren")
+
+    # --- pages ---
+
+    async def index(request):
+        page = static_dir / "index.html"
+        if page.is_file():
+            return web.FileResponse(page)
+        return web.Response(text=FALLBACK_HTML, content_type="text/html")
+
+    async def guide(request):
+        """GIDS.md, the user guide, as a page under the ingress path ("gids")."""
+        try:
+            md = GUIDE_PATH.read_text(encoding="utf-8")
+        except OSError:
+            raise web.HTTPNotFound() from None
+        return web.Response(text=markdown_page(md), content_type="text/html")
+
+    async def asset(request):
+        f = static_dir / request.match_info["name"]
+        if static_dir.is_dir() and f.is_file() and f.parent == static_dir:
+            return web.FileResponse(f)
+        raise web.HTTPNotFound()
+
+    # --- status and login ---
+
+    def waiting_for(start: date | None = None):
+        """The folder of a menu week without a menu is not out yet (or None)."""
+        w = ctx.waiting
+        if w is None or (start is not None and w.week != start) or ctx.ledger.load(w.week).plan:
+            return None
+        return w
+
+    async def status(request):
+        logged_in = ctx.store.load() is not None and not ctx.login_expired
+        # the welcome screen: no login file, AH never answered and no menu yet
+        first = (not logged_in and ctx.store.saved_at() is None
+                 and ctx.health.last_ok is None
+                 and not any(w.plan for w in ctx.ledger.weeks()))
+        w = waiting_for()
+        return web.json_response({
+            # a file or the login is from a newer add-on: the app says "werk bij"
+            # instead of showing the login screen
+            "update_needed": UPDATE_MESSAGE if main.update_needed(ctx) else None,
+            "ah_app_version": ctx.app_version,
+            "last_ah_sync": ctx.health.last_ok,
+            "writes_paused": ctx.health.writes_paused,
+            "logged_in": logged_in, "last_round": ctx.last_round, "error": ctx.error,
+            "first_start": first,
+            # a menu round only: the hourly new-folder look also takes the lock
+            "running": ctx.busy or ctx.in_round, "rounds": ctx.rounds,
+            "login_url": LOGIN_URL,
+            "waiting_for_folder": None if w is None else {
+                "week": w.week.isoformat(),
+                "expected": w.expected.isoformat() if w.expected else None},
+        })
+
+    async def login(request):
+        raw = (await body_of(request)).get("code")
+        code = extract_code(raw) if isinstance(raw, str) else ""
+        if not code:
+            return _err(400, "Geen code gevonden. Plak de hele regel met appie://login-exit?code=…")
+        if ctx.store.too_new():  # the answer could not be saved: keep the code unused
+            main.note_too_new(ctx, ctx.store.path)
+            return _err(409, UPDATE_MESSAGE, update=True)
+        async with ctx.lock:  # a round may be refreshing the tokens right now
+            try:
+                await ctx.client.exchange_code(code)
+            except AhApiError as e:
+                log.warning("Inloggen mislukt (HTTP %s)", e.status)
+                return _err(400, f"Inloggen mislukt (HTTP {e.status})" if e.status
+                            else "Inloggen mislukt")
+        ctx.login_expired = False
+        ctx.error = None
+        log.info("Ingelogd bij AH")
+        return web.json_response({"logged_in": True})
+
+    async def logout(request):
+        """Uitloggen bij AH: tokens.json (and its .bak) gone, the app shows the login.
+        Under the lock: a round may be refreshing the tokens right now."""
+        async with ctx.lock:
+            # a refresh still running (shielded, maybe from a cancelled caller) would
+            # write new tokens after the clear: let it finish first
+            task = getattr(ctx.client, "_refresh_task", None)
+            if task is not None and not task.done():
+                try:
+                    await asyncio.shield(task)
+                except Exception:
+                    pass  # an expired login is fine here: it is about to go anyway
+            await asyncio.to_thread(ctx.store.clear)
+        ctx.login_expired = True
+        log.info("Uitgelogd bij AH: login verwijderd")
+        return web.json_response({"logged_in": False})
+
+    # --- health and diagnose: no lock, no AH call ---
+
+    async def health(request):
+        return web.json_response({"ok": True})
+
+    async def get_diagnose(request):
+        return web.json_response(diagnose(ctx))
+
+    async def retry_writes(request):
+        """"Opnieuw proberen" in Diagnose: writing on again, by hand.
+
+        Ruling 53: the target week's pause note goes too (its round stays open, so the
+        hourly look still adds what is missing; the Check card shows it meanwhile).
+        Skipped while a round runs: that round's apply clears it anyway."""
+        ctx.health.resume("knop Opnieuw proberen")
+        await main.sync_health(ctx)
+        if not (ctx.busy or ctx.in_round):
+            async with ctx.lock:
+                wlog = ctx.ledger.load(menu_week_start(ctx.clock()))
+                if wlog.held == PAUSED_NOTE and not wlog.too_new:
+                    wlog.held = None
+                    try:
+                        await main.save_log(ctx, wlog)
+                    except Exception as e:
+                        log.warning("Logboek %s niet bijgewerkt (%s)", wlog.week,
+                                    type(e).__name__)
+        return web.json_response({"writes_paused": ctx.health.writes_paused})
+
+    # --- reading ---
+
+    def shown_week(request) -> date:
+        """?week=<iso> or the week the app shows by default (running, else the next one)."""
+        now = ctx.clock()
+        q = request.query.get("week")
+        if q:
+            try:
+                return main.week_of(date.fromisoformat(q))
+            except ValueError:
+                raise web.HTTPBadRequest(text='{"error": "ongeldige week"}',
+                                         content_type="application/json") from None
+        return main.app_week(ctx, now)
+
+    async def week(request):
+        return web.json_response(await week_payload(shown_week(request)))
+
+    async def week_payload(start: date) -> dict:
+        """api/week for the menu week `start`: its menu, else its draft (or the evenings
+        to choose for), with what the app shows around it."""
+        now = ctx.clock()
+        wlog = ctx.ledger.load(start)
+        plan = Plan.from_dict(wlog.plan) if wlog.plan else None
+        raw = await settings_now()
+        if plan is None:
+            out = draft_week_view(
+                wlog, Plan.from_dict(wlog.draft) if wlog.draft else None, start,
+                raw.away if raw is not None else (),
+                main.make_settings(ctx, raw, start) if raw is not None else None)
+            out["target"] = await draft_target(start)
+        else:
+            out = week_view(wlog, plan, start,
+                            raw.away if raw is not None else (),
+                            retry=start == menu_week_start(now))
+            if raw is not None:  # an evening without a dish can still be filled
+                mark_choosable(out["days"], main.make_settings(ctx, raw, start))
+        out["enabled"] = raw.enabled if raw is not None else None  # None: HA unreadable
+        out["writes_paused"] = PAUSED_NOTE if ctx.health.writes_paused else None
+        w = waiting_for(start) if plan is None else None
+        out["waiting_for_folder"] = None if w is None else {
+            "expected": w.expected.isoformat() if w.expected else None}
+        nxt = menu_week_start(now)
+        nxt_log = wlog if nxt == start else ctx.ledger.load(nxt)
+        # always reachable from the running week: next week is where you choose (it has
+        # no menu until you confirm one, so "only when planned" would hide it for good)
+        out["next_week"] = nxt.isoformat() if nxt > start else None
+        # "Nieuwe folder is er": about the week Menu bijwerken remakes, whichever shows
+        fresh = new_folder_available(nxt_log)
+        out["new_folder_available"] = fresh
+        out["new_folder_week"] = nxt.isoformat() if fresh else None
+        # v0.8: tonight (whichever week is shown) and the AH login line
+        out["vanavond"] = main.tonight(ctx, now.date(), raw.away if raw is not None else ())
+        out["login"] = main.login_view(ctx, now)
+        if "check" in out and (out["writes_paused"] or out["login"]["login_expired"]):
+            out["check"]["ok"] = False  # nothing reaches AH now: the card above says why
+            out["check"]["blocked"] = True
+        return out
+
+    async def draft_target(start: date) -> str | None:
+        """Where "Zet in bestelling" / "Zet op lijst" would write the draft of `start`,
+        by the same rule as apply (writer.destination). An AH read, never under the
+        lock, kept DRAFT_TARGET_TTL seconds per week. None without a login or when AH
+        does not answer: the app then shows a neutral button."""
+        if not main.login_view(ctx)["login_ok"]:
+            return None
+        now = main._time.monotonic()
+        hit = ctx.draft_targets.get(start)
+        if hit is not None and now - hit[0] < DRAFT_TARGET_TTL:
+            return hit[1]
+        try:
+            target = await destination(ctx.client, start)
+        except (AhApiError, httpx.HTTPError) as e:
+            if isinstance(e, AhLoginExpired):  # noted for the app; a read never pushes
+                ctx.login_expired = True
+            log.info("Bestelling of lijst voor het concept niet bekend: %s",
+                     main.short_error(e))
+            return None
+        ctx.draft_targets[start] = (now, target)
+        return target
+
+    def load_dish(day: date, allow_empty: bool = False):
+        """The week log, menu and dish of `day`; with `allow_empty` the dish may be None
+        (an evening of the menu without a dish)."""
+        wlog = ctx.ledger.load(main.week_of(day))
+        if not wlog.plan:
+            raise web.HTTPNotFound(text='{"error": "geen menu voor die week"}',
+                                   content_type="application/json")
+        plan = Plan.from_dict(wlog.plan)
+        d = next((x for x in plan.dishes if x.date == day), None)
+        if d is None and not allow_empty:
+            raise web.HTTPNotFound(text='{"error": "geen gerecht op die dag"}',
+                                   content_type="application/json")
+        return wlog, plan, d
+
+    def taste_of(d: Dish) -> str | None:
+        return ctx.taste.kind_of(d.recipe.id)
+
+    async def dish(request):
+        day = day_of(request)
+        wlog = ctx.ledger.load(main.week_of(day))
+        if not wlog.plan and wlog.draft:  # a draft dish: read only
+            draft = Plan.from_dict(wlog.draft)
+            return web.json_response(draft_dish_view(wlog, draft, draft_dish(draft, day)))
+        wlog, plan, d = load_dish(day)
+        return web.json_response(dish_view(wlog, plan, d, ctx.clock().date(),
+                                           ctx.overrides.load(), taste_of(d)))
+
+    # --- v1.1: the draft week (nothing goes to AH until it is confirmed) ---
+
+    def chooser() -> LocalFirst:
+        """The client for every planner call that may meet an own recipe."""
+        return LocalFirst(ctx.client, ctx.recipes)
+
+    def draft_dish(draft: Plan, day: date) -> Dish:
+        d = next((x for x in draft.dishes if x.date == day), None)
+        if d is None:
+            raise web.HTTPNotFound(text='{"error": "geen gerecht op die dag"}',
+                                   content_type="application/json")
+        return d
+
+    def draft_dish_view(wlog, draft: Plan, d: Dish) -> dict:
+        return {**dish_view(wlog, draft, d, ctx.clock().date(), ctx.overrides.load(),
+                            taste_of(d)), "draft": True}
+
+    def gone_or_raise(e: AhApiError, recipe_id: int) -> web.Response:
+        """A recipe that no longer exists (404) is a plain 409; anything else is raised."""
+        if e.status != 404 or isinstance(e, AhLoginExpired):
+            raise e
+        return _err(409, OWN_GONE if is_own(recipe_id) else AH_GONE)
+
+    async def on_draft(day: date, edit) -> web.Response | None:
+        """Under the lock: when the week of `day` has no confirmed menu, `edit(wlog)`
+        changes its draft (nothing goes to AH) and its answer is returned. None when the
+        week has a menu: the caller then goes through _write, the write path."""
+        start = main.week_of(day)
+        async with ctx.lock:
+            wlog = ctx.ledger.load(start)
+            if wlog.plan:
+                return None
+            if wlog.too_new:  # a newer add-on wrote this week: never written over
+                raise SchemaTooNew(ctx.ledger.root / f"{start.isoformat()}.json")
+            return await edit(wlog)
+
+    async def evening_settings(start: date):
+        """The helpers' Settings of the menu week, or a 503 when Home Assistant cannot
+        be read."""
+        try:
+            return await main.week_settings(ctx, start)
+        except httpx.HTTPError:
+            return _err(503, HA_UNREADABLE)
+
+    async def evening(start: date, day: date, plan: Plan):
+        """(persons, leftover night) for a dish chosen on `day` in `plan` (a draft or the
+        menu), or the Response that says why not: 503 when Home Assistant cannot be
+        read, 400 for an evening away, a leftover night or one without a cooking moment.
+
+        A leftover night that already has its own dish is never claimed: the evening
+        then cooks for its own persons only. An evening that already has a dish may get
+        another one, also when the helpers changed since."""
+        try:
+            raw = await ctx.hass.read_settings()
+        except httpx.HTTPError:
+            return _err(503, HA_UNREADABLE)
+        settings = main.make_settings(ctx, raw, start)
+        dated = {x.date for x in plan.dishes}
+        if any(x.leftover_date == day and x.date != day for x in plan.dishes):
+            return _err(400, LEFTOVER_NIGHT)
+        if WEEKDAGEN[day.weekday()] in raw.away:
+            return _err(400, NOT_HOME)
+        if day in settings.evenings:
+            rest = settings.leftovers.get(day)
+            if rest is None or rest not in dated:
+                return settings.persons[day], rest
+            return main.persons_on(raw, day), None
+        if day in dated:
+            return main.persons_on(raw, day), None
+        if day in settings.leftovers.values():
+            return _err(400, LEFTOVER_NIGHT)
+        return _err(400, NO_COOKING)
+
+    async def save_draft(wlog, draft: Plan) -> None:
+        wlog.draft = draft.to_dict()  # the caller holds ctx.lock
+        await main.save_log(ctx, wlog)
+
+    # --- writing: one at a time ---
+
+    async def note_history(week: date, d: Dish, action: str) -> None:
+        """v0.9: the swapped out or removed recipe in history.json; never in the way."""
+        try:
+            await asyncio.to_thread(ctx.history.record, week, d.date, d.recipe.id,
+                                    d.recipe.title, action, ctx.clock())
+        except SchemaTooNew as e:
+            main.note_too_new(ctx, e.path)
+        except Exception as e:
+            log.warning("history.json niet bijgewerkt (%s)", type(e).__name__)
+
+    async def note_correction(week: date, d: Dish, key: str) -> None:
+        """v1.0: a "Klopt niet" in its week, for the share of lines without a correction
+        (also when it is taken back later). Never in the way of the choice itself."""
+        try:
+            await asyncio.to_thread(ctx.history.record, week, d.date, d.recipe.id,
+                                    d.recipe.title, "correct", ctx.clock(), key=key)
+        except SchemaTooNew as e:
+            main.note_too_new(ctx, e.path)
+        except Exception as e:
+            log.warning("history.json niet bijgewerkt (%s)", type(e).__name__)
+
+    async def _write(day: date, change, action: str | None = None,
+                     allow_empty: bool = False) -> web.Response:
+        """Load, change and apply under the lock; `change` returns the new plan or a Response.
+
+        `action`: the old dish goes into history.json once the new plan is in the log
+        (also when a write to AH failed after that). `allow_empty`: `change` also gets
+        an evening without a dish (d is None; nothing goes into history.json then)."""
+        async with ctx.lock:
+            wlog, plan, d = load_dish(day, allow_empty)
+            if d is None:
+                action = None
+            new = await change(wlog, plan, d)
+            if isinstance(new, web.Response):
+                return new
+            try:
+                res = await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan,
+                                  today=ctx.clock().date())
+            except Exception:
+                if action is not None and wlog.plan == new.to_dict():
+                    await note_history(wlog.week, d, action)
+                raise
+            if action is not None:
+                await note_history(wlog.week, d, action)
+            settled = extras_savings(wlog)  # apply may have settled a staple write
+            if settled != wlog.extras_savings:
+                wlog.extras_savings = settled
+                await main.save_log(ctx, wlog)
+        nd = next((x for x in new.dishes if x.date == day), None)
+        await publish(wlog.week, new, wlog.target or "list", wlog.extras_total)
+        # removed: how many products went off the list or out of the order (opschonen)
+        done = {"removed": len(res.removed), "target": res.target, "held": res.held}
+        if nd is None:  # "Gerecht weghalen": no dish left to show
+            return web.json_response({"date": day.isoformat(), **done})
+        return web.json_response({**dish_view(wlog, new, nd, ctx.clock().date(),
+                                             ctx.overrides.load(), taste_of(nd)), **done})
+
+    async def pick(request):
+        """The user chose recipe `recipe_id` for this evening. Without a confirmed menu
+        it goes into the week's draft (nothing to AH); with one it replaces the dish
+        through the write path (so Terug puts the old one back)."""
+        day = day_of(request)
+        iso = day.isoformat()
+        rid = (await body_of(request)).get("recipe_id")
+        if not isinstance(rid, int) or isinstance(rid, bool):
+            return _err(400, "recipe_id is nodig")
+        check_offer_week(main.week_of(day))
+
+        async def edit(wlog):
+            if day < ctx.clock().date():  # a draft is for the evenings still to come
+                return _err(400, PAST_EVENING)
+            draft = Plan.from_dict(wlog.draft) if wlog.draft else empty_plan(list(ctx.pantry))
+            got = await evening(wlog.week, day, draft)
+            if isinstance(got, web.Response):
+                return got
+            persons, rest = got
+            bonus, _, period = await main.folder_for_week(ctx, wlog.week, ctx.clock(),
+                                                          fallback=True)
+            try:
+                new = await pick_dish(chooser(), draft, day, rid, bonus, persons, rest,
+                                      overrides=ctx.overrides.load())
+            except AhApiError as e:
+                return gone_or_raise(e, rid)
+            # the oldest folder a dish of the draft was matched to: confirming once a
+            # newer one is out matches the whole draft again
+            others = [x for x in draft.dishes if x.date != day]
+            if others and wlog.draft_period_start is not None:
+                period = min(period, wlog.draft_period_start)
+            wlog.draft_period_start = period
+            await save_draft(wlog, new)
+            return web.json_response(draft_dish_view(wlog, new, draft_dish(new, day)))
+
+        got = await on_draft(day, edit)
+        if got is not None:
+            return got
+
+        async def change(wlog, plan, d):
+            if d is None:  # an evening without a dish: filled, nothing to put back
+                got = await evening(wlog.week, day, plan)
+                if isinstance(got, web.Response):
+                    return got
+                persons, rest = got
+                bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(),
+                                                     fallback=True)
+                try:
+                    return await pick_dish(chooser(), plan, day, rid, bonus, persons, rest,
+                                           overrides=ctx.overrides.load())
+                except AhApiError as e:
+                    return gone_or_raise(e, rid)
+            if rid == d.recipe.id:  # the same recipe: nothing to change
+                return web.json_response({
+                    **dish_view(wlog, plan, d, ctx.clock().date(), ctx.overrides.load(),
+                                taste_of(d)),
+                    "removed": 0, "target": wlog.target or "list", "held": None})
+            bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(), fallback=True)
+            try:
+                new = await pick_dish(chooser(), plan, day, rid, bonus, d.persons,
+                                      d.leftover_date, overrides=ctx.overrides.load())
+            except AhApiError as e:
+                return gone_or_raise(e, rid)
+            wlog.swapped_out.setdefault(iso, []).append(d.recipe.id)
+            wlog.previous[iso] = d.recipe.id
+            wlog.previous_dish[iso] = main.dish_to_dict(d)  # "Terug" puts exactly this back
+            return new
+
+        return await _write(day, change, "swap", allow_empty=True)
+
+    async def back(request):
+        day = day_of(request)
+        iso = day.isoformat()
+
+        async def change(wlog, plan, d):
+            prev = wlog.previous.get(iso)
+            if prev is None:
+                return _err(409, "Er is geen vorig gerecht")
+            if ctx.clock().date() >= wlog.week:
+                return _err(409, "De week is al begonnen")
+            saved = wlog.previous_dish.get(iso)
+            if saved is not None and int(saved["recipe"]["id"]) == prev:
+                new = main.put_dish(plan, main.dish_from_dict(saved))  # exact, no AH reads
+            else:  # a log from before previous_dish: look the recipe up again
+                bonus, _ = await main.bonus_for_week(ctx, wlog.week, ctx.clock(),
+                                                     fallback=True)
+                new = await main.restore_dish(chooser(), plan, day, prev, bonus,
+                                              overrides=ctx.overrides.load())
+            if d.recipe.id not in wlog.swapped_out.setdefault(iso, []):
+                wlog.swapped_out[iso].append(d.recipe.id)
+            del wlog.previous[iso]
+            wlog.previous_dish.pop(iso, None)
+            return new
+
+        return await _write(day, change, "back")
+
+    async def persons(request):
+        day = day_of(request)
+        n = (await body_of(request)).get("persons")
+        if (not isinstance(n, int) or isinstance(n, bool)
+                or not MIN_PERSONS <= n <= MAX_PERSONS_LEFTOVERS):
+            return _err(400, f"personen moet tussen {MIN_PERSONS} en {MAX_PERSONS_LEFTOVERS} liggen")
+
+        async def rescaled(plan, d):
+            """This dish for n persons, or the Response that says why not."""
+            top = MAX_PERSONS_LEFTOVERS if d.leftover_date else MAX_PERSONS
+            if n > top:  # 2 x 8 only when the dish also feeds a leftover night
+                return _err(400, f"personen moet tussen {MIN_PERSONS} en {top} liggen")
+            try:
+                return await main.rescale_dish(chooser(), plan, day, n,  # only this dish
+                                               overrides=ctx.overrides.load())
+            except AhApiError as e:
+                return gone_or_raise(e, d.recipe.id)
+
+        async def edit(wlog):  # a draft: the same scaling, nothing to AH
+            draft = Plan.from_dict(wlog.draft) if wlog.draft else empty_plan(list(ctx.pantry))
+            new = await rescaled(draft, draft_dish(draft, day))
+            if isinstance(new, web.Response):
+                return new
+            await save_draft(wlog, new)
+            return web.json_response(draft_dish_view(wlog, new, draft_dish(new, day)))
+
+        got = await on_draft(day, edit)
+        if got is not None:
+            return got
+
+        async def change(wlog, plan, d):
+            return await rescaled(plan, d)
+
+        return await _write(day, change)
+
+    async def remove(request):
+        """"Gerecht weghalen": the evening gets no dish, its own products are cleaned up."""
+        day = day_of(request)
+        iso = day.isoformat()
+
+        async def edit(wlog):  # a draft: the evening is empty again, nothing to AH
+            draft = Plan.from_dict(wlog.draft) if wlog.draft else empty_plan(list(ctx.pantry))
+            draft_dish(draft, day)  # 404 without a dish there
+            await save_draft(wlog, main.remove_dish(draft, day))
+            return web.json_response({"date": iso, "draft": True})
+
+        got = await on_draft(day, edit)
+        if got is not None:
+            return got
+
+        async def change(wlog, plan, d):
+            wlog.previous.pop(iso, None)
+            wlog.previous_dish.pop(iso, None)
+            return main.remove_dish(plan, day)
+
+        return await _write(day, change, "remove")
+
+    async def confirm(request):
+        """"Zet in bestelling" / "Zet op lijst": the draft becomes the week's menu and is
+        written to AH once, through apply like a menu round (write-ahead, pending, the
+        order-week check, the pause). Under the lock; a week that already has a menu is
+        a 409, so a second tap never writes twice. The message is the round's."""
+        start = shown_week(request)
+        check_offer_week(start)
+        async with ctx.lock:
+            wlog = ctx.ledger.load(start)
+            if wlog.plan:
+                return _err(409, CONFIRMED)
+            plan = Plan.from_dict(wlog.draft) if wlog.draft else None
+            if plan is None or not plan.dishes:
+                return _err(400, NO_DRAFT)
+            if wlog.too_new:  # a newer add-on wrote this week: never written over
+                raise SchemaTooNew(ctx.ledger.root / f"{start.isoformat()}.json")
+            settings = await evening_settings(start)
+            if isinstance(settings, web.Response):
+                return settings
+            # an evening that is no longer a cook evening (away now) or already past
+            # is left out
+            today = ctx.clock().date()
+            gone = [x for x in plan.dishes
+                    if x.date not in settings.evenings or x.date < today]
+            for x in gone:
+                plan = main.remove_dish(plan, x.date)
+                plan.removed_days = [r for r in plan.removed_days
+                                     if r not in (x.date, x.leftover_date)]
+            if not plan.dishes:
+                return _err(400, NO_DRAFT)
+            if gone:
+                log.info("Week %s: %d gerecht(en) op een avond niet thuis of al geweest "
+                         "weggelaten", start, len(gone))
+            now = ctx.clock()
+            bonus, warning, period_start = await main.folder_for_week(ctx, start, now,
+                                                                      fallback=True)
+            if (wlog.draft_period_start is not None
+                    and period_start > wlog.draft_period_start):
+                # picked on an older folder: the same dishes against the current one,
+                # like Menu bijwerken, so the menu never locks in old prices
+                plan = await rebuild_plan(chooser(), plan, bonus, ctx.overrides.load())
+                log.info("Week %s: concept opnieuw gekoppeld aan de folder van %s",
+                         start, period_start)
+            # apply saves these with the plan, before writing: a stop halfway is
+            # completed once by the hourly look, from the log, never blind
+            wlog.draft = None
+            wlog.draft_period_start = None
+            wlog.period_warning = warning
+            wlog.folder_period_start = period_start
+            wlog.round_done = wlog.completion_tried = wlog.notified = False
+            result = await apply(ctx.client, ctx.ledger, wlog, plan, None, today=now.date())
+            held = result.held is not None
+            raw = await settings_now()
+            away = away_dates(start, raw.away) if raw is not None else []
+            await main.refresh_staples(ctx, wlog, plan, start, now)
+            await main.recount_extras(ctx, wlog)
+            title, body = format_message(plan, result, warning,
+                                         staples=staples.open_count(wlog, plan.basket),
+                                         start=start, away=away)
+            if await main.guard(ctx.hass.notify(title, body, ctx.ingress_url), "melding"):
+                wlog.notified = True
+            if not held:  # held: the hourly look writes it once the order allows
+                wlog.round_done = True
+            try:
+                await main.save_log(ctx, wlog)
+            except Exception as e:
+                log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
+        log.info("Week %s bevestigd: %s", start, "bewaard, nog niets toegevoegd" if held
+                 else "toegevoegd")
+        await publish(start, plan, wlog.target or "list", wlog.extras_total)
+        return web.json_response({**await week_payload(start),
+                                  "dropped": sorted(x.date.isoformat() for x in gone)})
+
+    # --- v1.1: the choice list ---
+
+    def choose_week(request, day: date | None) -> date:
+        """?week=<iso>, else the week holding `day`, else the week the app shows."""
+        if request.query.get("week") or day is None:
+            start = shown_week(request)
+        else:
+            start = main.week_of(day)
+        check_offer_week(start)
+        return start
+
+    async def choose(request):
+        """The choice list for one evening: kept AH recipes and own recipes. No AH call."""
+        raw = request.query.get("day")
+        try:
+            day = date.fromisoformat(raw) if raw else None
+        except ValueError:
+            return _err(400, "ongeldige datum")
+        start = choose_week(request, day)
+        return web.json_response(await catalog.choose_view(
+            ctx, start, day, request.query.get("q", ""), request.query.get("kind", "")))
+
+    async def choose_search(request):
+        """"Zoek bij AH": AH's recipes for `q`, scored and kept in the week's list."""
+        start = choose_week(request, None)
+        q = (await body_of(request)).get("q")
+        q = q.strip() if isinstance(q, str) else ""
+        if not 2 <= len(q) <= 60:
+            return _err(400, "Zoek op 2 tot 60 tekens")
+        if not main.login_view(ctx)["login_ok"]:
+            return _err(409, SEARCH_LOGIN)
+        if ctx.busy or ctx.in_round:  # never wait a whole menu round for a search
+            return _err(409, BUSY)
+        async with ctx.lock:
+            try:
+                found = await catalog.search_ah(ctx, start, q)
+            except AhLoginExpired:
+                raise
+            except AhApiError as e:
+                log.warning("Recepten zoeken bij AH mislukt: %s", main.short_error(e))
+                return _err(502, SEARCH_FAILED)
+        weeks_ago = ctx.ledger.recent_recipe_weeks(start)
+        return web.json_response({"items": [
+            catalog.item(e.id, e.title, e.image, e.cook, e.cuisine, e.score, "ah", None,
+                          weeks_ago) for e in found]})
+
+    # --- v0.9: "Klopt niet" per ingredient line ---
+
+    async def products(request):
+        """"Ander product": an AH search (a read, under the lock like every AH call that
+        may refresh the login). Only orderable products; a choice must be one of them."""
+        q = request.query.get("q", "").strip()
+        if not 2 <= len(q) <= 60:
+            return _err(400, "Zoek op 2 tot 60 tekens")
+        if ctx.busy or ctx.in_round:  # never wait a whole menu round for a search
+            return _err(409, BUSY)
+        async with ctx.lock:
+            found = await ctx.client.search_products(q)
+        items = [x for x in found if x.orderable][:20]
+        for x in items:
+            ctx.found.pop(x.id, None)
+            ctx.found[x.id] = x
+        while len(ctx.found) > MAX_FOUND:
+            ctx.found.pop(next(iter(ctx.found)))
+        return web.json_response({"items": [
+            {"id": x.id, "title": x.title, "unit_size": x.unit_size, "price_now": x.now,
+             "price_regular": x.regular, "mechanism": x.mechanism if x.is_bonus else None,
+             "bonus": x.is_bonus, "image": x.image}
+            for x in items]})
+
+    async def correct(request):
+        """"Klopt niet" on one ingredient line: the choice is kept for good (overrides.json)
+        and put on this week's menu through the same apply as a picked dish: cleanup
+        and adds, one lock, write-ahead, never retried, the order-week check."""
+        day = day_of(request)
+        body = await body_of(request)
+        text, kind, pid = body.get("ingredient"), body.get("kind"), body.get("product_id")
+        if not isinstance(text, str) or not text.strip() or kind not in KINDS:
+            return _err(400, "ingredient en kind (product, skip of pantry) zijn nodig")
+        product = None
+        if kind == PRODUCT:
+            if not isinstance(pid, int) or isinstance(pid, bool):
+                return _err(400, "product_id is nodig")
+            product = ctx.found.get(pid)
+            if product is None:
+                return _err(400, "Zoek het product opnieuw")
+
+        async def change(wlog, plan, d):
+            names = {t: n for t, n in d.recipe.ingredients}
+            if text not in names:
+                return _err(404, "Dit ingrediënt staat niet in dit gerecht")
+            key = override_key(names[text] or text)
+            if not key:
+                return _err(400, "Dit ingrediënt heeft geen naam")
+            await asyncio.to_thread(ctx.overrides.put, key,
+                                    make_entry(kind, text, product, ctx.clock()))
+            log.info("Correctie bewaard (%s)", kind)
+            await note_correction(wlog.week, d, key)
+            new = await main.apply_override(plan, key, ctx.overrides.load(), product)
+            ended = ctx.clock().date() > wlog.week + timedelta(days=6)
+            if new is plan or ended:  # nothing on this menu to change (or the week is over)
+                return web.json_response({
+                    **dish_view(wlog, plan, d, ctx.clock().date(), ctx.overrides.load(),
+                                taste_of(d)),
+                    "removed": 0, "target": wlog.target or "list", "held": None})
+            return new
+
+        return await _write(day, change)
+
+    # --- v1.0: duim omlaag and "nooit meer" (taste.json; nothing goes to AH) ---
+
+    async def set_taste(request):
+        """{"kind": "down" | "never" | null} for the dish on that day. Not for a whole
+        menu round: the lock is only taken when no round holds it."""
+        day = day_of(request)
+        kind = (await body_of(request)).get("kind")
+        if kind is not None and kind not in TASTE_KINDS:
+            return _err(400, "kind moet down, never of null zijn")
+        if ctx.busy or ctx.in_round:
+            return _err(409, BUSY)
+        async with ctx.lock:
+            wlog, plan, d = load_dish(day)
+            if kind is None:
+                await asyncio.to_thread(ctx.taste.remove, d.recipe.id)
+            else:
+                await asyncio.to_thread(ctx.taste.put, d.recipe.id, kind, d.recipe.title,
+                                        ctx.clock())
+        log.info("Smaak bewaard (%s)", kind or "geen")
+        return web.json_response(dish_view(wlog, plan, d, ctx.clock().date(),
+                                           ctx.overrides.load(), taste_of(d)))
+
+    async def get_taste(request):
+        return web.json_response({"items": ctx.taste.listing()})
+
+    async def remove_taste(request):
+        """"Terugdraaien" in Nooit meer: the recipe may be chosen again."""
+        rid = (await body_of(request)).get("recipe_id")
+        if not isinstance(rid, int) or isinstance(rid, bool):
+            return _err(400, "recipe_id is nodig")
+        if ctx.busy or ctx.in_round:
+            return _err(409, BUSY)
+        async with ctx.lock:
+            if ctx.taste.kind_of(rid) != "never":
+                return _err(404, "Dit gerecht staat niet (meer) op Nooit meer")
+            await asyncio.to_thread(ctx.taste.remove, rid)
+        return web.json_response({"items": ctx.taste.listing()})
+
+    async def get_overrides(request):
+        return web.json_response({"items": ctx.overrides.listing()})
+
+    async def remove_override(request):
+        """"Terugdraaien" in Mijn correcties: the add-on chooses by itself again, also on
+        the menus of this and the next menu week that have not ended. Those go through
+        the same apply as a picked dish (cleanup and adds, write-ahead, never retried,
+        the order-week check, the pause).
+
+        The choice is gone once it is taken back. When choosing again fails (an AH
+        read or a write), the answer says so (REPICK_FAILED) instead of an error, and
+        every week apply got to is published anyway (try/finally): apply saves the new
+        plan before it writes, so a week may already be changed. An expired login and
+        a file from a newer add-on still give their own answer."""
+        key = (await body_of(request)).get("key")
+        if not isinstance(key, str) or not key:
+            return _err(400, "key is nodig")
+        if ctx.busy or ctx.in_round:  # never wait a whole menu round (like the other taps)
+            return _err(409, BUSY)
+        done = {"removed": 0, "held": None, "target": None, "warning": None}
+        touched: list[date] = []
+        try:
+            async with ctx.lock:
+                gone = await asyncio.to_thread(ctx.overrides.remove, key)
+                if not gone:
+                    return _err(404, "Deze correctie bestaat niet (meer)")
+                now = ctx.clock()
+                today = now.date()
+                try:
+                    for start in sorted({main.week_of(today), menu_week_start(now)}):
+                        wlog = ctx.ledger.load(start)
+                        if not wlog.plan or today > start + timedelta(days=6):
+                            continue
+                        plan = Plan.from_dict(wlog.plan)
+                        if not any(override_key(n or t) == key
+                                   for d in plan.dishes for t, n in d.recipe.ingredients):
+                            continue
+                        got = await main.bonus_for_week(ctx, start, now, fallback=True)
+                        bonus = got[0] if isinstance(got, tuple) else []
+                        new = await main.reresolve(ctx.client, plan, key, bonus,
+                                                   ctx.overrides.load())
+                        if new is plan:
+                            continue
+                        touched.append(start)
+                        res = await apply(ctx.client, ctx.ledger, wlog, new, replaced=plan,
+                                          today=today)
+                        done["removed"] += len(res.removed)
+                        done["held"] = done["held"] or res.held
+                        done["target"] = res.target
+                except (AhLoginExpired, SchemaTooNew):
+                    raise
+                except Exception as e:
+                    log.warning("Opnieuw kiezen na Terugdraaien mislukt: %s", main.short_error(e))
+                    done["warning"] = REPICK_FAILED
+        finally:
+            for start in touched:  # what is in the log now, also after a failed write
+                try:
+                    wlog = ctx.ledger.load(start)
+                    if wlog.plan:
+                        await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",
+                                      wlog.extras_total)
+                except Exception as e:
+                    log.warning("Sensor niet bijgewerkt (%s)", type(e).__name__)
+        log.info("Correctie teruggedraaid")
+        return web.json_response({"items": ctx.overrides.listing(), **done})
+
+    async def run(request):
+        mode = (await body_of(request)).get("mode")
+        if mode not in main.BUTTONS:
+            return _err(400, "mode moet bijwerken zijn; het menu kies je zelf in de app")
+        if ctx.busy or ctx.in_round:
+            return _err(409, BUSY)
+        if mode == "bijwerken" and not new_folder_available(
+                ctx.ledger.load(menu_week_start(ctx.clock()))):
+            return _err(409, "Er is geen nieuwe folder om het menu mee bij te werken")
+        ctx.busy = True
+
+        async def go():
+            try:
+                await main.run_round(ctx, ctx.clock(), mode)
+            except Exception as e:
+                log.error("Ronde mislukt: %s", main.short_error(e))
+            finally:
+                ctx.busy = False
+
+        task = asyncio.create_task(go())
+        ctx.tasks.add(task)
+        task.add_done_callback(ctx.tasks.discard)
+        return web.json_response({"started": True, "mode": mode}, status=202)
+
+    # --- vaste boodschappen in de bonus ---
+
+    async def get_staples(request):
+        return web.json_response(staples_view(ctx.ledger.load(shown_week(request))))
+
+    async def add_staple(request):
+        """One tap: the staple goes in once, through the same write path as the menu."""
+        try:
+            pid = int(request.match_info["pid"])
+        except ValueError:
+            return _err(400, "ongeldig product")
+        start = shown_week(request)
+        now = ctx.clock()
+        if start not in (main.week_of(now.date()), menu_week_start(now)):
+            return _err(400, "Alleen voor deze of de volgende menuweek")
+        async with ctx.lock:
+            wlog = ctx.ledger.load(start)
+            staple = next((s for s in staple_list(wlog) if s.product.id == pid), None)
+            if staple is None:
+                return _err(404, "geen voorstel voor dit product")
+            target = wlog.target
+            if pid not in wlog.extras_added and pid not in wlog.offers_added:
+                res = await apply_extras(ctx.client, ctx.ledger, wlog, {pid: staple.qty},
+                                         {pid: staple.product.title})
+                if res.held:  # the open order is for another week: nothing written
+                    return _err(409, res.held, items=staples_view(wlog))
+                target = res.target
+                wlog.extras_savings = extras_savings(wlog)
+                await main.save_log(ctx, wlog)
+                if pid not in wlog.extras_added:  # outcome unsure, or unknown: never blind
+                    return _err(409, f"{unsure(target)}. Controleer in de AH-app.",
+                                items=staples_view(wlog))
+        if wlog.plan:
+            await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",
+                          wlog.extras_total)
+        # target: where this product went ("order" or "list"), for the app's message
+        return web.json_response({"items": staples_view(wlog), "target": target or "list"})
+
+    # --- aanbiedingen: the whole bonus folder of the menu week ---
+
+    def check_offer_week(start: date) -> None:
+        now = ctx.clock()
+        if start not in (main.week_of(now.date()), menu_week_start(now)):
+            raise web.HTTPBadRequest(
+                text='{"error": "Alleen voor deze of de volgende menuweek"}',
+                content_type="application/json")
+
+    def cached_folder(start: date) -> tuple[list[Product], bool] | None:
+        """The folder of the period holding the menu Wednesday, if it is in memory, and
+        whether it is the current folder standing in for one that is not out yet."""
+        for first, items in ctx.bonus_cache.items():
+            if first <= start <= first + timedelta(days=6):
+                return items, False
+        known = ctx.offers_fallback.get(start)
+        if known is not None and known[0] in ctx.bonus_cache:
+            # valid for an hour, and until the hourly look has seen the real folder
+            fresh = ctx.clock() - known[1] < timedelta(hours=1)
+            if fresh and ctx.ledger.load(start).new_folder is None:
+                return ctx.bonus_cache[known[0]], True
+        return None
+
+    async def fetch_folder(start: date) -> tuple[list[Product], bool]:
+        got = await main.folder_for_week(ctx, start, ctx.clock(), fallback=True)
+        items, warning, period_start = got  # fallback=True never gives Waiting
+        if warning:
+            ctx.offers_fallback[start] = (period_start, ctx.clock())
+        else:
+            ctx.offers_fallback.pop(start, None)
+        return items, bool(warning)
+
+    async def folder(start: date, locked: bool = False) -> tuple[list[Product], bool]:
+        """From the cache; when empty fetched once, under the lock (like a menu round)."""
+        got = cached_folder(start)
+        if got is not None:
+            return got
+        if locked:
+            return await fetch_folder(start)
+        async with ctx.lock:
+            got = cached_folder(start)  # another request may have filled it meanwhile
+            if got is not None:
+                return got
+            return await fetch_folder(start)
+
+    async def get_offers(request):
+        start = shown_week(request)
+        check_offer_week(start)
+        products, fallback = await folder(start)
+        out = offers_view(products, ctx.ledger.load(start), request.query.get("q", ""),
+                          request.query.get("category", ""))
+        out["period_warning"] = OFFERS_FALLBACK_NOTE if fallback else None
+        return web.json_response(out)
+
+    async def add_offer(request):
+        """One tap: the deal's quantity goes in once, through the same write path as staples."""
+        try:
+            pid = int(request.match_info["pid"])
+        except ValueError:
+            return _err(400, "ongeldig product")
+        start = shown_week(request)
+        check_offer_week(start)
+        async with ctx.lock:
+            product = next((p for p in (await folder(start, locked=True))[0] if p.id == pid), None)
+            if product is None:
+                return _err(404, "dit product zit niet in de folder")
+            if not product.orderable:
+                return _err(409, "Dit product is niet te bestellen")
+            wlog = ctx.ledger.load(start)
+            target = wlog.target
+            # a staple that is already in goes in once; its deal quantity is covered
+            if pid not in wlog.offers_added and pid not in wlog.extras_added:
+                qty = qty_for_deal(product, 1)
+                res = await apply_extras(
+                    ctx.client, ctx.ledger, wlog, {pid: qty}, {pid: product.title},
+                    kind=OFFER, savings={pid: deal_savings(product, qty)})
+                if res.held:  # the open order is for another week: nothing written
+                    return _err(409, res.held, added_qty=0)
+                target = res.target
+                if pid not in wlog.offers_added:  # outcome unsure, or unknown: never blind
+                    return _err(409, f"{unsure(target)}. Controleer in de AH-app.",
+                                added_qty=0)
+        if wlog.plan:
+            await publish(start, Plan.from_dict(wlog.plan), wlog.target or "list",
+                          wlog.extras_total)
+        return web.json_response({
+            "id": pid, "added_qty": offer_item(product, wlog)["added_qty"],
+            "target": target or "list", "offers_savings": wlog.offers_savings})
+
+    # --- savings and settings ---
+
+    async def savings(request):
+        today = ctx.clock().date()
+        weeks = [w for w in ctx.ledger.weeks() if w.plan]
+        month = sum(w.savings + w.extras_total for w in weeks
+                    if w.counted and (w.week.year, w.week.month) == (today.year, today.month))
+        recon = ctx.reconciliations.load()
+
+        def checked(iso: str):
+            """v1.0: "Echt bespaard (nagerekend)", next to the estimate (never in it)."""
+            e = recon.get(iso)
+            if not e or e.get("status") not in ("ok", "niet_na_te_rekenen"):
+                return None
+            return {k: e.get(k) for k in ("status", "bought_share", "realised_savings",
+                                          "reason")}
+
+        return web.json_response({
+            "month": round(month, 2),
+            "total": round(load_total(ctx.total_path), 2),
+            "weeks": [{"week": w.week.isoformat(),
+                       "savings": round(w.savings + w.extras_total, 2),
+                       "counted": w.counted,
+                       "reconciled": checked(w.week.isoformat())} for w in weeks],
+            "metrics": savings_metrics(ctx, today),
+        })
+
+    async def get_settings(request):
+        raw = await ctx.hass.read_settings()
+        return web.json_response({
+            # avonden: the cooking moments, at most the eat days (read_settings bounds it)
+            "enabled": raw.enabled, "avonden": raw.aantal, "eetdagen": eat_count(raw.persons),
+            "persons": raw.persons, "defaulted": raw.defaulted,
+            "away": [dag for dag in WEEKDAGEN[2:] + WEEKDAGEN[:2] if dag in raw.away],
+            "entities": {"enabled": HELPER_AAN, "avonden": HELPER_AVONDEN,
+                         "persons": helper_persons()},
+        })
+
+    async def post_settings(request):
+        body = await body_of(request)
+        entity, value, away = body.get("entity_id"), body.get("value"), body.get("away")
+        if not isinstance(entity, str) or (value is None and not isinstance(away, bool)):
+            return _err(400, "entity_id en value (of away) zijn nodig")
+        by_entity = {eid: dag for dag, eid in helper_persons().items()}
+        if isinstance(away, bool) and entity not in by_entity:
+            return _err(400, "away hoort bij een personen-helper")
+        if entity in by_entity and not isinstance(away, bool) and value == 0                 and not isinstance(value, bool):
+            away = True  # 0 persons is "niet thuis", whoever asks
+        try:
+            if entity in by_entity and isinstance(away, bool):
+                # "Niet thuis eten": the add-on remembers the number from before
+                value = await ctx.hass.set_away(by_entity[entity], away)
+            elif entity in by_entity and (isinstance(value, bool) or not isinstance(value, int)
+                                          or not MIN_PERSONS <= value <= MAX_PERSONS):
+                return _err(400, "personen moeten 1 tot 8 zijn")
+            elif entity == HELPER_AVONDEN and (isinstance(value, bool)
+                                               or not isinstance(value, int)):
+                return _err(400, "kookmomenten moeten een getal zijn")
+            else:
+                # cooking moments outside 1 .. eat days are bounded, not refused
+                value = await ctx.hass.set_setting(entity, value)
+        except ValueError:
+            return _err(400, "geen weekmenu-helper")
+        return web.json_response({"ok": True, "value": value})
+
+    # --- v1.1: own recipes, and "Van een link" (importer.py) ---
+
+    import_slot = asyncio.Semaphore(1)  # "Van een link": one fetch and parse at a time
+
+    def recipes_payload() -> dict:
+        items = sorted(ctx.recipes.all(), key=lambda r: r.title.casefold())
+        return {"items": [asdict(r) for r in items], "kinds": catalog.kind_names()}
+
+    async def get_recipes(request):
+        return web.json_response(recipes_payload())
+
+    def own_recipe_of(body: dict) -> OwnRecipe | str:
+        """The recipe in a form body, or the Dutch message of what is wrong with it."""
+        def text(value) -> str | None:
+            return (value.strip()[:MAX_TEXT] or None) if isinstance(value, str) else None
+
+        def lines(value) -> list[str]:
+            if not isinstance(value, list):
+                return []
+            return [x.strip()[:MAX_TEXT] for x in value
+                    if isinstance(x, str) and x.strip()][:MAX_LINES]
+
+        def link(value):
+            """A web link, None when empty, False when it is something else."""
+            if value is None or value == "":
+                return None
+            if (isinstance(value, str) and len(value) <= MAX_LINK
+                    and value.strip().lower().startswith(("http://", "https://"))):
+                return value.strip()
+            return False
+
+        rid, servings, cook = body.get("id", 0), body.get("servings"), body.get("cook")
+        kind = body.get("kind") or None
+        if not isinstance(rid, int) or isinstance(rid, bool) or rid > 0:
+            return "Ongeldig recept-id"
+        title = text(body.get("title"))
+        if not title:
+            return RECIPE_NAME
+        if (not isinstance(servings, int) or isinstance(servings, bool)
+                or not 1 <= servings <= MAX_RECIPE_SERVINGS):
+            return RECIPE_SERVINGS
+        ingredients = lines(body.get("ingredients"))
+        if not ingredients:
+            return RECIPE_INGREDIENTS
+        if cook is not None and (not isinstance(cook, int) or isinstance(cook, bool)
+                                 or not 0 <= cook <= 24 * 60):
+            return "Kooktijd moet een aantal minuten zijn"
+        if kind is not None and kind not in catalog.kind_names():
+            return "Kies een keuken uit de lijst"
+        url, image = link(body.get("url")), link(body.get("image"))
+        if url is False or image is False:
+            return "Een link moet beginnen met http:// of https://"
+        return OwnRecipe(rid, title, servings, ingredients, lines(body.get("steps")),
+                         cook or None, kind, text(body.get("source")), url, image,
+                         ctx.clock().isoformat(timespec="minutes"))
+
+    async def save_recipe(request):
+        """Add (id 0) or change an own recipe. A menu that already has it keeps its copy."""
+        r = own_recipe_of(await body_of(request))
+        if isinstance(r, str):
+            return _err(400, r)
+        if ctx.busy or ctx.in_round:
+            return _err(409, BUSY)
+        async with ctx.lock:
+            if r.id < 0 and ctx.recipes.get(r.id) is None:
+                return _err(404, RECIPE_GONE)
+            saved = await asyncio.to_thread(ctx.recipes.save, r)
+        log.info("Eigen recept %s bewaard", saved.id)
+        return web.json_response(asdict(saved))
+
+    async def remove_recipe(request):
+        try:
+            rid = int(request.match_info["id"])
+        except ValueError:
+            return _err(400, "ongeldig recept-id")
+        if ctx.busy or ctx.in_round:
+            return _err(409, BUSY)
+        async with ctx.lock:
+            if not await asyncio.to_thread(ctx.recipes.remove, rid):
+                return _err(404, RECIPE_GONE)
+        log.info("Eigen recept %s verwijderd", rid)
+        return web.json_response(recipes_payload())
+
+    async def read_link(url: str) -> OwnRecipe | None:
+        """Fetch and parse one link; one at a time, a second request waits. A parse that
+        takes longer than PARSE_LIMIT is answered as too hard, but its thread cannot be
+        stopped: the slot stays taken until that thread ends, so they never pile up.
+        None when no turn came within PARSE_LIMIT (a parse that never ends holds it)."""
+        try:
+            await asyncio.wait_for(import_slot.acquire(), PARSE_LIMIT)
+        except TimeoutError:
+            return None
+        handed_over = False
+        try:
+            final, page = await importer.fetch_page(ctx.web_http, url)
+            job = asyncio.ensure_future(asyncio.to_thread(importer.parse, page, final))
+
+            def done(j):
+                import_slot.release()
+                if not j.cancelled():
+                    j.exception()  # retrieved: a late failure is not logged as unhandled
+
+            job.add_done_callback(done)
+            handed_over = True
+            try:
+                return await asyncio.wait_for(asyncio.shield(job), PARSE_LIMIT)
+            except TimeoutError:
+                raise importer.RecipeImportError(importer.TOO_HARD) from None
+        finally:
+            if not handed_over:
+                import_slot.release()
+
+    async def import_recipe(request):
+        """"Van een link": the recipe on that page, filled in for the form; not saved.
+        Nothing is written, so no lock."""
+        url = (await body_of(request)).get("url")
+        if not isinstance(url, str) or not url.strip() or len(url) > MAX_LINK:
+            return _err(400, "Plak de link van een recept")
+        if ctx.web_http is None:
+            return _err(503, "Een recept van een link lezen kan nu niet")
+        try:
+            r = await read_link(url)
+        except importer.RecipeImportError as e:
+            # never the link itself in the log: a path or query may carry something private
+            log.info("Recept van een link niet gelezen: %s", e.message)
+            return _err(422, e.message)
+        if r is None:
+            return _err(503, IMPORT_BUSY)
+        log.info("Recept gelezen van %s", _printable(r.source))
+        return web.json_response(asdict(r))
+
+    app.router.add_get("/", index)
+    app.router.add_get("/gids", guide)
+    app.router.add_get("/api/status", status)
+    app.router.add_post("/api/login", login)
+    app.router.add_post("/api/logout", logout)
+    app.router.add_get("/api/health", health)
+    app.router.add_get("/api/diagnose", get_diagnose)
+    app.router.add_post("/api/diagnose/retry", retry_writes)
+    app.router.add_get("/api/week", week)
+    app.router.add_post("/api/week/confirm", confirm)
+    app.router.add_get("/api/choose", choose)
+    app.router.add_post("/api/choose/search", choose_search)
+    app.router.add_get("/api/dish/{day}", dish)
+    app.router.add_post("/api/dish/{day}/pick", pick)
+    app.router.add_post("/api/dish/{day}/back", back)
+    app.router.add_post("/api/dish/{day}/persons", persons)
+    app.router.add_post("/api/dish/{day}/remove", remove)
+    app.router.add_post("/api/dish/{day}/correct", correct)
+    app.router.add_get("/api/products", products)
+    app.router.add_post("/api/dish/{day}/taste", set_taste)
+    app.router.add_get("/api/taste", get_taste)
+    app.router.add_post("/api/taste/remove", remove_taste)
+    app.router.add_get("/api/overrides", get_overrides)
+    app.router.add_post("/api/overrides/remove", remove_override)
+    app.router.add_post("/api/run", run)
+    app.router.add_get("/api/staples", get_staples)
+    app.router.add_post("/api/staples/{pid}", add_staple)
+    app.router.add_get("/api/offers", get_offers)
+    app.router.add_post("/api/offers/{pid}", add_offer)
+    app.router.add_get("/api/savings", savings)
+    app.router.add_get("/api/settings", get_settings)
+    app.router.add_post("/api/settings", post_settings)
+    app.router.add_get("/api/recipes", get_recipes)
+    app.router.add_post("/api/recipes", save_recipe)
+    app.router.add_post("/api/recipes/import", import_recipe)
+    app.router.add_post("/api/recipes/{id}/remove", remove_recipe)
+    if static_dir.is_dir():
+        app.router.add_static("/static/", static_dir)
+    app.router.add_get("/" + _ASSET, asset)
+    return app

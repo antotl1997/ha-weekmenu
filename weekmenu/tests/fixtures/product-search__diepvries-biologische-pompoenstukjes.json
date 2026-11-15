@@ -1,0 +1,2490 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 23,
+  "totalPages": 2,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 425194,
+   "hqId": 693291,
+   "title": "AH Biologisch Doosje met wilde blauwe bessen",
+   "salesUnitSize": "250 g",
+   "unitPriceDescription": "normale prijs per kg €13.16",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343936?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343936?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343936?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343936?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313932343936?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 2.96,
+   "priceBeforeBonus": 3.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Blauwe bessen (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Deze wilde bosbessen hebben een zoete smaak en een knappige bite. Heerlijk om zo te eten, door de yoghurt te mixen, in een smoothie maar ook als ingredi&#x00EB;nt in taarten en muffins.</p><p><ul><li>100% natuurlijk, wilde bessen</li><li>100% biologisch</li><li>Vers ingevroren</li></ul></p>",
+   "propertyIcons": [
+    "vegan",
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 582549,
+   "hqId": 25169,
+   "title": "AH Zakje met mango stukjes",
+   "salesUnitSize": "1 kg",
+   "unitPriceDescription": "normale prijs per kg €7.99",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933373938?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933373938?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933373938?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933373938?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933373938?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 7.19,
+   "priceBeforeBonus": 7.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Mango, ananas (diepvries)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan",
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 582547,
+   "hqId": 25167,
+   "title": "AH Biologisch Doosje met mangostukjes",
+   "salesUnitSize": "250 g",
+   "unitPriceDescription": "normale prijs per kg €9.16",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833323736?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833323736?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833323736?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833323736?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313833323736?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 2.06,
+   "priceBeforeBonus": 2.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Mango, ananas (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan",
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 582548,
+   "hqId": 25168,
+   "title": "AH Zakje met zomer fruit",
+   "salesUnitSize": "1 kg",
+   "unitPriceDescription": "normale prijs per kg €7.99",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313834383233?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313834383233?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313834383233?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313834383233?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313834383233?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 7.19,
+   "priceBeforeBonus": 7.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Fruitmix (diepvries)",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan",
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 582546,
+   "hqId": 25166,
+   "title": "AH Biologisch Doosje met zomerfruit",
+   "salesUnitSize": "250 g",
+   "unitPriceDescription": "normale prijs per kg €11.96",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933393839?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933393839?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933393839?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933393839?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933393839?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 2.69,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Fruit, verse sappen",
+   "subCategory": "Fruitmix (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan",
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 609027,
+   "hqId": 66109,
+   "title": "AH Biologisch OerDesem blond gesneden vriesvers",
+   "salesUnitSize": "per stuk",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_5576423264365030516c69304348593252525a4e7067?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_5576423264365030516c69304348593252525a4e7067?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_5576423264365030516c69304348593252525a4e7067?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_5576423264365030516c69304348593252525a4e7067?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_5576423264365030516c69304348593252525a4e7067?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-02",
+   "bonusEndDate": "2026-11-08",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "VOOR 2.49",
+   "currentPrice": 2.49,
+   "priceBeforeBonus": 3.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Vriesvers desembrood",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vanaf maandag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan",
+    "biologisch",
+    "diepvries",
+    "afbakken"
+   ],
+   "stickers": null,
+   "nutriscore": "C",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 826710,
+   "bonusSegmentDescription": "Alle AH Liefde & Passie OerDesem",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 30,
+   "multipleItemPromotion": true,
+   "labelType": null,
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_FIXED_PRICE",
+     "defaultDescription": "voor 2.49",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": 2.49,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 62444,
+   "hqId": 524394,
+   "title": "AH Biologisch Roomijs vanille",
+   "salesUnitSize": "1 l",
+   "unitPriceDescription": "normale prijs per liter €3.99",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239383938353735?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239383938353735?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239383938353735?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239383938353735?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_43545239383938353735?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 3.59,
+   "priceBeforeBonus": 3.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Schepijs",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Gemaakt van de melk van Holsteiners</li><li>Maak ook eens laagjes in een hoog, smal glas in plaats van het ijs in bolletjes te eten</li><li>Lekker om te combineren met bijvoorbeeld vla, koekkruimels, room en vruchtenpuree</li></ul></p>",
+   "propertyIcons": [
+    "vega",
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 409994,
+   "hqId": 854203,
+   "title": "AH Biologisch Tuinerwten",
+   "salesUnitSize": "450 g",
+   "unitPriceDescription": "normale prijs per kg €3.53",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313433333139?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313433333139?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313433333139?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313433333139?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313433333139?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 1.43,
+   "priceBeforeBonus": 1.59,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Tuinerwten, velderwten (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Vriesverse erwten fijn uit biologische teelt. Ideaal als bijgerecht of verwerkt in rijstschotels.</p><p><ul><li>Zo makkelijk kan lekker eten zijn!</li><li>Direct na de oogst geblancheerd en ingevroren</li><li>Met behoud van smaak, vitamines en voedingsstoffen</li></ul></p>",
+   "propertyIcons": [
+    "biologisch"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 533328,
+   "hqId": 797679,
+   "title": "AH Biologisch Broccoliroosjes",
+   "salesUnitSize": "400 g",
+   "unitPriceDescription": "normale prijs per kg €5.73",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837373939?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837373939?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837373939?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837373939?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837373939?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 2.06,
+   "priceBeforeBonus": 2.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Broccoli (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 474803,
+   "hqId": 727638,
+   "title": "Iglo Biologische spinazie à la crème",
+   "salesUnitSize": "450 g",
+   "unitPriceDescription": "normale prijs per kg €6.64",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_747944516e4e4b5154744b3169634a6d4c4a515a4d67?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_747944516e4e4b5154744b3169634a6d4c4a515a4d67?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_747944516e4e4b5154744b3169634a6d4c4a515a4d67?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_747944516e4e4b5154744b3169634a6d4c4a515a4d67?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_747944516e4e4b5154744b3169634a6d4c4a515a4d67?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 2.69,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Spinazie (diepvries)",
+   "brand": "Iglo",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Spinazie a la creme van iglo, maar dan biologisch! Makkelijk en snel te bereiden en veelzijdig te gebruiken. Onze spinazie wordt razendsnel diepgevroren, voor maximaal behoud van smaak en vitamines.</p><p><ul><li>Snel na oogst diepgevroren voor maximaal behoud van vitamines</li><li>Makkelijk te portioneren met deelblokjes</li><li>Bron van vitamine a, k, eiwitten en vezels</li><li>Zonder toegevoegde kunstmatige smaak- of kleurstoffen</li></ul></p>",
+   "propertyIcons": [
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Probeer ook eens de andere spinazies van iglo!",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 409997,
+   "hqId": 854218,
+   "title": "AH Biologisch Bladspinazie deelblokjes",
+   "salesUnitSize": "450 g",
+   "unitPriceDescription": "normale prijs per kg €3.09",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50323031353135?revLabel=2&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50323031353135?revLabel=2&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50323031353135?revLabel=2&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50323031353135?revLabel=2&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50323031353135?revLabel=2&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 1.25,
+   "priceBeforeBonus": 1.39,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Spinazie (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Vriesverse biologische bladspinazie in deelblokjes. Lekker met aardappelen en een mooi stukje vis.</p><p><ul><li>Zachte, frisse spinazie in handige deelblokjes</li><li>Direct na de oogst geblancheerd en ingevroren</li><li>Met behoud van smaak, vitamines en voedingsstoffen</li></ul></p>",
+   "propertyIcons": [
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 603538,
+   "hqId": 56021,
+   "title": "Consenza Kaassouffle bio glutenvrij",
+   "salesUnitSize": "180 g",
+   "unitPriceDescription": "normale prijs per kg €34.94",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_385136394c4b6b46517347372d726d55583263764467?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_385136394c4b6b46517347372d726d55583263764467?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_385136394c4b6b46517347372d726d55583263764467?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_385136394c4b6b46517347372d726d55583263764467?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_385136394c4b6b46517347372d726d55583263764467?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 5.66,
+   "priceBeforeBonus": 6.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Glutenvrij",
+   "subCategory": "Glutenvrije snacks (diepvries)",
+   "brand": "Consenza",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Glutenvrije Kaassoufflés: krokant van buiten en rijkgevuld met romige Goudse kaas. Genieten voor elke snackliefhebber!</p><p><ul><li>Gluten- en tarwevrije kaassoufflés</li><li>Biologische snack</li><li>Rijkgevuld met Goudse kaas</li></ul></p>",
+   "propertyIcons": [
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Verpakt per 3 stuks",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 473390,
+   "hqId": 725780,
+   "title": "AH Biologisch Pizza mozzarella",
+   "salesUnitSize": "410 g",
+   "unitPriceDescription": "normale prijs per kg €9.00",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313732363032?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313732363032?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313732363032?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313732363032?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313732363032?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 3.32,
+   "priceBeforeBonus": 3.69,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Pizza (dunne bodem)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Pizza zoals ze die in napels maken: met een rijke tomatensaus, mozzarella, rode ui, cherry tomaatjes en pesto saus. Dus, zet die oven maar aan en maak iedereen blij aan tafel!</p><p><ul><li>Gemaakt in italie</li><li>Vegetarisch</li><li>Het deeg krijgt 24 uur om te rusten</li><li>Biologisch</li></ul></p>",
+   "propertyIcons": [
+    "vega",
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "D",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 409995,
+   "hqId": 854206,
+   "title": "AH Biologisch Sperziebonen",
+   "salesUnitSize": "450 g",
+   "unitPriceDescription": "normale prijs per kg €3.00",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313932353437?revLabel=2&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313932353437?revLabel=2&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313932353437?revLabel=2&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313932353437?revLabel=2&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313932353437?revLabel=2&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 1.21,
+   "priceBeforeBonus": 1.35,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Sperziebonen (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Vriesverse hele sperziebonen uit biologische teelt. Frisse, knapperige en hele bonen, klaar in enkele minuten.</p><p><ul><li>Ideaal in wokgerechten</li><li>Direct na de oogst geblancheerd en ingevroren</li><li>Met behoud van smaak, vitamines en voedingsstoffen</li></ul></p>",
+   "propertyIcons": [
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 617607,
+   "hqId": 73357,
+   "title": "AH Terra Biologische edamame bonen in peul",
+   "salesUnitSize": "450 g",
+   "unitPriceDescription": "normale prijs per kg €8.78",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_70376f5237745330533147332d306b3736344f585841?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_70376f5237745330533147332d306b3736344f585841?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_70376f5237745330533147332d306b3736344f585841?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_70376f5237745330533147332d306b3736344f585841?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_70376f5237745330533147332d306b3736344f585841?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 3.55,
+   "priceBeforeBonus": 3.95,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Edamame bonen (diepvries)",
+   "brand": "AH Terra",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 609028,
+   "hqId": 66110,
+   "title": "AH Biologisch OerDesem blond ongesneden vriesvers",
+   "salesUnitSize": "per stuk",
+   "unitPriceDescription": null,
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_7a44454152396a35514c696c6a4b4c766143582d6b51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_7a44454152396a35514c696c6a4b4c766143582d6b51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_7a44454152396a35514c696c6a4b4c766143582d6b51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_7a44454152396a35514c696c6a4b4c766143582d6b51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_7a44454152396a35514c696c6a4b4c766143582d6b51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-02",
+   "bonusEndDate": "2026-11-08",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "VOOR 2.49",
+   "currentPrice": 2.49,
+   "priceBeforeBonus": 3.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Vriesvers desembrood",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vanaf maandag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "vegan",
+    "biologisch",
+    "diepvries",
+    "afbakken"
+   ],
+   "stickers": null,
+   "nutriscore": "C",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 826710,
+   "bonusSegmentDescription": "Alle AH Liefde & Passie OerDesem",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 30,
+   "multipleItemPromotion": true,
+   "labelType": null,
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_FIXED_PRICE",
+     "defaultDescription": "voor 2.49",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": 2.49,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 533524,
+   "hqId": 665561,
+   "title": "AH Biologisch Bloemkoolroosjes",
+   "salesUnitSize": "400 g",
+   "unitPriceDescription": "normale prijs per kg €5.73",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838353032?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838353032?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838353032?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838353032?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313838353032?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 2.06,
+   "priceBeforeBonus": 2.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Bloemkool (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "",
+   "propertyIcons": [
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 409996,
+   "hqId": 854211,
+   "title": "AH Biologisch Boerenkool deelblokjes",
+   "salesUnitSize": "450 g",
+   "unitPriceDescription": "normale prijs per kg €2.87",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313933323730?revLabel=3&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313933323730?revLabel=3&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313933323730?revLabel=3&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313933323730?revLabel=3&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_434d50313933323730?revLabel=3&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 1.16,
+   "priceBeforeBonus": 1.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Boerenkool (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Vriesverse biologische boerenkool in deelblokjes. Ideaal voor een snelle stamppot.</p><p><ul><li>Zo makkelijk kan lekker eten zijn!</li><li>Direct na de oogst geblancheerd en ingevroren</li><li>Met behoud van smaak, vitamines en voedingsstoffen</li></ul></p>",
+   "propertyIcons": [
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 377317,
+   "hqId": 838773,
+   "title": "AH Biologisch Garnalen rauw en gepeld",
+   "salesUnitSize": "225 g",
+   "unitPriceDescription": "normale prijs per kg €28.84",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837383838?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837383838?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837383838?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837383838?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313837383838?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 5.84,
+   "priceBeforeBonus": 6.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Vis",
+   "subCategory": "Garnalen (diepvries)",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p><ul><li>Biologische garnalen, rauw en gepld</li><li>Vers ingevroren voor de beste kwaliteit</li></ul></p>",
+   "propertyIcons": [
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 625235,
+   "hqId": 78460,
+   "title": "Australian Vanilla macadamia with yuzu",
+   "salesUnitSize": "325 ml",
+   "unitPriceDescription": "normale prijs per liter €18.43",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_52324d30686e3831542d793435786555445a64636551?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_52324d30686e3831542d793435786555445a64636551?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_52324d30686e3831542d793435786555445a64636551?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_52324d30686e3831542d793435786555445a64636551?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_52324d30686e3831542d793435786555445a64636551?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": null,
+   "priceBeforeBonus": 5.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Diepvries",
+   "subCategory": "Roomijs pints",
+   "brand": "Australian",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Romig bourbon vanille roomijs met knapperige macadamia noten, een frisse hint van yuzu en een zachte karamelsaus van kokossuiker. Een frisse twist, op een tijdloze smaak.</p><p><ul><li>100% biologisch, gemaakt met zorgvuldig geselecteerde ingredienten</li><li>Ambachtelijk bereid door onze gepassioneerde gelatieri voor volle smaak</li><li>Ijssalonervaring thuis, toppings blijven zichtbaar dankzij staand invriezen</li><li>35+ jaar vakmanschap sinds 1989 liefde voor echte smaak</li></ul></p>",
+   "propertyIcons": [
+    "vega",
+    "biologisch",
+    "diepvries"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Passie voor kwaliteitaustralian is in 1989 gestart met de eerste ijssalon. Geniet nu ook thuis van jouw favoriete schepijs! De smaken worden Ambachtelijk bereid door onze gepassioneerde gelatieri. Puur vakmanschap voor jouw genietmoment, van de eerste oogst tot de laatste draai in de ijsmachine. doordat we het ijs staand invriezen behouden we de luxe toppings, voor een echte ijssalonervaring thuis.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=diepvries%20biologische%20pompoenstukjes&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=diepvries%20biologische%20pompoenstukjes&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=diepvries%20biologische%20pompoenstukjes&sortBy=RELEVANCE&page=1&size=20"
+  },
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=diepvries%20biologische%20pompoenstukjes&sortBy=RELEVANCE&page=1&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "AH Biologisch",
+     "label": "AH Biologisch",
+     "count": 14,
+     "display": true
+    },
+    {
+     "id": "AH Terra",
+     "label": "AH Terra",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Australian",
+     "label": "Australian",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "Consenza",
+     "label": "Consenza",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Iglo",
+     "label": "Iglo",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "4950",
+     "label": "Blauwe bessen (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "5194",
+     "label": "Bloemkool (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "44078",
+     "label": "Boerenkool (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "5196",
+     "label": "Broccoli (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "2186",
+     "label": "Brood",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "44223",
+     "label": "Desembrood",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "5886",
+     "label": "Diepvries brood, gebak, bladerdeeg",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "5882",
+     "label": "Diepvries fruit",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "5883",
+     "label": "Diepvries groente",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "5884",
+     "label": "Diepvries pizza",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "6360",
+     "label": "Diepvries vis",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "5887",
+     "label": "Diepvries vlees, vis",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "6318",
+     "label": "Edamame bonen (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "2743",
+     "label": "Fruitmix (diepvries)",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "2599",
+     "label": "Garnalen",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "2598",
+     "label": "Garnalen (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "8125",
+     "label": "Glutenvrije diepvries",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "8228",
+     "label": "Glutenvrije snacks (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "1171",
+     "label": "IJs",
+     "count": 5,
+     "display": true
+    },
+    {
+     "id": "3261",
+     "label": "Mango, ananas (diepvries)",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "2342",
+     "label": "Pizza (dunne bodem)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "11398",
+     "label": "Roomijs",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "2156",
+     "label": "Roomijs pints",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "1492",
+     "label": "Schaal- en schelpdieren",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "6381",
+     "label": "Schelpdieren (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "11696",
+     "label": "Schepijs",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "4041",
+     "label": "Sperziebonen (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "2695",
+     "label": "Spinazie",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "1579",
+     "label": "Spinazie (diepvries)",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "1342",
+     "label": "Spinazie, andijvie, witlof, kool",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "2322",
+     "label": "Toetjes",
+     "count": 4,
+     "display": true
+    },
+    {
+     "id": "9610",
+     "label": "Tuinerwten, velderwten (diepvries)",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "6539",
+     "label": "Verse vis",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "44403",
+     "label": "Vriesvers desembrood",
+     "count": 2,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 19,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 14,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 17,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 21,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 21,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 18,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 20,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 21,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 13,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 16,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 7,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 13,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "a",
+     "label": "Score A",
+     "count": 12,
+     "display": true
+    },
+    {
+     "id": "c",
+     "label": "Score C",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "d",
+     "label": "Score D",
+     "count": 2,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 23,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_biologisch",
+   "allLabel": null,
+   "label": "Biologisch",
+   "options": [
+    {
+     "id": "np_biologisch",
+     "label": "Biologisch",
+     "count": 23,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "diepvries",
+   "allLabel": null,
+   "label": "Diepvries",
+   "options": [
+    {
+     "id": "diepvries",
+     "label": "Diepvries",
+     "count": 22,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_vegetarisch",
+   "allLabel": null,
+   "label": "Vegetarisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 13,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_veganistisch",
+   "allLabel": null,
+   "label": "Veganistisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 7,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

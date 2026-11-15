@@ -1,0 +1,127 @@
+{
+ "status": 400,
+ "body": {
+  "errors": [
+   {
+    "message": "Cannot query field \"productId\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 19
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   },
+   {
+    "message": "Cannot query field \"webshopId\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 29
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   },
+   {
+    "message": "Cannot query field \"wsId\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 39
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   },
+   {
+    "message": "Cannot query field \"hqId\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 44
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   },
+   {
+    "message": "Cannot query field \"gtin\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 49
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   },
+   {
+    "message": "Cannot query field \"ean\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 54
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   },
+   {
+    "message": "Cannot query field \"barcode\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 58
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   },
+   {
+    "message": "Cannot query field \"articleNumber\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 66
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   },
+   {
+    "message": "Cannot query field \"sku\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 80
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   },
+   {
+    "message": "Cannot query field \"product\" on type \"PosReceiptProduct\".",
+    "locations": [
+     {
+      "line": 4,
+      "column": 84
+     }
+    ],
+    "extensions": {
+     "code": "GRAPHQL_VALIDATION_FAILED"
+    }
+   }
+  ]
+ }
+}

@@ -1,0 +1,106 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Ontbijtgranen, beleg",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817965",
+    "offerId": 201757,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817965,
+    "segmentDescription": "Alle De Ruijter en Venz hagelslag en vlokken",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2E HALVE PRIJS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201757_AH_NL_WK45_ALLE_DE_RUIJTER_EN_VENZ_HAGELSLAG_EN_VLOKKEN?rendition=200px&fileType=binary&version=j5Ak6w0woyQsLYRx1NaMbg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201757_AH_NL_WK45_ALLE_DE_RUIJTER_EN_VENZ_HAGELSLAG_EN_VLOKKEN?rendition=708px&fileType=binary&version=j5Ak6w0woyQsLYRx1NaMbg"
+     }
+    ],
+    "category": "Ontbijtgranen, beleg",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_HALF_PRICE",
+      "defaultDescription": "2e halve prijs",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817990",
+    "offerId": 201782,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817990,
+    "segmentDescription": "Alle AH Biologisch noten, zaden en pitten 150-500 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201782_AH_NL_WK45_ALLE_AH_BIOLOGISCH_NOTEN_EN_PITTEN_150500_GRAM?rendition=200px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201782_AH_NL_WK45_ALLE_AH_BIOLOGISCH_NOTEN_EN_PITTEN_150500_GRAM?rendition=708px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     }
+    ],
+    "category": "Ontbijtgranen, beleg",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

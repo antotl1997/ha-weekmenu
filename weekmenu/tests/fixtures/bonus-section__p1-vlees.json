@@ -1,0 +1,1457 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Vlees",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817955",
+    "offerId": 201747,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817955,
+    "segmentDescription": "Alle AH Greenfields beefburgers, AH (Terra plantaardige) hamburgers en AH Scharrelkipburgers 2 stuks",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201747_AH_NL_WK45_ALLE_AH_GREENFIELDS_BEEFBURGERS_AH_TERRA_PLANTAARDIGE_HAMBURGERS_EN_SCHARRELKIPBURGERS_2_STUKS?rendition=200px&fileType=binary&version=E_Jj9IzhfbRCYnhz8IUUPA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201747_AH_NL_WK45_ALLE_AH_GREENFIELDS_BEEFBURGERS_AH_TERRA_PLANTAARDIGE_HAMBURGERS_EN_SCHARRELKIPBURGERS_2_STUKS?rendition=708px&fileType=binary&version=E_Jj9IzhfbRCYnhz8IUUPA"
+     }
+    ],
+    "category": "Vlees",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "labelType": "SPOTLIGHT",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817946",
+    "offerId": 201738,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817946,
+    "segmentDescription": "Alle AH Spekreepjes en hamblokjes",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "1 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201738_AH_NL_WK45_ALLE_AH_SPEKREEPJES_EN_HAMBLOKJES?rendition=200px&fileType=binary&version=O0AdXEo541kEHR1q6GNR7g"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201738_AH_NL_WK45_ALLE_AH_SPEKREEPJES_EN_HAMBLOKJES?rendition=708px&fileType=binary&version=O0AdXEo541kEHR1q6GNR7g"
+     }
+    ],
+    "category": "Vlees",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "1+1 gratis",
+      "count": 1,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 4004,
+    "hqId": 646767,
+    "title": "AH Rundergehakt 300 gram",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €13.97",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_5038775f75484e3153592d7864705f3332354a6d7777?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_5038775f75484e3153592d7864705f3332354a6d7777?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_5038775f75484e3153592d7864705f3332354a6d7777?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_5038775f75484e3153592d7864705f3332354a6d7777?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_5038775f75484e3153592d7864705f3332354a6d7777?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "817961",
+    "bonusSegmentId": 817961,
+    "offerId": 201753,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "AH Rundergehakt 300 gram",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 3.79",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 3.79",
+      "price": 3.79
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 4.19,
+    "hasListPrice": false,
+    "currentPrice": 3.79,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Vlees",
+    "subCategory": "Rundergehakt",
+    "subCategoryId": 1099,
+    "propertyIcons": [
+     "goedkoopje"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Rund"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan",
+      "Wok",
+      "Braadpan"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "C"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "np_goedkoopje": [
+      "prijsfavoriet"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "np_verbluffen": [
+      "verbluffend goedkoop"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Rundergehakt om eindeloos mee te varieren. Natuurlijk voor een gewone gehaktbal, maar ook voor snackballetjes of soepballetjes. Of gebruik het geruld in pastasaus en ovengerechten.</p><p><ul><li>Rundvlees</li><li>Bereiding: koekenpan/wok. Rullen ca. 4-5 minuten</li><li>Weetje: je kunt het gehakt rullen zonder boter of olie toe te voegen</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+    "descriptionFull": "<p>  Met het vertrouwde ahhuismerk haal je een lekker stukje vlees in huis voor een goede prijs. Bewaar het rundergehakt in de koelkast op maximaal 4 graden celsius of vries het in op de dag van aankoop. Na invriezen wel binnen 3 maanden gebruiken. Voor gebruik ontdooien. </p><p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817909",
+    "offerId": 201701,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817909,
+    "segmentDescription": "Alle AH Kipworsten van de versafdeling",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2E HALVE PRIJS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_744e4a7142783768526153483362525f5f75744c4c51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_744e4a7142783768526153483362525f5f75744c4c51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_744e4a7142783768526153483362525f5f75744c4c51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_744e4a7142783768526153483362525f5f75744c4c51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_744e4a7142783768526153483362525f5f75744c4c51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_HALF_PRICE",
+      "defaultDescription": "2e halve prijs",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817948",
+    "offerId": 201740,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817948,
+    "segmentDescription": "AH Veluwse rookworst 280 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 2.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_382d755f3147676e527279525f36527546717a2d6f41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_382d755f3147676e527279525f36527546717a2d6f41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_382d755f3147676e527279525f36527546717a2d6f41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_382d755f3147676e527279525f36527546717a2d6f41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_382d755f3147676e527279525f36527546717a2d6f41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 2.99",
+      "price": 2.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 123833,
+    "hqId": 572511,
+    "title": "AH Biefstuk 2 stuks",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €33.78",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_30545f6f6874624e536b6d635f72786b3636534f6277?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_30545f6f6874624e536b6d635f72786b3636534f6277?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_30545f6f6874624e536b6d635f72786b3636534f6277?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_30545f6f6874624e536b6d635f72786b3636534f6277?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_30545f6f6874624e536b6d635f72786b3636534f6277?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "823232",
+    "bonusSegmentId": 823232,
+    "offerId": 207029,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "AH Biefstuk 2 stuks",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "100 GRAM VOOR 2.69",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_WEIGHT",
+      "defaultDescription": "per 100 GRAM voor €2.69",
+      "count": 100,
+      "price": 2.69,
+      "unit": "GRAM"
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 9.29,
+    "hasListPrice": false,
+    "currentPrice": 2.69,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "OUT_OF_STOCK",
+    "availableOnline": true,
+    "isOrderable": false,
+    "mainCategory": "Vlees",
+    "subCategory": "Biefstuk",
+    "subCategoryId": 6326,
+    "propertyIcons": [],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Rund"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan",
+      "Pan"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "da_cutting_method": [
+      "Stuk"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": true,
+    "nix18": false,
+    "descriptionHighlights": "",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "product": {
+    "webshopId": 123836,
+    "hqId": 572516,
+    "title": "AH Kogelbiefstuk 2 stuks",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €36.50",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_785756705f62544d5252367073507848435a582d7477?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_785756705f62544d5252367073507848435a582d7477?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_785756705f62544d5252367073507848435a582d7477?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_785756705f62544d5252367073507848435a582d7477?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_785756705f62544d5252367073507848435a582d7477?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "823231",
+    "bonusSegmentId": 823231,
+    "offerId": 207028,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "AH Kogelbiefstuk 2 stuks",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "100 GRAM VOOR 2.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_WEIGHT",
+      "defaultDescription": "per 100 GRAM voor €2.99",
+      "count": 100,
+      "price": 2.99,
+      "unit": "GRAM"
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 9.86,
+    "hasListPrice": false,
+    "currentPrice": 2.99,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "OUT_OF_STOCK",
+    "availableOnline": true,
+    "isOrderable": false,
+    "mainCategory": "Vlees",
+    "subCategory": "Biefstuk",
+    "subCategoryId": 6326,
+    "propertyIcons": [],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Rund"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan",
+      "Pan"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "da_cutting_method": [
+      "Stuk"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": true,
+    "nix18": false,
+    "descriptionHighlights": "",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823303",
+    "offerId": 207113,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823303,
+    "segmentDescription": "AH Scharrel kipfiletschnitzel",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "15% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_506f366846506c38514b4b2d65683265684f37585677?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_506f366846506c38514b4b2d65683265684f37585677?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_506f366846506c38514b4b2d65683265684f37585677?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_506f366846506c38514b4b2d65683265684f37585677?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_506f366846506c38514b4b2d65683265684f37585677?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "15% korting",
+      "percentage": 15,
+      "precisePercentage": 15
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817916",
+    "offerId": 201708,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817916,
+    "segmentDescription": "AH Excellent hertenbiefstuk of eendenborstfilet",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6251514576314b4a5170537647796c4b455952453167?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6251514576314b4a5170537647796c4b455952453167?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6251514576314b4a5170537647796c4b455952453167?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6251514576314b4a5170537647796c4b455952453167?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6251514576314b4a5170537647796c4b455952453167?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 569380,
+    "hqId": 9666,
+    "title": "Cucina kipshoarma",
+    "brand": "Cucina",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €14.98",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_533352647074797554396d30623065746277524a7441?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_533352647074797554396d30623065746277524a7441?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_533352647074797554396d30623065746277524a7441?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_533352647074797554396d30623065746277524a7441?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_533352647074797554396d30623065746277524a7441?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "823312",
+    "bonusSegmentId": 823312,
+    "offerId": 207122,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "Cucina kipshoarma",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "100 GRAM VOOR 1.39",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_WEIGHT",
+      "defaultDescription": "per 100 GRAM voor €1.39",
+      "count": 100,
+      "price": 1.39,
+      "unit": "GRAM"
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 5.99,
+    "hasListPrice": false,
+    "currentPrice": 1.39,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Vlees",
+    "subCategory": "Halal kip",
+    "subCategoryId": 3083,
+    "propertyIcons": [],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Kip"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Gezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Nee"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "da_grape": [],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Gemarineerde halal kipreepjes met shoarma kruiden.</p><p><ul><li>Gekruide kipstukjes</li><li>Gemaakt van halal kippenvlees met shoarma kruiden</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "product": {
+    "webshopId": 581558,
+    "hqId": 24037,
+    "title": "Cucina spicy chicken wings",
+    "brand": "Cucina",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €12.48",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_3057673472346c4e5459614b413948445057635a5951?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_3057673472346c4e5459614b413948445057635a5951?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_3057673472346c4e5459614b413948445057635a5951?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_3057673472346c4e5459614b413948445057635a5951?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_3057673472346c4e5459614b413948445057635a5951?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "823350",
+    "bonusSegmentId": 823350,
+    "offerId": 207161,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "Cucina spicy chicken wings",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "100 GRAM VOOR 1.05",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_WEIGHT",
+      "defaultDescription": "per 100 GRAM voor €1.05",
+      "count": 100,
+      "price": 1.05,
+      "unit": "GRAM"
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 4.99,
+    "hasListPrice": false,
+    "currentPrice": 1.05,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Vlees",
+    "subCategory": "Halal kip",
+    "subCategoryId": 3083,
+    "propertyIcons": [],
+    "properties": {
+     "da_a_taste_experience": [
+      "Pikant"
+     ],
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Kip"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Bbq",
+      "Grill",
+      "Koekenpan",
+      "Oven"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "da_processing_type": [
+      "Gemarineerd"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "D"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Gezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "da_grape": [],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "da_type_of_processed_food": [
+      "Gemarineerd"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Geniet van cucina chicken wings, gemarineerd in een smaakvolle spicy marinade voor een heerlijke maaltijd.</p><p><ul><li>Premium kwaliteit halal vlees</li><li>Gemakkelijk te bereiden in een pannetje of airfryer</li><li>Vlug klaar en lekker makkelijk</li><li>Smaakvolle marinade</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "product": {
+    "webshopId": 623374,
+    "hqId": 76678,
+    "title": "Cucina kipblokjes Indiase curry",
+    "brand": "Cucina",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €16.25",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_354876765045516a53584f354e496c6546596b5f5077?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_354876765045516a53584f354e496c6546596b5f5077?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_354876765045516a53584f354e496c6546596b5f5077?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_354876765045516a53584f354e496c6546596b5f5077?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_354876765045516a53584f354e496c6546596b5f5077?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "823234",
+    "bonusSegmentId": 823234,
+    "offerId": 207034,
+    "offerStartDate": "2026-11-02",
+    "bonusSegmentDescription": "Cucina kipblokjes Indiase curry",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "100 GRAM VOOR 1.62",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_WEIGHT",
+      "defaultDescription": "per 100 GRAM voor €1.62",
+      "count": 100,
+      "price": 1.62,
+      "unit": "GRAM"
+     }
+    ],
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "priceBeforeBonus": 5.69,
+    "hasListPrice": false,
+    "currentPrice": 1.62,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Vlees",
+    "subCategory": "Halal kip",
+    "subCategoryId": 3083,
+    "propertyIcons": [],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "da_taste": [
+      "Kerrie"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Kip"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "da_processing_type": [
+      "Gemarineerd"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "C"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Gezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "da_grape": [],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "da_type_of_processed_food": [
+      "Gemarineerd"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "da_cutting_method": [
+      "Blokjes"
+     ],
+     "da_regionalism": [
+      "Indiaas"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823260",
+    "offerId": 207067,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823260,
+    "segmentDescription": "AH Ovenspecialiteiten",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 12.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207067_AH_NL_WK45_AH_OVENSPECIALITEITEN?rendition=200px&fileType=binary&version=IuGbz528ZAL_BF32TPRrVw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207067_AH_NL_WK45_AH_OVENSPECIALITEITEN?rendition=708px&fileType=binary&version=IuGbz528ZAL_BF32TPRrVw"
+     }
+    ],
+    "category": "Vlees",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 12.00",
+      "count": 2,
+      "price": 12.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

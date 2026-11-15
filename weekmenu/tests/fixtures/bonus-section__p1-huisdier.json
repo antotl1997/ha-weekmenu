@@ -1,0 +1,56 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Huisdier",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817953",
+    "offerId": 201745,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817953,
+    "segmentDescription": "Alle Gourmet en Bonzo",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201745_AH_NL_WK45_ALLE_GOURMET_EN_BONZO?rendition=200px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201745_AH_NL_WK45_ALLE_GOURMET_EN_BONZO?rendition=708px&fileType=binary&version=OIJoyphzSyulk0MPPNTJDw"
+     }
+    ],
+    "category": "Huisdier",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}
