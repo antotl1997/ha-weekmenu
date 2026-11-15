@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- **Naar volgende week om te kiezen.** Onderaan de lopende week staat nu altijd "Menu voor volgende week", ook als daar nog niets voor gekozen is. Eerder verscheen die knop pas als volgende week al een menu had, en dat kan sinds je zelf kiest pas na bevestigen: zo kwam je er nooit.
+
 ## 2.0.1
 
 - **Eén regel per actie in Aanbiedingen.** Producten uit dezelfde AH-actie (bijvoorbeeld "2 voor 2.49" op spinazie, andijvie, boerenkool en andere kleinverpakkingen) staan nu samen op één regel, met de foto en de omschrijving van de actie en "vanaf" de laagste prijs. De plusknop opent de producten van die actie, elk met gewicht en prijs, en daar tik je aan welke je wilt; je kunt er meer kiezen voordat je op Klaar tikt. Een actie met één product blijft een gewone regel. Zoeken vindt de actie ook op de naam van een product erin, en dat product staat dan bovenaan. De bewaarde folder wordt na de update één keer opnieuw opgehaald.

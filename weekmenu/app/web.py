@@ -790,7 +790,9 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
             "expected": w.expected.isoformat() if w.expected else None}
         nxt = menu_week_start(now)
         nxt_log = wlog if nxt == start else ctx.ledger.load(nxt)
-        out["next_week"] = nxt.isoformat() if nxt != start and nxt_log.plan else None
+        # always reachable from the running week: next week is where you choose (it has
+        # no menu until you confirm one, so "only when planned" would hide it for good)
+        out["next_week"] = nxt.isoformat() if nxt > start else None
         # "Nieuwe folder is er": about the week Menu bijwerken remakes, whichever shows
         fresh = new_folder_available(nxt_log)
         out["new_folder_available"] = fresh

@@ -560,7 +560,7 @@ function weekScreen() {
   }
   html += loginCard(w.login, true);
   if (w.next_week) {
-    html += `<div class="linkrow"><button class="pill grey" data-week="${esc(w.next_week)}">Volgende week bekijken →</button></div>`;
+    html += `<div class="linkrow"><button class="pill grey" data-week="${esc(w.next_week)}">Menu voor volgende week →</button></div>`;
   } else if (state.weekParam) {
     html += `<div class="linkrow"><button class="pill grey" data-week="">← Terug naar deze week</button></div>`;
   }

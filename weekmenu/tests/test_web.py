@@ -212,6 +212,11 @@ async def test_api_week_shows_running_week_if_planned(aiohttp_client, tmp_path):
     await planned_ctx(ctx)
     body = await (await client.get("api/week")).json()
     assert body["week"] == W.isoformat()
+    # next week has nothing yet, and that is exactly when you want to go there to choose
+    assert body["next_week"] == "2026-11-11"
+    nxt = await (await client.get("api/week?week=2026-11-11")).json()
+    assert nxt["week"] == "2026-11-11" and nxt["draft"] is True and nxt["next_week"] is None
+    assert any(d.get("kies") for d in nxt["days"])
 
 
 async def test_api_persons_rescales_only_that_dish(aiohttp_client, ctx, monkeypatch):
