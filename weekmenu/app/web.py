@@ -88,8 +88,8 @@ CONFIRMED = "Dit menu is al bevestigd"
 # v2.1: Week leegmaken
 NOT_CONFIRMED = "Deze week heeft geen bevestigd menu"
 RESET_STARTED = "Deze week is al begonnen, leegmaken kan niet meer."
-# what "Week leegmaken" sets back to WeekLog's starting values; added, unknown, titles
-# and everything of staples and loose offers stay
+# what "Week leegmaken" sets back to WeekLog's starting values; added, unknown, titles,
+# crossed_off and everything of staples and loose offers stay
 RESET_FIELDS = ("plan", "draft", "draft_period_start", "savings", "previous",
                 "previous_dish", "swapped_out", "removed_by_user", "held", "held_notified",
                 "round_done", "completion_tried", "notified")
@@ -98,7 +98,7 @@ RESET_FIELDS = ("plan", "draft", "draft_period_start", "savings", "previous",
 # Restoring them would lower a product twice on the next tap.
 RESET_KEEPS_PROGRESS = ("added", "pending", "unknown", "removed_by_user", "extras_added",
                         "extras_savings", "offers_added", "offers_savings", "offers_saved",
-                        "titles")
+                        "titles", "crossed_off")
 RECIPE_NAME = "Geef het recept een naam"
 RECIPE_SERVINGS = "Aantal personen moet tussen 1 en 20 liggen"
 RECIPE_INGREDIENTS = "Zet er minstens één ingrediënt in"

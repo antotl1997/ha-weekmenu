@@ -951,3 +951,62 @@ async def test_extras_remember_their_title(led, kind):
     log = WeekLog(W)
     await apply_extras(ah, led, log, {7: 1}, {7: "Koffie"}, kind=kind, savings={7: 1.0})
     assert led.load(W).titles == {7: "Koffie"}
+
+
+# --- 2.1.0 review: a crossed-off product is never looked for in the order ---
+
+
+async def test_crossed_off_product_is_never_lowered_in_a_later_order(led):
+    # spec 2: crossed off on the list = bought; it stays a leftover and is not
+    # looked for in the order afterwards (the units there are the user's own)
+    ah = FakeAh()
+    old = plan({1: 1, 2: 1})
+    await apply(ah, led, WeekLog(W), old)
+    ah.struck = {1}
+    res = await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
+    assert res.leftovers == [("Product 1", 1)]
+    saved = led.load(W)
+    assert saved.added == {1: 1} and saved.crossed_off == [1]
+    ah.order = ActiveOrder(5, {1: 2, 2: 1}, W)
+    n = len(ah.calls)
+    res = await apply(ah, led, led.load(W), plan({}), replaced=plan({}), today=BEFORE)
+    assert ah.order.items == {1: 2, 2: 1} and res.removed == {} and len(ah.calls) == n
+    saved = led.load(W)
+    assert saved.added == {1: 1} and saved.removed_by_user == {}
+
+
+def test_crossed_off_survives_a_save_and_old_logs_load_without_it():
+    log = WeekLog(W, crossed_off=[3, 1])
+    assert WeekLog.from_dict(log.to_dict()).crossed_off == [3, 1]
+    d = log.to_dict()
+    del d["crossed_off"]
+    assert WeekLog.from_dict(d).crossed_off == []
+
+
+def test_paused_apply_never_counts_a_crossed_off_product_as_a_cut(led):
+    from app import writer
+    log = WeekLog(W, added={1: 1}, added_to="list", crossed_off=[1], round_done=True)
+    res = writer._paused_apply(led, log, plan({}), plan({}), BEFORE)
+    assert res.held is None and led.load(W).round_done is True
+
+
+# --- 2.1.0 review: held lowerings alone promise nothing to add ---
+
+
+async def test_only_held_lowerings_leave_no_held_note_in_the_log(led):
+    ah = FakeAh(order=ActiveOrder(5, {1: 2}, date(2026, 10, 28)))
+    log = WeekLog(W, added={1: 2}, added_to="order:5", held="oud", held_notified=True,
+                  held_notified_items=[9])
+    res = await apply(ah, led, log, plan({}), replaced=plan({1: 2}), today=BEFORE)
+    assert res.held is not None and res.held.startswith("Deze producten konden niet uit")
+    saved = led.load(W)
+    assert saved.held is None and saved.plan["basket"] == {}
+    assert ah.calls == [] and saved.added == {1: 2}
+
+
+async def test_held_list_lowerings_get_a_neutral_note(led):
+    ah = FakeAh(order=ActiveOrder(5, {1: 1}, date(2026, 10, 28)))
+    log = WeekLog(W, added={1: 1}, added_to="list")
+    res = await apply(ah, led, log, plan({}), replaced=plan({1: 1}), today=BEFORE)
+    assert res.held == ("Deze producten konden niet weg. Haal ze zelf weg in de AH-app "
+                        "als dat moet: Product 1")

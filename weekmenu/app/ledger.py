@@ -100,6 +100,10 @@ class WeekLog:
     # v2.1: pid -> the name of each product the add-on added, so a leftover shows its name
     # when the plan no longer holds the product
     titles: dict[int, str] = field(default_factory=dict)
+    # v2.1: products a lowering found crossed off on the list (bought). They stay in
+    # `added` as a leftover and are never lowered anywhere again that week, also not in
+    # an order later on: the units there are the user's own.
+    crossed_off: list[int] = field(default_factory=list)
     # not stored: the file was written by a newer add-on. Shown, never written (v0.6).
     too_new: bool = field(default=False, compare=False, repr=False)
 
@@ -144,6 +148,7 @@ class WeekLog:
             "draft": self.draft,
             "draft_period_start": _iso(self.draft_period_start),
             "titles": {str(k): v for k, v in self.titles.items()},
+            "crossed_off": list(self.crossed_off),
         }
 
     @classmethod
@@ -185,6 +190,7 @@ class WeekLog:
             draft=d.get("draft"),
             draft_period_start=_date(d.get("draft_period_start")),
             titles={int(k): str(v) for k, v in (d.get("titles") or {}).items()},
+            crossed_off=[int(x) for x in d.get("crossed_off") or []],
         )
 
 

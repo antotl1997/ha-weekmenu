@@ -947,7 +947,27 @@ async def test_reset_reports_what_could_not_be_removed(aiohttp_client, ctx):
     assert r.status == 200, await r.text()
     assert (await r.json())["not_removed"] == [{"product": "Product 3", "qty": 1}]
     assert ctx.ledger.load(W).added == {3: 1}  # a new menu never adds it twice
+    assert ctx.ledger.load(W).crossed_off == [3]
     assert ctx.client.held() == {3: 1}
+
+
+async def test_crossed_off_product_is_not_lowered_in_a_later_order_after_reset(
+        aiohttp_client, ctx):
+    """Spec 2: crossed off = bought; it is never looked for in the order afterwards,
+    also not after Week leegmaken and a new menu with the same product."""
+    from app.ahclient import ActiveOrder
+    from app.writer import apply
+    await planned_ctx(ctx)
+    ctx.client.struck = {3}
+    client = await aiohttp_client(make_app(ctx))
+    assert (await reset(client)).status == 200
+    ah = ctx.client
+    ah.order = ActiveOrder(5, {3: 2}, W)  # the user's own two units in this week's order
+    await apply(ah, ctx.ledger, ctx.ledger.load(W), make_plan([dish(WO, 103, [3], 1.0)]))
+    writes = list(ah.writes)
+    r = await reset(client)
+    assert r.status == 200, await r.text()
+    assert ah.order.items == {3: 2} and ah.writes == writes
 
 
 async def test_reset_refused_once_the_week_started(aiohttp_client, tmp_path):
@@ -1012,7 +1032,8 @@ async def test_reset_with_an_order_of_another_week_still_empties_the_week(aiohtt
     r = await reset(client)
     assert r.status == 200, await r.text()
     body = await r.json()
-    assert body["held"] == cut_note(["Product 1", "Product 2", "Product 3"])
+    # put on the list, so they may sit on the locked list too: a neutral note
+    assert body["held"] == cut_note(["Product 1", "Product 2", "Product 3"], from_list=True)
     assert body["not_removed"] == [{"product": "Product 1", "qty": 1},
                                    {"product": "Product 2", "qty": 2},
                                    {"product": "Product 3", "qty": 1}]

@@ -27,10 +27,11 @@ record with "kind": "reduce", a delta <= 0 and "remove" (what leaves `log.added`
 current <= before+delta means it arrived, current >= before that it did not (the
 entry is dropped), anything else moves it to `log.unknown` (with the negative delta).
 Never repeated blind. A product crossed off on the list is never lowered; it stays
-a leftover. What a lowering finds already gone (the user took it off in the AH app:
-remove - min(remove, before)) goes into `log.removed_by_user` and is never added
-again that week (Ruling 43, not for `from_list`): `apply` adds only
-n - added - removed_by_user.
+a leftover, and `log.crossed_off` keeps it out of every later lowering that week (also
+in an order: the units there are the user's own). What a lowering finds already gone
+(the user took it off in the AH app: remove - min(remove, before)) goes into
+`log.removed_by_user` and is never added again that week (Ruling 43, not for
+`from_list`): `apply` adds only n - added - removed_by_user.
 
 Write-ahead record: right before each PUT/PATCH the quantity AH holds
 (`before`) and the amount we are about to add (`delta`) go into `log.pending`
@@ -54,8 +55,9 @@ into `log.offers_savings`, in the same save. Neither is ever lowered.
 Which order (Ruling 42): an active order is only written to (added, lowered,
 staples, offers) when its delivery day lies inside the log's menu week (Wednesday
 to Tuesday). Another week's order, or one whose day cannot be read, gets nothing:
-the plan is saved, `log.held` says why and the result carries `held` (the note
-for the message and the app). Never a fallback to the wrong order. Only the week the
+the plan is saved, `log.held` says why (only with something to add: a held lowering
+alone promises nothing) and the result carries `held` (the note for the message and
+the app). Never a fallback to the wrong order. Only the week the
 schedule works on (menu_week_start of `today`) is retried later, so only that week's
 note promises it (`held_note`); any other week, and a staple or offer tap, gets the
 titles to add by hand (`manual_note`, Ruling 44). With nothing to write there is no
@@ -119,8 +121,14 @@ def manual_note(titles) -> str:
             "AH-app: " + ", ".join(titles))
 
 
-def cut_note(titles) -> str:
-    """Lowerings that could not go out: never retried, the user decides."""
+def cut_note(titles, from_list: bool = False) -> str:
+    """Lowerings that could not go out: never retried, the user decides.
+
+    `from_list`: the add-on put them on the list (or partly there), so they may sit on
+    the locked list as well as in the order: the note does not say where."""
+    if from_list:
+        return ("Deze producten konden niet weg. Haal ze zelf weg in de AH-app als dat "
+                "moet: " + ", ".join(titles))
     return ("Deze producten konden niet uit je bestelling. Haal ze zelf weg in de "
             "AH-app als dat moet: " + ", ".join(titles))
 
@@ -326,10 +334,12 @@ async def _reduce_each(
                 skipped = await client.reduce_on_shopping_list({pid: r}, on_before=before_write)
                 if pid in (skipped or set()):  # crossed off on the list: left alone, a leftover
                     log.pending.pop(pid, None)
+                    if pid not in log.crossed_off:  # never looked for in an order later
+                        log.crossed_off.append(pid)
                     ledger.save(log)
                     continue
             if from_list:
-                _take(log.added, pid, min(r, max(0, change[1])) if change else r)
+                _take(log.added, pid, min(r, max(0, change[1])) if change else 0)
             else:
                 _take(log.added, pid, r)
                 if change:
@@ -422,14 +432,18 @@ async def apply(
             p: n - plan.basket.get(p, 0)
             for p, n in log.added.items()
             if n - plan.basket.get(p, 0) > 0 and p not in log.pending and p not in log.unknown
+            and p not in log.crossed_off
         }
     if why is not None and (delta or cuts):  # another week's order: write nothing at all
         log.plan = plan.to_dict()
         log.savings = plan.savings
         log.target = target  # where it would have gone: never "list" by mistake
-        log.held = why
-        if log.held_notified and sorted(delta) != log.held_notified_items:
-            log.held_notified = False  # other products missing now: push again once
+        if delta:  # only something to add waits for an order: a held lowering never does
+            log.held = why
+            if log.held_notified and sorted(delta) != log.held_notified_items:
+                log.held_notified = False  # other products missing now: push again once
+        else:
+            log.held = None
         ledger.save(log)
         log_.info("Menu: niets geschreven, %s", why)
         if delta and retried(log.week, today):
@@ -437,7 +451,7 @@ async def apply(
         elif delta:
             note = manual_note(_title(plan, replaced, p, log) for p in delta)
         else:  # only lowerings: no round ever retries those
-            note = cut_note(_title(plan, replaced, p, log) for p in cuts)
+            note = cut_note((_title(plan, replaced, p, log) for p in cuts), from_list)
         result = WriteResult(target=target, held=note)
         _report(result, log, plan, replaced)
         return result
@@ -477,7 +491,7 @@ def _paused_apply(ledger: Ledger, log: WeekLog, plan: Plan, replaced: Plan | Non
     something is still to be written (or lowered), so the hourly look completes it."""
     delta = missing(log, plan)
     cuts = {p: n - plan.basket.get(p, 0) for p, n in log.added.items()
-            if n - plan.basket.get(p, 0) > 0}
+            if n - plan.basket.get(p, 0) > 0 and p not in log.crossed_off}
     may_cut = replaced is not None and today is not None and today < log.week and bool(cuts)
     log.plan = plan.to_dict()
     log.savings = plan.savings
@@ -496,7 +510,8 @@ def _paused_apply(ledger: Ledger, log: WeekLog, plan: Plan, replaced: Plan | Non
         elif delta:  # Ruling 44: no round comes back to this week, say what to add
             note = manual_note(_title(plan, replaced, p, log) for p in delta)
         else:
-            note = cut_note(_title(plan, replaced, p, log) for p in cuts)
+            note = cut_note((_title(plan, replaced, p, log) for p in cuts),
+                            log.added_to in ("list", "mixed"))
     result = WriteResult(target=target, held=note)
     if result.held:
         log_.warning("Menu: niets geschreven, schrijven staat stil (AH lijkt veranderd)")
