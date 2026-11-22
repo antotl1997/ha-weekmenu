@@ -77,11 +77,14 @@ De add-on schrijft alleen in een open bestelling die in de menuweek (woensdag to
 
 - De add-on rekent **nooit af**. Je kiest zelf het bezorgmoment en betaalt zelf.
 - Hij haalt alleen producten weg die hij **zelf** voor een menu heeft toegevoegd en die geen gerecht meer nodig heeft, bijvoorbeeld als je een ander gerecht kiest of minder personen. Wat jullie zelf in de bestelling zetten blijft staan, ook vaste boodschappen en aanbiedingen die je zelf aantikte. Wat je zelf van de lijst haalde komt die week niet terug.
+- Opschonen volgt de lijst: heeft de add-on producten op je lijst gezet en zette je ze zelf in de bestelling van die menuweek, dan haalt hij ze daar ook weg. Een open bestelling vergrendelt de lijst bij AH. Heb je de lijst maar deels overgezet, dan kan het deel op de lijst niet weg; het staat met naam bij "Over van het vorige menu".
+- **Week leegmaken** staat onder een bevestigde week die nog niet begonnen is. Na een bevestiging gaan de gerechten weg en haalt de add-on uit je bestelling of van je lijst wat hij ervoor toevoegde. Vaste boodschappen en losse aanbiedingen blijven staan, en wat niet weg kon (afgestreept) wordt genoemd. Is de week begonnen, dan weigert hij.
+- Op maandag en dinsdag staat boven het concept en in de bevestigvraag een waarschuwing dat je het menu voor de week erna kiest, omdat de bestelling voor de lopende week zondag al is geplaatst.
 - Elke wijziging wordt eerst in een logboek genoteerd, dan geschreven, en na een crash eerst gecontroleerd. Zo komt er niets dubbel in.
 
 ## Check voor je bestelt en Klopt niet
 
-Bovenaan de Week staat de kaart Check voor je bestelt. Daarin staat wat niet gevonden is, wat nog niet zeker in je bestelling staat, wat over is van een vorig menu, wat het menu nodig heeft maar nog niet is toegevoegd (bijvoorbeeld omdat schrijven stilstond) en welke producten een prijs per gewicht hebben (daarvan zet de add-on 1 stuk in je bestelling; pas het aantal zelf aan als dat te weinig is). Klopt alles, dan staat er "Alles staat klaar".
+Bovenaan de Week staat de kaart Check voor je bestelt. Daarin staat wat niet gevonden is, wat nog niet zeker in je bestelling staat, wat over is van een vorig menu (met de naam van het product), wat het menu nodig heeft maar nog niet is toegevoegd (bijvoorbeeld omdat schrijven stilstond) en welke producten een prijs per gewicht hebben (daarvan zet de add-on 1 stuk in je bestelling; pas het aantal zelf aan als dat te weinig is). Klopt alles, dan staat er "Alles staat klaar".
 
 Pakt de add-on een verkeerd product, tik dan in het gerecht bij dat ingrediënt op Klopt niet. Je kunt een ander product zoeken en kiezen, of zeggen dat het niet hoeft of dat je het al in huis hebt. Die keuze geldt voor dat ingrediënt in elke week en wordt meteen in je bestelling of op je lijst verwerkt, op dezelfde manier als Ander gerecht. Alle keuzes staan in Instellingen onder Mijn correcties, met de naam waarvoor ze gelden en Terugdraaien. Na Terugdraaien kiest de add-on weer zelf, ook meteen in het menu van deze week. Ze staan in `overrides.json` in de datamap van de add-on en gaan dus mee in je backups.
 

@@ -35,6 +35,7 @@ Tik op het gerecht en dan op **Koken**. Je ziet de hoeveelheden groot en de stap
 ## Iets anders willen
 
 - **Ander gerecht**: tik op het gerecht en kies Ander gerecht. Je kiest zelf een ander recept uit de lijst; is de week al bevestigd, dan worden de boodschappen meteen aangepast.
+- **Week leegmaken**: onder een bevestigde week die nog niet begonnen is. Na een bevestiging gaan de gerechten weg en haalt de add-on uit je bestelling of van je lijst wat hij zette; vaste boodschappen en aanbiedingen blijven staan, en wat al afgestreept is noemt de app. Op maandag en dinsdag waarschuwt een gele regel dat je het menu voor de week erna kiest.
 - **Minder of meer personen**: tik op het gerecht en gebruik de min en plus.
 - **Niet thuis eten**: kies Instellingen en tik de dag aan bij Niet thuis eten.
 - **Hoe vaak koken**: kies Instellingen, Kookmomenten. Kook je minder vaak dan je thuis eet, dan worden de andere avonden restjesavonden.
