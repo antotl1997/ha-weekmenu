@@ -40,7 +40,7 @@ from app.hass import (
     unsure,
 )
 from app.ingredients import KINDS, PRODUCT, override_key
-from app.ledger import leftovers, new_folder_available
+from app.ledger import WeekLog, leftovers, new_folder_available
 from app.overrides import make_entry
 from app.taste import KINDS as TASTE_KINDS
 from app.reconcile import metrics as savings_metrics
@@ -85,6 +85,14 @@ SEARCH_LOGIN = "Log eerst in bij AH om daar te zoeken"
 SEARCH_FAILED = "Zoeken bij AH lukte nu niet. Probeer het zo nog eens."
 NO_DRAFT = "Kies eerst voor minstens een avond een gerecht"
 CONFIRMED = "Dit menu is al bevestigd"
+# v2.1: Week leegmaken
+NOT_CONFIRMED = "Deze week heeft geen bevestigd menu"
+RESET_STARTED = "Deze week is al begonnen, leegmaken kan niet meer."
+# what "Week leegmaken" sets back to WeekLog's starting values; added, unknown, titles
+# and everything of staples and loose offers stay
+RESET_FIELDS = ("plan", "draft", "draft_period_start", "savings", "previous",
+                "previous_dish", "swapped_out", "removed_by_user", "held", "held_notified",
+                "round_done", "completion_tried", "notified")
 RECIPE_NAME = "Geef het recept een naam"
 RECIPE_SERVINGS = "Aantal personen moet tussen 1 en 20 liggen"
 RECIPE_INGREDIENTS = "Zet er minstens één ingrediënt in"
@@ -1220,6 +1228,58 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         return web.json_response({**await week_payload(start),
                                   "dropped": sorted(x.date.isoformat() for x in gone)})
 
+    async def reset_week(request):
+        """"Week leegmaken": a confirmed week that has not started becomes an empty draft.
+
+        What the add-on added for its dishes is lowered through apply with an empty
+        plan (settle first, write-ahead, the order-week check). A stop halfway keeps the
+        old menu and raises (the error middleware answers); tapping again only lowers
+        what is still in `added`. An open order of another week lowers nothing: the week
+        is emptied anyway and "held" carries the note."""
+        start = shown_week(request)
+        async with ctx.lock:
+            wlog = ctx.ledger.load(start)
+            if not wlog.plan:
+                return _err(409, NOT_CONFIRMED)
+            if wlog.too_new:  # a newer add-on wrote this week: never written over
+                raise SchemaTooNew(ctx.ledger.root / f"{start.isoformat()}.json")
+            now = ctx.clock()
+            if now.date() >= start:  # nothing is lowered any more: it would only wipe
+                return _err(409, RESET_STARTED)
+            if ctx.health.writes_paused:  # nothing would go: the products would linger
+                return _err(409, PAUSED_NOTE)
+            old = wlog.plan
+            old_plan = Plan.from_dict(old)
+            empty = empty_plan(list(ctx.pantry))
+            try:
+                res = await apply(ctx.client, ctx.ledger, wlog, empty, replaced=old_plan,
+                                  today=now.date())
+            except Exception:
+                wlog.plan, wlog.savings = old, old_plan.savings
+                try:
+                    await main.save_log(ctx, wlog)
+                except Exception as e:
+                    log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
+                raise
+            # the names from the old menu: the empty plan knows no products
+            not_removed = [{"product": _title(old_plan, p, wlog), "qty": n}
+                           for p, n in leftovers(wlog, empty).items()]
+            for d in sorted(old_plan.dishes, key=lambda x: x.date):
+                await note_history(start, d, "reset")
+            fresh = WeekLog(start)
+            for name in RESET_FIELDS:
+                setattr(wlog, name, getattr(fresh, name))
+            wlog.extras_savings = extras_savings(wlog)  # apply may have settled a staple
+            await main.save_log(ctx, wlog)
+            # the week is no menu any more, so sensor.weekmenu shows another one now
+            shown = ctx.ledger.load(main.shown_week(ctx, now))
+            if shown.plan and not shown.too_new:
+                await main.publish_week(ctx, shown)
+        log.info("Week %s leeggemaakt: %d product(en) weggehaald, %d niet", start,
+                 len(res.removed), len(not_removed))
+        return web.json_response({**await week_payload(start), "not_removed": not_removed,
+                                  "held": res.held})
+
     # --- v1.1: the choice list ---
 
     def choose_week(request, day: date | None) -> date:
@@ -1790,6 +1850,7 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
     app.router.add_post("/api/diagnose/retry", retry_writes)
     app.router.add_get("/api/week", week)
     app.router.add_post("/api/week/confirm", confirm)
+    app.router.add_post("/api/week/reset", reset_week)
     app.router.add_get("/api/choose", choose)
     app.router.add_post("/api/choose/search", choose_search)
     app.router.add_get("/api/dish/{day}", dish)

@@ -59,6 +59,7 @@ class FakeAh:
         self.periods = list(periods)
         self.order = order
         self.listed: dict[int, int] = {}
+        self.struck: set[int] = set()  # crossed off on the list: never lowered
         self.writes: list[tuple[str, dict]] = []
         self.calls: list[str] = []
         self.offers_for: list[BonusPeriod] = []
@@ -195,8 +196,11 @@ class FakeAh:
         await self._reduce("order", self.order.items, cuts, on_before)
 
     async def reduce_on_shopping_list(self, cuts, on_before=None):
+        skipped = {p for p in cuts if p in self.struck}
+        if skipped:
+            return skipped  # like AH client: a crossed-off line is never touched
         await self._reduce("list", self.listed, cuts, on_before)
-        return set()  # nothing crossed off in this fake
+        return set()
 
     def held(self) -> dict[int, int]:
         """What AH holds now, list and order together."""
