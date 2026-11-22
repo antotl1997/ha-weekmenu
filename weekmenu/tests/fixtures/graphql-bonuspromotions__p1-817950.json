@@ -1,0 +1,78 @@
+{
+ "data": {
+  "bonusPromotions": [
+   {
+    "products": [
+     {
+      "id": 169688,
+      "title": "AH Aardappelen voor de stamppot",
+      "brand": "AH",
+      "salesUnitSize": "600 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.49
+       },
+       "was": {
+        "amount": 1.49
+       },
+       "discount": {
+        "description": "1 + 1 gratis"
+       }
+      }
+     },
+     {
+      "id": 80568,
+      "title": "AH Hutspot",
+      "brand": "AH",
+      "salesUnitSize": "500 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.79
+       },
+       "was": {
+        "amount": 1.79
+       },
+       "discount": {
+        "description": "1 + 1 gratis"
+       }
+      }
+     },
+     {
+      "id": 51768,
+      "title": "AH Boerenkool",
+      "brand": "AH",
+      "salesUnitSize": "300 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.99
+       },
+       "was": {
+        "amount": 1.99
+       },
+       "discount": {
+        "description": "1 + 1 gratis"
+       }
+      }
+     },
+     {
+      "id": 525272,
+      "title": "AH Biologisch Zuurkool",
+      "brand": "AH Biologisch",
+      "salesUnitSize": "500 g",
+      "priceV2": {
+       "now": {
+        "amount": 1.79
+       },
+       "was": {
+        "amount": 1.79
+       },
+       "discount": {
+        "description": "1 + 1 gratis"
+       }
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

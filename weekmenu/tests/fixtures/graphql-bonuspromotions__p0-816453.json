@@ -1,0 +1,180 @@
+{
+ "data": {
+  "bonusPromotions": [
+   {
+    "products": [
+     {
+      "id": 198386,
+      "title": "AH Tomatensoep verspakket",
+      "brand": "AH",
+      "salesUnitSize": "6 pers | 30 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 4.49
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     },
+     {
+      "id": 198387,
+      "title": "AH Groentesoep verspakket",
+      "brand": "AH",
+      "salesUnitSize": "6 pers | 30 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 4.89
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     },
+     {
+      "id": 491171,
+      "title": "AH Prei-kerrie soep verspakket",
+      "brand": "AH",
+      "salesUnitSize": "6 pers | 35 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 4.89
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     },
+     {
+      "id": 399177,
+      "title": "AH Pompoensoep verspakket",
+      "brand": "AH",
+      "salesUnitSize": "6 pers | 35 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 4.89
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     },
+     {
+      "id": 548919,
+      "title": "AH Mosterdsoep verspakket",
+      "brand": "AH",
+      "salesUnitSize": "6 pers | 35 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 4.89
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     },
+     {
+      "id": 550037,
+      "title": "AH Indiase wortelsoep verspakket",
+      "brand": "AH",
+      "salesUnitSize": "6 pers | 40 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 4.99
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     },
+     {
+      "id": 166560,
+      "title": "AH Erwtensoep verspakket",
+      "brand": "AH",
+      "salesUnitSize": "6 pers | 90 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 3.99
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     },
+     {
+      "id": 473867,
+      "title": "AH Goulashsoep verspakket",
+      "brand": "AH",
+      "salesUnitSize": "6 pers | 30 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 4.89
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     },
+     {
+      "id": 440523,
+      "title": "AH Rode linzensoep verspakket",
+      "brand": "AH",
+      "salesUnitSize": "6 pers | 25 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 4.89
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     },
+     {
+      "id": 582606,
+      "title": "AH Biologisch Uiensoep verspakket",
+      "brand": "AH Biologisch",
+      "salesUnitSize": "6 pers | 40 min",
+      "priceV2": {
+       "now": {
+        "amount": 2.99
+       },
+       "was": {
+        "amount": 5.99
+       },
+       "discount": {
+        "description": "VOOR 2.99"
+       }
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

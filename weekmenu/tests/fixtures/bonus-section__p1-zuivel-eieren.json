@@ -1,0 +1,334 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Zuivel, eieren",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817928",
+    "offerId": 201720,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817928,
+    "segmentDescription": "Alle Campina yoghurt literpakken en kwark 500 gram",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 2.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201720_AH_NL_WK45_ALLE_CAMPINA_YOGHURT_LITERPAKKEN_EN_KWARK_500_GRAM?rendition=200px&fileType=binary&version=72hFWhxl0CxZHpY1DMtjuA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201720_AH_NL_WK45_ALLE_CAMPINA_YOGHURT_LITERPAKKEN_EN_KWARK_500_GRAM?rendition=708px&fileType=binary&version=72hFWhxl0CxZHpY1DMtjuA"
+     }
+    ],
+    "category": "Zuivel, eieren",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 2.99",
+      "count": 2,
+      "price": 2.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817957",
+    "offerId": 201749,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817957,
+    "segmentDescription": "Alle The Flower Farm",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201749_AH_NL_WK45_ALLE_THE_FLOWER_FARM?rendition=200px&fileType=binary&version=mJgU9SXs6bhEKuqhsa5R1g"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201749_AH_NL_WK45_ALLE_THE_FLOWER_FARM?rendition=708px&fileType=binary&version=mJgU9SXs6bhEKuqhsa5R1g"
+     }
+    ],
+    "category": "Zuivel, eieren",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817920",
+    "offerId": 201712,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817920,
+    "segmentDescription": "Alle Arla biologisch literpakken",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 2.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6177434c2d6375785156575864694d4b3636494e7351?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6177434c2d6375785156575864694d4b3636494e7351?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6177434c2d6375785156575864694d4b3636494e7351?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6177434c2d6375785156575864694d4b3636494e7351?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6177434c2d6375785156575864694d4b3636494e7351?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Zuivel, eieren",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 2.99",
+      "count": 2,
+      "price": 2.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817917",
+    "offerId": 201709,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817917,
+    "segmentDescription": "Alle Melkunie vla en pap 1 liter",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201709_AH_NL_WK45_ALLE_MELKUNIE_VLA_EN_PAP_1_LITER?rendition=200px&fileType=binary&version=DaYymapMXrydak57nwGSyg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201709_AH_NL_WK45_ALLE_MELKUNIE_VLA_EN_PAP_1_LITER?rendition=708px&fileType=binary&version=DaYymapMXrydak57nwGSyg"
+     }
+    ],
+    "category": "Zuivel, eieren",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "822310",
+    "offerId": 206107,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 822310,
+    "segmentDescription": "Alle XXL Nutrition zuivel",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 2.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6252595664532d4d517469315066504d315a73477251?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6252595664532d4d517469315066504d315a73477251?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6252595664532d4d517469315066504d315a73477251?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6252595664532d4d517469315066504d315a73477251?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6252595664532d4d517469315066504d315a73477251?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Zuivel, eieren",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 2.99",
+      "count": 2,
+      "price": 2.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817913",
+    "offerId": 201705,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817913,
+    "segmentDescription": "Alle Beautiful Immunity kefir",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201705_AH_NL_WK45_ALLE_BEAUTIFUL_IMMUNITY_KEFIR?rendition=200px&fileType=binary&version=j5Ak6w0woyQsLYRx1NaMbg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201705_AH_NL_WK45_ALLE_BEAUTIFUL_IMMUNITY_KEFIR?rendition=708px&fileType=binary&version=j5Ak6w0woyQsLYRx1NaMbg"
+     }
+    ],
+    "category": "Zuivel, eieren",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

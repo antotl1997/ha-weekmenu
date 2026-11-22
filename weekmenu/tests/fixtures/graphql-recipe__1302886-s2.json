@@ -1,0 +1,179 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302886,
+   "title": "Aardappel-preischotel met pancettacrunch",
+   "description": "Niet een regular preischotel maar een amazing preischotel! De goudgele aardappeltoefjes en pancettacrunch on top geven preischotel net een extraatje.",
+   "href": "/allerhande/recept/R-R1302886/aardappel-preischotel-met-pancettacrunch",
+   "cookTime": 30,
+   "nutriScore": "C",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036855_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 3.857142,
+    "count": 14
+   },
+   "ingredients": [
+    {
+     "text": "500 g kruimige aardappel",
+     "name": {
+      "singular": "kruimige aardappel"
+     }
+    },
+    {
+     "text": "2 preien",
+     "name": {
+      "singular": "prei"
+     }
+    },
+    {
+     "text": "25 g ongezouten roomboter",
+     "name": {
+      "singular": "ongezouten roomboter"
+     }
+    },
+    {
+     "text": "100 g diepvries tuinerwten",
+     "name": {
+      "singular": "diepvries tuinerwten"
+     }
+    },
+    {
+     "text": "62.5 g crème fraîche",
+     "name": {
+      "singular": "crème fraîche"
+     }
+    },
+    {
+     "text": "40 g pancetta",
+     "name": {
+      "singular": "pancetta"
+     }
+    },
+    {
+     "text": "&#189; tl gedroogde oregano",
+     "name": {
+      "singular": "gedroogde oregano"
+     }
+    },
+    {
+     "text": "35 ml halfvolle melk",
+     "name": {
+      "singular": "halfvolle melk"
+     }
+    },
+    {
+     "text": "50 g geraspte kaas voor ovengratin",
+     "name": {
+      "singular": "geraspte kaas voor ovengratin"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verwarm de oven voor op 200 °C.",
+     "Schil de aardappelen, snijd in gelijke stukken en kook in 15-20 min. gaar.",
+     "Snijd ondertussen de prei in ringen en spoel onder koud stromend water.",
+     "Verhit de boter in een grote koekenpan en bak de prei 10-12 min. op middelhoog vuur. Voeg de laatste 6 min. de tuinerwten toe.",
+     "Roer de crème fraîche erdoor en breng op smaak met peper en eventueel zout. Verdeel over de ovenschaal.",
+     "Bak de pancetta in een koekenpan zonder olie of boter in 5 min. krokant. Laat uitlekken op keukenpapier.",
+     "Snijd de pancetta grof en meng met de oregano.",
+     "Giet de aardappelen af en stamp met de melk en de rest van de boter met de pureestamper tot een gladde puree.",
+     "Breng op smaak met peper en eventueel zout. Schep de puree in de spuitzak en maak toefjes op de prei.",
+     "Bestrooi met de geraspte kaas.",
+     "Bak ca. 25 min. in de oven tot de toefjes goudgeel zijn. Bestrooi met de pancettacrunch."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 630,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 55,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 33,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 21,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

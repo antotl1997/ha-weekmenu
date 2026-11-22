@@ -1,0 +1,381 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Bier, wijn, aperitieven",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "816489",
+    "offerId": 200287,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816489,
+    "segmentDescription": "Alle biologische wijnen 0.75 liter",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200287_AH_NL_WK44_ALLE_BIOLOGISCHE_WIJNEN_075_LITER?rendition=200px&fileType=binary&version=-Pl1I42096y6ZYfGlsFxjg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200287_AH_NL_WK44_ALLE_BIOLOGISCHE_WIJNEN_075_LITER?rendition=708px&fileType=binary&version=-Pl1I42096y6ZYfGlsFxjg"
+     }
+    ],
+    "category": "Bier, wijn, aperitieven",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816485",
+    "offerId": 200283,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816485,
+    "segmentDescription": "Alle Hertog Jan, Amstel, Jupiler of Birra Moretti kratten of multipacks*",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200283_AH_NL_WK44_ALLE_HERTOG_JAN_AMSTEL_JUPILER_OF_BIRRA_MORETTI_KRATTEN_OF_MULTIPACKS?rendition=200px&fileType=binary&version=SdPJPL4fJc9L7yB4enoVtA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200283_AH_NL_WK44_ALLE_HERTOG_JAN_AMSTEL_JUPILER_OF_BIRRA_MORETTI_KRATTEN_OF_MULTIPACKS?rendition=708px&fileType=binary&version=SdPJPL4fJc9L7yB4enoVtA"
+     }
+    ],
+    "category": "Bier, wijn, aperitieven",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. 0.0 gekoeld"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. 0.0 gekoeld"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816490",
+    "offerId": 200288,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816490,
+    "segmentDescription": "Alle alcoholvrije wijnen",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_3650357877676d325436716b5933554d6f4853474d51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_3650357877676d325436716b5933554d6f4853474d51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_3650357877676d325436716b5933554d6f4853474d51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_3650357877676d325436716b5933554d6f4853474d51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_3650357877676d325436716b5933554d6f4853474d51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Bier, wijn, aperitieven",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816450",
+    "offerId": 200248,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816450,
+    "segmentDescription": "Alle Chouffe of Brouwerij 't IJ multipacks*",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200248_AH_NL_WK44_ALLE_CHOUFFE_OF_BROUWERIJ_T_IJ_MULTIPACKS?rendition=200px&fileType=binary&version=wy5UcvhBLA_mnsDEK8I7iA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200248_AH_NL_WK44_ALLE_CHOUFFE_OF_BROUWERIJ_T_IJ_MULTIPACKS?rendition=708px&fileType=binary&version=wy5UcvhBLA_mnsDEK8I7iA"
+     }
+    ],
+    "category": "Bier, wijn, aperitieven",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. 0.0 en gekoeld"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. 0.0 en gekoeld"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816422",
+    "offerId": 200220,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816422,
+    "segmentDescription": "Alle Leffe of Tripel Karmeliet kratten of multipacks*",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200220_AH_NL_WK44_ALLE_LEFFE_OF_TRIPEL_KARMELIET_KRATTEN_OF_MULTIPACKS?rendition=200px&fileType=binary&version=sj3sY7yxw9S4sJt66yisww"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200220_AH_NL_WK44_ALLE_LEFFE_OF_TRIPEL_KARMELIET_KRATTEN_OF_MULTIPACKS?rendition=708px&fileType=binary&version=sj3sY7yxw9S4sJt66yisww"
+     }
+    ],
+    "category": "Bier, wijn, aperitieven",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. 0.0 en gekoeld"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. 0.0 en gekoeld"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816466",
+    "offerId": 200264,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816466,
+    "segmentDescription": "Alle Cono Sur of Vila Nova 0.75 liter",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "subtitle": "Chili/Portugal",
+    "discountDescription": "1.50 EURO KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200264_AH_NL_WK44_ALLE_CONO_SUR_OF_VILA_NOVA_075_LITER?rendition=200px&fileType=binary&version=SdPJPL4fJc9L7yB4enoVtA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200264_AH_NL_WK44_ALLE_CONO_SUR_OF_VILA_NOVA_075_LITER?rendition=708px&fileType=binary&version=SdPJPL4fJc9L7yB4enoVtA"
+     }
+    ],
+    "category": "Bier, wijn, aperitieven",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_AMOUNT",
+      "defaultDescription": "€1.50 euro korting",
+      "amount": 1.5
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816478",
+    "offerId": 200276,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816478,
+    "segmentDescription": "Alle AH Excellent Port of Warre's",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200276_AH_NL_WK44_ALLE_AH_EXCELLENT_PORT_OF_WARRES?rendition=200px&fileType=binary&version=SdPJPL4fJc9L7yB4enoVtA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200276_AH_NL_WK44_ALLE_AH_EXCELLENT_PORT_OF_WARRES?rendition=708px&fileType=binary&version=SdPJPL4fJc9L7yB4enoVtA"
+     }
+    ],
+    "category": "Bier, wijn, aperitieven",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

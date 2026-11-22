@@ -1,0 +1,171 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Vegetarisch, vegan en plantaardig",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817940",
+    "offerId": 201732,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817940,
+    "segmentDescription": "Alle Alpro 0.75-1 liter",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201732_AH_NL_WK45_ALLE_ALPRO_0751_LITER?rendition=200px&fileType=binary&version=GmaRR62BfVY2bW8k4JRuyQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201732_AH_NL_WK45_ALLE_ALPRO_0751_LITER?rendition=708px&fileType=binary&version=GmaRR62BfVY2bW8k4JRuyQ"
+     }
+    ],
+    "category": "Vegetarisch, vegan en plantaardig",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "819358",
+    "offerId": 203175,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 819358,
+    "segmentDescription": "Alle A-merk plantaardig of vegetarisch broodbeleg gekoeld",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_203175_AH_NL_WK45_ALLE_AMERK_PLANTAARDIG_OF_VEGETARISCH_BROODBELEG_GEKOELD?rendition=200px&fileType=binary&version=JdlkAmms4BhFNFYMBbODAg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_203175_AH_NL_WK45_ALLE_AMERK_PLANTAARDIG_OF_VEGETARISCH_BROODBELEG_GEKOELD?rendition=708px&fileType=binary&version=JdlkAmms4BhFNFYMBbODAg"
+     }
+    ],
+    "category": "Vegetarisch, vegan en plantaardig",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817986",
+    "offerId": 201778,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817986,
+    "segmentDescription": "Alle Vivera",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 + 1 GRATIS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_626e796e53675755524832386f5f7148637468323477?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_626e796e53675755524832386f5f7148637468323477?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_626e796e53675755524832386f5f7148637468323477?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_626e796e53675755524832386f5f7148637468323477?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_626e796e53675755524832386f5f7148637468323477?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vegetarisch, vegan en plantaardig",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "2+1 gratis",
+      "count": 2,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

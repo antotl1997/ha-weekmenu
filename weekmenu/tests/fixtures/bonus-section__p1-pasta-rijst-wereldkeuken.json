@@ -1,0 +1,71 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Pasta, rijst, wereldkeuken",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817980",
+    "offerId": 201772,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817980,
+    "segmentDescription": "Alle Grand'Italia",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2E HALVE PRIJS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_644a49544a2d2d50535a4f73746274444f4a42437a41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_644a49544a2d2d50535a4f73746274444f4a42437a41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_644a49544a2d2d50535a4f73746274444f4a42437a41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_644a49544a2d2d50535a4f73746274444f4a42437a41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_644a49544a2d2d50535a4f73746274444f4a42437a41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Pasta, rijst, wereldkeuken",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_HALF_PRICE",
+      "defaultDescription": "2e halve prijs",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

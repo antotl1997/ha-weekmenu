@@ -1,0 +1,260 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Diepvries",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "817998",
+    "offerId": 201790,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817998,
+    "segmentDescription": "Alle A-merk diepvriesmaaltijden",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2e GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201790_AH_NL_WK45_ALLE_AMERK_DIEPVRIESMAALTIJDEN?rendition=200px&fileType=binary&version=TozCo2_DNG-qsZOf3XilDw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201790_AH_NL_WK45_ALLE_AMERK_DIEPVRIESMAALTIJDEN?rendition=708px&fileType=binary&version=TozCo2_DNG-qsZOf3XilDw"
+     }
+    ],
+    "category": "Diepvries",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "labelType": "SPOTLIGHT",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_FREE",
+      "defaultDescription": "2e gratis",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "807236",
+    "offerId": 190538,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 807236,
+    "segmentDescription": "Alle Snickers en trüfrü ijs",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2E HALVE PRIJS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_190538_AH_NL_WK45_ALLE_SNICKERS_EN_TRUFRU_IJS?rendition=200px&fileType=binary&version=Fh5_f9uxwXXJKpFbjsmwxg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_190538_AH_NL_WK45_ALLE_SNICKERS_EN_TRUFRU_IJS?rendition=708px&fileType=binary&version=Fh5_f9uxwXXJKpFbjsmwxg"
+     }
+    ],
+    "category": "Diepvries",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_ONE_HALF_PRICE",
+      "defaultDescription": "2e halve prijs",
+      "count": 2
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "817995",
+    "offerId": 201787,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 817995,
+    "segmentDescription": "Alle Mora en Hebro saté*",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "subtitle": "Diepvries",
+    "discountDescription": "2 VOOR 2.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201787_AH_NL_WK45_ALLE_MORA_EN_HEBRO_SATE?rendition=200px&fileType=binary&version=KM0e75fEyw2oJeb18ew_9A"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_201787_AH_NL_WK45_ALLE_MORA_EN_HEBRO_SATE?rendition=708px&fileType=binary&version=KM0e75fEyw2oJeb18ew_9A"
+     }
+    ],
+    "category": "Diepvries",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. grootverpakkingen"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 2.99",
+      "count": 2,
+      "price": 2.99
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. grootverpakkingen"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823271",
+    "offerId": 207078,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823271,
+    "segmentDescription": "AH Excellent kroketjes",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 7.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207078_AH_NL_WK45_AH_EXCELLENT_KROKETJES?rendition=200px&fileType=binary&version=P62hj0WTC6iP8mho0_06pg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207078_AH_NL_WK45_AH_EXCELLENT_KROKETJES?rendition=708px&fileType=binary&version=P62hj0WTC6iP8mho0_06pg"
+     }
+    ],
+    "category": "Diepvries",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 7.00",
+      "count": 2,
+      "price": 7.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "823319",
+    "offerId": 207129,
+    "offerStartDate": "2026-11-02",
+    "segmentId": 823319,
+    "segmentDescription": "AH Roomijsbakjes 70 ml",
+    "bonusStartDate": "2026-11-02",
+    "bonusEndDate": "2026-11-08",
+    "validityPeriod": {
+     "start": "2026-11-02",
+     "end": "2026-11-08",
+     "description": "vanaf maandag",
+     "code": "FROM_WEEKDAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 3.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207129_AH_NL_WK45_AH_ROOMIJSBAKJES_70_ML?rendition=200px&fileType=binary&version=IuGbz528ZAL_BF32TPRrVw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_207129_AH_NL_WK45_AH_ROOMIJSBAKJES_70_ML?rendition=708px&fileType=binary&version=IuGbz528ZAL_BF32TPRrVw"
+     }
+    ],
+    "category": "Diepvries",
+    "future": true,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vanaf maandag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 3.00",
+      "count": 3,
+      "price": 3.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

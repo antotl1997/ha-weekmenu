@@ -1,0 +1,982 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 8,
+  "totalPages": 1,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 197977,
+   "hqId": 635882,
+   "title": "AH Paprika mild gemalen",
+   "salesUnitSize": "48 g",
+   "unitPriceDescription": "prijs per kg €16.46",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393533?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393533?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393533?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393533?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313439393533?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 0.79,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Paprikapoeder",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>AH Basic paprika poeder geeft uw gerecht de zoete smaak van paprika</p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": "A",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 216677,
+   "hqId": 810558,
+   "title": "Verstegen Paprikapoeder mild",
+   "salesUnitSize": "38 g",
+   "unitPriceDescription": "prijs per kg €78.68",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_59626e56376d3175534e3258577735507774515a7267?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_59626e56376d3175534e3258577735507774515a7267?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_59626e56376d3175534e3258577735507774515a7267?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_59626e56376d3175534e3258577735507774515a7267?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_59626e56376d3175534e3258577735507774515a7267?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Paprikapoeder",
+   "brand": "Verstegen",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Voor paprika als specerij worden speciaal daarvoor gekweekte rode vruchten van de 'specerijen'-paprikaplant gebruikt.</p><p><ul><li>Mild zoete smaak</li><li>Paprikapoeder is ook leuk om te gebruiken als garnering door zijn mooie volle rode kleur.</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> Heerlijke kruiden &amp; specerijen  </p>\n  <p>Lekker eten begint bij de juiste smaak. Met de kruiden en specerijen van Verstegen is elk gerecht een succes. Sinds het ontstaan van ons familiebedrijf in 1886 reizen we de hele wereld over om uitstekende kruiden en specerijen in huis te halen. En dit proeft u als u deze in uw gerechten gebruikt. Eet smakelijk!</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 414970,
+   "hqId": 857074,
+   "title": "Verstegen Zakje paprikapoeder",
+   "salesUnitSize": "35 g",
+   "unitPriceDescription": "prijs per kg €42.57",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_52777a397a4b4d75534c755642756f6d584a37784167?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_52777a397a4b4d75534c755642756f6d584a37784167?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_52777a397a4b4d75534c755642756f6d584a37784167?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_52777a397a4b4d75534c755642756f6d584a37784167?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_52777a397a4b4d75534c755642756f6d584a37784167?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Paprikapoeder",
+   "brand": "Verstegen",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Voor paprika als specerij worden speciaal daarvoor gekweekte rode vruchten van de 'specerijen'-paprikaplant gebruikt.</p><p><ul><li>Mild zoete smaak</li><li>Ook te gebruiken als garnering door zijn mooie volle rode kleur</li><li>In handig hersluitbaar zakje</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> Paprikapoeder.  </p>\n  <p>Bij Verstegen geloven wij dat de beste kwaliteit begint bij de oorsprong, daar waar de mooiste ingredi&#x00EB;nten te vinden zijn. Hier werken we samen met lokale boeren aan de puurste kruiden &amp; specerijen. Vanaf hier hebben we alles in eigen hand: van transport, tot zelf malen en veilig verwerken. Dit doen we al sinds 1886.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 234766,
+   "hqId": 827750,
+   "title": "Verstegen Paprika gerookt",
+   "salesUnitSize": "35 g",
+   "unitPriceDescription": "prijs per kg €85.43",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_5f46496f4f50546e544d574d6e652d582d32736b4d77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_5f46496f4f50546e544d574d6e652d582d32736b4d77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_5f46496f4f50546e544d574d6e652d582d32736b4d77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_5f46496f4f50546e544d574d6e652d582d32736b4d77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_5f46496f4f50546e544d574d6e652d582d32736b4d77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Paprikapoeder",
+   "brand": "Verstegen",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Strooier paprika gerookt</p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 216679,
+   "hqId": 810560,
+   "title": "Verstegen Paprikapoeder pikant",
+   "salesUnitSize": "35 g",
+   "unitPriceDescription": "prijs per kg €85.43",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_575641533254394d522d79515870435570664e674467?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_575641533254394d522d79515870435570664e674467?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_575641533254394d522d79515870435570664e674467?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_575641533254394d522d79515870435570664e674467?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_575641533254394d522d79515870435570664e674467?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Paprikapoeder",
+   "brand": "Verstegen",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Voor paprika als specerij worden speciaal daarvoor gekweekte\n\t\t\t\t  rode vruchten van de 'specerijen'-paprikaplant gebruikt. Die zijn kleiner dan\n\t\t\t\t  de grote dikvlezige en milde 'groente'-paprika's.</p><p><ul><li>Lekkere pittige smaak met een zoete toon van \t\t\t\t\t\tpaprika</li><li>Een belangrijk bestandsdeel van stoofschotels zoals \t\t\t\t\t\tgoulash</li><li>In handige strooi verpakking</li></ul></p>",
+   "propertyIcons": [
+    "vegan"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> Paprikapoeder pikant. </p>\n  <p>Bij Verstegen geloven wij dat de beste kwaliteit begint bij de    oorsprong, daar waar de mooiste ingredi&#x00EB;nten te vinden zijn. Hier werken    we samen met lokale boeren aan de puurste kruiden &amp; specerijen. Vanaf hier    hebben we alles in eigen hand: van transport, tot zelf malen en veilig    verwerken. Dit doen we al sinds 1886.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 375989,
+   "hqId": 838198,
+   "title": "La Chinata Smoked paprika powder sweet",
+   "salesUnitSize": "70 g",
+   "unitPriceDescription": "prijs per kg €64.14",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6143724471584b41533732444262537a4c3358314867?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6143724471584b41533732444262537a4c3358314867?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6143724471584b41533732444262537a4c3358314867?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6143724471584b41533732444262537a4c3358314867?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6143724471584b41533732444262537a4c3358314867?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 4.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Paprikapoeder",
+   "brand": "La Chinata",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>La Chinata is een klein familie bedrijf dat sinds 1975 dit gerookte paprikapoeder produceert vanuit het zonovergoten Spanje.</p><p><ul><li>Zeer geschikt voor het maken van paella</li><li>Als kruidenrub voor vlees</li><li>Of om soepen op smaak te brengen</li><li>De 'geheime' smaakmaker van vele topchefs in de wereld waaronder Jamie Oliver!</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> Dit gerookte paprikapoeder heeft een zoete rooksmaak. Het is perfect om je gerechten net wat meer kick te geven. Gebruik wel maar een klein beetje want de smaak kan nogal intens zijn. Alle producten worden met veel liefde gemaakt, dit proef je er dan ook echt aan af! Wereldwijd wordt het gerookte paprikapoeder van La Chinata erkent om zijn sublieme kwaliteit. Het gerookte paprikapoeder van La Chinata wordt gemaakt door de Spaanse rode paprika&#8217;s te laten drogen op eikenhout. Wat dit gerookte paprikapoeder zo bijzonder maakt is de oorsprong van de paprika&#8217;s. Deze paprika&#8217;s zijn namelijk afkomstig uit de Noord Spaanse regio La Vera. Alleen paprikapoeder uit deze regio mag de naam &#8220;Pimenton de la Vera&#8221; door zijn beschermde oorsprong en hoge kwaliteit.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 589852,
+   "hqId": 35430,
+   "title": "Mill & Mortar Gerookte zoete paprika poeder",
+   "salesUnitSize": "50 g",
+   "unitPriceDescription": "normale prijs per kg €139.80",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313630303633?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313630303633?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313630303633?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313630303633?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313630303633?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 6.29,
+   "priceBeforeBonus": 6.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Paprikapoeder",
+   "brand": "Mill & Mortar",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Gerookt Zoet Paprikapoeder uit Spanje staat bekend om zijn aroma, smaak en verfijnde rode tint. Gemaakt van zoete paprika s die drogen boven laag vuur in 'Secaderos', rookhuizen op de velden.</p><p><ul><li>Spaarzaam toegevoegd geeft het umami en body zoals bouillon of spek.</li><li>Heerlijk in stoofschotels en marinades, op een omelet of avocado.</li><li>Biologische teelt door kleinschalige boeren in Spanje.</li><li>Recepten en inspiratie? Scan de QR-code op de verpakking.</li></ul></p>",
+   "propertyIcons": [
+    "vegan",
+    "biologisch"
+   ],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "Mill & Mortar enkelvoudige kruiden en specerijen zijn het resultaat van een nauwe samenwerking met leveranciers om biologische grondstoffen te vinden. Het Deense merk is altijd op zoek naar producten van uitstekende kwaliteit en oorsprong en ondersteunt inspanningen van leveranciers op het gebied van eerlijke handel en regeneratieve praktijken.De ambachtelijke producten van Mill & Mortar zijn gebaseerd op specerijen, kruiden en zaden van uitstekende kwaliteit en herkomst. De smaakontwikkeling begint bij de telers die ze kweken, oogsten en schoonmaken. Omdat biologisch geteelde kruiden langer rijpen, bevatten ze meer essentiële oliën en dus meer smaak. Mill & Mortar creëert kruidenmelanges in een kleine fabriek in de buurt van Kopenhagen, Denemarken. Alle producten zijn zoutvrij, glutenvrij en bevatten geen toevoegingen.",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 375990,
+   "hqId": 838201,
+   "title": "La Chinata Smoked paprika powder hot",
+   "salesUnitSize": "70 g",
+   "unitPriceDescription": "prijs per kg €64.14",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6b4c6e484955765375656c425f455063706c425f77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6b4c6e484955765375656c425f455063706c425f77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6b4c6e484955765375656c425f455063706c425f77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6b4c6e484955765375656c425f455063706c425f77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_6b6b4c6e484955765375656c425f455063706c425f77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 4.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Soepen, sauzen, kruiden, olie",
+   "subCategory": "Paprikapoeder",
+   "brand": "La Chinata",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>La Chinata is een klein familie bedrijf dat sinds 1975 dit gerookte paprikapoeder produceert vanuit het zonovergoten Spanje.</p><p><ul><li>Zeer geschikt voor het maken van paella</li><li>Als kruidenrub voor vlees</li><li>Of om soepen op smaak te brengen</li><li>De 'geheime' smaakmaker van vele topchefs in de wereld waaronder Jamie Oliver!</li></ul></p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": null,
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> Dit gerookte paprikapoeder heeft een pittige smaak. Het is perfect om je gerechten net wat meer kick te geven. Gebruik wel maar een klein beetje want de smaak kan nogal intens zijn. Alle producten worden met veel liefde gemaakt, dit proef je er dan ook echt aan af! Wereldwijd wordt het gerookte paprikapoeder van La Chinata erkent om zijn sublieme kwaliteit. Het gerookte paprikapoeder van La Chinata wordt gemaakt door de Spaanse rode paprika&#8217;s te laten drogen op eikenhout. Wat dit gerookte paprikapoeder zo bijzonder maakt is de oorsprong van de paprika&#8217;s. Deze paprika&#8217;s zijn namelijk afkomstig uit de Noord Spaanse regio La Vera. Alleen paprikapoeder uit deze regio mag de naam &#8220;Pimenton de la Vera&#8221; door zijn beschermde oorsprong en hoge kwaliteit.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": null,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=paprikapoeder&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=paprikapoeder&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": null,
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=paprikapoeder&sortBy=RELEVANCE&page=0&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "La Chinata",
+     "label": "La Chinata",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "Mill & Mortar",
+     "label": "Mill & Mortar",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "Verstegen",
+     "label": "Verstegen",
+     "count": 4,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "20447",
+     "label": "Kruiden, specerijen, garnering",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "1399",
+     "label": "Paprikapoeder",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "21105",
+     "label": "Specerijen",
+     "count": 8,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 8,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 6,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "a",
+     "label": "Score A",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_veganistisch",
+   "allLabel": null,
+   "label": "Veganistisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_veganistisch",
+     "label": "Veganistisch",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "sp_include_dieet_vegetarisch",
+   "allLabel": null,
+   "label": "Vegetarisch",
+   "options": [
+    {
+     "id": "sp_include_dieet_vegetarisch",
+     "label": "Vegetarisch",
+     "count": 6,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_biologisch",
+   "allLabel": null,
+   "label": "Biologisch",
+   "options": [
+    {
+     "id": "np_biologisch",
+     "label": "Biologisch",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_verbluffen",
+   "allLabel": null,
+   "label": "Prijsfavoriet",
+   "options": [
+    {
+     "id": "np_verbluffen",
+     "label": "Prijsfavoriet",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

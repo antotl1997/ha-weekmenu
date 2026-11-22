@@ -1,0 +1,240 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302905,
+   "title": "Wagyu-gehaktballen uit de slowcooker met knolselderijpuree",
+   "description": "Zet de slowcooker aan en laat deze wagyu gehaktballen rustig garen in teriyaki-gembersaus. Met romige kruidenpuree erbij is het plaatje compleet!",
+   "href": "/allerhande/recept/R-R1302905/wagyu-gehaktballen-uit-de-slowcooker-met-knolselderijpuree",
+   "cookTime": 40,
+   "nutriScore": "C",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036900_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 5,
+    "count": 3
+   },
+   "ingredients": [
+    {
+     "text": "&#189; middelgroot scharrelei",
+     "name": {
+      "singular": "middelgroot scharrelei"
+     }
+    },
+    {
+     "text": "150 g AH Excellent wagyu gehakt",
+     "name": {
+      "singular": "AH Excellent wagyu gehakt"
+     }
+    },
+    {
+     "text": "7.5 g paneermeel",
+     "name": {
+      "singular": "paneermeel"
+     }
+    },
+    {
+     "text": "37.5 g ongezouten roomboter",
+     "name": {
+      "singular": "ongezouten roomboter"
+     }
+    },
+    {
+     "text": "1 middelgrote ui",
+     "name": {
+      "singular": "middelgrote ui"
+     }
+    },
+    {
+     "text": "1 teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "7.5 g verse gember",
+     "name": {
+      "singular": "verse gember"
+     }
+    },
+    {
+     "text": "60 ml sojasaus",
+     "name": {
+      "singular": "sojasaus"
+     }
+    },
+    {
+     "text": "30 ml mirin",
+     "name": {
+      "singular": "mirin"
+     }
+    },
+    {
+     "text": "1 el rijstazijn",
+     "name": {
+      "singular": "rijstazijn"
+     }
+    },
+    {
+     "text": "1&#189; el honing",
+     "name": {
+      "singular": "honing"
+     }
+    },
+    {
+     "text": "&#189; el sesamolie",
+     "name": {
+      "singular": "sesamolie"
+     }
+    },
+    {
+     "text": "62.5 g shiitake",
+     "name": {
+      "singular": "shiitake"
+     }
+    },
+    {
+     "text": "500 g kruimige aardappel",
+     "name": {
+      "singular": "kruimige aardappel"
+     }
+    },
+    {
+     "text": "200 g knolselderij",
+     "name": {
+      "singular": "knolselderij"
+     }
+    },
+    {
+     "text": "25 ml halfvolle melk",
+     "name": {
+      "singular": "halfvolle melk"
+     }
+    },
+    {
+     "text": "5 g verse bieslook",
+     "name": {
+      "singular": "verse bieslook"
+     }
+    },
+    {
+     "text": "7.5 g platte peterselie",
+     "name": {
+      "singular": "platte peterselie"
+     }
+    },
+    {
+     "text": "&#189; bosui",
+     "name": {
+      "singular": "bosui"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Splits het ei en meng de eidooier met het gehakt en het paneermeel. Het eiwit gebruik je niet. Breng op smaak met peper.",
+     "Draai er met vochtige handen gehaktballen van.",
+     "Verhit de boter in een koekenpan en bak de gehaktballen in 3 min. rondom bruin. Schep in de slowcooker.",
+     "Snipper de uien, snijd de knoflook fijn en rasp de gember.",
+     "Meng de sojasaus met de mirin, rijstazijn, honing, sesamolie, ui, gember en knoflook en voeg toe aan de slowcooker.",
+     "Gaar de gehaktballen 4 uur op de lage stand. Keer halverwege.",
+     "Halveer de shiitakes en voeg de laatste 45 min. toe aan de slowcooker.",
+     "Schil ondertussen de aardappelen en knolselderij en snijd in gelijke stukken. Kook de aardappelen en knolselderij in 20 min. gaar.",
+     "Giet af en stamp met de pureestamper met de rest van de boter en de melk tot een gladde puree.",
+     "Snijd de bieslook en peterselie fijn en meng door de puree. Breng op smaak met peper en eventueel zout.",
+     "Haal de gehaktballen uit de slowcooker.",
+     "Verdeel de puree en de gehaktballen over borden en verdeel de teriyaki-gember saus erover. Snijd de bosui in dunne ringetjes en strooi erover."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 735,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 69,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 36,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 27,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

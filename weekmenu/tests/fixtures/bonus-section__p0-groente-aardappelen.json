@@ -1,0 +1,1258 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Groente, aardappelen",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "816455",
+    "offerId": 200253,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816455,
+    "segmentDescription": "Alle AH Kleinverpakkingen groentegemak",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 2.49",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200253_AH_NL_WK44_ALLE_AH_KLEINVERPAKKINGEN_GROENTEGEMAK?rendition=200px&fileType=binary&version=68DxI1lGeAGHi0BPvsCbMg"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200253_AH_NL_WK44_ALLE_AH_KLEINVERPAKKINGEN_GROENTEGEMAK?rendition=708px&fileType=binary&version=68DxI1lGeAGHi0BPvsCbMg"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 2.49",
+      "count": 2,
+      "price": 2.49
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816453",
+    "offerId": 200251,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816453,
+    "segmentDescription": "Alle AH Soep verspakketten",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 2.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200251_AH_NL_WK44_ALLE_AH_SOEP_VERSPAKKETTEN?rendition=200px&fileType=binary&version=pradj67OJ_ok6EDxkC_cAw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200251_AH_NL_WK44_ALLE_AH_SOEP_VERSPAKKETTEN?rendition=708px&fileType=binary&version=pradj67OJ_ok6EDxkC_cAw"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 2.99",
+      "price": 2.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816424",
+    "offerId": 200222,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816424,
+    "segmentDescription": "Alle AH Gekoelde bakaardappelen 450 gram",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 0.89",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6b34396a546d4c4a523369693443626f6c47345a3141?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6b34396a546d4c4a523369693443626f6c47345a3141?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6b34396a546d4c4a523369693443626f6c47345a3141?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6b34396a546d4c4a523369693443626f6c47345a3141?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6b34396a546d4c4a523369693443626f6c47345a3141?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 0.89",
+      "price": 0.89
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816447",
+    "offerId": 200245,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816447,
+    "segmentDescription": "Alle Bonduelle 150-200 gram",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 2.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4951554c66634d7652456945775657454f474f367677?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4951554c66634d7652456945775657454f474f367677?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4951554c66634d7652456945775657454f474f367677?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4951554c66634d7652456945775657454f474f367677?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4951554c66634d7652456945775657454f474f367677?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 2.99",
+      "count": 3,
+      "price": 2.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 4183,
+    "hqId": 20960,
+    "title": "AH Bloemkool",
+    "brand": "AH",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323030333238?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323030333238?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323030333238?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323030333238?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323030333238?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "824992",
+    "bonusSegmentId": 824992,
+    "offerId": 208226,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Bloemkool",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 1.49",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 1.49",
+      "price": 1.49
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 1.75,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Groente, aardappelen",
+    "subCategory": "Bloemkool",
+    "subCategoryId": 5193,
+    "propertyIcons": [
+     "goedkoopje",
+     "lokaal"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "da_taste": [
+      "Bloemkool"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "np_lokaal": [
+      "nederland"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "np_vegafav": [
+      "vegafavoriet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "np_goedkoopje": [
+      "prijsfavoriet"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "np_vorm": [
+      "heel"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "np_verbluffen": [
+      "verbluffend goedkoop"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": true,
+    "nix18": false,
+    "descriptionHighlights": "<p>Bloemkool is nog altijd één van de meest gegeten groente in Nederland. De bloemkool is heerlijk om te koken, of om te gebruiken in een soep, om te wokken of in een stamppot. Elke dag vers van onze teler.</p><p><ul><li>Smaak:Bloemkool heeft een zachte, typische koolsmaak.</li><li>Bewaar de bloemkool met het blad eromheen, zo blijft deze lekker lang vers.</li><li>Bewaren: In de koelkast.</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+    "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>"
+   }
+  },
+  {
+   "product": {
+    "webshopId": 4095,
+    "hqId": 20971,
+    "title": "AH Spruitjes 500 gram",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €2.98",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313835353032?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313835353032?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313835353032?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313835353032?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313835353032?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "824990",
+    "bonusSegmentId": 824990,
+    "offerId": 208224,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Spruitjes 500 gram",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 0.89",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 0.89",
+      "price": 0.89
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 1.49,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Groente, aardappelen",
+    "subCategory": "Spruitjes",
+    "subCategoryId": 1586,
+    "propertyIcons": [
+     "lokaal"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "np_lokaal": [
+      "nederland"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan",
+      "Oven",
+      "Pan",
+      "Wok"
+     ],
+     "np_vegafav": [
+      "vegafavoriet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Nee"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "np_vorm": [
+      "heel"
+     ],
+     "da_accreditation": [
+      "NATUUR_BOER"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "np_verbluffen": [
+      "verbluffend goedkoop"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": true,
+    "nix18": false,
+    "descriptionHighlights": "<p>Spruitjes zijn echte herfst- en wintergroenten. Het is een veelzijdig mini kooltje die je op heel veel verschillende manieren kan klaar maken. Elke dag vers van onze teler.</p><p><ul><li>Smaak: Spruiten hebben een milde, bittere, iets nootachtige smaak.</li><li>Bewaren: In de koelkast.</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "824993",
+    "offerId": 208227,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 824993,
+    "segmentDescription": "AH (Iets) kruimige en vastkokende aardappelen 1 kilo",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 1.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_208227_AH_NL_WK44_AH_IETS_KRUIMIGE_EN_VASTKOKENDE_AARDAPPELEN_1_KILO?rendition=200px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_208227_AH_NL_WK44_AH_IETS_KRUIMIGE_EN_VASTKOKENDE_AARDAPPELEN_1_KILO?rendition=708px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 1.99",
+      "count": 2,
+      "price": 1.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 426004,
+    "hqId": 694716,
+    "title": "Online AH Biologisch flespompoen",
+    "brand": "AH Biologisch",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313734?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313734?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313734?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313734?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031313734?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "824988",
+    "bonusSegmentId": 824988,
+    "offerId": 208222,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "Online AH Biologisch flespompoen",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "40% korting",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "40% korting",
+      "percentage": 40,
+      "precisePercentage": 40
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 2.98,
+    "hasListPrice": false,
+    "currentPrice": 1.79,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Groente, aardappelen",
+    "subCategory": "Pompoen",
+    "subCategoryId": 2507,
+    "propertyIcons": [
+     "biologisch"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "da_taste": [
+      "Pompoen"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_kenmerk": [
+      "biologisch"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "np_vegafav": [
+      "vegafavoriet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "np_biologisch": [
+      "biologisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Deze flespompoen heeft een zoete, boterachtige smaak en kan met schil en al gegeten worden. Door zijn zachte textuur is deze pompoen vaak eerste keus bij het maken van soep.</p><p><ul><li>Ook heerlijk om te roosteren. Lekker door de couscoussalade, in de lasagne, door de stoofmaaltijd enz. De mogelijkheden zijn eindeloos</li><li>De biologische flespompoen kan in grootte en gewicht varieren</li><li>100% biologisch</li><li>Bewaren: buiten de koelkast</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "product": {
+    "webshopId": 465601,
+    "hqId": 714549,
+    "title": "AH Snoepgroente tomaat bak 1 kilo",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €5.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303433393635?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303433393635?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303433393635?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303433393635?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130303433393635?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "824991",
+    "bonusSegmentId": 824991,
+    "offerId": 208225,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Snoepgroente tomaat bak 1 kilo",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "1 EURO KORTING",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_AMOUNT",
+      "defaultDescription": "€1.00 euro korting",
+      "amount": 1.0
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 5.99,
+    "hasListPrice": false,
+    "currentPrice": 4.99,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Groente, aardappelen",
+    "subCategory": "Snoepgroente",
+    "subCategoryId": 5159,
+    "propertyIcons": [],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "da_taste": [
+      "Tomaat"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "np_vegafav": [
+      "vegafavoriet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Nee"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Snoeptomaatjes zijn volzoet en sappig van smaak. Deze tomaatjes zijn ideaal als gezonde snack in de lunchtrommel of als extra bite bij de borrel.</p><p><ul><li>Smaak: snoeptomaatjes zijn volzoet en sappig van smaak</li><li>Bewaren: buiten de koelkast</li><li>Gezondheid: van nature een bron van vitamine c</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "824994",
+    "offerId": 208228,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 824994,
+    "segmentDescription": "AH Biologisch oranje pompoen",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303837?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303837?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303837?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303837?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323031303837?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "salesUnitSize": "Los, per 500 gram",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 231202,
+    "hqId": 589705,
+    "title": "AH Biologisch flespompoen",
+    "brand": "AH Biologisch",
+    "isSample": false,
+    "salesUnitSize": "Los, per kilo",
+    "unitPriceDescription": "normale prijs per kg €2.98",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239353635393837?revLabel=2&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239353635393837?revLabel=2&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239353635393837?revLabel=2&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239353635393837?revLabel=2&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239353635393837?revLabel=2&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "824989",
+    "bonusSegmentId": 824989,
+    "offerId": 208223,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Biologisch flespompoen",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "40% KORTING",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "40% korting",
+      "percentage": 40,
+      "precisePercentage": 40
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 2.98,
+    "hasListPrice": false,
+    "currentPrice": 1.79,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "NO_LONGER_IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": false,
+    "mainCategory": "Groente, aardappelen",
+    "subCategory": "Pompoen",
+    "subCategoryId": 2507,
+    "propertyIcons": [
+     "lokaal",
+     "biologisch"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "da_taste": [
+      "Pompoen"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_kenmerk": [
+      "biologisch"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "np_lokaal": [
+      "nederland"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "np_biologisch": [
+      "biologisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Deze pompoen in de vorm van een fles is geliefd vanwege zijn dunne schil, nootachtige smaak en flinke hoeveelheid vruchtvlees. Net als andere pompoensoorten is hij rijk aan vezels en vitamine C en dat helpt mede je weerstand op peil te houden. Flespompoenen kun je heel goed vullen, bijvoorbeeld met feta, mediterrane groente en pijnboompitten. Ook zijn lekker ze door een salade of een oosterse soep met koriander.</p><p><ul><li>Deze pompoen in de vorm van een fles is geliefd vanwege zijn dunne schil en nootachtige smaak. En hij is ook nog eens rijk aan vezels en vitamine C</li><li>De flespompoen heeft een zoete nootachtige smaak en boterzacht vruchtvlees</li><li>Flespompoen is een vrucht die rauw, geroosterd, gepureerd en in soepen kan worden gegeten of gebruikt kan worden als vulling voor brood en gebak</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821885",
+    "offerId": 205687,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821885,
+    "segmentDescription": "AH Slaverrijkers",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 6.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205687_AH_NL_WK44_AH_SLAVERRIJKERS?rendition=200px&fileType=binary&version=pTTR8IdC2rg6HBifcCcPzw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205687_AH_NL_WK44_AH_SLAVERRIJKERS?rendition=708px&fileType=binary&version=pTTR8IdC2rg6HBifcCcPzw"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 6.00",
+      "count": 3,
+      "price": 6.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821932",
+    "offerId": 205734,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821932,
+    "segmentDescription": "Alle AH Rauwkost",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 4.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205734_AH_NL_WK44_ALLE_AH_RAUWKOST?rendition=200px&fileType=binary&version=iyVGGpOBwDPn2s63mP82HA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205734_AH_NL_WK44_ALLE_AH_RAUWKOST?rendition=708px&fileType=binary&version=iyVGGpOBwDPn2s63mP82HA"
+     }
+    ],
+    "category": "Groente, aardappelen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 4.00",
+      "count": 2,
+      "price": 4.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

@@ -1,0 +1,1294 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Vlees",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "816399",
+    "offerId": 200197,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816399,
+    "segmentDescription": "AH Scharrelkipfilet 2 stuks of scharrelkipfilethaasjes 300 gram",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 3.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200197_AH_NL_WK44_AH_SCHARRELKIPFILET_2_STUKS_OF_SCHARRELKIPFILETHAASJES_300_GRAM?rendition=200px&fileType=binary&version=Nn-_Z_Bhwx5m31VguZT1VQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200197_AH_NL_WK44_AH_SCHARRELKIPFILET_2_STUKS_OF_SCHARRELKIPFILETHAASJES_300_GRAM?rendition=708px&fileType=binary&version=Nn-_Z_Bhwx5m31VguZT1VQ"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 3.99",
+      "price": 3.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816442",
+    "offerId": 200240,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816442,
+    "segmentDescription": "Alle Unox Knaks",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 4.99",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200240_AH_NL_WK44_ALLE_UNOX_KNAKS?rendition=200px&fileType=binary&version=4Wd9uLYFeL4l5o9xMnSWgw"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200240_AH_NL_WK44_ALLE_UNOX_KNAKS?rendition=708px&fileType=binary&version=4Wd9uLYFeL4l5o9xMnSWgw"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 4.99",
+      "count": 2,
+      "price": 4.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816458",
+    "offerId": 200256,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816458,
+    "segmentDescription": "AH Runderhamburgers 4 stuks of Hollandse gehaktballetjes",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 3.89",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200256_AH_NL_WK44_AH_RUNDERHAMBURGERS_4_STUKS_OF_HOLLANDSE_GEHAKTBALLETJES?rendition=200px&fileType=binary&version=bmWqu7vgraLbOdAkJVd1pA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200256_AH_NL_WK44_AH_RUNDERHAMBURGERS_4_STUKS_OF_HOLLANDSE_GEHAKTBALLETJES?rendition=708px&fileType=binary&version=bmWqu7vgraLbOdAkJVd1pA"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 3.89",
+      "price": 3.89
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816428",
+    "offerId": 200226,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816428,
+    "segmentDescription": "Alle AH Soepvlees*",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4c694a4345336267514b3630596b676b495776466567?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4c694a4345336267514b3630596b676b495776466567?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4c694a4345336267514b3630596b676b495776466567?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4c694a4345336267514b3630596b676b495776466567?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4c694a4345336267514b3630596b676b495776466567?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [
+     "*M.u.v. Biologisch"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false,
+    "exceptionRule": "*M.u.v. Biologisch"
+   }
+  },
+  {
+   "product": {
+    "webshopId": 619322,
+    "hqId": 75051,
+    "title": "AH Varkensgehakt 300 gram",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €9.97",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200201_AH_NL_WK44_AH_VARKENSGEHAKT_300_GRAM?rendition=200px&fileType=binary&version=iyVGGpOBwDPn2s63mP82HA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200201_AH_NL_WK44_AH_VARKENSGEHAKT_300_GRAM?rendition=708px&fileType=binary&version=iyVGGpOBwDPn2s63mP82HA"
+     }
+    ],
+    "segmentId": "816403",
+    "bonusSegmentId": 816403,
+    "offerId": 200201,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Varkensgehakt 300 gram",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "50% korting",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 2.99,
+    "hasListPrice": false,
+    "currentPrice": 1.49,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Vlees",
+    "subCategory": "Gehakt (half-om-half)",
+    "subCategoryId": 2459,
+    "propertyIcons": [],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Varken"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan",
+      "Wok",
+      "Braadpan"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "D"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Gezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "da_accreditation": [
+      "BETER_LEVEN_1_STER",
+      "VARKEN_NATUUR_BOER"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821888",
+    "offerId": 205690,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821888,
+    "segmentDescription": "AH Rookworst",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "15% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6b4131384c6c6d77534943547259624a4a43304e4641?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6b4131384c6c6d77534943547259624a4a43304e4641?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6b4131384c6c6d77534943547259624a4a43304e4641?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6b4131384c6c6d77534943547259624a4a43304e4641?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6b4131384c6c6d77534943547259624a4a43304e4641?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "15% korting",
+      "percentage": 15,
+      "precisePercentage": 15
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821935",
+    "offerId": 205737,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821935,
+    "segmentDescription": "AH Varkensschnitzel naturel",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "15% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_744e2d7a5442384e53414349326b5859334857754d51?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_744e2d7a5442384e53414349326b5859334857754d51?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_744e2d7a5442384e53414349326b5859334857754d51?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_744e2d7a5442384e53414349326b5859334857754d51?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_744e2d7a5442384e53414349326b5859334857754d51?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "15% korting",
+      "percentage": 15,
+      "precisePercentage": 15
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 4033,
+    "hqId": 43593,
+    "title": "AH Ribkarbonade",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €8.79",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_36686862567a5056514e364550474d7869306d343241?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_36686862567a5056514e364550474d7869306d343241?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_36686862567a5056514e364550474d7869306d343241?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_36686862567a5056514e364550474d7869306d343241?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_36686862567a5056514e364550474d7869306d343241?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "821925",
+    "bonusSegmentId": 821925,
+    "offerId": 205727,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Ribkarbonade",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "100 GRAM VOOR 0.75",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_WEIGHT",
+      "defaultDescription": "per 100 GRAM voor €0.75",
+      "count": 100,
+      "price": 0.75,
+      "unit": "GRAM"
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 2.64,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Vlees",
+    "subCategory": "Karbonades",
+    "subCategoryId": 1207,
+    "propertyIcons": [
+     "goedkoopje",
+     "lokaal"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Varken"
+     ],
+     "np_lokaal": [
+      "nederland"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "B"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "np_goedkoopje": [
+      "prijsfavoriet"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "da_accreditation": [
+      "BETER_LEVEN_1_STER",
+      "VARKEN_NATUUR_BOER"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Gesneden van mager varkensvlees uit de rib van het varken, bevat minder dan 10% vet. Makkelijk en snel te bereiden voor bij de warme maaltijd. Lekker met gekookte aardappelen en boontjes.</p><p><ul><li>Varkensvlees van varkens van Nederlandse boeren</li><li>Bereiding: koekenpan, ongeveer 10 minuten</li><li>Tip: marineer de ribkarbonade en bereid deze op de bbq</li><li>Met 1 ster beter leven keurmerk</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+    "descriptionFull": "<p>  Varkensvlees met het 1 ster beter leven keurmerk heeft naast de ah-kwaliteit nog iets extras: het staat borg voor een beter leven voor het dier. De boer moet zijn best doen om deze ster te verdienen: hij geeft de varkens onder andere meer ruimte en beter afleidingsmateriaal tegen verveling en biggen worden niet gecastreerd. Letterlijk dus: een beter leven en minder stress. Het 1 ster beter leven keurmerk wordt toegekend door de dierenbescherming. </p><p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816460",
+    "offerId": 200258,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816460,
+    "segmentDescription": "AH Scharrel sticky chicken",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_475f4a627234776551622d6c566d7969535846564b77?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_475f4a627234776551622d6c566d7969535846564b77?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_475f4a627234776551622d6c566d7969535846564b77?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_475f4a627234776551622d6c566d7969535846564b77?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_475f4a627234776551622d6c566d7969535846564b77?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 483300,
+    "hqId": 738042,
+    "title": "AH Spekreepjes kalkoen",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €24.60",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_626d413578675a595231616868325577707278343351?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_626d413578675a595231616868325577707278343351?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_626d413578675a595231616868325577707278343351?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_626d413578675a595231616868325577707278343351?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_626d413578675a595231616868325577707278343351?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "821891",
+    "bonusSegmentId": 821891,
+    "offerId": 205693,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Spekreepjes kalkoen",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "15% korting",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "15% korting",
+      "percentage": 15,
+      "precisePercentage": 15
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 3.69,
+    "hasListPrice": false,
+    "currentPrice": 3.14,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Vlees",
+    "subCategory": "Kalkoen",
+    "subCategoryId": 5508,
+    "propertyIcons": [],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Kalkoen"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "da_processing_type": [
+      "Gerookt",
+      "Gezouten"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "D"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Gezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "da_fat_content": [
+      "Mager"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "da_type_of_processed_food": [
+      "Gerookt",
+      "Gezouten"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "da_accreditation": [
+      "BETER_LEVEN_1_STER"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "da_cutting_method": [
+      "Reepjes"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Magere smaakmaker door vele gerechten, zoals pasta's, stamppotten, salades en wokgerechten.</p><p><ul><li>Lekker uitbakken voor door de maaltijd</li><li>Slechts 7% vet</li><li>Traditioneel gerookt</li><li>Gemaakt op basis van kalkoen</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821861",
+    "offerId": 205663,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821861,
+    "segmentDescription": "Brandt & Levie",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "VOOR 4.99",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_6f4e454d556d6c50525443746c3379734c456d373377?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_6f4e454d556d6c50525443746c3379734c456d373377?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_6f4e454d556d6c50525443746c3379734c456d373377?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_6f4e454d556d6c50525443746c3379734c456d373377?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_6f4e454d556d6c50525443746c3379734c456d373377?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 4.99",
+      "price": 4.99
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821927",
+    "offerId": 205729,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821927,
+    "segmentDescription": "AH Hele kip",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "15% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_39616f776c535f4a5263754c4e75496c326669343667?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_39616f776c535f4a5263754c4e75496c326669343667?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_39616f776c535f4a5263754c4e75496c326669343667?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_39616f776c535f4a5263754c4e75496c326669343667?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_39616f776c535f4a5263754c4e75496c326669343667?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "15% korting",
+      "percentage": 15,
+      "precisePercentage": 15
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 364883,
+    "hqId": 830741,
+    "title": "AH Greenfields runderhachee",
+    "brand": "AH Greenfields",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €22.98",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_30505f4a4c6f7070536b69396b503735715330387551?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_30505f4a4c6f7070536b69396b503735715330387551?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_30505f4a4c6f7070536b69396b503735715330387551?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_30505f4a4c6f7070536b69396b503735715330387551?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_30505f4a4c6f7070536b69396b503735715330387551?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "821923",
+    "bonusSegmentId": 821923,
+    "offerId": 205725,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Greenfields runderhachee",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "100 GRAM VOOR 1.89",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_WEIGHT",
+      "defaultDescription": "per 100 GRAM voor €1.89",
+      "count": 100,
+      "price": 1.89,
+      "unit": "GRAM"
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 11.49,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Vlees",
+    "subCategory": "Sukadelappen en runderlappen",
+    "subCategoryId": 2623,
+    "propertyIcons": [],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "da_animal_species": [
+      "Rund"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Braadpan"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Ja"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_exclude_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_exclude_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Rundvlees voorgesneden in blokjes, van runderen uit Ierland. Gesneden ui, hacheekruiden en een scheutje azijn toevoegen om traditionele hachee te maken. Ook geschikt voor andere stoofpotjes.</p><p><ul><li>Rundvlees van runderen uit Ierland</li><li>Bereiding: braadpan, ca. 4 tot 4,5 uur</li><li>Door 'zuur' toe te voegen (bijvoorbeeld azijn) wordt het vlees extra mals</li><li>Tip: heel geschikt om een dag van te voren te bereiden</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "821914",
+    "offerId": 205716,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 821914,
+    "segmentDescription": "AH Excellent iberico",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "15% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_435133385a535a6853664b4a504d5862396c59474577?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_435133385a535a6853664b4a504d5862396c59474577?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_435133385a535a6853664b4a504d5862396c59474577?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_435133385a535a6853664b4a504d5862396c59474577?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_435133385a535a6853664b4a504d5862396c59474577?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vlees",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "15% korting",
+      "percentage": 15,
+      "precisePercentage": 15
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

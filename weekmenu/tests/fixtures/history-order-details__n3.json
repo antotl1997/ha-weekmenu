@@ -1,0 +1,13 @@
+{
+ "status": 200,
+ "body": {
+  "orderId": 900004,
+  "deliveryDate": "2026-08-04",
+  "orderState": "CANCELLED",
+  "deliveryType": "HOME",
+  "groupedProductsInTaxonomy": [],
+  "cancellable": false,
+  "orderMethod": "PLANSERVICE",
+  "reopenable": false
+ }
+}

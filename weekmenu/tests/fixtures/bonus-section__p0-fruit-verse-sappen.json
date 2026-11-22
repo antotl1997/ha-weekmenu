@@ -1,0 +1,1116 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Fruit, verse sappen",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "825001",
+    "offerId": 208235,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 825001,
+    "segmentDescription": "AH Appels en peren",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 STAPELEN TOT 40%",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_208235_AH_NL_WK44_AH_APPELS_EN_PEREN?rendition=200px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_208235_AH_NL_WK44_AH_APPELS_EN_PEREN?rendition=708px&fileType=binary&version=4JujKzEEkvvw0Re90tWZoQ"
+     }
+    ],
+    "category": "Fruit, verse sappen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": true,
+    "extraDescriptions": [
+     "1 stuk 25% korting",
+     "2 stuks 40% korting"
+    ],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_TIERED_PERCENT",
+      "defaultDescription": "2 stuks 40%",
+      "count": 2,
+      "percentage": 40,
+      "unit": "PIECE",
+      "precisePercentage": 40
+     },
+     {
+      "code": "DISCOUNT_TIERED_PERCENT",
+      "defaultDescription": "1 stuk 25%",
+      "count": 1,
+      "percentage": 25,
+      "unit": "PIECE",
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 197314,
+    "hqId": 590974,
+    "title": "AH Kaki fruit",
+    "brand": "AH",
+    "isSample": false,
+    "salesUnitSize": "Los",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_434d50303230323533?revLabel=2&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_434d50303230323533?revLabel=2&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_434d50303230323533?revLabel=2&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_434d50303230323533?revLabel=2&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_434d50303230323533?revLabel=2&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "824999",
+    "bonusSegmentId": 824999,
+    "offerId": 208233,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Kaki fruit",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "4 VOOR 1.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "4 voor 1.99",
+      "count": 4,
+      "price": 1.99
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 0.89,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Fruit, verse sappen",
+    "subCategory": "Exotisch fruit",
+    "subCategoryId": 43619,
+    "propertyIcons": [
+     "vegan"
+    ],
+    "properties": {
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "da_taste": [
+      "Kaki"
+     ],
+     "sp_include_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "sp_include_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Kaki lijkt een beetje op een vierkante tomaat maar deze exotische vrucht met dunne schil is heerlijk zoet. Je kunt 'm eventueel schillen, maar ook zo uit het vuistje eten.</p><p><ul><li>Smaak: aromatisch en zoet</li><li>Lekker in een vruchtensalade, als toetje of als voorgerecht met parmaham</li><li>Een kaki is rijp als de schil oranjerood is</li><li>Bewaren: buiten de koelkast</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "product": {
+    "webshopId": 93224,
+    "hqId": 20869,
+    "title": "AH Mango",
+    "brand": "AH",
+    "isSample": false,
+    "salesUnitSize": "Los",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_75376b2d46425368526c4334344e58722d7a55445767?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_75376b2d46425368526c4334344e58722d7a55445767?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_75376b2d46425368526c4334344e58722d7a55445767?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_75376b2d46425368526c4334344e58722d7a55445767?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_75376b2d46425368526c4334344e58722d7a55445767?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "825000",
+    "bonusSegmentId": 825000,
+    "offerId": 208234,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Mango",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "2 VOOR 2.99",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 2.99",
+      "count": 2,
+      "price": 2.99
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 1.99,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Fruit, verse sappen",
+    "subCategory": "Mango",
+    "subCategoryId": 2559,
+    "propertyIcons": [
+     "vegan"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "da_taste": [
+      "Mango"
+     ],
+     "sp_include_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "sp_include_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "np_verbluffen": [
+      "verbluffend goedkoop"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Mango heeft een volzoete smaak. Een rijpe mango ruikt lekker zoet en kan licht ingedrukt worden. De kleur van de schil zegt niets over de rijpheid van de vrucht. Een mango is heerlijk in een fruitsalade of tropische smoothie. Tip: Probeer een mango ook eens in een gezonde wrap of salade.</p><p><ul><li>Smaak: mango heeft een volzoete smaak.</li><li>Bewaren: Buiten de koelkast.</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816413",
+    "offerId": 200211,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816413,
+    "segmentDescription": "Alle AH Verse sappen en smoothies 500 ml",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 3.75",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200211_AH_NL_WK44_ALLE_AH_VERSE_SAPPEN_EN_SMOOTHIES_500_ML?rendition=200px&fileType=binary&version=dQd4xf95x95o_wPdbT1mig"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200211_AH_NL_WK44_ALLE_AH_VERSE_SAPPEN_EN_SMOOTHIES_500_ML?rendition=708px&fileType=binary&version=dQd4xf95x95o_wPdbT1mig"
+     }
+    ],
+    "category": "Fruit, verse sappen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 3.75",
+      "count": 2,
+      "price": 3.75
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 177754,
+    "hqId": 587596,
+    "title": "AH Blauwe bessen 300 gram",
+    "brand": "AH",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €14.97",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239383832393636?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239383832393636?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239383832393636?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239383832393636?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_43545239383832393636?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "824998",
+    "bonusSegmentId": 824998,
+    "offerId": 208232,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Blauwe bessen 300 gram",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 3.79",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 3.79",
+      "price": 3.79
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 4.49,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Fruit, verse sappen",
+    "subCategory": "Blauwe bessen",
+    "subCategoryId": 4949,
+    "propertyIcons": [
+     "vegan"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "da_taste": [
+      "Bessen",
+      "Blauwe bes"
+     ],
+     "sp_include_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "sp_include_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Nee"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_exclude_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Blauwe besssen hebben een fris zoete smaak en knappige bite. Blauwe bessen kunnen uit de hand gegeten worden als gezonde snack. Maar ze zijn ook heerlijk door de yogurt of in een smoothie.</p><p><ul><li>Smaak: Blauwe bessen hebben een fris zoete smaak en knapperige bite.</li><li>Bewaren: In de koelkast.</li><li>Gezondheid: Rijk aan vezels, bron van vitamine K</li></ul></p>",
+    "descriptionFull": ""
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816407",
+    "offerId": 200205,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816407,
+    "segmentDescription": "AH Verse ananas 250 gram en meloenmix 225 gram",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "1 + 1 GRATIS",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200205_AH_NL_WK44_AH_VERSE_ANANAS_250_GRAM_EN_MELOENMIX_225_GRAM?rendition=200px&fileType=binary&version=V4h1Dud7bMMxzLGfxfIP3Q"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_200205_AH_NL_WK44_AH_VERSE_ANANAS_250_GRAM_EN_MELOENMIX_225_GRAM?rendition=708px&fileType=binary&version=V4h1Dud7bMMxzLGfxfIP3Q"
+     }
+    ],
+    "category": "Fruit, verse sappen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "1+1 gratis",
+      "count": 1,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "824995",
+    "offerId": 208229,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 824995,
+    "segmentDescription": "AH Biologisch mandarijnen net 750 gram of mandarijnen met blad bak 650 gram",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "25% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313930393437?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313930393437?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313930393437?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313930393437?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130313930393437?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Fruit, verse sappen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 107671,
+    "hqId": 81582,
+    "title": "AH Cantaloupe meloen",
+    "brand": "AH",
+    "isSample": false,
+    "salesUnitSize": "Los",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323033333135?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323033333135?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323033333135?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323033333135?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4354523130323033333135?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "824997",
+    "bonusSegmentId": 824997,
+    "offerId": 208231,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Cantaloupe meloen",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "25% korting",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "25% korting",
+      "percentage": 25,
+      "precisePercentage": 25
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 2.99,
+    "hasListPrice": false,
+    "currentPrice": 2.24,
+    "isBonusPrice": true,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Fruit, verse sappen",
+    "subCategory": "Meloenen",
+    "subCategoryId": 1321,
+    "propertyIcons": [
+     "vegan"
+    ],
+    "properties": {
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "da_taste": [
+      "Meloen"
+     ],
+     "sp_include_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "sp_include_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Meloen met een onregelmatige lichtgroene tot goudgele\n\t\t\t\tschil. Deze zomermeloen is vernoemd naar de Italiaanse stad Catalupa bij Rome.</p>",
+    "descriptionFull": "<p>\n   <ul>\n   <li><strong>Smaak:</strong> Cantaloupe-meloen heeft\n    een frisse, achte zoete smaak. </li>\n   <li><strong>Gebruik:</strong> Cantaloupe meloen kun\n    je zo eten, in partjes, blokjes of uit de schil. Lekker in fruitsalades en als\n    voorgerecht met ham zoals Parmaham. </li>\n   <li><strong>Bewaren:</strong> Buiten de koelkast.\n    </li>\n   </ul>\n  </p>"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "822143",
+    "offerId": 205943,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 822143,
+    "segmentDescription": "AH Verse sappen en smoothies 250 ml",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "3 VOOR 5.00",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205943_AH_NL_WK44_AH_VERSE_SAPPEN_EN_SMOOTHIES_250_ML?rendition=200px&fileType=binary&version=swTiWwiz7MN6eI53VftGQA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205943_AH_NL_WK44_AH_VERSE_SAPPEN_EN_SMOOTHIES_250_ML?rendition=708px&fileType=binary&version=swTiWwiz7MN6eI53VftGQA"
+     }
+    ],
+    "category": "Fruit, verse sappen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "3 voor 5.00",
+      "count": 3,
+      "price": 5.0
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 571711,
+    "hqId": 13967,
+    "title": "AH Ananas zonder kroon",
+    "brand": "AH",
+    "isSample": false,
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_764144494a77423252764f514b676d654d7a6d746351?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_764144494a77423252764f514b676d654d7a6d746351?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_764144494a77423252764f514b676d654d7a6d746351?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_764144494a77423252764f514b676d654d7a6d746351?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_764144494a77423252764f514b676d654d7a6d746351?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "segmentId": "822144",
+    "bonusSegmentId": 822144,
+    "offerId": 205944,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Ananas zonder kroon",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "2 VOOR 4.00",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 4.00",
+      "count": 2,
+      "price": 4.0
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 2.19,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Fruit, verse sappen",
+    "subCategory": "Ananas",
+    "subCategoryId": 2545,
+    "propertyIcons": [
+     "vegan"
+    ],
+    "properties": {
+     "sp_include_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "da_taste": [
+      "Ananas"
+     ],
+     "sp_include_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "sp_include_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "sp_include_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "da_salted_or_not_salted": [
+      "Ongezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "sp_include_intolerance_geen_eieren": [
+      "Geen eieren"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "sp_include_intolerance_geen_gluten": [
+      "Geen gluten"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p>Deze ananas is fantastisch in een fruitsalade, een frisse smoothie en zelfs in warme maaltijden.</p><p><ul><li>Met een extra zoete en sappige smaak</li><li>Bewaar buiten de koelkast</li><li>Voor zowel warme als koude gerechten.</li><li>Rijp: Al onze ananassen zijn ready to eat.</li></ul></p>",
+    "descriptionFull": "Bereiden: Snij de boven- en onderkant eraf en zet de ananas rechtop. Snij de schil er met een ruime marge van boven naar beneden in één keer af en volg de ronding van de ananas. Verwijder de achtergebleven zwarte puntjes. Snij de ananas tot slot in parten of stukken en verwijder de harde kern.\n"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "822145",
+    "offerId": 205945,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 822145,
+    "segmentDescription": "Chiquita Ready to eat en Later lekker bananen",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 VOOR 3.50",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205945_AH_NL_WK44_CHIQUITA_READY_TO_EAT_EN_LATER_LEKKER_BANANEN?rendition=200px&fileType=binary&version=hRDk965lMg_Q0c2v8wJ6GA"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205945_AH_NL_WK44_CHIQUITA_READY_TO_EAT_EN_LATER_LEKKER_BANANEN?rendition=708px&fileType=binary&version=hRDk965lMg_Q0c2v8wJ6GA"
+     }
+    ],
+    "category": "Fruit, verse sappen",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_FOR_Y",
+      "defaultDescription": "2 voor 3.50",
+      "count": 2,
+      "price": 3.5
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

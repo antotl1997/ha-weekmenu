@@ -1,0 +1,311 @@
+{
+ "sectionType": "AH",
+ "sectionDescription": "Vegetarisch, vegan en plantaardig",
+ "bonusGroupOrProducts": [
+  {
+   "bonusGroup": {
+    "id": "816449",
+    "offerId": 200247,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816449,
+    "segmentDescription": "Alle Beyond Meat",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "50% KORTING",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_4974576a764a7a53547a657530537242334837325377?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_4974576a764a7a53547a657530537242334837325377?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_4974576a764a7a53547a657530537242334837325377?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_4974576a764a7a53547a657530537242334837325377?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_4974576a764a7a53547a657530537242334837325377?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vegetarisch, vegan en plantaardig",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_PERCENTAGE",
+      "defaultDescription": "50% korting",
+      "percentage": 50,
+      "precisePercentage": 50
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  },
+  {
+   "product": {
+    "webshopId": 580544,
+    "hqId": 23252,
+    "title": "AH Terra plantaardige kipstukjes 160 gram",
+    "brand": "AH Terra",
+    "isSample": false,
+    "unitPriceDescription": "normale prijs per kg €13.06",
+    "images": [
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205653_AH_NL_WK44_AH_TERRA_PLANTAARDIGE_KIPSTUKJES_160_GRAM?rendition=200px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     },
+     {
+      "width": 708,
+      "height": 708,
+      "url": "https://static.ah.nl/mam/bonus/COMBIBEELD_205653_AH_NL_WK44_AH_TERRA_PLANTAARDIGE_KIPSTUKJES_160_GRAM?rendition=708px&fileType=binary&version=PMz3iM0dmRc0PrfDWK7k8Q"
+     }
+    ],
+    "segmentId": "821851",
+    "bonusSegmentId": 821851,
+    "offerId": 205653,
+    "offerStartDate": "2026-10-26",
+    "bonusSegmentDescription": "AH Terra plantaardige kipstukjes 160 gram",
+    "extraDescriptions": [],
+    "discountType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "isInfiniteBonus": false,
+    "bonusMechanism": "VOOR 1.59",
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_FIXED_PRICE",
+      "defaultDescription": "voor 1.59",
+      "price": 1.59
+     }
+    ],
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "bonusPeriodDescription": "vandaag",
+    "priceBeforeBonus": 2.09,
+    "hasListPrice": false,
+    "isBonusPrice": false,
+    "isStapelBonus": false,
+    "isBonus": true,
+    "shopType": "AH",
+    "orderAvailabilityStatus": "IN_ASSORTMENT",
+    "availableOnline": true,
+    "isOrderable": true,
+    "mainCategory": "Vlees",
+    "subCategory": "Vegetarische stukjes",
+    "subCategoryId": 1738,
+    "propertyIcons": [
+     "goedkoopje",
+     "vegan"
+    ],
+    "properties": {
+     "sp_exclude_intolerance_geen_gluten": [
+      "Geen gluten"
+     ],
+     "sp_exclude_intolerance_geen_lactose": [
+      "Geen lactose"
+     ],
+     "sp_exclude_intolerance_geen_soja": [
+      "Geen soja"
+     ],
+     "sp_include_intolerance_geen_kreeftachtigen": [
+      "Geen kreeftachtigen (schaaldieren)"
+     ],
+     "da_sugar_added_or_no_sugar_added": [
+      "Geen toegevoegde suikers"
+     ],
+     "sp_include_intolerance_geen_vis": [
+      "Geen vis"
+     ],
+     "sp_include_dieet_laag_suiker": [
+      "Laag suiker"
+     ],
+     "da_taste": [
+      "Naturel",
+      "Soja"
+     ],
+     "sp_include_dieet_vegetarisch": [
+      "Vegetarisch"
+     ],
+     "sp_include_intolerance_geen_lupine": [
+      "Geen lupine"
+     ],
+     "sp_include_intolerance_geen_pindas": [
+      "Geen pinda's"
+     ],
+     "sp_exclude_intolerance_geen_melk": [
+      "Geen melk"
+     ],
+     "da_a_type_of_preparation_cookware": [
+      "Koekenpan"
+     ],
+     "sp_exclude_dieet_laag_vet": [
+      "Laag vet"
+     ],
+     "np_vegafav": [
+      "vegafavoriet"
+     ],
+     "da_processing_type": [
+      "Voorgegaard"
+     ],
+     "sp_include_intolerance_geen_mosterd": [
+      "Geen mosterd"
+     ],
+     "da_available_in_store": [
+      "true"
+     ],
+     "nutriscore": [
+      "A"
+     ],
+     "sp_include_intolerance_geen_sulfiet": [
+      "Geen sulfiet"
+     ],
+     "sp_include_dieet_veganistisch": [
+      "Veganistisch"
+     ],
+     "da_salted_or_not_salted": [
+      "Gezouten"
+     ],
+     "da_excluded_assortment": [
+      "false"
+     ],
+     "sp_include_intolerance_geen_sesam": [
+      "Geen sesam"
+     ],
+     "sp_exclude_dieet_laag_zout": [
+      "Laag zout"
+     ],
+     "da_free_of_sugar": [
+      "Nee"
+     ],
+     "da_store_department": [
+      "Vers"
+     ],
+     "sp_include_intolerance_geen_schelpdieren": [
+      "Geen schelpdieren (schaaldieren)"
+     ],
+     "np_goedkoopje": [
+      "prijsfavoriet"
+     ],
+     "da_type_of_processed_food": [
+      "Voorgegaard"
+     ],
+     "sp_include_intolerance_geen_noten": [
+      "Geen noten"
+     ],
+     "sp_include_intolerance_geen_selderij": [
+      "Geen selderij"
+     ],
+     "da_cutting_method": [
+      "Stukjes"
+     ],
+     "np_verbluffen": [
+      "verbluffend goedkoop"
+     ],
+     "da_type_of_grain": [
+      "Tarwe"
+     ],
+     "sp_exclude_intolerance_geen_eieren": [
+      "Geen eieren"
+     ]
+    },
+    "isPreviouslyBought": false,
+    "nix18": false,
+    "descriptionHighlights": "<p><ul><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+    "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>"
+   }
+  },
+  {
+   "bonusGroup": {
+    "id": "816381",
+    "offerId": 200179,
+    "offerStartDate": "2026-10-26",
+    "segmentId": 816381,
+    "segmentDescription": "Online only: Redefine meat",
+    "bonusStartDate": "2026-10-26",
+    "bonusEndDate": "2026-11-01",
+    "validityPeriod": {
+     "start": "2026-10-26",
+     "end": "2026-11-01",
+     "description": "vandaag",
+     "code": "TODAY"
+    },
+    "bonusType": "AH",
+    "promotionType": "NATIONAL",
+    "segmentType": "AH",
+    "discountDescription": "2 + 1 GRATIS",
+    "images": [
+     {
+      "width": 800,
+      "height": 800,
+      "url": "https://static.ah.nl/dam/product/AHI_744c744f5359616e5445655a4f33516341387a534f41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+     },
+     {
+      "width": 400,
+      "height": 400,
+      "url": "https://static.ah.nl/dam/product/AHI_744c744f5359616e5445655a4f33516341387a534f41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+     },
+     {
+      "width": 200,
+      "height": 200,
+      "url": "https://static.ah.nl/dam/product/AHI_744c744f5359616e5445655a4f33516341387a534f41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+     },
+     {
+      "width": 48,
+      "height": 48,
+      "url": "https://static.ah.nl/dam/product/AHI_744c744f5359616e5445655a4f33516341387a534f41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+     },
+     {
+      "width": 80,
+      "height": 80,
+      "url": "https://static.ah.nl/dam/product/AHI_744c744f5359616e5445655a4f33516341387a534f41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+     }
+    ],
+    "category": "Vegetarisch, vegan en plantaardig",
+    "future": false,
+    "products": [],
+    "shopType": "AH",
+    "bonusPeriodDescription": "vandaag",
+    "exampleHasListPrice": false,
+    "isStapelBonus": false,
+    "extraDescriptions": [],
+    "discountLabels": [
+     {
+      "code": "DISCOUNT_X_PLUS_Y_FREE",
+      "defaultDescription": "2+1 gratis",
+      "count": 2,
+      "freeCount": 1
+     }
+    ],
+    "storeOnlyPromotion": false
+   }
+  }
+ ],
+ "sectionImage": []
+}

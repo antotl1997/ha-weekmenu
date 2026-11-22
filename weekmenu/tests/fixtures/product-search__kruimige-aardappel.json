@@ -1,0 +1,1263 @@
+{
+ "page": {
+  "size": 20,
+  "totalElements": 11,
+  "totalPages": 1,
+  "number": 0
+ },
+ "products": [
+  {
+   "webshopId": 123955,
+   "hqId": 549734,
+   "title": "AH Kruimige aardappelen",
+   "salesUnitSize": "1 kg",
+   "unitPriceDescription": "normale prijs per kg €1.29",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373831?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373831?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373831?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373831?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373831?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-10-26",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "2 VOOR 1.99",
+   "currentPrice": null,
+   "priceBeforeBonus": 1.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Kruimige aardappelen",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Deze aardappelen hebben een losse kruimige structuur en vallen makkelijk uit elkaar na het koken.</p><p><ul><li>De kruimige aardappelen hebben een volle, romige smaak</li><li>Gekookt zeer kruimig met een goede volle smaak</li><li>Bron van vitamine c en b6</li><li>Bewaren: bewaar de aardappelen op een koele, donkere en droge plek</li></ul></p>",
+   "propertyIcons": [
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 824993,
+   "bonusSegmentDescription": "AH (Iets) kruimige en vastkokende aardappelen 1 kilo",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "<p>  De rassen die worden verpakt, zijn o.a. Eigenheimer (nl), excellency (fr.). </p>\n  <p>  Eenmaal uit de grond wordt de aardappel steeds bloemiger. Vooral geschikt om te koken en voor het maken van puree.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 3,
+   "multipleItemPromotion": true,
+   "labelType": null,
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_X_FOR_Y",
+     "defaultDescription": "2 voor 1.99",
+     "amount": null,
+     "deliveryType": null,
+     "count": 2,
+     "freeCount": null,
+     "actualCount": null,
+     "price": 1.99,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 7,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 96049,
+   "hqId": 549729,
+   "title": "AH Iets kruimige aardappel",
+   "salesUnitSize": "3 kg",
+   "unitPriceDescription": "normale prijs per kg €1.28",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313334343435?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-11-02",
+   "bonusEndDate": "2026-11-08",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "2e gratis",
+   "currentPrice": null,
+   "priceBeforeBonus": 3.85,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Iets kruimige aardappelen",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vanaf maandag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Iets kruimige aardappelen met een blanke schil. Ze zijn na het koken stevig in de kern en aan de buitenkant kruimelig en los van structuur. De\nrassen die worden verpakt zijn o.a. Milva, Vivaldi, Monalisa, Melody, Victoria en Berber. De vleeskleur is lichtgeel en de aardappelen zijn rond-ovaal van vorm.</p>",
+   "propertyIcons": [
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 826871,
+   "bonusSegmentDescription": "AH Iets kruimige aardappelen 3 kilo",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "<p>\n   <ul>\n   <li><strong>Smaak:</strong> Veelzijdig en gewoon lekker. </li>\n   <li><strong>Bewaren:</strong> Bewaar de aardappelen op een koele donkere plek, liefst in de koelkast. </li>\n   <li><strong>Bereiden:</strong> Geschikt om te koken, bakken of te pureren. Het stomen van aardappelen zorgt ervoor dat ze\n smaakvol en knapperig blijven en de vitamines blijven behouden. Het is een veelzijdige aardappel waar je bijna alle toepassingen mee kunt maken.  </li>\n   </ul>\n  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1,
+   "multipleItemPromotion": true,
+   "labelType": null,
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_ONE_FREE",
+     "defaultDescription": "2e gratis",
+     "amount": null,
+     "deliveryType": null,
+     "count": 2,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 6,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 169198,
+   "hqId": 559663,
+   "title": "AH Biologisch Iets kruimige aardappelen",
+   "salesUnitSize": "1 kg",
+   "unitPriceDescription": "normale prijs per kg €2.29",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313636?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313636?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313636?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313636?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313636?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 2.06,
+   "priceBeforeBonus": 2.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Iets kruimige aardappelen",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Een van de bijzondere rassen is de carolus, een iets kruimige, geelschillige aardappel met mooie, rode ogen. Ook in schil te bereiden.</p><p><ul><li>Deze aardappelen hebben een licht korrelige structuur enzijn vol van smaak</li><li>Geschikt om te koken, bakken of te pureren</li><li>Bron van vitamine c en b6</li><li>Bewaren: bewaar de aardappelen op een koele, donkere en droge plek</li></ul></p>",
+   "propertyIcons": [
+    "lokaal",
+    "biologisch"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "<p>  Onze biologische aardappelen komen van september tot en met april van Nederlandse bodem. Biologische boeren geloven in de kracht van de natuur. Daarom zijn zij continu op zoek naar wijzen om de teelt te verduurzamen en het selecteren van de beste rassen op kwaliteit, smaak en textuur. Zo krijg je piepers met een heerlijke smaak. bio-aardappels groeien in hun eigen tempo, zonder de hulp of ondersteuning van onnatuurlijke hulpmiddelen. </p>\n  <p>  Iets kruimige aardappelen zijn na het koken stevig in de kern en aan de buitenkant kruimig en los van structuur. Een veelzijdige aardappel.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 7,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 111388,
+   "hqId": 549733,
+   "title": "AH Iets kruimige aardappelen",
+   "salesUnitSize": "1 kg",
+   "unitPriceDescription": "normale prijs per kg €1.29",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373735?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373735?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373735?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373735?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373735?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-10-26",
+   "bonusEndDate": "2026-11-01",
+   "discountType": "AH",
+   "segmentType": "AH",
+   "promotionType": "NATIONAL",
+   "bonusMechanism": "2 VOOR 1.99",
+   "currentPrice": null,
+   "priceBeforeBonus": 1.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Iets kruimige aardappelen",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": "vandaag",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Iets kruimige aardappelen zijn na het koken stevig in de kern en aan de buitenkant kruimig en los van structuur. Een veelzijdige aardappel. Ook in schil te bereiden.</p><p><ul><li>Deze aardappelen hebben een licht korrelige structuur enzijn vol van smaak</li><li>Geschikt om te koken, bakken of te pureren</li><li>Bron van vitamine c en b6</li><li>Bewaren: bewaar de aardappelen op een koele, donkere en droge plek</li></ul></p>",
+   "propertyIcons": [
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 824993,
+   "bonusSegmentDescription": "AH (Iets) kruimige en vastkokende aardappelen 1 kilo",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "<p>  De rassen die worden verpakt, zijn o.a. Milva, melody, vivaldi, frieslander, danique. </p>\n  <p>  Het is een veelzijdige aardappel waar je bijna alle toepassingen mee kunt maken.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": false,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 3,
+   "multipleItemPromotion": true,
+   "labelType": null,
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_X_FOR_Y",
+     "defaultDescription": "2 voor 1.99",
+     "amount": null,
+     "deliveryType": null,
+     "count": 2,
+     "freeCount": null,
+     "actualCount": null,
+     "price": 1.99,
+     "percentage": null,
+     "unit": null,
+     "precisePercentage": null
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 7,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 482757,
+   "hqId": 737742,
+   "title": "AH Aardappelen kruimig",
+   "salesUnitSize": "800 g",
+   "unitPriceDescription": "prijs per kg €1.94",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313836363231?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313836363231?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313836363231?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313836363231?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313836363231?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 1.55,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Stamppot aardappelen",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Ah kruimige aardappel.</p><p><ul><li>Voorgekookte aardappel</li><li>Verpakt onder beschermende atmosfeer</li><li>Zonder conserveermiddelen</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+   "propertyIcons": [
+    "goedkoopje"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 2,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 428673,
+   "hqId": 11659,
+   "title": "AH Stamppotaardappelen",
+   "salesUnitSize": "1,5 kg",
+   "unitPriceDescription": "prijs per kg €1.53",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373734?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373734?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373734?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373734?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373734?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.29,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Kruimige aardappelen",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Deze aardappel is makkelijk te schillen en vol en romig van smaak. De aardappel heeft na het koken een kruimige en losse structuur en is daarom zeer geschikt voor het maken van een smeu&#x00EF;ge stamppot.</p><p><ul><li>Voor een smeu&#x00EF;ge stamppot</li><li>Geschikt om te koken, pureren voor in de stamppot of magnetron</li><li>Bron van Vitamine C en B6</li><li>Koel, donker en droog bewaren</li></ul></p>",
+   "propertyIcons": [
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p> Onze aardappelen komen het merendeel van het jaar van Nederlandse bodem. Ze worden zorgvuldig geteeld en geoogst door een vaste groep aardappeltelers, waarmee we continu zoeken naar wijzen om de teelt te verduurzamen. We selecteren de beste rassen op kwaliteit, smaak en textuur.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 5,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 108672,
+   "hqId": 562194,
+   "title": "AH Biologisch Iets kruimige aardappelen",
+   "salesUnitSize": "3 kg",
+   "unitPriceDescription": "normale prijs per kg €1.86",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313534?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313534?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313534?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313534?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130303632313534?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": "2026-08-03",
+   "bonusEndDate": "2034-12-31",
+   "discountType": "PO",
+   "segmentType": "PREMIUM",
+   "promotionType": "PERSONAL",
+   "bonusMechanism": "10% KORTING",
+   "currentPrice": 5.03,
+   "priceBeforeBonus": 5.59,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Iets kruimige aardappelen",
+   "brand": "AH Biologisch",
+   "shopType": "AH",
+   "bonusPeriodDescription": "",
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Een van de bijzondere rassen is de carolus, een iets kruimige, geelschillige aardappel met mooie, rode ogen. Ook in schil te bereiden.</p><p><ul><li>Deze aardappelen hebben een licht korrelige structuur enzijn vol van smaak</li><li>Geschikt om te koken, bakken of te pureren</li><li>Bron van vitamine c en b6</li><li>Bewaren: bewaar de aardappelen op een koele, donkere en droge plek</li></ul></p>",
+   "propertyIcons": [
+    "lokaal",
+    "biologisch"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": 803465,
+   "bonusSegmentDescription": "Bio Premium Stuks",
+   "isBonus": true,
+   "hasListPrice": false,
+   "descriptionFull": "<p>  Onze biologische aardappelen komen van september tot en met april van Nederlandse bodem. Biologische boeren geloven in de kracht van de natuur. Daarom zijn zij continu op zoek naar wijzen om de teelt te verduurzamen en het selecteren van de beste rassen op kwaliteit, smaak en textuur. Zo krijg je piepers met een heerlijke smaak. bio-aardappels groeien in hun eigen tempo, zonder de hulp of ondersteuning van onnatuurlijke hulpmiddelen. </p>\n  <p>  Iets kruimige aardappelen zijn na het koken stevig in de kern en aan de buitenkant kruimig en los van structuur. Een veelzijdige aardappel.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": true,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": 1639,
+   "multipleItemPromotion": true,
+   "labelType": "PREMIUM",
+   "discountLabels": [
+    {
+     "code": "DISCOUNT_PERCENTAGE",
+     "defaultDescription": "10% korting",
+     "amount": null,
+     "deliveryType": null,
+     "count": null,
+     "freeCount": null,
+     "actualCount": null,
+     "price": null,
+     "percentage": 10,
+     "unit": null,
+     "precisePercentage": 10
+    }
+   ],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 7,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 202049,
+   "hqId": 794633,
+   "title": "AH Friet aardappelen",
+   "salesUnitSize": "3 kg",
+   "unitPriceDescription": "prijs per kg €1.50",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313333313538?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313333313538?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313333313538?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313333313538?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313333313538?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 4.49,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Iets kruimige aardappelen",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Maak thuis je eigen verse frietjes met de\n\t\t\t\tfrietaardappelen. De iets kruimige aardappelen blijven redelijk stevig tijdens\n\t\t\t\thet koken, maar zijn kruimig van structuur.</p>",
+   "propertyIcons": [],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>\n   <ul>\n   <li><strong>Smaak:</strong> Voor de lekkerste\n    krokante friet. </li>\n   <li><strong>Bewaren:</strong> Bewaar aardappelen op\n    een koele donkere plek.</li>\n   <li><strong>Bereiden:</strong> Deze aardappelen bij voorkeur schillen. Friteuse\n    (160 &#x00B0;C-180 &#x00B0;C): snijd frites van de rauwe aardappelen, spoel ze\n    af en droog ze in een doek. Bak maximaal 400 gram frites gedurende 5 minuten op\n    160 &#x00B0;C voor en laat de frites afkoelen. Bak vervolgens af gedurende 3-4\n    minuten op 180 &#x00B0;C. Koekenpan: kook de aardappelen in ca. 15 minuten\n    bijna gaar, snij daarna in partjes. Verhit (olijf)olie in een koekenpan en bak\n    de aardappelpartjes op hoge temperatuur in ca. 10 minuten goudbruin. Regelmatig keren.\n    </li>\n   </ul>\n  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 6,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 115055,
+   "hqId": 520135,
+   "title": "AH Iets kruimige roodschillige aardappelen",
+   "salesUnitSize": "3 kg",
+   "unitPriceDescription": "prijs per kg €1.23",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373830?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373830?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373830?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373830?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313135373830?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 3.69,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Iets kruimige aardappelen",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Veelzijdige rode aardappel voor bijna alle toepassingen.\n\t\t\t\tIets kruimige aardappelen blijven redelijk stevig tijdens het koken, maar zijn\n\t\t\t\tkruimige van structuur. Bijna het hele jaar uit Nederland, alleen in juni komen\n\t\t\t\tde aardappelen uit Spanje. Gebruikte rassen zijn: Mozart &amp; Romance (nieuwe\n\t\t\t\toogst (half juni-juli))</p>",
+   "propertyIcons": [
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>\n   <ul>\n   <li><strong>Smaak:</strong> Veelzijdig en gewoon\n    lekker</li>\n   <li><strong>Bewaren:</strong> Bewaar op een koele\n    donkere plek, kan ook in de koelkast </li>\n   <li><strong>Bereiden:</strong> Ideaal om te koken,\n    bakken en natuurlijk stamppot. </li>\n   </ul>\n  </p>\n  <p>Pan: schil de aardappelen, snij in gelijke stukken en spoel af\n    met koud water. Kook de aardappelen in een laagje water in ca. 20 minuten gaar.\n    Afgieten, even op lage temperatuur droog laten stomen, omschudden en serveren.\n    </p>\n  <p>Magnetron (700 Watt): schil 500 gram aardappelen, snij in\n    gelijke stukken en spoel af met koud water. Leg de aardappelen in\n    &#x00E9;&#x00E9;n laag in een voor de magnetron geschikte schaal en besprenkel\n    met 2 eetlepels water. Kook de aardappelen in 7 minuten gaar. </p>\n  <p>Koekenpan: kook de aardappelen in ca. 15 minuten bijna gaar,\n    snij daarna in schijfjes of partjes. Verhit boter en/of (olijf)olie in een\n    koekenpan. Bak de schijfjes of partjes op hoge temperatuur in ca. 10 minuten\n    goudbruin. Regelmatig keren. </p>\n  <p>Oven (225&#x00BA;C): schil de aardappelen en snij in schijfjes.\n    Doe de schijfjes in een ovenschaal en besprenkel met (olijf)olie. Bak in een\n    voorverwarmde oven in 30 minuten goudbruin. Bestrooi eventueel met wat geraspte\n    kaas. Ook heerlijk met groente en gehakt.</p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 4,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 187351,
+   "hqId": 589888,
+   "title": "AH Gourmande aardappelen",
+   "salesUnitSize": "1,5 kg",
+   "unitPriceDescription": "prijs per kg €1.99",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_325375745949516a5359325366333057615142656b41?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_325375745949516a5359325366333057615142656b41?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_325375745949516a5359325366333057615142656b41?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_325375745949516a5359325366333057615142656b41?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_325375745949516a5359325366333057615142656b41?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 2.99,
+   "orderAvailabilityStatus": "IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Iets kruimige aardappelen",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Van oorsprong franse aardappel met een stevige en kruimige textuur. De aardappel absorbeert de aroma's van de bereidingen, zonder zijn eigen smaak te verliezen..</p><p><ul><li>De smaak is iets nootachtig, vol en romig. Ook lekker in de schil</li><li>De gourmandine laat zich makkelijk schillen</li><li>De gourmandine is zeer geschikt voor gratins en kook- en stoofgerechten</li><li>Bron van vitamine c en b6</li></ul></p>",
+   "propertyIcons": [
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>  De bijzondere culinaire eigenschappen van de gourmandine zijn niet onopgemerkt gebleven. In Frankrijk heeft deze aardappel in 2009 de 'saveur de l'annee 2009' award gewonnen. In de categorie aardappelen, groenten en fruit vinden franse consumenten de culinaire gourmandine de allerlekkerste aardappel. deze vrij vastkokende aardappel heeft een gave huid en behoudt ook bij bewaring z'n lichtgele vleeskleur. Bewaren: bewaar de aardappelen op een koele, donkere en droge plek. </p>\n  <p>  Bewaar de aardappelen op een koele, donkere en droge plek.  </p>",
+   "isOrderable": true,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 4,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  },
+  {
+   "webshopId": 127728,
+   "hqId": 574028,
+   "title": "AH Aardappelen iets kruimig",
+   "salesUnitSize": "5 kg",
+   "unitPriceDescription": "prijs per kg €1.02",
+   "images": [
+    {
+     "width": 800,
+     "height": 800,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933323236?revLabel=1&rendition=800x800_WEBP&fileType=binary"
+    },
+    {
+     "width": 400,
+     "height": 400,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933323236?revLabel=1&rendition=400x400_WEBP&fileType=binary"
+    },
+    {
+     "width": 200,
+     "height": 200,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933323236?revLabel=1&rendition=200x200_WEBP&fileType=binary"
+    },
+    {
+     "width": 48,
+     "height": 48,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933323236?revLabel=1&rendition=48x48_GIF&fileType=binary"
+    },
+    {
+     "width": 80,
+     "height": 80,
+     "url": "https://static.ah.nl/dam/product/AHI_4354523130313933323236?revLabel=1&rendition=80x80_JPG&fileType=binary"
+    }
+   ],
+   "bonusStartDate": null,
+   "bonusEndDate": null,
+   "discountType": null,
+   "segmentType": null,
+   "promotionType": null,
+   "bonusMechanism": null,
+   "currentPrice": null,
+   "priceBeforeBonus": 5.09,
+   "orderAvailabilityStatus": "NO_LONGER_IN_ASSORTMENT",
+   "orderAvailabilityDescription": null,
+   "mainCategory": "Groente, aardappelen",
+   "subCategory": "Iets kruimige aardappelen",
+   "brand": "AH",
+   "shopType": "AH",
+   "bonusPeriodDescription": null,
+   "availableOnline": true,
+   "isPreviouslyBought": false,
+   "descriptionHighlights": "<p>Iets kruimige aardappelen met een blanke schil. Ze zijn na het koken stevig in de kern en aan de buitenkant kruimelig en los van structuur. De rassen die worden verpakt zijn o.a. Milva, Vivaldi, Monalisa, Melody, Victoria en Berber. De vleeskleur is lichtgeel en de aardappelen zijn rond-ovaal van vorm.</p>",
+   "propertyIcons": [
+    "lokaal"
+   ],
+   "stickers": null,
+   "nutriscore": "B",
+   "nix18": false,
+   "isStapelBonus": false,
+   "extraDescriptions": [],
+   "bonusSegmentId": null,
+   "bonusSegmentDescription": null,
+   "isBonus": false,
+   "hasListPrice": null,
+   "descriptionFull": "<p>\n   <ul>\n   <li><strong>Smaak:</strong> Veelzijdig en gewoon lekker. </li>\n   <li><strong>Bewaren:</strong> Bewaar de aardappelen op een koele donkere plek, liefst in de koelkast. </li>\n   <li><strong>Bereiden:</strong> Geschikt om te koken, bakken of te pureren. Het stomen van aardappelen zorgt ervoor dat ze smaakvol en knapperig blijven en de vitamines blijven behouden. Het is een veelzijdige aardappel waar je bijna alle toepassingen mee kunt maken.  </li>\n   </ul>\n  </p>",
+   "isOrderable": false,
+   "isInfiniteBonus": false,
+   "isSample": false,
+   "isBonusPrice": null,
+   "isSponsored": false,
+   "auctionId": null,
+   "isVirtualBundle": false,
+   "virtualBundleItems": null,
+   "productCount": null,
+   "multipleItemPromotion": null,
+   "labelType": null,
+   "discountLabels": [],
+   "isFavorite": null,
+   "externalWebshopUrl": null,
+   "minBestBeforeDays": 4,
+   "medicalDeviceTypeCode": null,
+   "medicineTypeCode": null
+  }
+ ],
+ "links": {
+  "first": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=kruimige%20aardappel&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "current": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=kruimige%20aardappel&sortBy=RELEVANCE&page=0&size=20"
+  },
+  "next": null,
+  "prev": null,
+  "last": {
+   "href": "https://ms.ah.nl:8080/mobile-services/product/search/v2?application=AHWEBSHOP&availableOnline=true&bonus=NONE&memberId=39672949&orderable=any&query=kruimige%20aardappel&sortBy=RELEVANCE&page=0&size=20"
+  }
+ },
+ "filters": [
+  {
+   "id": "brand",
+   "allLabel": null,
+   "label": "Merk",
+   "options": [
+    {
+     "id": "AH",
+     "label": "AH",
+     "count": 9,
+     "display": true
+    },
+    {
+     "id": "AH Biologisch",
+     "label": "AH Biologisch",
+     "count": 2,
+     "display": true
+    }
+   ],
+   "type": "BRAND",
+   "booleanFilter": false
+  },
+  {
+   "id": "taxonomy",
+   "allLabel": null,
+   "label": "Soort",
+   "options": [
+    {
+     "id": "10942",
+     "label": "Aardappel geschild",
+     "count": 1,
+     "display": true
+    },
+    {
+     "id": "2341",
+     "label": "Aardappel ongeschild",
+     "count": 10,
+     "display": true
+    },
+    {
+     "id": "1789",
+     "label": "Aardappelen",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "5255",
+     "label": "Iets kruimige aardappelen",
+     "count": 8,
+     "display": true
+    },
+    {
+     "id": "5253",
+     "label": "Kruimige aardappelen",
+     "count": 2,
+     "display": true
+    },
+    {
+     "id": "10944",
+     "label": "Stamppot aardappelen",
+     "count": 1,
+     "display": true
+    }
+   ],
+   "type": "TAXONOMY",
+   "booleanFilter": false
+  },
+  {
+   "id": "intolerance",
+   "allLabel": null,
+   "label": "Allergie",
+   "options": [
+    {
+     "id": "sp_include_intolerance_geen_eieren",
+     "label": "eieren",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_gluten",
+     "label": "gluten",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lactose",
+     "label": "lactose",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_lupine",
+     "label": "lupine",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_melk",
+     "label": "melk",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_mosterd",
+     "label": "mosterd",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_noten",
+     "label": "noten",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_pindas",
+     "label": "pinda's",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_schelpdieren",
+     "label": "schelpdieren",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_selderij",
+     "label": "selderij",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sesam",
+     "label": "sesam",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_soja",
+     "label": "soja",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_sulfiet",
+     "label": "sulfiet",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_intolerance_geen_vis",
+     "label": "vis",
+     "count": 11,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "diet",
+   "allLabel": null,
+   "label": "Dieet",
+   "options": [
+    {
+     "id": "sp_include_dieet_laag_suiker",
+     "label": "Laag suiker",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_vet",
+     "label": "Laag vet",
+     "count": 11,
+     "display": true
+    },
+    {
+     "id": "sp_include_dieet_laag_zout",
+     "label": "Laag zout",
+     "count": 11,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": false
+  },
+  {
+   "id": "nutriscore",
+   "allLabel": null,
+   "label": "Nutri-Score",
+   "options": [
+    {
+     "id": "b",
+     "label": "Score B",
+     "count": 11,
+     "display": true
+    }
+   ],
+   "type": "NUTRISCORE",
+   "booleanFilter": false
+  },
+  {
+   "id": "bonus",
+   "allLabel": null,
+   "label": "Bonus",
+   "options": [
+    {
+     "id": "Bonus",
+     "label": "Bonus",
+     "count": 5,
+     "display": true
+    }
+   ],
+   "type": "BONUS",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_verbluffen",
+   "allLabel": null,
+   "label": "Prijsfavoriet",
+   "options": [
+    {
+     "id": "np_verbluffen",
+     "label": "Prijsfavoriet",
+     "count": 3,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  },
+  {
+   "id": "np_biologisch",
+   "allLabel": null,
+   "label": "Biologisch",
+   "options": [
+    {
+     "id": "np_biologisch",
+     "label": "Biologisch",
+     "count": 2,
+     "display": true
+    }
+   ],
+   "type": "PROPERTY",
+   "booleanFilter": true
+  }
+ ],
+ "sortOn": [
+  "RELEVANCE",
+  "PRICEHIGHLOW",
+  "PRICELOWHIGH",
+  "TAXONOMY",
+  "PURCHASE_FREQUENCY",
+  "PURCHASE_DATE",
+  "PURCHASE_DEPARTMENT",
+  "NUTRISCORE"
+ ],
+ "configuration": {
+  "googleBanners": {
+   "adUnitMainPath": "/21888805090/ah.nl_app/zoeken/1",
+   "adUnitSecondaryPath": "/21888805090/ah.nl_app/zoeken/2",
+   "customTemplateId": "11894057",
+   "divGptAd": "1577185579002-0"
+  }
+ },
+ "ads": [],
+ "taxonomyNodes": []
+}

@@ -1,0 +1,186 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302913,
+   "title": "Linzensoep met venkelworst en spinazie",
+   "description": "Deze grove linzensoep met venkelworst en spinazie is alles wat je nodig hebt op een kille najaarsavond. Lekker budgetproof én heel makkelijk te maken met de soepmaker!",
+   "href": "/allerhande/recept/R-R1302913/linzensoep-met-venkelworst-en-spinazie",
+   "cookTime": 20,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036878_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 3.444445,
+    "count": 9
+   },
+   "ingredients": [
+    {
+     "text": "1 middelgrote ui",
+     "name": {
+      "singular": "middelgrote ui"
+     }
+    },
+    {
+     "text": "1&#189; teen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "2.5 g tijm",
+     "name": {
+      "singular": "tijm"
+     }
+    },
+    {
+     "text": "125 g fijne soepgroente",
+     "name": {
+      "singular": "fijne soepgroente"
+     }
+    },
+    {
+     "text": "175 g gedroogde groene linzen",
+     "name": {
+      "singular": "gedroogde groene linzen"
+     }
+    },
+    {
+     "text": "&#189; kippenbouillonblokje",
+     "name": {
+      "singular": "kippenbouillonblokje"
+     }
+    },
+    {
+     "text": "1 l water",
+     "name": {
+      "singular": "water"
+     }
+    },
+    {
+     "text": "1 varkensbraadworst",
+     "name": {
+      "singular": "varkensbraadworst"
+     }
+    },
+    {
+     "text": "&#189; el milde olijfolie",
+     "name": {
+      "singular": "milde olijfolie"
+     }
+    },
+    {
+     "text": "&#188; tl venkelzaad",
+     "name": {
+      "singular": "venkelzaad"
+     }
+    },
+    {
+     "text": "225 g verse spinazie",
+     "name": {
+      "singular": "verse spinazie"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Snipper de uien en snijd de knoflook grof. Ris de blaadjes van de takjes tijm.",
+     "Doe de ui, knoflook, tijm, soepgroente, linzen, het bouillonblokje en het water in de soepmaker. Zet op het programma voor grove soep.",
+     "Verwijder ondertussen het vel van de worsten.",
+     "Verhit de olie in een koekenpan op middelhoog vuur en bak de worsten met het venkelzaad in 8 min. goudbruin.",
+     "Druk het worstvlees in stukjes met een houten lepel.",
+     "Roer in delen de spinazie door de hete soep en schep in diepe borden. Verdeel de worst over de soep."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 505,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 46,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 16,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 33,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}

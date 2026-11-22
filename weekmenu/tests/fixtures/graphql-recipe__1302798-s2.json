@@ -1,0 +1,201 @@
+{
+ "data": {
+  "recipe": {
+   "id": 1302798,
+   "title": "Eiercurry met spinazie en naan",
+   "description": "Ei met spinazie is al een topcombinatie en deze variant van curry met naan is al helemaal speciaal. Een smaakvol gerecht, gezond en niet duur!",
+   "href": "/allerhande/recept/R-R1302798/eiercurry-met-spinazie-en-naan",
+   "cookTime": 25,
+   "nutriScore": "A",
+   "courses": [
+    "hoofdgerecht"
+   ],
+   "cuisines": [],
+   "images": [
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_220x162_JPG.jpg",
+     "width": 220,
+     "height": 162
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_302x220_JPG.jpg",
+     "width": 302,
+     "height": 220
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_440x324_JPG.jpg",
+     "width": 440,
+     "height": 324
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_445x297_JPG.jpg",
+     "width": 445,
+     "height": 297
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_612x450_JPG.jpg",
+     "width": 612,
+     "height": 450
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_680x320_JPG.jpg",
+     "width": 680,
+     "height": 320
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_890x594_JPG.jpg",
+     "width": 890,
+     "height": 594
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_1024x748_JPG.jpg",
+     "width": 1024,
+     "height": 748
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_1224x900_JPG.jpg",
+     "width": 1224,
+     "height": 900
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_1600x560_JPG.jpg",
+     "width": 1600,
+     "height": 560
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_1920x1080_JPG.jpg",
+     "width": 1920,
+     "height": 1080
+    },
+    {
+     "url": "https://static.ah.nl/static/recepten/img_4036709_2048x1496_JPG.jpg",
+     "width": 2048,
+     "height": 1496
+    }
+   ],
+   "servings": {
+    "number": 4,
+    "type": "personen"
+   },
+   "rating": {
+    "average": 3.500002,
+    "count": 32
+   },
+   "ingredients": [
+    {
+     "text": "3 middelgrote scharreleieren",
+     "name": {
+      "singular": "middelgroot scharrelei"
+     }
+    },
+    {
+     "text": "250 g iets kruimige aardappelen",
+     "name": {
+      "singular": "iets kruimige aardappel"
+     }
+    },
+    {
+     "text": "1 middelgrote ui",
+     "name": {
+      "singular": "middelgrote ui"
+     }
+    },
+    {
+     "text": "2 tenen knoflook",
+     "name": {
+      "singular": "knoflook"
+     }
+    },
+    {
+     "text": "5 g verse gember",
+     "name": {
+      "singular": "verse gember"
+     }
+    },
+    {
+     "text": "25 g ongezouten cashewnoten",
+     "name": {
+      "singular": "ongezouten cashewnoten"
+     }
+    },
+    {
+     "text": "2 el zonnebloemolie",
+     "name": {
+      "singular": "zonnebloemolie"
+     }
+    },
+    {
+     "text": "1 el curry madras specerijenmelange",
+     "name": {
+      "singular": "curry madras specerijenmelange"
+     }
+    },
+    {
+     "text": "200 g tomatenblokjes",
+     "name": {
+      "singular": "tomatenblokjes"
+     }
+    },
+    {
+     "text": "225 g diepvries gesneden bladspinazie",
+     "name": {
+      "singular": "diepvries gesneden bladspinazie"
+     }
+    },
+    {
+     "text": "125 ml water",
+     "name": {
+      "singular": "water"
+     }
+    },
+    {
+     "text": "100 g mini naanbrood volkoren",
+     "name": {
+      "singular": "mini naanbrood volkoren"
+     }
+    },
+    {
+     "text": "2.5 g verse koriander",
+     "name": {
+      "singular": "verse koriander"
+     }
+    }
+   ],
+   "preparation": {
+    "steps": [
+     "Verwarm de oven voor op 200 °C.",
+     "Kook de eieren in 7 min. halfzacht. Laat schrikken onder koud stromend water en pel ze.",
+     "Snijd ondertussen de aardappelen in stukken van 3 cm. Kook in 15 min. gaar en giet af.",
+     "Snijd ondertussen de uien, knoflook en gember grof. Doe samen met de cashewnoten in een hakmolen en mix tot een gladde pasta.",
+     "Verhit de olie in een hapjespan op middelhoog vuur. Bak de gekookte eieren in 2 min. rondom goudgeel. Schep uit de pan en hou apart.",
+     "Voeg de rest van de olie toe en bak de ui-cashewpasta 5 min. Voeg de curry-madraskruiden toe en bak 1 min. mee.",
+     "Voeg de tomatenblokjes toe en stoof 10 min. Voeg de spinazie, aardappelen en het water toe en verwarm 5 min.",
+     "Bereid ondertussen de naan volgens de aanwijzingen op de verpakking.",
+     "Pluk de blaadjes van de koriander. Serveer de eiercurry met het naanbrood en bestrooi met de korianderblaadjes."
+    ]
+   },
+   "nutritions": {
+    "energy": {
+     "value": 610,
+     "unit": "kcal",
+     "name": "energie"
+    },
+    "carbohydrates": {
+     "value": 58,
+     "unit": "g",
+     "name": "koolhydraten"
+    },
+    "fat": {
+     "value": 28,
+     "unit": "g",
+     "name": "vet"
+    },
+    "protein": {
+     "value": 24,
+     "unit": "g",
+     "name": "eiwit"
+    }
+   }
+  }
+ }
+}
