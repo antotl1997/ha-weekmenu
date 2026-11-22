@@ -421,6 +421,26 @@ def test_app_later_order_warning_and_reset_button_in_chrome(tmp_path):
     assert "Dit is het menu voor" not in dom
 
 
+@pytest.mark.slow
+def test_later_order_warning_is_in_the_one_confirm_sheet_in_chrome(tmp_path):
+    """Spec 3: on Monday the confirm question itself says which week it is, in one
+    sheet followed by the usual question (no second sheet)."""
+    from tests.fakes import dish, make_plan
+    ctx = make_ctx(tmp_path / "later", now=datetime(2026, 11, 23, 9, 0))
+    ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
+    week = date(2026, 12, 2)
+    ctx.ledger.save(WeekLog(week, draft=make_plan([dish(week, 101, [1], 1.0)]).to_dict()))
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        got = act(base, "", tmp_path, "later-bevestigen", [{"sel": "[data-confirm]"}])
+    sheet = got[got.index('id="sheet"'):]
+    assert "Dit is het menu voor woensdag 2 december." in sheet
+    assert "De bestelling voor woensdag 25 november is zondag al geplaatst. " in sheet
+    assert "Wat je daarna per avond wijzigt, past de add-on meteen aan." in sheet
+    assert ctx.ledger.load(week).plan is None  # only the sheet
+
+
 def fake_offers() -> list[Product]:
     def o(pid, title, cat, mech, regular, now=None, image=None, unit="500 g"):
         return Product(pid, title, unit, regular, regular if now is None else now, True, mech,

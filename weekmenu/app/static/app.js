@@ -1395,17 +1395,16 @@ async function startRound(btn, mode) {
 async function confirmWeek(btn) {
   const w = state.week;
   const where = w.target === "order" ? "in je bestelling" : w.target === "list" ? "op je AH-lijst" : "";
-  if (w.later_order) {
-    const l = w.later_order;
-    const go = await confirmSheet(`Dit is het menu voor ${longDate(l.week)}.`,
-      `De bestelling voor ${longDate(l.skipped)} is zondag al geplaatst.`, confirmLabel(w.target));
-    if (!go) return;
-  }
-  const ok = await confirmSheet(where ? `De week ${where} zetten?` : "Het menu van deze week bevestigen?",
-    (where ? "De boodschappen van alle gekozen gerechten gaan in één keer naar AH."
+  let text = where ? `De week ${where} zetten?` : "Het menu van deze week bevestigen?";
+  let sub = (where ? "De boodschappen van alle gekozen gerechten gaan in één keer naar AH."
       : "De boodschappen van alle gekozen gerechten gaan in één keer naar AH: in je open bestelling als die er is, anders op je AH-lijst.")
-      + " Wat je daarna per avond wijzigt, past de add-on meteen aan.",
-    confirmLabel(w.target));
+      + " Wat je daarna per avond wijzigt, past de add-on meteen aan.";
+  if (w.later_order) {  // Monday and Tuesday: the warning is part of the one question
+    const l = w.later_order;
+    sub = `De bestelling voor ${longDate(l.skipped)} is zondag al geplaatst. ${text} ${sub}`;
+    text = `Dit is het menu voor ${longDate(l.week)}.`;
+  }
+  const ok = await confirmSheet(text, sub, confirmLabel(w.target));
   if (!ok) return;
   await busy(btn, async () => {
     const res = await api(`api/week/confirm?week=${encodeURIComponent(w.week)}`, {});
