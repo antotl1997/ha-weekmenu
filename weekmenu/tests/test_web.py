@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import pytest
 
@@ -1074,3 +1074,36 @@ async def test_reset_publishes_the_running_week_on_the_sensor(aiohttp_client, ct
     sensor = [p for path, p in ctx.hass.posts[n:] if path == "states/sensor.weekmenu"]
     assert sensor and sensor[-1]["attributes"]["week"] == running.isoformat()
     assert [d["titel"] for d in sensor[-1]["attributes"]["dishes"]] == ["Recept 201"]
+
+
+# --- v2.1: waarschuwing voor de week erna, en Week leegmaken alleen voor de start ----------
+
+async def test_later_order_warning_only_on_monday_and_tuesday(aiohttp_client, tmp_path):
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 23, 9, 0))  # maandag
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert body["week"] == "2026-12-02" and body["draft"] is True
+    assert body["later_order"] == {"week": "2026-12-02", "skipped": "2026-11-25"}
+    ctx.clock = lambda: datetime(2026, 11, 24, 20, 0)  # dinsdag
+    body = await (await client.get("api/week")).json()
+    assert body["later_order"] == {"week": "2026-12-02", "skipped": "2026-11-25"}
+    ctx.clock = lambda: datetime(2026, 11, 22, 12, 0)  # zondag: de gewone bestelling
+    body = await (await client.get("api/week")).json()
+    assert body["week"] == "2026-11-25" and body["later_order"] is None
+    ctx.clock = lambda: datetime(2026, 11, 25, 12, 0)  # woensdag
+    body = await (await client.get("api/week")).json()
+    assert body["later_order"] is None
+
+
+async def test_can_reset_only_before_the_week_starts(aiohttp_client, tmp_path):
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 3, 9, 0))  # dinsdag voor W
+    await planned_ctx(ctx)
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+    assert body["can_reset"] is True and body["later_order"] is None
+    ctx.clock = lambda: datetime(2026, 11, 4, 9, 0)  # de woensdag zelf
+    body = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+    assert body["can_reset"] is False
+    ctx.clock = lambda: datetime(2026, 11, 3, 9, 0)
+    body = await (await client.get(f"api/week?week={(W + timedelta(days=7)).isoformat()}")).json()
+    assert body["draft"] is True and body["can_reset"] is False

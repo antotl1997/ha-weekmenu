@@ -396,6 +396,31 @@ def test_app_new_folder_card_in_chrome(tmp_path):
     assert order in after
 
 
+@pytest.mark.slow
+def test_app_later_order_warning_and_reset_button_in_chrome(tmp_path):
+    """Monday 23 November: the draft is for 2 December, say so. Sunday 1 November: the
+    confirmed week of 4 November has not started, so it can be emptied."""
+    ctx = make_ctx(tmp_path / "later", now=datetime(2026, 11, 23, 9, 0))
+    ctx.store.save(Tokens("test-access", "test-refresh", 9e9))
+    static = tmp_path / "static"
+    shutil.copytree(STATIC_DIR, static)
+    with Server(ctx, static) as base:
+        dom = render(base, "", tmp_path, "week-later")
+    assert "Dit is het menu voor woensdag 2 december." in dom
+    assert ("De bestelling voor woensdag 25 november is zondag al geplaatst; "
+            "die week kies je hier niet meer.") in dom
+    assert "Week leegmaken" not in dom and "—" not in dom
+
+    ctx = build_ctx(tmp_path / "reset")
+    ctx.ledger.save(WeekLog(date(2026, 10, 28)))  # no running menu: the app opens on W
+    ctx.clock = lambda: datetime(2026, 11, 1, 12, 0)
+    with Server(ctx, static) as base:
+        dom = render(base, "", tmp_path, "week-leegmaken", size=(390, 2000))
+    assert "data-reset" in dom and "Week leegmaken" in dom
+    assert dom.index("Week leegmaken") > dom.index("Bonus bespaard")
+    assert "Dit is het menu voor" not in dom
+
+
 def fake_offers() -> list[Product]:
     def o(pid, title, cat, mech, regular, now=None, image=None, unit="500 g"):
         return Product(pid, title, unit, regular, regular if now is None else now, True, mech,

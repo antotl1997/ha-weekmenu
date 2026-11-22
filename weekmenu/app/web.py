@@ -801,6 +801,12 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
                             retry=start == menu_week_start(now))
             if raw is not None:  # an evening without a dish can still be filled
                 mark_choosable(out["days"], main.make_settings(ctx, raw, start))
+        today = now.date()
+        # Monday and Tuesday the order is for the week after the one Sunday skipped
+        later = plan is None and (start - main.week_of(today)).days >= 14
+        out["later_order"] = {"week": start.isoformat(),
+                              "skipped": (start - timedelta(days=7)).isoformat()} if later else None
+        out["can_reset"] = plan is not None and today < start
         out["enabled"] = raw.enabled if raw is not None else None  # None: HA unreadable
         out["writes_paused"] = PAUSED_NOTE if ctx.health.writes_paused else None
         w = waiting_for(start) if plan is None else None
