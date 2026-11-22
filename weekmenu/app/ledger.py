@@ -95,6 +95,9 @@ class WeekLog:
     # v1.1: the start of the oldest bonus period a dish in the draft was matched to;
     # confirming with a newer folder out matches the draft again first. None: no draft.
     draft_period_start: date | None = None
+    # v2.1: pid -> the name of each product the add-on added, so a leftover shows its name
+    # when the plan no longer holds the product
+    titles: dict[int, str] = field(default_factory=dict)
     # not stored: the file was written by a newer add-on. Shown, never written (v0.6).
     too_new: bool = field(default=False, compare=False, repr=False)
 
@@ -138,6 +141,7 @@ class WeekLog:
             "offers_saved": {str(k): v for k, v in self.offers_saved.items()},
             "draft": self.draft,
             "draft_period_start": _iso(self.draft_period_start),
+            "titles": {str(k): v for k, v in self.titles.items()},
         }
 
     @classmethod
@@ -178,6 +182,7 @@ class WeekLog:
             offers_saved={int(k): float(v) for k, v in (d.get("offers_saved") or {}).items()},
             draft=d.get("draft"),
             draft_period_start=_date(d.get("draft_period_start")),
+            titles={int(k): str(v) for k, v in (d.get("titles") or {}).items()},
         )
 
 

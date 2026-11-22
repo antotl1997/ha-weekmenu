@@ -242,13 +242,17 @@ def _source_of(recipe) -> str:
     return host.removeprefix("www.") or "eigen"
 
 
-def _title(plan: Plan, pid: int) -> str:
+def _title(plan: Plan, pid: int, log=None) -> str:
     p = plan.products.get(pid)
-    return p.title if p else str(pid)
+    if p:
+        return p.title
+    if log is not None and pid in log.titles:
+        return log.titles[pid]
+    return str(pid)
 
 
 def _leftovers(log, plan: Plan) -> list[dict]:
-    return [{"product": _title(plan, p), "qty": n} for p, n in leftovers(log, plan).items()]
+    return [{"product": _title(plan, p, log), "qty": n} for p, n in leftovers(log, plan).items()]
 
 
 def _held(wlog, plan: Plan | None, start: date, retry: bool) -> str | None:
@@ -258,7 +262,7 @@ def _held(wlog, plan: Plan | None, start: date, retry: bool) -> str | None:
     if retry:  # writes paused: the hourly look completes it once writing is on again
         return PAUSED_NOTE if wlog.held == PAUSED_NOTE else held_note(start)
     todo = missing(wlog, plan)
-    return manual_note(_title(plan, p) for p in todo) if todo else None
+    return manual_note(_title(plan, p, wlog) for p in todo) if todo else None
 
 
 def check_view(wlog, plan: Plan, held: str | None) -> dict:
@@ -276,10 +280,10 @@ def check_view(wlog, plan: Plan, held: str | None) -> dict:
     weigh = [{"date": d.date.isoformat(), "dag": WEEKDAGEN[d.date.weekday()],
               "product": ln.product.title, "ingredient": ln.from_ingredient}
              for d in dishes for ln in d.lines if ln.check]
-    pending = [_title(plan, p) for p in wlog.pending]
-    unknown = [_title(plan, p) for p in wlog.unknown]
+    pending = [_title(plan, p, wlog) for p in wlog.pending]
+    unknown = [_title(plan, p, wlog) for p in wlog.unknown]
     left = _leftovers(wlog, plan)
-    todo = [] if held else [{"product": _title(plan, p), "qty": n}
+    todo = [] if held else [{"product": _title(plan, p, wlog), "qty": n}
                             for p, n in missing(wlog, plan).items()]
     counts = {"not_found": len(not_found), "unsure": len(pending) + len(unknown),
               "leftovers": len(left), "held": 1 if held else 0, "missing": len(todo),
@@ -349,8 +353,8 @@ def week_view(wlog, plan: Plan | None, start: date,
         not_found=list(plan.not_found),
         short_by=plan.short_by,
         budget_exhausted=plan.budget_exhausted,
-        pending=[_title(plan, p) for p in wlog.pending],
-        unknown=[_title(plan, p) for p in wlog.unknown],
+        pending=[_title(plan, p, wlog) for p in wlog.pending],
+        unknown=[_title(plan, p, wlog) for p in wlog.unknown],
     )
     out["check"] = check_view(wlog, plan, out["held"])
     return out

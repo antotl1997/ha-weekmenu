@@ -890,3 +890,14 @@ async def test_api_write_to_a_too_new_week_is_refused_with_the_update_message(
     assert f"{W.isoformat()}.json" in ctx.too_new
     r = await client.get(f"api/dish/{WO.isoformat()}")  # showing it still works
     assert r.status == 200
+
+
+async def test_api_week_leftover_uses_the_remembered_title(aiohttp_client, ctx):
+    await planned_ctx(ctx)
+    wlog = ctx.ledger.load(W)
+    wlog.added[99] = 1
+    wlog.titles[99] = "AH Scharrel kipfilet 2 stuks"
+    ctx.ledger.save(wlog)
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert {"product": "AH Scharrel kipfilet 2 stuks", "qty": 1} in body["check"]["leftovers"]

@@ -162,10 +162,12 @@ async def destination(client, week: date) -> Literal["order", "list"]:
     return "order" if order is not None else "list"
 
 
-def _title(plan: Plan, replaced: Plan | None, pid: int) -> str:
+def _title(plan: Plan, replaced: Plan | None, pid: int, log: WeekLog | None = None) -> str:
     for src in (plan, replaced):
         if src is not None and pid in src.products:
             return src.products[pid].title
+    if log is not None and pid in log.titles:
+        return log.titles[pid]
     return str(pid)
 
 
@@ -320,7 +322,7 @@ async def _reduce_each(
 async def _write_each(
     client, ledger: Ledger, log: WeekLog, order, delta: dict[int, int],
     into: dict[int, int], result: WriteResult, kind: str | None = None,
-    gain: dict[int, float] | None = None,
+    gain: dict[int, float] | None = None, titles: dict[int, str] | None = None,
 ) -> None:
     """One AH call per product, write-ahead `pending` before each, `into` after each.
 
@@ -350,6 +352,8 @@ async def _write_each(
             else:
                 await client.add_to_shopping_list({pid: qty}, on_before=before_write)
             into[pid] = into.get(pid, 0) + qty
+            if titles and pid in titles:
+                log.titles[pid] = titles[pid]
             if kind == OFFER:
                 g = (gain or {}).get(pid, 0.0)
                 log.offers_savings = round(log.offers_savings + g, 2)
@@ -402,9 +406,9 @@ async def apply(
         if delta and retried(log.week, today):
             note = held_note(log.week)
         elif delta:
-            note = manual_note(_title(plan, replaced, p) for p in delta)
+            note = manual_note(_title(plan, replaced, p, log) for p in delta)
         else:  # only lowerings: no round ever retries those
-            note = cut_note(_title(plan, replaced, p) for p in cuts)
+            note = cut_note(_title(plan, replaced, p, log) for p in cuts)
         result = WriteResult(target=target, held=note)
         _report(result, log, plan, replaced)
         return result
@@ -426,7 +430,10 @@ async def apply(
     _log_target("Menu", order, len(delta))
 
     result = WriteResult(target=target)
-    await _write_each(client, ledger, log, order, delta, log.added, result)
+    await _write_each(
+        client, ledger, log, order, delta, log.added, result,
+        titles={p: plan.products[p].title for p in delta if p in plan.products},
+    )
     if cuts:
         _log_target("Opschonen", order, len(cuts))
         await _reduce_each(client, ledger, log, order, cuts, result)
@@ -458,9 +465,9 @@ def _paused_apply(ledger: Ledger, log: WeekLog, plan: Plan, replaced: Plan | Non
         if retried(log.week, today):  # the hourly look completes it once writing is on
             note = PAUSED_NOTE
         elif delta:  # Ruling 44: no round comes back to this week, say what to add
-            note = manual_note(_title(plan, replaced, p) for p in delta)
+            note = manual_note(_title(plan, replaced, p, log) for p in delta)
         else:
-            note = cut_note(_title(plan, replaced, p) for p in cuts)
+            note = cut_note(_title(plan, replaced, p, log) for p in cuts)
     result = WriteResult(target=target, held=note)
     if result.held:
         log_.warning("Menu: niets geschreven, schrijven staat stil (AH lijkt veranderd)")
@@ -472,9 +479,9 @@ def _report(result: WriteResult, log: WeekLog, plan: Plan, replaced: Plan | None
     left = leftovers(log, plan)
     if replaced is not None:
         left = {p: n for p, n in left.items() if p in replaced.basket}
-    result.leftovers = [(_title(plan, replaced, p), n) for p, n in left.items()]
-    result.pending = [(_title(plan, replaced, p), int(e["delta"])) for p, e in log.pending.items()]
-    result.unknown = [(_title(plan, replaced, p), n) for p, n in log.unknown.items()]
+    result.leftovers = [(_title(plan, replaced, p, log), n) for p, n in left.items()]
+    result.pending = [(_title(plan, replaced, p, log), int(e["delta"])) for p, e in log.pending.items()]
+    result.unknown = [(_title(plan, replaced, p, log), n) for p, n in log.unknown.items()]
 
 
 async def apply_extras(
@@ -518,7 +525,8 @@ async def apply_extras(
     if log.target is None:
         log.target = result.target
     _log_target("Losse aanbieding" if kind == OFFER else "Vaste boodschappen", order, len(delta))
-    await _write_each(client, ledger, log, order, delta, into, result, kind=kind, gain=savings)
+    await _write_each(client, ledger, log, order, delta, into, result, kind=kind, gain=savings,
+                      titles=titles)
     result.pending = [(titles.get(p, str(p)), int(log.pending[p]["delta"]))
                       for p in adds if p in log.pending]
     result.unknown = [(titles.get(p, str(p)), log.unknown[p]) for p in adds if p in log.unknown]

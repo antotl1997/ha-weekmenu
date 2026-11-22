@@ -845,3 +845,26 @@ async def test_no_ah_write_for_a_too_new_week(tmp_path, kind):
             await apply_extras(ah, led, log, {1: 1})
     assert ah.calls == [] and ah.listed == {}
     assert path.read_bytes() == before
+
+
+async def test_apply_remembers_the_title_of_what_it_added(led):
+    ah = FakeAh()
+    log = WeekLog(W)
+    await apply(ah, led, log, plan({1: 2}))
+    assert led.load(W).titles == {1: "Product 1"}
+
+
+def test_title_falls_back_to_the_log_before_the_number():
+    from app import writer
+    log = WeekLog(W, titles={1: "Grana padano"})
+    assert writer._title(plan({}), None, 1, log) == "Grana padano"
+    assert writer._title(plan({1: 1}), None, 1, log) == "Product 1"  # the plan wins
+    assert writer._title(plan({}), None, 2, log) == "2"
+
+
+@pytest.mark.parametrize("kind", ["extra", "offer"])
+async def test_extras_remember_their_title(led, kind):
+    ah = FakeAh()
+    log = WeekLog(W)
+    await apply_extras(ah, led, log, {7: 1}, {7: "Koffie"}, kind=kind, savings={7: 1.0})
+    assert led.load(W).titles == {7: "Koffie"}

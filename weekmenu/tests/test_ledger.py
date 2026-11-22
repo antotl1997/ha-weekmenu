@@ -237,3 +237,10 @@ def test_too_new_log_that_does_not_parse_loads_empty(tmp_path):
         json.dumps({"schema": 7, "week": "anders", "added": "x"}), encoding="utf-8")
     log = Ledger(tmp_path).load(W)
     assert log.too_new and log.week == W and log.added == {}
+
+
+def test_titles_round_trip_and_old_logs_load(tmp_path):
+    led = Ledger(tmp_path)
+    led.save(WeekLog(W, titles={7: "AH Scharrel kipfilet 2 stuks"}))
+    assert led.load(W).titles == {7: "AH Scharrel kipfilet 2 stuks"}
+    assert WeekLog.from_dict({"week": W.isoformat()}).titles == {}
