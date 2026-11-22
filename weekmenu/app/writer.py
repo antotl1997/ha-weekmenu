@@ -8,10 +8,20 @@ Rules: one AH call per product, any error stops the round (progress kept,
 error re-raised) and nothing is retried.
 
 Lowering (opschonen): only when `apply` gets a replacing plan and `today` before
-the menu week starts, and only on the destination everything in `log.added` went
-to (`log.added_to`: the list, or that one order). Per product the add-on lowers
-what it added itself and the new plan no longer needs: max(0, log.added - basket).
-AH gets max(0, current - that), so what the user put there besides the add-on stays.
+the menu week starts. Where (2.1.0): the list is locked while an order is active, so
+"first the list, then the order" comes down to: with an active order of the menu week
+it is lowered there, whether `log.added_to` is "list", "order:<id>" (that same id
+only) or "mixed"; with no active order on the list, when `added_to` is "list" or
+"mixed". An order of another id is never lowered. List or mixed adds with an active
+order of another week (or an unknown delivery day) are held like any other write to
+that order (`cut_note`, nothing written, nothing to `removed_by_user`). Per product
+the add-on lowers what it added itself and the new plan no longer needs:
+max(0, log.added - basket). AH gets max(0, current - that), so what the user put
+there besides the add-on stays. Lowering list (or mixed) adds in the order
+(`from_list`): only what the order still had leaves `log.added`; the rest may still be
+on the locked list (a partly moved list), so it stays a leftover and is not counted as
+removed by the user. Its pending entry carries "from_list": True so a settle does the
+same.
 Staples (`extras_added`) are never lowered. A lowering has the same write-ahead
 record with "kind": "reduce", a delta <= 0 and "remove" (what leaves `log.added`):
 current <= before+delta means it arrived, current >= before that it did not (the
@@ -19,7 +29,8 @@ entry is dropped), anything else moves it to `log.unknown` (with the negative de
 Never repeated blind. A product crossed off on the list is never lowered; it stays
 a leftover. What a lowering finds already gone (the user took it off in the AH app:
 remove - min(remove, before)) goes into `log.removed_by_user` and is never added
-again that week (Ruling 43): `apply` adds only n - added - removed_by_user.
+again that week (Ruling 43, not for `from_list`): `apply` adds only
+n - added - removed_by_user.
 
 Write-ahead record: right before each PUT/PATCH the quantity AH holds
 (`before`) and the amount we are about to add (`delta`) go into `log.pending`
@@ -231,8 +242,11 @@ async def _settle(client, ledger: Ledger, log: WeekLog) -> None:
         if entry.get("kind") == REDUCE:
             if cur <= before + delta:  # arrived
                 remove = int(entry.get("remove", -delta))
-                _take(log.added, pid, remove)
-                _user_removed(log, pid, remove, before)
+                if entry.get("from_list"):  # the rest may still be on the locked list
+                    _take(log.added, pid, min(remove, max(0, before)))
+                else:
+                    _take(log.added, pid, remove)
+                    _user_removed(log, pid, remove, before)
             elif cur < before:  # partly lower: nobody can tell what happened
                 log.unknown[pid] = delta
             del log.pending[pid]
@@ -273,9 +287,13 @@ def _dest(target: str, order) -> str:
 
 async def _reduce_each(
     client, ledger: Ledger, log: WeekLog, order, cuts: dict[int, int], result: WriteResult,
+    from_list: bool = False,
 ) -> None:
     """One AH call per product, write-ahead `pending` (kind "reduce") before each.
 
+    `from_list`: lowering in the order what the add-on put on the list. Only what the
+    order still had (min(r, before)) leaves `log.added`, and nothing counts as removed
+    by the user: the rest may still be on the locked list.
     Any error stops the loop: progress is saved and the error re-raised, never retried.
     """
     target = result.target
@@ -289,7 +307,7 @@ async def _reduce_each(
                 delta = max(0, before - r) - before
                 change.append(delta)
                 change.append(before)
-                log.pending[pid] = {
+                entry = {
                     "before": before,
                     "delta": delta,
                     "remove": r,
@@ -297,6 +315,9 @@ async def _reduce_each(
                     "order_id": order_id,
                     "kind": REDUCE,
                 }
+                if from_list:
+                    entry["from_list"] = True
+                log.pending[pid] = entry
                 ledger.save(log)
 
             if order is not None:
@@ -307,9 +328,12 @@ async def _reduce_each(
                     log.pending.pop(pid, None)
                     ledger.save(log)
                     continue
-            _take(log.added, pid, r)
-            if change:
-                _user_removed(log, pid, r, change[1])
+            if from_list:
+                _take(log.added, pid, min(r, max(0, change[1])) if change else r)
+            else:
+                _take(log.added, pid, r)
+                if change:
+                    _user_removed(log, pid, r, change[1])
             log.pending.pop(pid, None)
             if change and change[0] < 0:
                 result.removed[pid] = -change[0]
@@ -386,9 +410,14 @@ async def apply(
     order, why, day = await _destination(client, log.week)
     target: Literal["order", "list"] = "order" if order is not None else "list"
     dest = _dest(target, order)
+    # list or mixed adds follow into the active order (the list is locked meanwhile);
+    # an order of another week holds them below like any write to it
+    from_list = log.added_to in ("list", "mixed") and order is not None
+    lowerable = (log.added_to == dest or from_list
+                 or (log.added_to == "mixed" and dest == "list"))
     cuts: dict[int, int] = {}
     if (replaced is not None and today is not None and today < log.week
-            and log.added_to == dest):
+            and lowerable):
         cuts = {
             p: n - plan.basket.get(p, 0)
             for p, n in log.added.items()
@@ -425,7 +454,7 @@ async def apply(
         if not log.added:
             log.added_to = dest
         elif log.added_to != dest:
-            log.added_to = "mixed"  # never lowered again: the adds are on two places
+            log.added_to = "mixed"  # the adds are on two places: see "Lowering" above
     ledger.save(log)
     _log_target("Menu", order, len(delta))
 
@@ -436,7 +465,7 @@ async def apply(
     )
     if cuts:
         _log_target("Opschonen", order, len(cuts))
-        await _reduce_each(client, ledger, log, order, cuts, result)
+        await _reduce_each(client, ledger, log, order, cuts, result, from_list=from_list)
 
     _report(result, log, plan, replaced)
     return result

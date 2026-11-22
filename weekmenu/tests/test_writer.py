@@ -557,14 +557,8 @@ async def test_no_lowering_without_a_replaced_plan(led):
 
 
 async def test_no_lowering_on_another_destination(led):
-    # added to the list, now there is an order: the order holds other things
-    ah = FakeAh()
-    old = plan({1: 1})
-    await apply(ah, led, WeekLog(W), old)
-    ah.order = ActiveOrder(5, {1: 1}, W)
-    res = await apply(ah, led, led.load(W), plan({}), replaced=old, today=BEFORE)
-    assert ah.order.items == {1: 1} and ah.listed == {1: 1} and res.removed == {}
     # added to order 5, now order 6 is the active one
+    old = plan({1: 1})
     ah = FakeAh(order=ActiveOrder(5, {}, W))
     log = WeekLog(date(2026, 11, 11))
     await apply(ah, led, log, old)
@@ -573,7 +567,10 @@ async def test_no_lowering_on_another_destination(led):
     assert ah.order.items == {1: 1} and res.removed == {}
 
 
-async def test_adds_on_two_destinations_are_never_lowered(led):
+async def test_adds_on_two_destinations_are_lowered_in_this_weeks_order(led):
+    # 1 on the list (never moved into the order), 2 straight into order 5: both are
+    # lowered in the order; 1 is not there, so it may still be on the locked list and
+    # stays a leftover instead of counting as removed by the user
     ah = FakeAh()
     old = plan({1: 1})
     await apply(ah, led, WeekLog(W), old)
@@ -582,7 +579,93 @@ async def test_adds_on_two_destinations_are_never_lowered(led):
     await apply(ah, led, led.load(W), both)
     assert led.load(W).added_to == "mixed"
     res = await apply(ah, led, led.load(W), plan({}), replaced=both, today=BEFORE)
-    assert ah.order.items == {2: 1} and ah.listed == {1: 1} and res.removed == {}
+    assert ah.order.items == {} and ah.listed == {1: 1} and res.removed == {2: 1}
+    saved = led.load(W)
+    assert saved.added == {1: 1} and saved.removed_by_user == {}
+    assert res.leftovers == [("Product 1", 1)]
+
+
+# --- 2.1.0: lowering follows the list into this week's order ---
+
+async def test_list_moved_to_this_weeks_order_is_lowered_there(led):
+    # 22 november: put on the list, the user moved the list into the order
+    ah = FakeAh(order=ActiveOrder(5, {1: 2, 2: 1}, date(2026, 11, 4)))
+    log = WeekLog(W, added={1: 2, 2: 1}, added_to="list")
+    res = await apply(ah, led, log, plan({2: 1}), replaced=plan({1: 2, 2: 1}), today=BEFORE)
+    assert ah.order.items == {2: 1} and res.removed == {1: 2}
+    assert led.load(W).added == {2: 1} and led.load(W).removed_by_user == {}
+
+
+async def test_mixed_week_is_lowered_in_this_weeks_order(led):
+    ah = FakeAh(order=ActiveOrder(5, {1: 1, 3: 1}, date(2026, 11, 4)))
+    log = WeekLog(W, added={1: 1, 3: 1}, added_to="mixed")
+    await apply(ah, led, log, plan({}), replaced=plan({1: 1, 3: 1}), today=BEFORE)
+    assert ah.order.items == {}
+
+
+async def test_partly_moved_list_keeps_the_rest_as_leftover_not_user_removed(led):
+    # 2 were added on the list, only 1 made it into the order: 1 may still be on the
+    # (locked) list, so it stays in added and is a leftover with its name
+    ah = FakeAh(order=ActiveOrder(5, {1: 1}, date(2026, 11, 4)))
+    log = WeekLog(W, added={1: 2}, added_to="list", titles={1: "Risottorijst"})
+    res = await apply(ah, led, log, plan({}), replaced=plan({1: 2}), today=BEFORE)
+    assert ah.order.items == {} and led.load(W).added == {1: 1}
+    assert led.load(W).removed_by_user == {} and res.leftovers == [("Product 1", 1)]
+
+
+async def test_locked_list_is_never_read_when_lowering_in_the_order(led):
+    ah = FakeAh(order=ActiveOrder(5, {1: 1}, date(2026, 11, 4)))
+    async def locked():
+        raise AhOrderMode("shopping list is locked: order mode", 400)
+    ah.shopping_list = locked
+    log = WeekLog(W, added={1: 1}, added_to="list")
+    await apply(ah, led, log, plan({}), replaced=plan({1: 1}), today=BEFORE)
+    assert ah.order.items == {}
+
+
+async def test_mixed_week_without_an_order_is_lowered_on_the_list(led):
+    ah = FakeAh(listed={1: 1})
+    log = WeekLog(W, added={1: 1}, added_to="mixed")
+    await apply(ah, led, log, plan({}), replaced=plan({1: 1}), today=BEFORE)
+    assert ah.listed == {}
+
+
+async def test_list_items_are_never_lowered_in_another_weeks_order(led):
+    ah = FakeAh(order=ActiveOrder(5, {1: 1}, date(2026, 10, 28)))
+    log = WeekLog(W, added={1: 1}, added_to="list")
+    res = await apply(ah, led, log, plan({}), replaced=plan({1: 1}), today=BEFORE)
+    assert ah.calls == [] and ah.order.items == {1: 1} and res.held is not None
+    assert led.load(W).removed_by_user == {}
+
+
+async def test_order_of_another_id_in_the_menu_week_is_not_lowered(led):
+    ah = FakeAh(order=ActiveOrder(6, {1: 1}, date(2026, 11, 4)))
+    log = WeekLog(W, added={1: 1}, added_to="order:5")
+    await apply(ah, led, log, plan({}), replaced=plan({1: 1}), today=BEFORE)
+    assert ah.order.items == {1: 1}
+
+
+async def test_staples_and_offers_stay_when_the_list_follows_into_the_order(led):
+    ah = FakeAh(order=ActiveOrder(5, {1: 1, 7: 1}, date(2026, 11, 4)))
+    log = WeekLog(W, added={1: 1}, added_to="list", extras_added={7: 1})
+    await apply(ah, led, log, plan({}), replaced=plan({1: 1}), today=BEFORE)
+    assert ah.order.items == {7: 1}
+
+
+async def test_crash_after_lowering_list_items_in_the_order_settles_without_user_removed(led):
+    # 2 on the list, 1 moved into the order; AH lowered it, then the call raised
+    ah = FakeAh(order=ActiveOrder(5, {1: 1}, W), fail_on_call=0, fail_after=True)
+    log = WeekLog(W, added={1: 2}, added_to="list")
+    with pytest.raises(AhApiError):
+        await apply(ah, led, log, plan({}), replaced=plan({1: 2}), today=BEFORE)
+    assert ah.order.items == {} and led.load(W).pending[1]["kind"] == "reduce"
+    ah.fail_on_call = None
+    n = len(ah.calls)
+    res = await apply(ah, led, led.load(W), plan({}), replaced=plan({1: 2}), today=BEFORE)
+    saved = led.load(W)
+    assert len(ah.calls) == n + 1  # the settled part is never lowered twice; 1 left to try
+    assert saved.pending == {} and saved.removed_by_user == {} and saved.added == {1: 1}
+    assert res.leftovers == [("Product 1", 1)]
 
 
 async def test_old_log_without_destination_is_never_lowered(led):

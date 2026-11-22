@@ -65,7 +65,9 @@ class WeekLog:
     completion_tried: bool = False
     notified: bool = False  # the "klaar" message for this menu went out
     # where everything in `added` went: "list", "order:<id>", or "mixed" once a later
-    # write went elsewhere. Only an unmixed, known destination is ever lowered.
+    # write went elsewhere. "list" and "mixed" are lowered in this week's active order
+    # (the list is locked then) or, without one, on the list; "order:<id>" only in
+    # that order; None (an old log without it) never.
     added_to: str | None = None
     # the start of the bonus period the menu was made with (None: a log from before 0.4)
     folder_period_start: date | None = None
