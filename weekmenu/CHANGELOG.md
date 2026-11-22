@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.0
+
+- **Namen bij "Over van het vorige menu".** Die regel noemt nu de producten bij hun naam in plaats van met een AH-nummer. Het logboek onthoudt de naam vanaf nu; weken die al nummers tonen worden niet hersteld.
+- **Opschonen volgt de lijst naar de bestelling.** Heeft de add-on producten op je lijst gezet en heb je die daarna zelf in de bestelling van die menuweek gezet, dan haalt opschonen ze nu ook daar weg. Zolang een bestelling openstaat, vergrendelt AH de lijst. Heb je de lijst maar voor een deel overgezet, dan kan het deel dat nog op de lijst staat niet weg en staat het met naam bij "Over van het vorige menu". Opschonen kan dan ook een eigen exemplaar van hetzelfde product uit je bestelling halen. Wat je op de lijst al afstreepte blijft staan en wordt ook later niet uit je bestelling gehaald.
+- **Waarschuwing op maandag en dinsdag.** Op die dagen staat boven het concept en in de bevestigvraag een gele waarschuwing: "Dit is het menu voor <datum>. De bestelling voor <datum> is zondag al geplaatst; die week kies je hier niet meer." Zo zie je dat je voor de week erna kiest.
+- **Week leegmaken.** Onder een bevestigde week die nog niet begonnen is staat de knop "Week leegmaken". Na een bevestiging gaan de gerechten weg en haalt de add-on uit je bestelling of van je lijst wat hij daarvoor toevoegde. Vaste boodschappen en losse aanbiedingen blijven staan. Wat niet weg kan, zoals iets wat je al afstreepte, noemt de app bij naam. Is de week begonnen, dan weigert de add-on het.
+
 ## 2.0.2
 
 - **Naar volgende week om te kiezen.** Onderaan de lopende week staat nu altijd "Menu voor volgende week", ook als daar nog niets voor gekozen is. Eerder verscheen die knop pas als volgende week al een menu had, en dat kan sinds je zelf kiest pas na bevestigen: zo kwam je er nooit.

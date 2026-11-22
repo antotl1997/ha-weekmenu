@@ -488,7 +488,15 @@ function draftHtml(w, waiting) {
     return html + `<div class="card empty"><b>Nog geen menu voor deze week</b>
       Kies per avond een gerecht. ${when}</div>`;
   }
-  return html + conceptCard(w, when) + days.map(dayCard).join("");
+  return html + laterCard(w) + conceptCard(w, when) + days.map(dayCard).join("");
+}
+
+/* Monday and Tuesday: the order is for the week after the one Sunday's order skipped. */
+function laterCard(w) {
+  const l = w.later_order;
+  if (!l) return "";
+  return `<div class="card note warn later-order"><span class="dot"></span><div><b>Dit is het menu voor ${esc(longDate(l.week))}.</b>
+    <span class="muted">De bestelling voor ${esc(longDate(l.skipped))} is zondag al geplaatst; die week kies je hier niet meer.</span></div></div>`;
 }
 
 /* "Concept: nog niets in je bestelling": how far the week is, and the one button that
@@ -557,6 +565,7 @@ function weekScreen() {
     html += days.map(dayCard).join("");
     html += staplesHtml(w);
     html += notesHtml(w, true);
+    if (w.can_reset) html += `<button class="btn sec2 full" data-reset>Week leegmaken</button>`;
   }
   html += loginCard(w.login, true);
   if (w.next_week) {
@@ -1386,11 +1395,16 @@ async function startRound(btn, mode) {
 async function confirmWeek(btn) {
   const w = state.week;
   const where = w.target === "order" ? "in je bestelling" : w.target === "list" ? "op je AH-lijst" : "";
-  const ok = await confirmSheet(where ? `De week ${where} zetten?` : "Het menu van deze week bevestigen?",
-    (where ? "De boodschappen van alle gekozen gerechten gaan in één keer naar AH."
+  let text = where ? `De week ${where} zetten?` : "Het menu van deze week bevestigen?";
+  let sub = (where ? "De boodschappen van alle gekozen gerechten gaan in één keer naar AH."
       : "De boodschappen van alle gekozen gerechten gaan in één keer naar AH: in je open bestelling als die er is, anders op je AH-lijst.")
-      + " Wat je daarna per avond wijzigt, past de add-on meteen aan.",
-    confirmLabel(w.target));
+      + " Wat je daarna per avond wijzigt, past de add-on meteen aan.";
+  if (w.later_order) {  // Monday and Tuesday: the warning is part of the one question
+    const l = w.later_order;
+    sub = `De bestelling voor ${longDate(l.skipped)} is zondag al geplaatst. ${text} ${sub}`;
+    text = `Dit is het menu voor ${longDate(l.week)}.`;
+  }
+  const ok = await confirmSheet(text, sub, confirmLabel(w.target));
   if (!ok) return;
   await busy(btn, async () => {
     const res = await api(`api/week/confirm?week=${encodeURIComponent(w.week)}`, {});
@@ -1404,6 +1418,27 @@ async function confirmWeek(btn) {
       : ` ${n} gerechten op avonden dat jullie niet thuis eten, zijn weggelaten.`;
     const done = res.held || `Staat ${res.target === "order" ? "in je bestelling" : "op je lijst"}.`;
     toast(done + dropped);
+  });
+  if (route().tab === "week" && !isInner(route())) render();
+}
+
+/* "Week leegmaken": the dishes and what they put at AH go, the week is a draft again. */
+async function resetWeek(btn) {
+  const w = state.week;
+  const ok = await confirmSheet(`Week van ${longDate(w.week)} leegmaken?`,
+    "De gerechten gaan eruit en wat de app voor deze gerechten in je bestelling of op je lijst zette, haalt hij weg. Vaste boodschappen en losse aanbiedingen blijven staan. Daarna kies je opnieuw.",
+    "Leegmaken");
+  if (!ok) return;
+  await busy(btn, async () => {
+    const res = await api(`api/week/reset?week=${encodeURIComponent(w.week)}`, {});
+    state.week = res;
+    state.dishes = {};
+    state.savings = null;
+    try { await loadStaples(); } catch (e) { /* the week is empty; staples show on the next visit */ }
+    const left = (res.not_removed || []).map((n) => `${n.product} (${n.qty}x)`);
+    const parts = [left.length ? "Niet weggehaald: " + left.join(", ") + "." : "Week leeggemaakt."];
+    if (res.held) parts.push(res.held);
+    toast(parts.join(" "));
   });
   if (route().tab === "week" && !isInner(route())) render();
 }
@@ -1554,6 +1589,7 @@ app.addEventListener("click", async (ev) => {
   if (t.dataset.dish) { location.hash = "#gerecht/" + t.dataset.dish; return; }
   if (t.dataset.kies) { location.hash = "#kies/" + t.dataset.kies; return; }
   if ("confirm" in t.dataset && state.week) { confirmWeek(t); return; }
+  if ("reset" in t.dataset && state.week) { resetWeek(t); return; }
   if (r.choose && state.choose) { await chooseClick(t, r.choose); return; }
   if (r.recipes || r.recipe) { await recipeClick(t, r); return; }
   // the check card: a product not found is an action

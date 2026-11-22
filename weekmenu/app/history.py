@@ -20,8 +20,9 @@ log = logging.getLogger(__name__)
 
 HISTORY_SCHEMA = 1
 # v1.0: "correct" is a "Klopt niet" choice (with the ingredient key), for the
-# share of ingredient lines without a correction
-ACTIONS = ("swap", "back", "remove", "correct")
+# share of ingredient lines without a correction. v2.1: "reset" is "Week leegmaken"
+# (statistics only: the recent-dishes logic reads the plans, not this file)
+ACTIONS = ("swap", "back", "remove", "correct", "reset")
 
 
 class History:

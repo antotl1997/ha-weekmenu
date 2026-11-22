@@ -308,3 +308,4 @@ a.btn.sm{display:inline-flex}
 .linkbox input{flex:1;min-width:0;border:1px solid #e1dbd1;border-radius:12px;padding:10px 12px;font:inherit;font-size:15px;background:#fff;min-height:44px}
 .form p.hint{margin-top:6px}
 .form p.hint[hidden]{display:none}
+.later-order{background:#fbecd9}.later-order b{color:#8a5a14}

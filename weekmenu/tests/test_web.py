@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import pytest
 
@@ -890,3 +890,241 @@ async def test_api_write_to_a_too_new_week_is_refused_with_the_update_message(
     assert f"{W.isoformat()}.json" in ctx.too_new
     r = await client.get(f"api/dish/{WO.isoformat()}")  # showing it still works
     assert r.status == 200
+
+
+async def test_api_week_leftover_uses_the_remembered_title(aiohttp_client, ctx):
+    await planned_ctx(ctx)
+    wlog = ctx.ledger.load(W)
+    wlog.added[99] = 1
+    wlog.titles[99] = "AH Scharrel kipfilet 2 stuks"
+    ctx.ledger.save(wlog)
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert {"product": "AH Scharrel kipfilet 2 stuks", "qty": 1} in body["check"]["leftovers"]
+
+
+# --- v2.1: Week leegmaken ----------------------------------------------------------------
+
+STARTED = "Deze week is al begonnen, leegmaken kan niet meer."
+
+
+def reset(client, week=W):
+    return client.post(f"api/week/reset?week={week.isoformat()}")
+
+
+async def test_reset_takes_the_dishes_out_and_leaves_an_empty_draft(aiohttp_client, ctx):
+    await planned_ctx(ctx)  # on the list: 1 x1, 2 x2, 3 x1
+    ah = ctx.client
+    ah.listed[7] = 1  # a staple the add-on put there: never lowered
+    wlog = ctx.ledger.load(W)
+    wlog.extras_added = {7: 1}
+    wlog.previous[WO.isoformat()] = 99
+    wlog.swapped_out[WO.isoformat()] = [99]
+    wlog.removed_by_user = {5: 1}
+    ctx.ledger.save(wlog)
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 200, await r.text()
+    body = await r.json()
+    assert body["draft"] is True and body["not_removed"] == [] and body["held"] is None
+    assert all(d["recipe"] is None for d in body["days"])
+    assert ah.held() == {7: 1}  # the dishes' products are gone, the staple stays
+    log = ctx.ledger.load(W)
+    assert log.plan is None and log.draft is None and log.draft_period_start is None
+    assert log.added == {} and log.extras_added == {7: 1}
+    assert log.removed_by_user == {} and log.previous == {} and log.previous_dish == {}
+    assert log.swapped_out == {} and log.savings == 0.0 and log.held is None
+    assert not (log.round_done or log.completion_tried or log.notified)
+    events = ctx.history.load()[W.isoformat()]
+    assert [(e["recipe_id"], e["action"]) for e in events] == [(101, "reset"), (102, "reset")]
+
+
+async def test_reset_reports_what_could_not_be_removed(aiohttp_client, ctx):
+    await planned_ctx(ctx)
+    ctx.client.struck = {3}  # crossed off on the list: bought, never lowered
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 200, await r.text()
+    assert (await r.json())["not_removed"] == [{"product": "Product 3", "qty": 1}]
+    assert ctx.ledger.load(W).added == {3: 1}  # a new menu never adds it twice
+    assert ctx.ledger.load(W).crossed_off == [3]
+    assert ctx.client.held() == {3: 1}
+
+
+async def test_crossed_off_product_is_not_lowered_in_a_later_order_after_reset(
+        aiohttp_client, ctx):
+    """Spec 2: crossed off = bought; it is never looked for in the order afterwards,
+    also not after Week leegmaken and a new menu with the same product."""
+    from app.ahclient import ActiveOrder
+    from app.writer import apply
+    await planned_ctx(ctx)
+    ctx.client.struck = {3}
+    client = await aiohttp_client(make_app(ctx))
+    assert (await reset(client)).status == 200
+    ah = ctx.client
+    ah.order = ActiveOrder(5, {3: 2}, W)  # the user's own two units in this week's order
+    await apply(ah, ctx.ledger, ctx.ledger.load(W), make_plan([dish(WO, 103, [3], 1.0)]))
+    writes = list(ah.writes)
+    r = await reset(client)
+    assert r.status == 200, await r.text()
+    assert ah.order.items == {3: 2} and ah.writes == writes
+
+
+async def test_reset_refused_once_the_week_started(aiohttp_client, tmp_path):
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 4, 9, 0))  # W itself
+    await planned_ctx(ctx)
+    before = ctx.ledger.load(W).plan
+    writes = list(ctx.client.writes)
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 409 and (await r.json())["error"] == STARTED
+    assert ctx.client.writes == writes and ctx.ledger.load(W).plan == before
+
+
+async def test_reset_refused_without_a_confirmed_menu(aiohttp_client, ctx):
+    wlog = ctx.ledger.load(W)
+    wlog.draft = week_plan().to_dict()
+    ctx.ledger.save(wlog)
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 409
+    assert ctx.ledger.load(W).draft == week_plan().to_dict()
+
+
+async def test_reset_failing_halfway_keeps_the_menu(aiohttp_client, ctx):
+    await planned_ctx(ctx)
+    ah = ctx.client
+    wlog = ctx.ledger.load(W)
+    wlog.held = "een eerdere notitie"  # apply clears it before writing
+    wlog.previous[WO.isoformat()] = 99
+    ctx.ledger.save(wlog)
+    old = wlog.plan
+    ah.fail_on_call = len(ah.writes) + 1  # the second lowering (product 2) fails
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 502 and "error" in await r.json()
+    log = ctx.ledger.load(W)
+    assert log.plan == old and log.savings == week_plan().savings
+    assert log.held == "een eerdere notitie" and log.previous == {WO.isoformat(): 99}
+    # what really left AH stays out of `added`: a second tap never lowers it again
+    # product 2's lowering stays in flight: the next tap settles it from AH first
+    assert log.added == {2: 2, 3: 1} and list(log.pending) == [2]
+    assert ctx.history.load() == {}
+
+    ah.fail_on_call = None  # tapping again is safe: only what is still in `added` goes
+    r = await reset(client)
+    assert r.status == 200, await r.text()
+    log = ctx.ledger.load(W)
+    assert log.plan is None and log.added == {} and ah.held() == {}
+
+
+async def test_reset_with_an_order_of_another_week_still_empties_the_week(aiohttp_client,
+                                                                          ctx):
+    """Ruling: an open order of another week lowers nothing; the week is emptied
+    anyway and the answer carries the note."""
+    from app.ahclient import ActiveOrder
+    from app.writer import cut_note
+    await planned_ctx(ctx)
+    ah = ctx.client
+    ah.order = ActiveOrder(5, {7: 1}, date(2026, 10, 28))
+    writes = list(ah.writes)
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 200, await r.text()
+    body = await r.json()
+    # put on the list, so they may sit on the locked list too: a neutral note
+    assert body["held"] == cut_note(["Product 1", "Product 2", "Product 3"], from_list=True)
+    assert body["not_removed"] == [{"product": "Product 1", "qty": 1},
+                                   {"product": "Product 2", "qty": 2},
+                                   {"product": "Product 3", "qty": 1}]
+    assert ah.writes == writes and ah.order.items == {7: 1}
+    log = ctx.ledger.load(W)
+    assert log.plan is None and log.held is None and log.added == {1: 1, 2: 2, 3: 1}
+
+
+async def test_reset_refused_while_writes_are_paused(aiohttp_client, ctx):
+    from app.health import PAUSED_NOTE
+    await planned_ctx(ctx)
+    ctx.health.failed("lijst", "vorm")
+    ctx.health.failed("lijst", "vorm")
+    before, writes = ctx.ledger.load(W).plan, list(ctx.client.writes)
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 409 and (await r.json())["error"] == PAUSED_NOTE
+    assert ctx.client.writes == writes and ctx.ledger.load(W).plan == before
+
+
+async def test_reset_of_a_too_new_week_is_refused_with_the_update_message(aiohttp_client,
+                                                                          ctx):
+    import json as _json
+    from app.durable import UPDATE_MESSAGE
+    await planned_ctx(ctx)
+    path = ctx.ledger.root / f"{W.isoformat()}.json"
+    path.write_text(_json.dumps({**_json.loads(path.read_text(encoding="utf-8")),
+                                 "schema": 9}), encoding="utf-8")
+    before, writes = path.read_bytes(), list(ctx.client.writes)
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 409 and (await r.json())["error"] == UPDATE_MESSAGE
+    assert ctx.client.writes == writes and path.read_bytes() == before
+
+
+async def test_reset_of_an_unreadable_newer_log_says_update(aiohttp_client, ctx):
+    """A log from a newer add-on that this code cannot read shows no plan: the answer
+    is still the update message, never "geen bevestigd menu"."""
+    import json as _json
+    from app.durable import UPDATE_MESSAGE
+    path = ctx.ledger.root / f"{W.isoformat()}.json"
+    path.write_text(_json.dumps({"schema": 9, "week": "onleesbaar"}), encoding="utf-8")
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 409 and (await r.json())["error"] == UPDATE_MESSAGE
+
+
+async def test_reset_publishes_the_running_week_on_the_sensor(aiohttp_client, ctx):
+    """W is the week sensor.weekmenu shows; once it is emptied, the running week
+    (28 October, with a menu) is what the sensor shows."""
+    running = date(2026, 10, 28)
+    ctx.ledger.save(WeekLog(running, plan=make_plan(
+        [dish(date(2026, 11, 2), 201, [4], 1.0)]).to_dict(), target="list"))
+    await planned_ctx(ctx)
+    n = len(ctx.hass.posts)
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 200, await r.text()
+    sensor = [p for path, p in ctx.hass.posts[n:] if path == "states/sensor.weekmenu"]
+    assert sensor and sensor[-1]["attributes"]["week"] == running.isoformat()
+    assert [d["titel"] for d in sensor[-1]["attributes"]["dishes"]] == ["Recept 201"]
+
+
+# --- v2.1: waarschuwing voor de week erna, en Week leegmaken alleen voor de start ----------
+
+async def test_later_order_warning_only_on_monday_and_tuesday(aiohttp_client, tmp_path):
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 23, 9, 0))  # maandag
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get("api/week")).json()
+    assert body["week"] == "2026-12-02" and body["draft"] is True
+    assert body["later_order"] == {"week": "2026-12-02", "skipped": "2026-11-25"}
+    ctx.clock = lambda: datetime(2026, 11, 24, 20, 0)  # dinsdag
+    body = await (await client.get("api/week")).json()
+    assert body["later_order"] == {"week": "2026-12-02", "skipped": "2026-11-25"}
+    ctx.clock = lambda: datetime(2026, 11, 22, 12, 0)  # zondag: de gewone bestelling
+    body = await (await client.get("api/week")).json()
+    assert body["week"] == "2026-11-25" and body["later_order"] is None
+    ctx.clock = lambda: datetime(2026, 11, 25, 12, 0)  # woensdag
+    body = await (await client.get("api/week")).json()
+    assert body["later_order"] is None
+
+
+async def test_can_reset_only_before_the_week_starts(aiohttp_client, tmp_path):
+    ctx = make_ctx(tmp_path, now=datetime(2026, 11, 3, 9, 0))  # dinsdag voor W
+    await planned_ctx(ctx)
+    client = await aiohttp_client(make_app(ctx))
+    body = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+    assert body["can_reset"] is True and body["later_order"] is None
+    ctx.clock = lambda: datetime(2026, 11, 4, 9, 0)  # de woensdag zelf
+    body = await (await client.get(f"api/week?week={W.isoformat()}")).json()
+    assert body["can_reset"] is False
+    ctx.clock = lambda: datetime(2026, 11, 3, 9, 0)
+    body = await (await client.get(f"api/week?week={(W + timedelta(days=7)).isoformat()}")).json()
+    assert body["draft"] is True and body["can_reset"] is False

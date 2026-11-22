@@ -65,7 +65,9 @@ class WeekLog:
     completion_tried: bool = False
     notified: bool = False  # the "klaar" message for this menu went out
     # where everything in `added` went: "list", "order:<id>", or "mixed" once a later
-    # write went elsewhere. Only an unmixed, known destination is ever lowered.
+    # write went elsewhere. "list" and "mixed" are lowered in this week's active order
+    # (the list is locked then) or, without one, on the list; "order:<id>" only in
+    # that order; None (an old log without it) never.
     added_to: str | None = None
     # the start of the bonus period the menu was made with (None: a log from before 0.4)
     folder_period_start: date | None = None
@@ -95,6 +97,13 @@ class WeekLog:
     # v1.1: the start of the oldest bonus period a dish in the draft was matched to;
     # confirming with a newer folder out matches the draft again first. None: no draft.
     draft_period_start: date | None = None
+    # v2.1: pid -> the name of each product the add-on added, so a leftover shows its name
+    # when the plan no longer holds the product
+    titles: dict[int, str] = field(default_factory=dict)
+    # v2.1: products a lowering found crossed off on the list (bought). They stay in
+    # `added` as a leftover and are never lowered anywhere again that week, also not in
+    # an order later on: the units there are the user's own.
+    crossed_off: list[int] = field(default_factory=list)
     # not stored: the file was written by a newer add-on. Shown, never written (v0.6).
     too_new: bool = field(default=False, compare=False, repr=False)
 
@@ -138,6 +147,8 @@ class WeekLog:
             "offers_saved": {str(k): v for k, v in self.offers_saved.items()},
             "draft": self.draft,
             "draft_period_start": _iso(self.draft_period_start),
+            "titles": {str(k): v for k, v in self.titles.items()},
+            "crossed_off": list(self.crossed_off),
         }
 
     @classmethod
@@ -178,6 +189,8 @@ class WeekLog:
             offers_saved={int(k): float(v) for k, v in (d.get("offers_saved") or {}).items()},
             draft=d.get("draft"),
             draft_period_start=_date(d.get("draft_period_start")),
+            titles={int(k): str(v) for k, v in (d.get("titles") or {}).items()},
+            crossed_off=[int(x) for x in d.get("crossed_off") or []],
         )
 
 
