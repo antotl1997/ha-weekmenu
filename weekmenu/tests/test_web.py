@@ -974,13 +974,21 @@ async def test_reset_refused_without_a_confirmed_menu(aiohttp_client, ctx):
 async def test_reset_failing_halfway_keeps_the_menu(aiohttp_client, ctx):
     await planned_ctx(ctx)
     ah = ctx.client
-    old = ctx.ledger.load(W).plan
+    wlog = ctx.ledger.load(W)
+    wlog.held = "een eerdere notitie"  # apply clears it before writing
+    wlog.previous[WO.isoformat()] = 99
+    ctx.ledger.save(wlog)
+    old = wlog.plan
     ah.fail_on_call = len(ah.writes) + 1  # the second lowering (product 2) fails
     client = await aiohttp_client(make_app(ctx))
     r = await reset(client)
     assert r.status == 502 and "error" in await r.json()
     log = ctx.ledger.load(W)
-    assert log.plan == old and log.added == {2: 2, 3: 1}
+    assert log.plan == old and log.savings == week_plan().savings
+    assert log.held == "een eerdere notitie" and log.previous == {WO.isoformat(): 99}
+    # what really left AH stays out of `added`: a second tap never lowers it again
+    # product 2's lowering stays in flight: the next tap settles it from AH first
+    assert log.added == {2: 2, 3: 1} and list(log.pending) == [2]
     assert ctx.history.load() == {}
 
     ah.fail_on_call = None  # tapping again is safe: only what is still in `added` goes
@@ -1038,3 +1046,31 @@ async def test_reset_of_a_too_new_week_is_refused_with_the_update_message(aiohtt
     r = await reset(client)
     assert r.status == 409 and (await r.json())["error"] == UPDATE_MESSAGE
     assert ctx.client.writes == writes and path.read_bytes() == before
+
+
+async def test_reset_of_an_unreadable_newer_log_says_update(aiohttp_client, ctx):
+    """A log from a newer add-on that this code cannot read shows no plan: the answer
+    is still the update message, never "geen bevestigd menu"."""
+    import json as _json
+    from app.durable import UPDATE_MESSAGE
+    path = ctx.ledger.root / f"{W.isoformat()}.json"
+    path.write_text(_json.dumps({"schema": 9, "week": "onleesbaar"}), encoding="utf-8")
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 409 and (await r.json())["error"] == UPDATE_MESSAGE
+
+
+async def test_reset_publishes_the_running_week_on_the_sensor(aiohttp_client, ctx):
+    """W is the week sensor.weekmenu shows; once it is emptied, the running week
+    (28 October, with a menu) is what the sensor shows."""
+    running = date(2026, 10, 28)
+    ctx.ledger.save(WeekLog(running, plan=make_plan(
+        [dish(date(2026, 11, 2), 201, [4], 1.0)]).to_dict(), target="list"))
+    await planned_ctx(ctx)
+    n = len(ctx.hass.posts)
+    client = await aiohttp_client(make_app(ctx))
+    r = await reset(client)
+    assert r.status == 200, await r.text()
+    sensor = [p for path, p in ctx.hass.posts[n:] if path == "states/sensor.weekmenu"]
+    assert sensor and sensor[-1]["attributes"]["week"] == running.isoformat()
+    assert [d["titel"] for d in sensor[-1]["attributes"]["dishes"]] == ["Recept 201"]

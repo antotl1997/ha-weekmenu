@@ -93,6 +93,12 @@ RESET_STARTED = "Deze week is al begonnen, leegmaken kan niet meer."
 RESET_FIELDS = ("plan", "draft", "draft_period_start", "savings", "previous",
                 "previous_dish", "swapped_out", "removed_by_user", "held", "held_notified",
                 "round_done", "completion_tried", "notified")
+# a "Week leegmaken" that stops halfway puts the log back as it was, except these: the
+# writer's record of what AH holds now (settled and lowered writes, writes in flight).
+# Restoring them would lower a product twice on the next tap.
+RESET_KEEPS_PROGRESS = ("added", "pending", "unknown", "removed_by_user", "extras_added",
+                        "extras_savings", "offers_added", "offers_savings", "offers_saved",
+                        "titles")
 RECIPE_NAME = "Geef het recept een naam"
 RECIPE_SERVINGS = "Aantal personen moet tussen 1 en 20 liggen"
 RECIPE_INGREDIENTS = "Zet er minstens één ingrediënt in"
@@ -1239,25 +1245,28 @@ def make_app(ctx, static_dir: Path = STATIC_DIR,
         start = shown_week(request)
         async with ctx.lock:
             wlog = ctx.ledger.load(start)
-            if not wlog.plan:
-                return _err(409, NOT_CONFIRMED)
             if wlog.too_new:  # a newer add-on wrote this week: never written over
                 raise SchemaTooNew(ctx.ledger.root / f"{start.isoformat()}.json")
+            if not wlog.plan:
+                return _err(409, NOT_CONFIRMED)
             now = ctx.clock()
             if now.date() >= start:  # nothing is lowered any more: it would only wipe
                 return _err(409, RESET_STARTED)
             if ctx.health.writes_paused:  # nothing would go: the products would linger
                 return _err(409, PAUSED_NOTE)
-            old = wlog.plan
-            old_plan = Plan.from_dict(old)
+            before = wlog.to_dict()
+            old_plan = Plan.from_dict(wlog.plan)
             empty = empty_plan(list(ctx.pantry))
             try:
                 res = await apply(ctx.client, ctx.ledger, wlog, empty, replaced=old_plan,
                                   today=now.date())
             except Exception:
-                wlog.plan, wlog.savings = old, old_plan.savings
+                # the log as it was, except what really happened at AH meanwhile
+                kept = WeekLog.from_dict(before)
+                for name in RESET_KEEPS_PROGRESS:
+                    setattr(kept, name, getattr(wlog, name))
                 try:
-                    await main.save_log(ctx, wlog)
+                    await main.save_log(ctx, kept)
                 except Exception as e:
                     log.warning("Logboek %s niet bijgewerkt (%s)", start, type(e).__name__)
                 raise
